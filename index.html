@@ -1,0 +1,288 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Support Hub - Global Call Center KB</title>
+
+	<script src="https://cdn.tailwindcss.com"></script>
+	<script>
+		tailwind.config = {
+			theme: {
+				extend: {
+					colors: {
+						brand: {
+							50: "#ecfeff",
+							100: "#cffafe",
+							500: "#0891b2",
+							600: "#0e7490",
+							700: "#155e75"
+						}
+					},
+					boxShadow: {
+						soft: "0 12px 30px -16px rgba(14, 116, 144, 0.35)",
+						card: "0 14px 30px -18px rgba(21, 32, 51, 0.35)"
+					}
+				}
+			}
+		};
+	</script>
+	<link rel="stylesheet" href="style.css">
+
+	
+</head>
+
+<body class="antialiased">
+	<div class="decor-glow pointer-events-none fixed -right-20 -top-20 h-72 w-72 rounded-full bg-cyan-200/40 blur-3xl"></div>
+	<div class="decor-glow pointer-events-none fixed -bottom-24 -left-16 h-72 w-72 rounded-full bg-blue-200/35 blur-3xl"></div>
+
+	<section id="splashScreen" class="fixed inset-0 z-50 flex items-center justify-center px-4 py-8">
+		<div class="w-full max-w-xl rounded-3xl border border-white/70 bg-white/90 p-8 shadow-[0_20px_60px_-25px_rgba(13,148,136,0.45)] backdrop-blur-xl">
+			<p class="brand-font text-xs uppercase tracking-[0.24em] text-brand-700">Support Hub</p>
+			<h1 class="brand-font mt-3 text-3xl leading-tight text-slate-900 sm:text-4xl">Global Technical Knowledge Base</h1>
+			<p class="mt-3 text-sm text-slate-600 sm:text-base">
+				Select the operating region to load country context before entering the dashboard.
+			</p>
+
+			<div class="mt-8">
+				<label for="countrySelect" class="mb-2 block text-sm font-semibold text-slate-700">Agent region</label>
+				<div class="rounded-2xl border border-slate-300 bg-white px-3 py-2 shadow-sm">
+					<select id="countrySelect" class="w-full bg-transparent text-base font-medium text-slate-800 outline-none">
+						<option value="UK">United Kingdom (UK)</option>
+						<option value="PL">Poland (PL)</option>
+						<option value="DE">Germany (DE)</option>
+					</select>
+				</div>
+			</div>
+
+			<button
+				id="continueBtn"
+				type="button"
+				class="mt-6 inline-flex w-full items-center justify-center rounded-2xl bg-brand-700 px-5 py-3 text-base font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-brand-600 focus:outline-none focus-visible:ring-4 focus-visible:ring-cyan-300"
+			>
+				Continue to dashboard
+			</button>
+
+			<p id="splashHint" class="mt-4 text-xs text-slate-500 sm:text-sm">
+				Country profile sets SWAP procedures, contact channels, and policy routing.
+			</p>
+		</div>
+	</section>
+
+	<div id="appShell" class="is-hidden relative z-10">
+		<header class="sticky top-0 z-40 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl">
+			<div class="mx-auto max-w-[1560px] px-4 py-4 md:px-6 lg:px-8">
+				<div class="flex flex-wrap items-center gap-3 md:gap-4">
+					<div class="flex items-center gap-3">
+						<span class="brand-font inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-700 text-sm font-bold text-white">SH</span>
+						<div>
+							<p class="brand-font text-lg leading-none text-slate-900">Support Hub</p>
+							<p class="text-xs text-slate-500">Omni-Search Knowledge Console</p>
+						</div>
+					</div>
+
+					<nav id="moduleTabs" class="order-3 w-full md:order-2 md:flex-1">
+						<div class="inline-flex w-full items-center rounded-xl border border-slate-300/80 bg-white/90 p-1 md:w-auto">
+							<button data-tab="TV" type="button" class="module-tab is-active flex-1 rounded-lg px-4 py-2 text-sm font-semibold transition md:flex-none">TV</button>
+							<button data-tab="MNT" type="button" class="module-tab flex-1 rounded-lg px-4 py-2 text-sm font-semibold text-slate-600 transition hover:text-slate-900 md:flex-none">MNT</button>
+							<button data-tab="AVA" type="button" class="module-tab flex-1 rounded-lg px-4 py-2 text-sm font-semibold text-slate-600 transition hover:text-slate-900 md:flex-none">AVA</button>
+						</div>
+					</nav>
+
+					<div class="ml-auto flex items-center gap-2 md:order-3">
+						<span id="countryBadge" class="rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-semibold text-brand-700"></span>
+
+						<button
+							id="printModeBtn"
+							type="button"
+							class="rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100"
+						>
+							Print mode
+						</button>
+
+						<button
+							id="changelogBtn"
+							type="button"
+							class="relative inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-600 transition hover:bg-slate-50"
+							aria-label="Open changelog"
+						>
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+								<path stroke-linecap="round" stroke-linejoin="round" d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+							</svg>
+							<span id="changelogUnreadDot" class="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white"></span>
+						</button>
+
+						<button
+							id="changeCountryBtn"
+							type="button"
+							class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+						>
+							Change country
+						</button>
+					</div>
+				</div>
+
+				<div id="globalSearchWrap" class="mt-4">
+					<label for="globalSearch" class="block text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Global Omni-Search</label>
+					<div class="relative mt-2">
+						<span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="h-5 w-5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m1.1-4.65a6.75 6.75 0 1 1-13.5 0 6.75 6.75 0 0 1 13.5 0Z" />
+							</svg>
+						</span>
+						<input
+							id="globalSearch"
+							type="text"
+							autocomplete="off"
+							placeholder="Search models, chassis, Matter, contact numbers, policy rules, known issues..."
+							class="w-full rounded-2xl border border-slate-300 bg-white px-11 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-500 focus:ring-4 focus:ring-cyan-100"
+						>
+						<span class="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg border border-slate-300 bg-slate-50 px-2 py-1 text-[11px] font-semibold text-slate-500">Ctrl+F</span>
+
+						<div id="omniSearchDropdown" class="search-dropdown-hidden absolute left-0 right-0 top-[calc(100%+8px)] z-50 max-h-[420px] overflow-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl"></div>
+					</div>
+
+					<p id="moduleNotice" class="mt-2 text-xs text-slate-500">TV module active. MNT and AVA are visual placeholders for future domains.</p>
+				</div>
+			</div>
+		</header>
+
+		<main class="mx-auto max-w-[1560px] px-4 py-6 md:px-6 lg:px-8">
+			<div id="mainContentGrid" class="grid items-start gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
+				<aside id="leftSidebar" class="rounded-2xl border border-slate-200 bg-white/85 p-4 shadow-card backdrop-blur lg:sticky lg:top-[154px]">
+					<h2 class="brand-font text-sm uppercase tracking-[0.2em] text-slate-500">Cascading Filters</h2>
+
+					<div class="mt-3 space-y-3">
+						<div>
+							<label for="yearFilter" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">1) Year</label>
+							<select id="yearFilter" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-cyan-100"></select>
+						</div>
+						<div>
+							<label for="osFilter" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">2) OS</label>
+							<select id="osFilter" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-cyan-100"></select>
+						</div>
+						<div>
+							<label for="panelFilter" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">3) Panel</label>
+							<select id="panelFilter" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-cyan-100"></select>
+						</div>
+					</div>
+
+					<p id="activePath" class="mt-4 rounded-xl border border-cyan-100 bg-cyan-50/70 px-3 py-2 text-xs font-semibold text-brand-700">Path: Any Year -> Any OS -> Any Panel</p>
+				</aside>
+
+				<section class="space-y-5">
+					<section id="modelResultsSection" class="rounded-2xl border border-slate-200 bg-white/85 p-4 shadow-card">
+						<div class="mb-3 grid items-center gap-2 md:grid-cols-[1fr_auto_1fr]">
+							<h2 id="resultsSectionTitle" class="brand-font text-xl text-slate-900 md:justify-self-start">Model Results</h2>
+							<div id="resultModeSwitch" class="inline-flex items-center justify-self-center rounded-full border border-slate-300 bg-white p-0.5">
+								<button id="resultsModeModelsBtn" type="button" class="result-view-tab is-active rounded-full px-3 py-1 text-xs font-semibold text-slate-700 transition">Models</button>
+								<button id="resultsModeArticlesBtn" type="button" class="result-view-tab rounded-full px-3 py-1 text-xs font-semibold text-slate-700 transition">Articles</button>
+							</div>
+							<span id="resultCountBadge" class="rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-semibold text-brand-700 md:justify-self-end">0 models</span>
+						</div>
+
+						<div id="modelGrid" class="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3"></div>
+						<p id="emptyState" class="mt-3 hidden rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">No models matched current filters/query.</p>
+					</section>
+
+					<section id="modelDetailSection" class="hidden rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-card">
+						<div class="flex flex-wrap items-start justify-between gap-3">
+							<div>
+								<p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">TV Model Detail</p>
+								<h3 id="detailTitle" class="brand-font mt-1 text-2xl text-slate-900"></h3>
+								<p id="detailSubTitle" class="mt-1 text-sm text-slate-600"></p>
+							</div>
+							<div class="flex gap-2">
+								<button id="backToResultsBtn" type="button" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50">Back to model list</button>
+								<button id="printNowBtn" type="button" class="rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100">Print this detail</button>
+							</div>
+						</div>
+
+						<div id="detailBadges" class="mt-3 flex flex-wrap gap-2"></div>
+
+						<div id="detailTabs" class="mt-4 inline-flex w-full items-center rounded-xl border border-slate-300 bg-white p-1 sm:w-auto">
+							<button data-detail-tab="specs" type="button" class="detail-tab is-active flex-1 rounded-lg border border-transparent px-4 py-2 text-sm font-semibold transition sm:flex-none">Specs</button>
+							<button data-detail-tab="ports" type="button" class="detail-tab flex-1 rounded-lg border border-transparent px-4 py-2 text-sm font-semibold text-slate-600 transition hover:text-slate-900 sm:flex-none">Ports</button>
+							<button data-detail-tab="troubleshooting" type="button" class="detail-tab flex-1 rounded-lg border border-transparent px-4 py-2 text-sm font-semibold text-slate-600 transition hover:text-slate-900 sm:flex-none">Troubleshooting</button>
+							<button data-detail-tab="policies" type="button" class="detail-tab flex-1 rounded-lg border border-transparent px-4 py-2 text-sm font-semibold text-slate-600 transition hover:text-slate-900 sm:flex-none">Policies</button>
+							<button data-detail-tab="gallery" type="button" class="detail-tab flex-1 rounded-lg border border-transparent px-4 py-2 text-sm font-semibold text-slate-600 transition hover:text-slate-900 sm:flex-none">Gallery / Images</button>
+						</div>
+
+						<div id="detailPanes" class="mt-4">
+							<div data-pane="specs"></div>
+							<div data-pane="ports" class="pane-hidden"></div>
+							<div data-pane="troubleshooting" class="pane-hidden"></div>
+							<div data-pane="policies" class="pane-hidden"></div>
+							<div data-pane="gallery" class="pane-hidden"></div>
+						</div>
+					</section>
+
+					<section id="articleViewSection" class="hidden rounded-2xl border border-slate-200 bg-white/92 p-6 shadow-card">
+						<div class="flex flex-wrap items-start justify-between gap-3">
+							<div>
+								<p id="articleTypeLabel" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Article</p>
+								<h3 id="articleTitle" class="brand-font mt-1 text-2xl text-slate-900"></h3>
+								<p id="articleSummary" class="mt-1 text-sm text-slate-600"></p>
+							</div>
+							<div class="flex gap-2">
+								<button id="articleBackBtn" type="button" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50">Back to model list</button>
+								<button id="articlePrintBtn" type="button" class="rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100">Print article</button>
+							</div>
+						</div>
+						<div id="articleContent" class="mt-4 space-y-4"></div>
+						<div id="articleRecommendationDock" class="mt-4"></div>
+					</section>
+				</section>
+			</div>
+		</main>
+	</div>
+
+	<div id="changelogPanel" class="changelog-panel-hidden fixed right-4 top-[86px] z-50 w-[min(92vw,380px)] rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-2xl backdrop-blur-xl transition-all duration-300">
+		<div class="flex items-center justify-between">
+			<p class="brand-font text-sm uppercase tracking-[0.18em] text-slate-500">Changelog</p>
+			<button id="closeChangelogBtn" type="button" class="rounded-lg border border-slate-300 px-2 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-50">Close</button>
+		</div>
+		<div id="changelogAccordion" class="mt-3 space-y-2"></div>
+	</div>
+
+	<div id="quickInfoModal" class="hidden fixed inset-0 z-[70] flex items-center justify-center bg-slate-900/35 p-4 backdrop-blur-[1px]" role="dialog" aria-modal="true" aria-labelledby="quickInfoTitle">
+		<div id="quickInfoCard" class="w-[min(96vw,560px)] rounded-2xl border border-slate-200 bg-white p-5 shadow-2xl">
+			<div class="flex items-start justify-between gap-3">
+				<div>
+					<p class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Quick Feature Info</p>
+					<h4 id="quickInfoTitle" class="mt-1 text-xl font-semibold text-slate-900"></h4>
+					<p id="quickInfoSummary" class="mt-1 text-sm text-slate-600"></p>
+				</div>
+				<button id="quickInfoCloseBtn" type="button" class="rounded-lg border border-slate-300 bg-white px-2 py-1 text-xs font-semibold text-slate-600 transition hover:bg-slate-50">X</button>
+			</div>
+
+			<ul id="quickInfoPoints" class="mt-4 list-disc space-y-1 pl-5 text-sm text-slate-700"></ul>
+
+			<div class="mt-5 flex flex-wrap justify-end gap-2">
+				<button id="quickInfoDismissBtn" type="button" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50">Close</button>
+				<button id="quickInfoReadBtn" type="button" class="rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100">Read Full Article</button>
+			</div>
+		</div>
+	</div>
+
+	<div id="quickInfoToast" class="pointer-events-none fixed bottom-5 left-1/2 z-[72] hidden -translate-x-1/2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-xl"></div>
+
+	<button
+		id="scrollTopBtn"
+		type="button"
+		class="scroll-btn-hidden fixed bottom-5 right-5 z-40 rounded-full border border-brand-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-brand-700 shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:bg-cyan-100"
+	>
+		Top
+	</button>
+
+	
+<script src="data/models.js"></script>
+<script src="data/policies.js"></script>
+<script src="data/knowledge.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
+
+

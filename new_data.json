@@ -1,0 +1,428 @@
+[
+  {
+    "modelName": "OLED951",
+    "year": 2026,
+    "availableSizes": ["65", "77"],
+    "osProfileId": "Titan OS",
+    "panelType": "OLED",
+    "features": {
+      "ambilight": "4-sided Ambilight",
+      "video": ["Dolby Vision 2 Max", "HDR10+ Adaptive"],
+      "audio": ["Dolby Atmos", "DTS:X", "IntelliSound", "2x 3-way speakers", "70W"],
+      "gaming": ["165Hz VRR", "FreeSync Premium", "G-Sync Compatible", "ALLM"],
+      "smart": ["Matter", "AmbiScape", "AirPlay 2", "Works with Alexa", "Voice control", "Bluetooth 5.4", "Auracast", "WiFi 6", "Casting"]
+    },
+    "specs": {
+      "stand": "Rounded stick, Satin Chrome",
+      "remote": "Wireless rechargeable metal remote"
+    }
+  },
+  {
+    "modelName": "OLED911",
+    "year": 2026,
+    "availableSizes": ["48", "55", "65", "77"],
+    "osProfileId": "Titan OS",
+    "panelType": "OLED",
+    "features": {
+      "ambilight": "4-sided Ambilight",
+      "video": ["Dolby Vision 2 Max", "HDR10+ Adaptive"],
+      "audio": ["Sound by Bowers & Wilkins", "Dolby Atmos", "DTS:X", "IntelliSound", "3.1 CH", "built-in subwoofer", "81W"],
+      "gaming": ["165Hz VRR", "FreeSync Premium", "G-Sync Compatible", "ALLM"],
+      "smart": ["Matter", "AmbiScape", "AirPlay 2", "Works with Alexa", "Voice control", "Bluetooth 5.4", "Auracast", "WiFi 6", "Casting"]
+    },
+    "specs": {
+      "stand": "Rounded stick, Satin Chrome",
+      "remote": "Wireless rechargeable metal remote"
+    }
+  },
+  {
+    "modelName": "OLED901",
+    "year": 2026,
+    "availableSizes": ["42", "48"],
+    "osProfileId": "Google TV",
+    "panelType": "OLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": ["Dolby Vision", "HDR10+ Adaptive"],
+      "audio": ["Frontal sound", "Dolby Atmos", "DTS:X", "2.1 CH", "built-in subwoofer"],
+      "gaming": ["144Hz VRR", "FreeSync Premium", "G-Sync Compatible", "ALLM"],
+      "smart": ["Matter", "AirPlay 2", "Works with Alexa", "Voice control", "Bluetooth 5.2", "WiFi 6", "Casting"]
+    },
+    "specs": {
+      "stand": "Swivel stand, Satin Chrome",
+      "remote": "Wireless rechargeable metal remote"
+    }
+  },
+  {
+    "modelName": "OLED811",
+    "year": 2026,
+    "availableSizes": ["42", "48", "55", "65", "77"],
+    "osProfileId": "Titan OS",
+    "panelType": "OLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": ["Dolby Vision 2 Max", "HDR10+ Adaptive"],
+      "audio": ["Dolby Atmos", "DTS:X", "IntelliSound", "3-way speakers", "70W (42\" 50W)"],
+      "gaming": ["165Hz VRR", "FreeSync Premium", "G-Sync Compatible", "ALLM"],
+      "smart": ["Matter", "AmbiScape", "AirPlay 2", "Works with Alexa", "Voice control", "Bluetooth 5.4", "Auracast", "WiFi 6", "Casting"]
+    },
+    "specs": {
+      "stand": "Swivel stand (up to 65\"), Satin Chrome"
+    }
+  },
+  {
+    "modelName": "OLED851",
+    "year": 2026,
+    "availableSizes": ["55", "65"],
+    "osProfileId": "Titan OS",
+    "panelType": "OLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": ["Dolby Vision 2 Max", "HDR10+ Adaptive"],
+      "audio": ["Dolby Atmos", "DTS:X", "IntelliSound", "3-way speakers", "70W"],
+      "gaming": ["165Hz VRR", "FreeSync Premium", "G-Sync Compatible", "ALLM"],
+      "smart": ["Matter", "AmbiScape", "AirPlay 2", "Works with Alexa", "Voice control", "Bluetooth 5.4", "Auracast", "WiFi 6", "Casting"]
+    },
+    "specs": {
+      "stand": "Swivel stand compatible with TAB8200"
+    }
+  },
+  {
+    "modelName": "OLED761",
+    "year": 2026,
+    "availableSizes": ["55", "65", "77"],
+    "osProfileId": "Titan OS",
+    "panelType": "OLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": ["Dolby Vision", "HDR10+ Adaptive"],
+      "audio": ["Dolby Atmos", "DTS:X", "IntelliSound", "77\": 50W, 55-65\": 20W"],
+      "gaming": ["120Hz VRR", "FreeSync Premium", "G-Sync Compatible", "ALLM"],
+      "smart": ["Matter", "AmbiScape", "AirPlay 2", "Works with Alexa", "Voice control", "Bluetooth 5.2", "Auracast", "WiFi 6", "Casting"]
+    },
+    "specs": {
+      "stand": "Angled Metal Satin Chrome"
+    }
+  },
+  {
+    "modelName": "OLED771",
+    "year": 2026,
+    "availableSizes": ["55", "65"],
+    "osProfileId": "Titan OS",
+    "panelType": "OLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": ["Dolby Vision", "HDR10+ Adaptive"],
+      "audio": ["Dolby Atmos", "DTS:X", "IntelliSound", "20W"],
+      "gaming": ["120Hz VRR", "FreeSync Premium", "G-Sync Compatible", "ALLM"],
+      "smart": ["Matter", "AmbiScape", "AirPlay 2", "Alexa Built-in", "Voice control", "Bluetooth 5.2", "WiFi 6", "Casting"]
+    },
+    "specs": {
+      "stand": "Square stick, Satin Chrome"
+    }
+  },
+  {
+    "modelName": "MLED981",
+    "year": 2026,
+    "availableSizes": ["85"],
+    "osProfileId": "Titan OS",
+    "panelType": "RGB MiniLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": ["Dolby Vision 2 Max", "HDR10+"],
+      "audio": ["Dolby Atmos", "DTS:X", "IntelliSound", "4.1 CH", "70W", "down and side firing tweeters"],
+      "gaming": ["165Hz VRR", "FreeSync Premium Pro", "ALLM"],
+      "smart": ["Matter", "AmbiScape", "AirPlay 2", "Works with Alexa", "Voice control", "Bluetooth 5.4", "Auracast", "WiFi 6", "Casting"]
+    },
+    "specs": {
+      "stand": "Metal Edge Rise Arch, Satin Chrome",
+      "remote": "Wireless rechargeable metal remote"
+    }
+  },
+  {
+    "modelName": "MLED910",
+    "year": 2026,
+    "availableSizes": ["55", "65", "75", "85"],
+    "osProfileId": "Titan OS",
+    "panelType": "QD MiniLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": ["Dolby Vision", "HDR10+"],
+      "audio": ["Dolby Atmos", "DTS:X", "IntelliSound", "2.1 CH 50W (85\"), 2.0 CH 40W (55-75\")"],
+      "gaming": ["144Hz VRR", "FreeSync Premium", "ALLM"],
+      "smart": ["Matter", "AirPlay 2", "Alexa Built-in", "Bluetooth 5.2", "WiFi 5", "Casting"]
+    },
+    "specs": {
+      "stand": "Edge stand"
+    }
+  },
+  {
+    "modelName": "PUS9001",
+    "year": 2026,
+    "availableSizes": ["43", "50", "55", "65", "75", "85", "100"],
+    "osProfileId": "Titan OS",
+    "panelType": "QLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": ["Dolby Vision 2", "HDR10+"],
+      "audio": ["Dolby Atmos", "DTS:X", "IntelliSound", "2.1 CH 50W (75-100\"), 4.0 CH 40W (50-65\"), 2.0 CH 20W (43\")"],
+      "gaming": ["144Hz VRR", "FreeSync Premium", "ALLM"],
+      "smart": ["Matter", "AmbiScape", "AirPlay 2", "Works with Alexa", "Voice control", "Bluetooth 5.4", "Auracast", "WiFi 5", "Casting"]
+    },
+    "specs": {
+      "stand": "Central swivel stand (43-65\"), Edge stand (75-100\")"
+    }
+  },
+  {
+    "modelName": "PUS9011",
+    "year": 2026,
+    "availableSizes": ["43", "50", "55", "65", "75"],
+    "osProfileId": "Titan OS",
+    "panelType": "QLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": ["Dolby Vision 2", "HDR10+"],
+      "audio": ["Dolby Atmos", "DTS:X", "IntelliSound", "2.1 CH 50W (75\"), 4.0 CH 40W (50-65\"), 2.0 CH 20W (43\")"],
+      "gaming": ["144Hz VRR", "FreeSync Premium", "ALLM"],
+      "smart": ["Matter", "AmbiScape", "AirPlay 2", "Works with Alexa", "Voice control", "Bluetooth 5.4", "Auracast", "WiFi 5", "Casting"]
+    },
+    "specs": {
+      "stand": "Central swivel stand (43-65\"), Edge stand (75\")"
+    }
+  },
+  {
+    "modelName": "PUS9081",
+    "year": 2026,
+    "availableSizes": ["43", "50", "55", "65"],
+    "osProfileId": "Titan OS",
+    "panelType": "QLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": ["Dolby Vision 2", "HDR10+"],
+      "audio": ["Dolby Atmos", "DTS:X", "IntelliSound", "4.0 CH 40W (50-65\"), 2.0 CH 20W (43\")"],
+      "gaming": ["144Hz VRR", "FreeSync Premium", "ALLM"],
+      "smart": ["Matter", "AmbiScape", "AirPlay 2", "Works with Alexa", "Voice control", "Bluetooth 5.4", "Auracast", "WiFi 5", "Casting"]
+    },
+    "specs": {
+      "stand": "Swivel stand compatible with TAB8200"
+    }
+  },
+  {
+    "modelName": "PUS8601",
+    "year": 2026,
+    "availableSizes": ["43", "50", "55", "65", "75"],
+    "osProfileId": "Titan OS",
+    "panelType": "QLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": ["HDR10+"],
+      "audio": ["Dolby Atmos", "DTS:X", "IntelliSound", "2.0 CH 20W"],
+      "gaming": ["120Hz in DLG/HSR", "ALLM"],
+      "smart": ["Matter", "AmbiScape", "AirPlay 2", "Works with Alexa", "Voice control", "Bluetooth 5.2", "Auracast", "WiFi 5", "Casting"]
+    },
+    "specs": {
+      "stand": "Color: Black Sheen"
+    }
+  },
+  {
+    "modelName": "PUS8611",
+    "year": 2026,
+    "availableSizes": ["43", "50", "55", "65", "75"],
+    "osProfileId": "Titan OS",
+    "panelType": "QLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": ["HDR10+"],
+      "audio": ["Dolby Atmos", "DTS:X", "IntelliSound", "2.0 CH 20W"],
+      "gaming": ["120Hz in DLG/HSR", "ALLM"],
+      "smart": ["Matter", "AmbiScape", "AirPlay 2", "Works with Alexa", "Voice control", "Bluetooth 5.2", "Auracast", "WiFi 5", "Casting"]
+    },
+    "specs": {
+      "stand": "Color: Black Sheen"
+    }
+  },
+  {
+    "modelName": "PUS8631",
+    "year": 2026,
+    "availableSizes": ["43", "50", "55", "65"],
+    "osProfileId": "Titan OS",
+    "panelType": "QLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": ["HDR10+"],
+      "audio": ["Dolby Atmos", "DTS:X", "IntelliSound", "2.0 CH 20W"],
+      "gaming": ["120Hz in DLG/HSR", "ALLM"],
+      "smart": ["Matter", "AmbiScape", "AirPlay 2", "Works with Alexa", "Voice control", "Bluetooth 5.2", "Auracast", "WiFi 5", "Casting"]
+    },
+    "specs": {
+      "stand": "Color: Black Sheen"
+    }
+  },
+  {
+    "modelName": "PUS8651",
+    "year": 2026,
+    "availableSizes": ["43", "50", "55", "65"],
+    "osProfileId": "Titan OS",
+    "panelType": "QLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": ["HDR10+"],
+      "audio": ["Dolby Atmos", "DTS:X", "IntelliSound", "2.0 CH 20W"],
+      "gaming": ["120Hz in DLG/HSR", "ALLM"],
+      "smart": ["Matter", "AmbiScape", "AirPlay 2", "Works with Alexa", "Voice control", "Bluetooth 5.2", "Auracast", "WiFi 5", "Casting"]
+    },
+    "specs": {
+      "stand": "Color: Black Sheen"
+    }
+  },
+  {
+    "modelName": "PUS8701",
+    "year": 2026,
+    "availableSizes": ["43", "55", "65"],
+    "osProfileId": "Titan OS",
+    "panelType": "QLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": ["HDR10+"],
+      "audio": ["Dolby Atmos", "DTS:X", "IntelliSound", "2.0 CH 20W"],
+      "gaming": ["120Hz in DLG/HSR", "ALLM"],
+      "smart": ["Matter", "AmbiScape", "AirPlay 2", "Works with Alexa", "Voice control", "Bluetooth 5.2", "Auracast", "WiFi 5", "Casting"]
+    },
+    "specs": {
+      "stand": "Central stand, Color: Black Sheen"
+    }
+  },
+  {
+    "modelName": "PUS8501",
+    "year": 2026,
+    "availableSizes": ["43", "55", "65", "85"],
+    "osProfileId": "Titan OS",
+    "panelType": "QLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": ["HDR10+", "Natural Motion"],
+      "audio": ["Dolby Atmos", "DTS:X", "IntelliSound", "2.0 CH 20W"],
+      "gaming": ["60Hz VRR", "ALLM"],
+      "smart": ["Matter", "AmbiScape", "AirPlay 2", "Works with Alexa", "Bluetooth 5.2", "Auracast", "WiFi 5"]
+    },
+    "specs": {
+      "stand": "Edge stand, Color: Black Matt"
+    }
+  },
+  {
+    "modelName": "PUS8401",
+    "year": 2026,
+    "availableSizes": ["43", "55", "65"],
+    "osProfileId": "Titan OS",
+    "panelType": "QLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": ["HDR10+", "Natural Motion"],
+      "audio": ["DTS:X", "IntelliSound", "2.0 CH 20W"],
+      "gaming": ["60Hz VRR", "ALLM"],
+      "smart": ["Matter", "Works with Alexa", "WiFi 4"]
+    },
+    "specs": {
+      "stand": "Open frame stand, Color: Black Matt"
+    }
+  },
+  {
+    "modelName": "PUS8001",
+    "year": 2026,
+    "availableSizes": ["43", "50", "55", "65"],
+    "osProfileId": "Titan OS",
+    "panelType": "LED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": ["HDR10+", "Natural Motion"],
+      "audio": ["Dolby Atmos", "DTS:X", "IntelliSound", "2.0 CH 20W"],
+      "gaming": ["60Hz VRR", "ALLM"],
+      "smart": ["Matter", "AmbiScape", "AirPlay 2", "Works with Alexa", "Bluetooth 5.2", "Auracast", "WiFi 5", "Casting"]
+    },
+    "specs": {
+      "stand": "Edge stand, Color: Black Matt"
+    }
+  },
+  {
+    "modelName": "PUS7801",
+    "year": 2026,
+    "availableSizes": ["43", "50", "55", "65", "75"],
+    "osProfileId": "Titan OS",
+    "panelType": "QLED",
+    "features": {
+      "video": ["HDR10+", "Natural Motion"],
+      "audio": ["Dolby Atmos", "DTS:X", "IntelliSound", "2.0 CH 20W"],
+      "gaming": ["60Hz VRR", "ALLM"],
+      "smart": ["Matter", "AirPlay 2", "Works with Alexa", "Bluetooth 5.2", "Auracast", "WiFi 5", "Casting"]
+    },
+    "specs": {
+      "stand": "Edge stand, Color: Black Matt"
+    }
+  },
+  {
+    "modelName": "PUS7001",
+    "year": 2026,
+    "availableSizes": ["43", "50", "55", "65", "75"],
+    "osProfileId": "Titan OS",
+    "panelType": "LED",
+    "features": {
+      "video": ["HDR10+", "Natural Motion"],
+      "audio": ["Dolby Atmos", "DTS:X", "IntelliSound", "2.0 CH 20W"],
+      "gaming": ["60Hz VRR", "ALLM"],
+      "smart": ["Matter", "AirPlay 2", "Works with Alexa", "Bluetooth 5.0", "WiFi 5", "Casting"]
+    },
+    "specs": {
+      "stand": "Edge stand, plastic angled black sheen"
+    }
+  },
+  {
+    "modelName": "PUS7061",
+    "year": 2026,
+    "availableSizes": ["43", "50", "55", "65", "75"],
+    "osProfileId": "Titan OS",
+    "panelType": "LED",
+    "features": {
+      "video": ["HDR10+", "Natural Motion"],
+      "audio": ["Dolby Atmos", "DTS:X", "IntelliSound", "2.0 CH 20W"],
+      "gaming": ["60Hz VRR", "ALLM"],
+      "smart": ["Matter", "AirPlay 2", "Works with Alexa", "Bluetooth 5.0", "WiFi 5", "Casting"]
+    },
+    "specs": {
+      "stand": "Edge stand, plastic angled black sheen"
+    }
+  },
+  {
+    "modelName": "PFS6901",
+    "year": 2026,
+    "availableSizes": ["32", "40"],
+    "osProfileId": "Titan OS",
+    "panelType": "QLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": ["HDR10"],
+      "audio": ["Dolby audio", "2.0 CH 12W"],
+      "gaming": ["60Hz VRR", "ALLM"],
+      "smart": ["Matter", "Works with Alexa", "WiFi 4 Single band"]
+    },
+    "specs": {
+      "stand": "Edge stand, Color: Black Sheen/Matt"
+    }
+  },
+  {
+    "modelName": "PFS6951",
+    "year": 2026,
+    "availableSizes": ["32"],
+    "osProfileId": "Titan OS",
+    "panelType": "QLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": ["HDR10"],
+      "audio": ["Dolby audio", "2.0 CH 12W"],
+      "gaming": ["60Hz VRR", "ALLM"],
+      "smart": ["Matter", "Works with Alexa", "WiFi 4 Single band"]
+    },
+    "specs": {
+      "stand": "Edge stand, Color: Black Sheen/Matt"
+    }
+  }
+]

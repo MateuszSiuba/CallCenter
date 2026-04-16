@@ -86,6 +86,7 @@
 			const quickInfoCard = document.getElementById("quickInfoCard");
 			const quickInfoTitle = document.getElementById("quickInfoTitle");
 			const quickInfoSummary = document.getElementById("quickInfoSummary");
+			const quickInfoMedia = document.getElementById("quickInfoMedia");
 			const quickInfoPoints = document.getElementById("quickInfoPoints");
 			const quickInfoCloseBtn = document.getElementById("quickInfoCloseBtn");
 			const quickInfoDismissBtn = document.getElementById("quickInfoDismissBtn");
@@ -1117,14 +1118,65 @@
 				}, 2400);
 			}
 
+			function createQuickInfoMediaPlaceholder(article) {
+				const placeholder = document.createElement("div");
+				placeholder.className = "rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 p-5 text-center";
+
+				const heading = document.createElement("p");
+				heading.className = "text-sm font-semibold text-slate-800";
+				heading.textContent = safeText(article && article.title, "Knowledge article image");
+
+				const note = document.createElement("p");
+				note.className = "mt-1 text-xs text-slate-500";
+				note.textContent = "Placeholder for article image.";
+
+				placeholder.appendChild(heading);
+				placeholder.appendChild(note);
+				return placeholder;
+			}
+
+			function renderQuickInfoMedia(article) {
+				if (!quickInfoMedia) {
+					return;
+				}
+
+				quickInfoMedia.innerHTML = "";
+
+				const rawImageUrl = safeText(article && article.imageUrl, "");
+				const imageUrl = rawImageUrl.replace(/\\/g, "/");
+
+				if (!imageUrl) {
+					quickInfoMedia.appendChild(createQuickInfoMediaPlaceholder(article));
+					return;
+				}
+
+				const imageFrame = document.createElement("div");
+				imageFrame.className = "overflow-hidden rounded-xl border border-slate-200 bg-slate-50";
+
+				const image = document.createElement("img");
+				image.src = imageUrl;
+				image.alt = safeText(article && article.title, "Knowledge article") + " image";
+				image.className = "h-56 w-full object-cover";
+				image.loading = "lazy";
+				image.decoding = "async";
+				image.addEventListener("error", () => {
+					quickInfoMedia.innerHTML = "";
+					quickInfoMedia.appendChild(createQuickInfoMediaPlaceholder(article));
+				});
+
+				imageFrame.appendChild(image);
+				quickInfoMedia.appendChild(imageFrame);
+			}
+
 			function showQuickInfoModal(article) {
-				if (!quickInfoModal || !quickInfoTitle || !quickInfoSummary || !quickInfoPoints) {
+				if (!quickInfoModal || !quickInfoTitle || !quickInfoSummary || !quickInfoMedia || !quickInfoPoints) {
 					return;
 				}
 
 				state.quickInfoArticleId = safeText(article && article.id, "");
 				quickInfoTitle.textContent = safeText(article && article.title, "Knowledge Base");
 				quickInfoSummary.textContent = safeText(article && article.summary, "No summary available.");
+				renderQuickInfoMedia(article);
 				quickInfoPoints.innerHTML = "";
 
 				const points = getArticleContentPoints(article);
@@ -1332,71 +1384,12 @@
 			}
 
 			function getModelStandardSpecs(model) {
-				const featureValues = flattenFeatureValues(model && model.features);
-				const audioValues = safeList(model && model.features && model.features.audio);
-				const sourceValues = [...featureValues, ...audioValues].map((value) => safeText(value, "")).filter(Boolean);
-
-				let audioChannels = safeText(model && model.audioChannels, "");
-				if (!audioChannels) {
-					const channelMatch = sourceValues
-						.map((value) => value.match(/(\d+(?:\.\d+)?)\s*ch\b/i))
-						.find(Boolean);
-					audioChannels = channelMatch ? (channelMatch[1] + " CH") : "";
-				}
-
-				let audioPower = safeText(model && model.audioPower, "");
-				if (!audioPower) {
-					const wattValues = sourceValues.flatMap((value) => {
-						const matches = value.match(/(\d{2,3})\s*w\b/ig);
-						if (!matches) {
-							return [];
-						}
-						return matches.map((match) => Number((match.match(/\d+/) || [""])[0])).filter((num) => Number.isFinite(num));
-					});
-					if (wattValues.length > 0) {
-						audioPower = String(Math.max(...wattValues)) + "W";
-					}
-				}
-
-				let wifiStandard = safeText(model && model.wifiStandard, "");
-				if (!wifiStandard) {
-					const wifiMatch = sourceValues.find((value) => /wi\s*-?\s*fi\b/i.test(value));
-					wifiStandard = wifiMatch || "";
-				}
-
-				let bluetoothVersion = safeText(model && model.bluetoothVersion, "");
-				if (!bluetoothVersion) {
-					const btMatch = sourceValues
-						.map((value) => value.match(/bluetooth\s*([0-9]+(?:\.[0-9]+)?)/i))
-						.find(Boolean);
-					if (btMatch) {
-						bluetoothVersion = "Bluetooth " + btMatch[1];
-					}
-				}
-
-				let vrrMaxRefreshRate = safeText(model && model.vrrMaxRefreshRate, "");
-				if (!vrrMaxRefreshRate) {
-					const hzMatches = sourceValues.flatMap((value) => {
-						if (!/vrr/i.test(value)) {
-							return [];
-						}
-						const matches = value.match(/(\d{2,3})\s*hz/ig);
-						if (!matches) {
-							return [];
-						}
-						return matches.map((item) => Number((item.match(/\d+/) || [""])[0])).filter((num) => Number.isFinite(num));
-					});
-					if (hzMatches.length > 0) {
-						vrrMaxRefreshRate = String(Math.max(...hzMatches)) + " Hz";
-					}
-				}
-
 				return {
-					audioChannels,
-					audioPower,
-					wifiStandard,
-					bluetoothVersion,
-					vrrMaxRefreshRate
+					audioChannels: safeText(model && model.audioChannels, ""),
+					audioPower: safeText(model && model.audioPower, ""),
+					wifiStandard: safeText(model && model.wifiStandard, ""),
+					bluetoothVersion: safeText(model && model.bluetoothVersion, ""),
+					vrrMaxRefreshRate: safeText(model && model.vrrMaxRefreshRate, "")
 				};
 			}
 
@@ -1427,14 +1420,13 @@
 
 			function normalizeModelsData(models) {
 				return safeList(models).map((model, index) => {
-					const standardSpecs = getModelStandardSpecs(model);
 					return {
 						...model,
-						audioChannels: safeText(model && model.audioChannels, standardSpecs.audioChannels),
-						audioPower: safeText(model && model.audioPower, standardSpecs.audioPower),
-						wifiStandard: safeText(model && model.wifiStandard, standardSpecs.wifiStandard),
-						bluetoothVersion: safeText(model && model.bluetoothVersion, standardSpecs.bluetoothVersion),
-						vrrMaxRefreshRate: safeText(model && model.vrrMaxRefreshRate, standardSpecs.vrrMaxRefreshRate),
+						audioChannels: safeText(model && model.audioChannels, ""),
+						audioPower: safeText(model && model.audioPower, ""),
+						wifiStandard: safeText(model && model.wifiStandard, ""),
+						bluetoothVersion: safeText(model && model.bluetoothVersion, ""),
+						vrrMaxRefreshRate: safeText(model && model.vrrMaxRefreshRate, ""),
 						__key: getModelKey(model, index)
 					};
 				});
@@ -1444,6 +1436,7 @@
 				const articleId = safeText(article && article.id, "kb_auto_" + String(index + 1));
 				const title = safeText(article && article.title, "Knowledge Article");
 				const summary = safeText(article && article.summary, "");
+				const imageUrl = safeText(article && article.imageUrl, "").replace(/\\/g, "/");
 				const filters = normalizeKnowledgeFilters(article && article.filters);
 				const tags = safeList(article && article.tags)
 					.map((tag) => safeText(tag, ""))
@@ -1471,6 +1464,7 @@
 					id: articleId,
 					title,
 					summary,
+					imageUrl,
 					filters,
 					tags,
 					contentPoints,
@@ -1500,6 +1494,7 @@
 						id: normalized.id,
 						title: normalized.title || existing.title,
 						summary: normalized.summary || existing.summary,
+						imageUrl: normalized.imageUrl || existing.imageUrl || "",
 						filters: nextFilters,
 						tags: nextTags,
 						contentPoints: nextPoints,

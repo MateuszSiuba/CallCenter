@@ -1,6 +1,6 @@
 const ModelsData = [
   {
-    "modelName": "OLED951",
+    "modelName": "65OLED951",
     "year": 2026,
     "availableSizes": [
       "65",
@@ -20,19 +20,15 @@ const ModelsData = [
         "Dolby Atmos",
         "DTS:X",
         "IntelliSound",
-        "2x 3-way speakers",
-        "70W"
+        "2x 3-way speakers"
       ],
       "gaming": [
         "HDMI-VRR",
         "FreeSync Premium",
         "G-Sync Compatible",
-        "165Hz VRR",
         "ALLM"
       ],
       "smart": [
-        "WIFI 11ax 2x2 DB",
-        "Bluetooth 5.4",
         "Airplay",
         "Apple HomeKit",
         "Auracast",
@@ -44,7 +40,6 @@ const ModelsData = [
         "AirPlay 2",
         "Works with Alexa",
         "Voice control",
-        "WiFi 6",
         "Casting"
       ]
     },
@@ -63,10 +58,15 @@ const ModelsData = [
       "Titan Channel",
       "YouTube",
       "Apps"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "70W",
+    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "bluetoothVersion": "Bluetooth 5.4",
+    "vrrMaxRefreshRate": "165 Hz"
   },
   {
-    "modelName": "9001",
+    "modelName": "75PUS9001",
     "year": 2026,
     "availableSizes": [
       "75",
@@ -84,8 +84,6 @@ const ModelsData = [
         "FreeSync Premium"
       ],
       "smart": [
-        "WIFI 11ax 2x2 DB",
-        "Bluetooth 5.4",
         "Airplay",
         "Apple HomeKit",
         "MATTER Dash (Ambiscape)",
@@ -107,10 +105,15 @@ const ModelsData = [
       "Titan Channel",
       "YouTube",
       "Apps"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "bluetoothVersion": "Bluetooth 5.4",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "OLED911",
+    "modelName": "55OLED911",
     "year": 2026,
     "availableSizes": [
       "48",
@@ -129,25 +132,19 @@ const ModelsData = [
       ],
       "audio": [
         "B&W frontal sound",
-        "3.1ch 81W",
         "Sound by Bowers & Wilkins",
         "Dolby Atmos",
         "DTS:X",
         "IntelliSound",
-        "3.1 CH",
-        "built-in subwoofer",
-        "81W"
+        "built-in subwoofer"
       ],
       "gaming": [
         "HDMI-VRR",
         "FreeSync Premium",
         "G-Sync Compatible",
-        "165Hz VRR",
         "ALLM"
       ],
       "smart": [
-        "WIFI 11ax 2x2 DB",
-        "Bluetooth 5.4",
         "Auracast",
         "Airplay",
         "Apple HomeKit",
@@ -159,7 +156,6 @@ const ModelsData = [
         "AirPlay 2",
         "Works with Alexa",
         "Voice control",
-        "WiFi 6",
         "Casting"
       ]
     },
@@ -178,10 +174,15 @@ const ModelsData = [
       "Titan Channel",
       "YouTube",
       "Apps"
-    ]
+    ],
+    "audioChannels": "3.1 CH",
+    "audioPower": "81W",
+    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "bluetoothVersion": "Bluetooth 5.4",
+    "vrrMaxRefreshRate": "165 Hz"
   },
   {
-    "modelName": "OLED901",
+    "modelName": "48OLED901",
     "year": 2026,
     "availableSizes": [
       "42",
@@ -198,24 +199,18 @@ const ModelsData = [
       ],
       "audio": [
         "Slim frontal sound",
-        "42\" 2.1ch 50W",
-        "48\" 2.1ch 70W",
         "Frontal sound",
         "Dolby Atmos",
         "DTS:X",
-        "2.1 CH",
         "built-in subwoofer"
       ],
       "gaming": [
         "HDMI-VRR",
         "FreeSync Premium",
         "G-Sync Compatible",
-        "144Hz VRR",
         "ALLM"
       ],
       "smart": [
-        "WIFI 11ax 2x2 DB",
-        "Bluetooth 5.2",
         "Airplay",
         "Apple HomeKit",
         "Google Assistant",
@@ -224,7 +219,6 @@ const ModelsData = [
         "Matter",
         "AirPlay 2",
         "Voice control",
-        "WiFi 6",
         "Casting"
       ],
       "ambilight": "3-sided Ambilight"
@@ -243,10 +237,15 @@ const ModelsData = [
       "Titan Channel",
       "YouTube",
       "Apps"
-    ]
+    ],
+    "audioChannels": "2.1 CH",
+    "audioPower": "70W",
+    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "bluetoothVersion": "Bluetooth 5.2",
+    "vrrMaxRefreshRate": "144 Hz"
   },
   {
-    "modelName": "OLED811",
+    "modelName": "55OLED811",
     "year": 2026,
     "availableSizes": [
       "55",
@@ -268,12 +267,9 @@ const ModelsData = [
         "HDMI-VRR",
         "FreeSync Premium",
         "G-Sync Compatible",
-        "165Hz VRR",
         "ALLM"
       ],
       "smart": [
-        "WIFI 11ax 2x2 DB",
-        "Bluetooth 5.4",
         "Auracast",
         "Airplay",
         "Apple HomeKit",
@@ -284,7 +280,6 @@ const ModelsData = [
         "AirPlay 2",
         "Works with Alexa",
         "Voice control",
-        "WiFi 6",
         "Casting"
       ],
       "ambilight": "3-sided Ambilight",
@@ -292,8 +287,7 @@ const ModelsData = [
         "Dolby Atmos",
         "DTS:X",
         "IntelliSound",
-        "3-way speakers",
-        "70W (42\" 50W)"
+        "3-way speakers"
       ]
     },
     "specs": {
@@ -310,10 +304,15 @@ const ModelsData = [
       "Titan Channel",
       "YouTube",
       "Apps"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "70W",
+    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "bluetoothVersion": "Bluetooth 5.4",
+    "vrrMaxRefreshRate": "165 Hz"
   },
   {
-    "modelName": "OLED771",
+    "modelName": "55OLED771",
     "year": 2026,
     "availableSizes": [
       "42",
@@ -333,12 +332,9 @@ const ModelsData = [
         "HDMI-VRR",
         "FreeSync Premium",
         "G-Sync Compatible",
-        "120Hz VRR",
         "ALLM"
       ],
       "smart": [
-        "WIFI 11ax 2x2 DB",
-        "Bluetooth 5.2",
         "Auracast",
         "Airplay",
         "Apple HomeKit",
@@ -349,15 +345,13 @@ const ModelsData = [
         "AirPlay 2",
         "Alexa Built-in",
         "Voice control",
-        "WiFi 6",
         "Casting"
       ],
       "ambilight": "3-sided Ambilight",
       "audio": [
         "Dolby Atmos",
         "DTS:X",
-        "IntelliSound",
-        "20W"
+        "IntelliSound"
       ]
     },
     "specs": {
@@ -375,10 +369,15 @@ const ModelsData = [
       "Titan Channel",
       "YouTube",
       "Apps"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "20W",
+    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "bluetoothVersion": "Bluetooth 5.2",
+    "vrrMaxRefreshRate": "120 Hz"
   },
   {
-    "modelName": "OLED761",
+    "modelName": "55OLED761",
     "year": 2026,
     "availableSizes": [
       "48",
@@ -399,12 +398,9 @@ const ModelsData = [
         "HDMI-VRR",
         "FreeSync Premium",
         "G-Sync Compatible",
-        "120Hz VRR",
         "ALLM"
       ],
       "smart": [
-        "WIFI 11ax 2x2 DB",
-        "Bluetooth 5.2",
         "Auracast",
         "Airplay",
         "Apple HomeKit",
@@ -415,15 +411,13 @@ const ModelsData = [
         "AirPlay 2",
         "Works with Alexa",
         "Voice control",
-        "WiFi 6",
         "Casting"
       ],
       "ambilight": "3-sided Ambilight",
       "audio": [
         "Dolby Atmos",
         "DTS:X",
-        "IntelliSound",
-        "77\": 50W, 55-65\": 20W"
+        "IntelliSound"
       ]
     },
     "specs": {
@@ -441,10 +435,15 @@ const ModelsData = [
       "Titan Channel",
       "YouTube",
       "Apps"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "50W",
+    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "bluetoothVersion": "Bluetooth 5.2",
+    "vrrMaxRefreshRate": "120 Hz"
   },
   {
-    "modelName": "MLED981",
+    "modelName": "85MLED981",
     "year": 2026,
     "availableSizes": [
       "85"
@@ -457,23 +456,17 @@ const ModelsData = [
         "HDR10+"
       ],
       "audio": [
-        "4.1ch 70W down-firing + side tweeters",
         "Dolby Atmos",
         "DTS:X",
         "IntelliSound",
-        "4.1 CH",
-        "70W",
         "down and side firing tweeters"
       ],
       "gaming": [
         "HDMI-VRR",
         "FreeSync Premium Pro",
-        "165Hz VRR",
         "ALLM"
       ],
       "smart": [
-        "WIFI 11ax 2x2 DB",
-        "Bluetooth 5.4",
         "Auracast",
         "Airplay",
         "Apple HomeKit",
@@ -485,7 +478,6 @@ const ModelsData = [
         "AirPlay 2",
         "Works with Alexa",
         "Voice control",
-        "WiFi 6",
         "Casting"
       ],
       "ambilight": "3-sided Ambilight"
@@ -506,10 +498,15 @@ const ModelsData = [
       "Titan Channel",
       "YouTube",
       "Apps"
-    ]
+    ],
+    "audioChannels": "4.1 CH",
+    "audioPower": "70W",
+    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "bluetoothVersion": "Bluetooth 5.4",
+    "vrrMaxRefreshRate": "165 Hz"
   },
   {
-    "modelName": "8601",
+    "modelName": "55PUS8601",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -529,8 +526,6 @@ const ModelsData = [
         "FreeSync Premium"
       ],
       "smart": [
-        "WIFI 11ax 2x2 DB",
-        "Bluetooth 5.2",
         "MATTER Dash (Ambiscape)",
         "Easylink+"
       ]
@@ -550,10 +545,15 @@ const ModelsData = [
       "Titan Channel",
       "YouTube",
       "Apps"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "bluetoothVersion": "Bluetooth 5.2",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "8501",
+    "modelName": "55PUS8501",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -573,8 +573,6 @@ const ModelsData = [
         "FreeSync Premium"
       ],
       "smart": [
-        "WIFI 11ax 2x2 DB",
-        "Bluetooth 5.2",
         "Airplay",
         "Apple HomeKit",
         "MATTER Dash (Ambiscape)",
@@ -595,10 +593,15 @@ const ModelsData = [
       "Titan Channel",
       "YouTube",
       "Apps"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "bluetoothVersion": "Bluetooth 5.2",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "8401",
+    "modelName": "55PUS8401",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -616,7 +619,6 @@ const ModelsData = [
         "FreeSync Premium"
       ],
       "smart": [
-        "WIFI 11n 2x2 DB",
         "MATTER Dash (Ambiscape)"
       ]
     },
@@ -634,10 +636,15 @@ const ModelsData = [
       "Titan Channel",
       "YouTube",
       "Apps"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "WIFI 11n 2x2 DB",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "8001",
+    "modelName": "55PUS8001",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -656,8 +663,6 @@ const ModelsData = [
         "FreeSync Premium"
       ],
       "smart": [
-        "WIFI 11ax 2x2 DB",
-        "Bluetooth 5.2",
         "Airplay",
         "Apple HomeKit",
         "MATTER Dash (Ambiscape)",
@@ -678,10 +683,15 @@ const ModelsData = [
       "Titan Channel",
       "YouTube",
       "Apps"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "bluetoothVersion": "Bluetooth 5.2",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "7801",
+    "modelName": "55PUS7801",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -704,8 +714,6 @@ const ModelsData = [
         "FreeSync Premium"
       ],
       "smart": [
-        "WIFI 11ax 2x2 DB",
-        "Bluetooth 5.2",
         "Easylink+",
         "Auracast"
       ]
@@ -723,10 +731,15 @@ const ModelsData = [
       "Titan Channel",
       "YouTube",
       "Apps"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "bluetoothVersion": "Bluetooth 5.2",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "7201",
+    "modelName": "55PUS7201",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -748,8 +761,6 @@ const ModelsData = [
         "FreeSync Premium"
       ],
       "smart": [
-        "WIFI 11ax 2x2 DB",
-        "Bluetooth 5.0",
         "Airplay",
         "Apple HomeKit",
         "Easylink+"
@@ -769,10 +780,15 @@ const ModelsData = [
       "Titan Channel",
       "YouTube",
       "Apps"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "bluetoothVersion": "Bluetooth 5.0",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "7001",
+    "modelName": "55PUS7001",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -795,8 +811,6 @@ const ModelsData = [
         "FreeSync Premium"
       ],
       "smart": [
-        "WIFI 11ax 2x2 DB",
-        "Bluetooth 5.0",
         "Airplay",
         "Apple HomeKit",
         "Easylink+",
@@ -817,10 +831,15 @@ const ModelsData = [
       "Titan Channel",
       "YouTube",
       "Apps"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "bluetoothVersion": "Bluetooth 5.0",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "6901",
+    "modelName": "32PUS6901",
     "year": 2026,
     "availableSizes": [
       "32",
@@ -837,7 +856,6 @@ const ModelsData = [
         "FreeSync Premium"
       ],
       "smart": [
-        "WIFI 11n 2x2 SB",
         "Easylink+"
       ]
     },
@@ -854,10 +872,15 @@ const ModelsData = [
       "Titan Channel",
       "YouTube",
       "Apps"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "WIFI 11n 2x2 SB",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "OLED950",
+    "modelName": "65OLED950",
     "year": 2025,
     "availableSizes": [
       "65",
@@ -880,7 +903,6 @@ const ModelsData = [
         "Integrated subwoofer"
       ],
       "gaming": [
-        "VRR 144Hz",
         "HDMI 2.1",
         "FreeSync Premium",
         "G-Sync Compatible",
@@ -904,10 +926,15 @@ const ModelsData = [
     },
     "apps": [
       "Google OS"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": "144 Hz"
   },
   {
-    "modelName": "OLED910",
+    "modelName": "55OLED910",
     "year": 2025,
     "availableSizes": [
       "55",
@@ -933,7 +960,6 @@ const ModelsData = [
         "Subwoofer out"
       ],
       "gaming": [
-        "VRR 144Hz",
         "HDMI 2.1",
         "FreeSync Premium",
         "G-Sync Compatible",
@@ -957,10 +983,15 @@ const ModelsData = [
     },
     "apps": [
       "Google OS"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": "144 Hz"
   },
   {
-    "modelName": "OLED810",
+    "modelName": "55OLED810",
     "year": 2025,
     "availableSizes": [
       "42",
@@ -986,7 +1017,6 @@ const ModelsData = [
         "Integrated subwoofer"
       ],
       "gaming": [
-        "VRR 144Hz",
         "HDMI 2.1",
         "FreeSync Premium",
         "G-Sync Compatible",
@@ -1010,10 +1040,15 @@ const ModelsData = [
     },
     "apps": [
       "Google OS"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": "144 Hz"
   },
   {
-    "modelName": "OLED760",
+    "modelName": "55OLED760",
     "year": 2025,
     "availableSizes": [
       "48",
@@ -1038,7 +1073,6 @@ const ModelsData = [
         "IntelliSound"
       ],
       "gaming": [
-        "VRR 120Hz",
         "HDMI 2.1",
         "FreeSync Premium",
         "G-Sync Compatible",
@@ -1060,10 +1094,15 @@ const ModelsData = [
     },
     "apps": [
       "Titan OS"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": "120 Hz"
   },
   {
-    "modelName": "MLED950",
+    "modelName": "55MLED950",
     "year": 2025,
     "availableSizes": [
       "55",
@@ -1083,11 +1122,9 @@ const ModelsData = [
       "audio": [
         "Dolby Atmos",
         "DTS:X",
-        "4.1 surround sound",
-        "60W side-firing speakers"
+        "4.1 surround sound"
       ],
       "gaming": [
-        "VRR 144Hz",
         "HDMI 2.1",
         "FreeSync Premium Pro",
         "Game Bar 2.0"
@@ -1108,10 +1145,15 @@ const ModelsData = [
     },
     "apps": [
       "Titan OS"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "60W",
+    "wifiStandard": "",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": "144 Hz"
   },
   {
-    "modelName": "MLED910",
+    "modelName": "55MLED910",
     "year": 2025,
     "availableSizes": [
       "55",
@@ -1132,15 +1174,12 @@ const ModelsData = [
       "audio": [
         "Dolby Atmos",
         "DTS:X",
-        "IntelliSound",
-        "2.1 CH 50W (85\"), 2.0 CH 40W (55-75\")"
+        "IntelliSound"
       ],
       "gaming": [
-        "VRR 144Hz",
         "HDMI 2.1",
         "FreeSync Premium",
         "Game Bar 2.0",
-        "144Hz VRR",
         "ALLM"
       ],
       "smart": [
@@ -1149,8 +1188,6 @@ const ModelsData = [
         "Calman calibration",
         "AirPlay 2",
         "Alexa Built-in",
-        "Bluetooth 5.2",
-        "WiFi 5",
         "Casting"
       ]
     },
@@ -1164,10 +1201,15 @@ const ModelsData = [
     },
     "apps": [
       "Titan OS"
-    ]
+    ],
+    "audioChannels": "2.1 CH",
+    "audioPower": "50W",
+    "wifiStandard": "WiFi 5",
+    "bluetoothVersion": "Bluetooth 5.2",
+    "vrrMaxRefreshRate": "144 Hz"
   },
   {
-    "modelName": "MLED810",
+    "modelName": "55MLED810",
     "year": 2025,
     "availableSizes": [
       "55",
@@ -1206,10 +1248,15 @@ const ModelsData = [
     },
     "apps": [
       "Titan OS"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "PUS9000",
+    "modelName": "55PUS9000",
     "year": 2025,
     "availableSizes": [
       "43",
@@ -1235,7 +1282,6 @@ const ModelsData = [
         "IntelliSound"
       ],
       "gaming": [
-        "VRR 144Hz",
         "HDMI 2.1",
         "FreeSync Premium",
         "Game Bar 2.0"
@@ -1256,10 +1302,15 @@ const ModelsData = [
     },
     "apps": [
       "Titan OS"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": "144 Hz"
   },
   {
-    "modelName": "PUS8600",
+    "modelName": "55PUS8600",
     "year": 2025,
     "availableSizes": [
       "43",
@@ -1281,7 +1332,6 @@ const ModelsData = [
         "IntelliSound"
       ],
       "gaming": [
-        "VRR 120Hz",
         "HDMI-VRR with DLG/HSR"
       ],
       "smart": [
@@ -1300,10 +1350,15 @@ const ModelsData = [
     },
     "apps": [
       "Titan OS"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": "120 Hz"
   },
   {
-    "modelName": "PUS8500",
+    "modelName": "55PUS8500",
     "year": 2025,
     "availableSizes": [
       "43",
@@ -1346,10 +1401,15 @@ const ModelsData = [
     },
     "apps": [
       "Titan OS"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "PUS8200",
+    "modelName": "55PUS8200",
     "year": 2025,
     "availableSizes": [
       "43",
@@ -1391,10 +1451,15 @@ const ModelsData = [
     },
     "apps": [
       "Titan OS"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "PUS8000",
+    "modelName": "55PUS8000",
     "year": 2025,
     "availableSizes": [
       "43",
@@ -1436,10 +1501,15 @@ const ModelsData = [
     },
     "apps": [
       "Titan OS"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "PUS7800",
+    "modelName": "55PUS7800",
     "year": 2025,
     "availableSizes": [
       "43",
@@ -1479,10 +1549,15 @@ const ModelsData = [
     },
     "apps": [
       "Titan OS"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "PUS7200",
+    "modelName": "55PUS7200",
     "year": 2025,
     "availableSizes": [
       "43",
@@ -1523,10 +1598,15 @@ const ModelsData = [
     },
     "apps": [
       "Titan OS"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "PUS7000",
+    "modelName": "55PUS7000",
     "year": 2025,
     "availableSizes": [
       "43",
@@ -1566,10 +1646,15 @@ const ModelsData = [
     },
     "apps": [
       "Titan OS"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "PFS6900",
+    "modelName": "32PFS6900",
     "year": 2025,
     "availableSizes": [
       "32"
@@ -1599,10 +1684,15 @@ const ModelsData = [
     },
     "apps": [
       "Titan OS"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "6000",
+    "modelName": "24PUS6000",
     "year": 2025,
     "availableSizes": [
       "24",
@@ -1634,10 +1724,15 @@ const ModelsData = [
     },
     "apps": [
       "Titan OS"
-    ]
+    ],
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "5500",
+    "modelName": "32PUS5500",
     "year": 2025,
     "availableSizes": [
       "32",
@@ -1652,10 +1747,15 @@ const ModelsData = [
     "specs": {
       "resolution": "HD (32) / FHD (43)",
       "stand": "Compact lightweight design"
-    }
+    },
+    "audioChannels": "",
+    "audioPower": "",
+    "wifiStandard": "",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "OLED851",
+    "modelName": "55OLED851",
     "year": 2026,
     "availableSizes": [
       "55",
@@ -1673,11 +1773,9 @@ const ModelsData = [
         "Dolby Atmos",
         "DTS:X",
         "IntelliSound",
-        "3-way speakers",
-        "70W"
+        "3-way speakers"
       ],
       "gaming": [
-        "165Hz VRR",
         "FreeSync Premium",
         "G-Sync Compatible",
         "ALLM"
@@ -1688,18 +1786,21 @@ const ModelsData = [
         "AirPlay 2",
         "Works with Alexa",
         "Voice control",
-        "Bluetooth 5.4",
         "Auracast",
-        "WiFi 6",
         "Casting"
       ]
     },
     "specs": {
       "stand": "Swivel stand compatible with TAB8200"
-    }
+    },
+    "audioChannels": "",
+    "audioPower": "70W",
+    "wifiStandard": "WiFi 6",
+    "bluetoothVersion": "Bluetooth 5.4",
+    "vrrMaxRefreshRate": "165 Hz"
   },
   {
-    "modelName": "PUS9001",
+    "modelName": "55PUS9001",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -1721,11 +1822,9 @@ const ModelsData = [
       "audio": [
         "Dolby Atmos",
         "DTS:X",
-        "IntelliSound",
-        "2.1 CH 50W (75-100\"), 4.0 CH 40W (50-65\"), 2.0 CH 20W (43\")"
+        "IntelliSound"
       ],
       "gaming": [
-        "144Hz VRR",
         "FreeSync Premium",
         "ALLM"
       ],
@@ -1735,18 +1834,21 @@ const ModelsData = [
         "AirPlay 2",
         "Works with Alexa",
         "Voice control",
-        "Bluetooth 5.4",
         "Auracast",
-        "WiFi 5",
         "Casting"
       ]
     },
     "specs": {
       "stand": "Central swivel stand (43-65\"), Edge stand (75-100\")"
-    }
+    },
+    "audioChannels": "2.1 CH",
+    "audioPower": "50W",
+    "wifiStandard": "WiFi 5",
+    "bluetoothVersion": "Bluetooth 5.4",
+    "vrrMaxRefreshRate": "144 Hz"
   },
   {
-    "modelName": "PUS9011",
+    "modelName": "55PUS9011",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -1766,11 +1868,9 @@ const ModelsData = [
       "audio": [
         "Dolby Atmos",
         "DTS:X",
-        "IntelliSound",
-        "2.1 CH 50W (75\"), 4.0 CH 40W (50-65\"), 2.0 CH 20W (43\")"
+        "IntelliSound"
       ],
       "gaming": [
-        "144Hz VRR",
         "FreeSync Premium",
         "ALLM"
       ],
@@ -1780,18 +1880,21 @@ const ModelsData = [
         "AirPlay 2",
         "Works with Alexa",
         "Voice control",
-        "Bluetooth 5.4",
         "Auracast",
-        "WiFi 5",
         "Casting"
       ]
     },
     "specs": {
       "stand": "Central swivel stand (43-65\"), Edge stand (75\")"
-    }
+    },
+    "audioChannels": "2.1 CH",
+    "audioPower": "50W",
+    "wifiStandard": "WiFi 5",
+    "bluetoothVersion": "Bluetooth 5.4",
+    "vrrMaxRefreshRate": "144 Hz"
   },
   {
-    "modelName": "PUS9081",
+    "modelName": "55PUS9081",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -1810,11 +1913,9 @@ const ModelsData = [
       "audio": [
         "Dolby Atmos",
         "DTS:X",
-        "IntelliSound",
-        "4.0 CH 40W (50-65\"), 2.0 CH 20W (43\")"
+        "IntelliSound"
       ],
       "gaming": [
-        "144Hz VRR",
         "FreeSync Premium",
         "ALLM"
       ],
@@ -1824,18 +1925,21 @@ const ModelsData = [
         "AirPlay 2",
         "Works with Alexa",
         "Voice control",
-        "Bluetooth 5.4",
         "Auracast",
-        "WiFi 5",
         "Casting"
       ]
     },
     "specs": {
       "stand": "Swivel stand compatible with TAB8200"
-    }
+    },
+    "audioChannels": "4 CH",
+    "audioPower": "40W",
+    "wifiStandard": "WiFi 5",
+    "bluetoothVersion": "Bluetooth 5.4",
+    "vrrMaxRefreshRate": "144 Hz"
   },
   {
-    "modelName": "PUS8601",
+    "modelName": "55PUS8601",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -1854,8 +1958,7 @@ const ModelsData = [
       "audio": [
         "Dolby Atmos",
         "DTS:X",
-        "IntelliSound",
-        "2.0 CH 20W"
+        "IntelliSound"
       ],
       "gaming": [
         "120Hz in DLG/HSR",
@@ -1867,18 +1970,21 @@ const ModelsData = [
         "AirPlay 2",
         "Works with Alexa",
         "Voice control",
-        "Bluetooth 5.2",
         "Auracast",
-        "WiFi 5",
         "Casting"
       ]
     },
     "specs": {
       "stand": "Color: Black Sheen"
-    }
+    },
+    "audioChannels": "2 CH",
+    "audioPower": "20W",
+    "wifiStandard": "WiFi 5",
+    "bluetoothVersion": "Bluetooth 5.2",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "PUS8611",
+    "modelName": "55PUS8611",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -1897,8 +2003,7 @@ const ModelsData = [
       "audio": [
         "Dolby Atmos",
         "DTS:X",
-        "IntelliSound",
-        "2.0 CH 20W"
+        "IntelliSound"
       ],
       "gaming": [
         "120Hz in DLG/HSR",
@@ -1910,18 +2015,21 @@ const ModelsData = [
         "AirPlay 2",
         "Works with Alexa",
         "Voice control",
-        "Bluetooth 5.2",
         "Auracast",
-        "WiFi 5",
         "Casting"
       ]
     },
     "specs": {
       "stand": "Color: Black Sheen"
-    }
+    },
+    "audioChannels": "2 CH",
+    "audioPower": "20W",
+    "wifiStandard": "WiFi 5",
+    "bluetoothVersion": "Bluetooth 5.2",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "PUS8631",
+    "modelName": "55PUS8631",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -1939,8 +2047,7 @@ const ModelsData = [
       "audio": [
         "Dolby Atmos",
         "DTS:X",
-        "IntelliSound",
-        "2.0 CH 20W"
+        "IntelliSound"
       ],
       "gaming": [
         "120Hz in DLG/HSR",
@@ -1952,18 +2059,21 @@ const ModelsData = [
         "AirPlay 2",
         "Works with Alexa",
         "Voice control",
-        "Bluetooth 5.2",
         "Auracast",
-        "WiFi 5",
         "Casting"
       ]
     },
     "specs": {
       "stand": "Color: Black Sheen"
-    }
+    },
+    "audioChannels": "2 CH",
+    "audioPower": "20W",
+    "wifiStandard": "WiFi 5",
+    "bluetoothVersion": "Bluetooth 5.2",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "PUS8651",
+    "modelName": "55PUS8651",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -1981,8 +2091,7 @@ const ModelsData = [
       "audio": [
         "Dolby Atmos",
         "DTS:X",
-        "IntelliSound",
-        "2.0 CH 20W"
+        "IntelliSound"
       ],
       "gaming": [
         "120Hz in DLG/HSR",
@@ -1994,18 +2103,21 @@ const ModelsData = [
         "AirPlay 2",
         "Works with Alexa",
         "Voice control",
-        "Bluetooth 5.2",
         "Auracast",
-        "WiFi 5",
         "Casting"
       ]
     },
     "specs": {
       "stand": "Color: Black Sheen"
-    }
+    },
+    "audioChannels": "2 CH",
+    "audioPower": "20W",
+    "wifiStandard": "WiFi 5",
+    "bluetoothVersion": "Bluetooth 5.2",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "PUS8701",
+    "modelName": "55PUS8701",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -2022,8 +2134,7 @@ const ModelsData = [
       "audio": [
         "Dolby Atmos",
         "DTS:X",
-        "IntelliSound",
-        "2.0 CH 20W"
+        "IntelliSound"
       ],
       "gaming": [
         "120Hz in DLG/HSR",
@@ -2035,18 +2146,21 @@ const ModelsData = [
         "AirPlay 2",
         "Works with Alexa",
         "Voice control",
-        "Bluetooth 5.2",
         "Auracast",
-        "WiFi 5",
         "Casting"
       ]
     },
     "specs": {
       "stand": "Central stand, Color: Black Sheen"
-    }
+    },
+    "audioChannels": "2 CH",
+    "audioPower": "20W",
+    "wifiStandard": "WiFi 5",
+    "bluetoothVersion": "Bluetooth 5.2",
+    "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "PUS8501",
+    "modelName": "55PUS8501",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -2065,11 +2179,9 @@ const ModelsData = [
       "audio": [
         "Dolby Atmos",
         "DTS:X",
-        "IntelliSound",
-        "2.0 CH 20W"
+        "IntelliSound"
       ],
       "gaming": [
-        "60Hz VRR",
         "ALLM"
       ],
       "smart": [
@@ -2077,17 +2189,20 @@ const ModelsData = [
         "AmbiScape",
         "AirPlay 2",
         "Works with Alexa",
-        "Bluetooth 5.2",
-        "Auracast",
-        "WiFi 5"
+        "Auracast"
       ]
     },
     "specs": {
       "stand": "Edge stand, Color: Black Matt"
-    }
+    },
+    "audioChannels": "2 CH",
+    "audioPower": "20W",
+    "wifiStandard": "WiFi 5",
+    "bluetoothVersion": "Bluetooth 5.2",
+    "vrrMaxRefreshRate": "60 Hz"
   },
   {
-    "modelName": "PUS8401",
+    "modelName": "55PUS8401",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -2104,25 +2219,27 @@ const ModelsData = [
       ],
       "audio": [
         "DTS:X",
-        "IntelliSound",
-        "2.0 CH 20W"
+        "IntelliSound"
       ],
       "gaming": [
-        "60Hz VRR",
         "ALLM"
       ],
       "smart": [
         "Matter",
-        "Works with Alexa",
-        "WiFi 4"
+        "Works with Alexa"
       ]
     },
     "specs": {
       "stand": "Open frame stand, Color: Black Matt"
-    }
+    },
+    "audioChannels": "2 CH",
+    "audioPower": "20W",
+    "wifiStandard": "WiFi 4",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": "60 Hz"
   },
   {
-    "modelName": "PUS8001",
+    "modelName": "55PUS8001",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -2141,11 +2258,9 @@ const ModelsData = [
       "audio": [
         "Dolby Atmos",
         "DTS:X",
-        "IntelliSound",
-        "2.0 CH 20W"
+        "IntelliSound"
       ],
       "gaming": [
-        "60Hz VRR",
         "ALLM"
       ],
       "smart": [
@@ -2153,18 +2268,21 @@ const ModelsData = [
         "AmbiScape",
         "AirPlay 2",
         "Works with Alexa",
-        "Bluetooth 5.2",
         "Auracast",
-        "WiFi 5",
         "Casting"
       ]
     },
     "specs": {
       "stand": "Edge stand, Color: Black Matt"
-    }
+    },
+    "audioChannels": "2 CH",
+    "audioPower": "20W",
+    "wifiStandard": "WiFi 5",
+    "bluetoothVersion": "Bluetooth 5.2",
+    "vrrMaxRefreshRate": "60 Hz"
   },
   {
-    "modelName": "PUS7801",
+    "modelName": "55PUS7801",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -2183,29 +2301,30 @@ const ModelsData = [
       "audio": [
         "Dolby Atmos",
         "DTS:X",
-        "IntelliSound",
-        "2.0 CH 20W"
+        "IntelliSound"
       ],
       "gaming": [
-        "60Hz VRR",
         "ALLM"
       ],
       "smart": [
         "Matter",
         "AirPlay 2",
         "Works with Alexa",
-        "Bluetooth 5.2",
         "Auracast",
-        "WiFi 5",
         "Casting"
       ]
     },
     "specs": {
       "stand": "Edge stand, Color: Black Matt"
-    }
+    },
+    "audioChannels": "2 CH",
+    "audioPower": "20W",
+    "wifiStandard": "WiFi 5",
+    "bluetoothVersion": "Bluetooth 5.2",
+    "vrrMaxRefreshRate": "60 Hz"
   },
   {
-    "modelName": "PUS7001",
+    "modelName": "55PUS7001",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -2224,28 +2343,29 @@ const ModelsData = [
       "audio": [
         "Dolby Atmos",
         "DTS:X",
-        "IntelliSound",
-        "2.0 CH 20W"
+        "IntelliSound"
       ],
       "gaming": [
-        "60Hz VRR",
         "ALLM"
       ],
       "smart": [
         "Matter",
         "AirPlay 2",
         "Works with Alexa",
-        "Bluetooth 5.0",
-        "WiFi 5",
         "Casting"
       ]
     },
     "specs": {
       "stand": "Edge stand, plastic angled black sheen"
-    }
+    },
+    "audioChannels": "2 CH",
+    "audioPower": "20W",
+    "wifiStandard": "WiFi 5",
+    "bluetoothVersion": "Bluetooth 5.0",
+    "vrrMaxRefreshRate": "60 Hz"
   },
   {
-    "modelName": "PUS7061",
+    "modelName": "55PUS7061",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -2264,28 +2384,29 @@ const ModelsData = [
       "audio": [
         "Dolby Atmos",
         "DTS:X",
-        "IntelliSound",
-        "2.0 CH 20W"
+        "IntelliSound"
       ],
       "gaming": [
-        "60Hz VRR",
         "ALLM"
       ],
       "smart": [
         "Matter",
         "AirPlay 2",
         "Works with Alexa",
-        "Bluetooth 5.0",
-        "WiFi 5",
         "Casting"
       ]
     },
     "specs": {
       "stand": "Edge stand, plastic angled black sheen"
-    }
+    },
+    "audioChannels": "2 CH",
+    "audioPower": "20W",
+    "wifiStandard": "WiFi 5",
+    "bluetoothVersion": "Bluetooth 5.0",
+    "vrrMaxRefreshRate": "60 Hz"
   },
   {
-    "modelName": "PFS6901",
+    "modelName": "32PFS6901",
     "year": 2026,
     "availableSizes": [
       "32",
@@ -2299,25 +2420,27 @@ const ModelsData = [
         "HDR10"
       ],
       "audio": [
-        "Dolby audio",
-        "2.0 CH 12W"
+        "Dolby audio"
       ],
       "gaming": [
-        "60Hz VRR",
         "ALLM"
       ],
       "smart": [
         "Matter",
-        "Works with Alexa",
-        "WiFi 4 Single band"
+        "Works with Alexa"
       ]
     },
     "specs": {
       "stand": "Edge stand, Color: Black Sheen/Matt"
-    }
+    },
+    "audioChannels": "2 CH",
+    "audioPower": "12W",
+    "wifiStandard": "WiFi 4 Single band",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": "60 Hz"
   },
   {
-    "modelName": "PFS6951",
+    "modelName": "32PFS6951",
     "year": 2026,
     "availableSizes": [
       "32"
@@ -2330,22 +2453,24 @@ const ModelsData = [
         "HDR10"
       ],
       "audio": [
-        "Dolby audio",
-        "2.0 CH 12W"
+        "Dolby audio"
       ],
       "gaming": [
-        "60Hz VRR",
         "ALLM"
       ],
       "smart": [
         "Matter",
-        "Works with Alexa",
-        "WiFi 4 Single band"
+        "Works with Alexa"
       ]
     },
     "specs": {
       "stand": "Edge stand, Color: Black Sheen/Matt"
-    }
+    },
+    "audioChannels": "2 CH",
+    "audioPower": "12W",
+    "wifiStandard": "WiFi 4 Single band",
+    "bluetoothVersion": "",
+    "vrrMaxRefreshRate": "60 Hz"
   }
 ];
 if (typeof window !== "undefined") {

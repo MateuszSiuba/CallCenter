@@ -5,6 +5,34 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Support Hub - Global Call Center KB</title>
 
+	<script>
+		(() => {
+			try {
+				const allowedCountries = ["UK", "PL", "DE"];
+				const savedCountry = localStorage.getItem("support-hub-country") || "";
+				const rawSession = localStorage.getItem("support-hub-session-v1");
+				let sessionCountry = "";
+
+				if (rawSession) {
+					const parsed = JSON.parse(rawSession);
+					if (parsed && typeof parsed === "object" && typeof parsed.countryCode === "string") {
+						sessionCountry = parsed.countryCode;
+					}
+				}
+
+				const effectiveCountry = allowedCountries.includes(sessionCountry)
+					? sessionCountry
+					: (allowedCountries.includes(savedCountry) ? savedCountry : "");
+
+				if (effectiveCountry) {
+					document.documentElement.classList.add("resume-ready");
+				}
+			} catch (error) {
+				// Ignore storage access/parsing issues.
+			}
+		})();
+	</script>
+
 	<script src="https://cdn.tailwindcss.com"></script>
 	<script>
 		tailwind.config = {
@@ -268,6 +296,38 @@
 
 	<div id="quickInfoToast" class="pointer-events-none fixed bottom-5 left-1/2 z-[72] hidden -translate-x-1/2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-xl"></div>
 
+	<div id="specDetailsModal" class="hidden fixed inset-0 z-[71] flex items-center justify-center bg-slate-900/35 p-4 backdrop-blur-[1px]" role="dialog" aria-modal="true" aria-labelledby="specDetailsTitle">
+		<div id="specDetailsCard" class="w-[min(96vw,960px)] max-h-[88vh] overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-2xl">
+			<div class="flex items-start justify-between gap-3">
+				<div>
+					<p class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Expanded Technical View</p>
+					<h4 id="specDetailsTitle" class="mt-1 text-xl font-semibold text-slate-900"></h4>
+					<p id="specDetailsSummary" class="mt-1 text-sm text-slate-600"></p>
+				</div>
+				<button id="specDetailsCloseBtn" type="button" class="rounded-lg border border-slate-300 bg-white px-2 py-1 text-xs font-semibold text-slate-600 transition hover:bg-slate-50">X</button>
+			</div>
+
+			<div id="specDetailsBody" class="mt-4 max-h-[62vh] overflow-auto"></div>
+
+			<div class="mt-5 flex flex-wrap justify-end gap-2">
+				<button id="specDetailsDismissBtn" type="button" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50">Close</button>
+			</div>
+		</div>
+	</div>
+
+	<div id="imageZoomModal" class="hidden fixed inset-0 z-[73] flex items-center justify-center bg-slate-900/75 p-4" role="dialog" aria-modal="true" aria-label="Image zoom preview">
+		<div id="imageZoomCard" class="relative w-[min(96vw,1400px)] max-h-[92vh] rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl">
+			<button id="imageZoomCloseBtn" type="button" class="absolute right-2 top-2 z-10 rounded-lg border border-slate-300 bg-white px-2 py-1 text-xs font-semibold text-slate-600 transition hover:bg-slate-50">X</button>
+			<div id="imageZoomLoading" class="absolute inset-0 hidden items-center justify-center rounded-xl bg-white/80">
+				<div class="flex flex-col items-center gap-2 text-slate-600">
+					<span class="h-8 w-8 animate-spin rounded-full border-2 border-slate-300 border-t-brand-700"></span>
+					<p class="text-xs font-semibold uppercase tracking-[0.14em]">Loading image</p>
+				</div>
+			</div>
+			<img id="imageZoomPreview" src="" alt="Zoom preview" class="block max-h-[86vh] w-full rounded-xl object-contain transition-opacity duration-200">
+		</div>
+	</div>
+
 	<button
 		id="scrollTopBtn"
 		type="button"
@@ -280,6 +340,7 @@
 <script src="data/models.js"></script>
 <script src="data/policies.js"></script>
 <script src="data/knowledge.js"></script>
+<script src="data/model-media.js"></script>
 <script src="app.js"></script>
 
 </body>

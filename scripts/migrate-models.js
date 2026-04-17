@@ -1,27 +1,16 @@
-const fs = require("fs");
 const path = require("path");
-const vm = require("vm");
+const {
+  loadModelsData,
+  saveModelsData,
+  toText
+} = require("./lib/models-io");
 
 const rootDir = path.resolve(__dirname, "..");
 const modelsPath = path.join(rootDir, "data", "models.js");
 
-const source = fs.readFileSync(modelsPath, "utf8");
-const context = {
-  window: {}
-};
-vm.createContext(context);
-vm.runInContext(source, context);
-
-const models = context.window.ModelsData;
-if (!Array.isArray(models)) {
-  throw new Error("ModelsData array not found in data/models.js");
-}
+const models = loadModelsData(modelsPath);
 
 const SIZE_PRIORITY = ["55", "50", "65", "48", "42"];
-
-function toText(value) {
-  return String(value == null ? "" : value).trim();
-}
 
 function pickDefaultSize(availableSizes) {
   const sizes = Array.isArray(availableSizes)
@@ -204,10 +193,5 @@ for (const model of models) {
   }
 }
 
-const output =
-  "const ModelsData = "
-  + JSON.stringify(models, null, 2)
-  + ";\nif (typeof window !== \"undefined\") {\n  window.ModelsData = ModelsData;\n}\n";
-
-fs.writeFileSync(modelsPath, output, "utf8");
+saveModelsData(modelsPath, models);
 console.log("Migrated models:", models.length);

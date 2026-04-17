@@ -46,6 +46,10 @@
 			transition: opacity 320ms ease, transform 320ms ease, filter 320ms ease;
 		}
 
+		html.resume-ready #splashScreen {
+			display: none !important;
+		}
+
 		#splashScreen.is-hiding {
 			opacity: 0;
 			transform: scale(0.97);
@@ -61,6 +65,12 @@
 			opacity: 0;
 			transform: translateY(12px);
 			pointer-events: none;
+		}
+
+		html.resume-ready #appShell.is-hidden {
+			opacity: 1;
+			transform: none;
+			pointer-events: auto;
 		}
 
 		.module-tab.is-active {
@@ -149,7 +159,7 @@
 		body.article-mode #articleViewSection {
 			display: flex;
 			flex-direction: column;
-			min-height: 0;
+			min-height: 65vh;
 		}
 
 		body.article-mode #articleContent {
@@ -157,39 +167,50 @@
 			min-height: 0;
 		}
 
+		#articleRecommendationDock {
+			margin-top: 1.25rem;
+		}
+
+		#articleRecommendationDock:empty {
+			margin-top: 0;
+			padding-top: 0;
+		}
+
 		body.article-mode #articleRecommendationDock {
 			margin-top: auto;
 			position: static;
+			padding-top: 1.25rem;
 		}
 
 		@media (min-width: 1024px) {
 			body.article-mode {
-				overflow: hidden;
+				overflow-y: auto;
 			}
 
 			body.article-mode main {
-				height: calc(100dvh - 188px);
-				overflow: hidden;
+				height: auto;
+				overflow: visible;
 			}
 
 			body.article-mode #mainContentGrid {
-				height: 100%;
+				height: auto;
 			}
 
 			body.article-mode #mainContentGrid > section {
-				height: 100%;
+				height: auto;
 				display: flex;
 				flex-direction: column;
 			}
 
 			body.article-mode #articleViewSection {
-				height: 100%;
+				height: auto;
+				min-height: calc(100dvh - 220px);
 				flex: 1 1 auto;
 			}
 
 			body.article-mode #articleContent {
-				overflow: auto;
-				padding-right: 0.25rem;
+				overflow: visible;
+				padding-right: 0;
 			}
 		}
 

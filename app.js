@@ -24,10 +24,12 @@
 				KnowledgeBaseData: [
 					...((Array.isArray(window.KnowledgeBaseData) ? window.KnowledgeBaseData : [])),
 					...((typeof KnowledgeBaseData !== "undefined" && Array.isArray(KnowledgeBaseData)) ? KnowledgeBaseData : [])
-				]
+				],
+								ModelMediaData: window.ModelMediaData || (typeof ModelMediaData !== "undefined" ? ModelMediaData : {})
 			};
 
 			const storageKeyCountry = "support-hub-country";
+			const storageKeySession = "support-hub-session-v1";
 
 			const splashScreen = document.getElementById("splashScreen");
 			const countrySelect = document.getElementById("countrySelect");
@@ -54,7 +56,6 @@
 			const osFilter = document.getElementById("osFilter");
 			const panelFilter = document.getElementById("panelFilter");
 			const activePath = document.getElementById("activePath");
-			const sidebarModelList = document.getElementById("sidebarModelList");
 
 			const modelResultsSection = document.getElementById("modelResultsSection");
 			const modelGrid = document.getElementById("modelGrid");
@@ -91,6 +92,20 @@
 			const quickInfoDismissBtn = document.getElementById("quickInfoDismissBtn");
 			const quickInfoReadBtn = document.getElementById("quickInfoReadBtn");
 			const quickInfoToast = document.getElementById("quickInfoToast");
+			const specDetailsModal = document.getElementById("specDetailsModal");
+			const specDetailsCard = document.getElementById("specDetailsCard");
+			const specDetailsTitle = document.getElementById("specDetailsTitle");
+			const specDetailsSummary = document.getElementById("specDetailsSummary");
+			const specDetailsBody = document.getElementById("specDetailsBody");
+			const specDetailsCloseBtn = document.getElementById("specDetailsCloseBtn");
+			const specDetailsDismissBtn = document.getElementById("specDetailsDismissBtn");
+			const imageZoomModal = document.getElementById("imageZoomModal");
+			const imageZoomCard = document.getElementById("imageZoomCard");
+			const imageZoomPreview = document.getElementById("imageZoomPreview");
+			const imageZoomLoading = document.getElementById("imageZoomLoading");
+			const imageZoomCloseBtn = document.getElementById("imageZoomCloseBtn");
+			const zoomImageCache = new Set();
+			let imageZoomLoadToken = 0;
 
 			const scrollTopBtn = document.getElementById("scrollTopBtn");
 
@@ -115,7 +130,11 @@
 				viewMode: "browse",
 				quickInfoArticleId: null,
 				articleBackModelId: null,
-				quickInfoToastTimer: null
+				quickInfoToastTimer: null,
+				selectedSizeByModelId: {},
+				specDetailsContext: null,
+				articleViewContext: null,
+				isRestoringSession: false
 			};
 
 			const changelogEntries = [
@@ -239,6 +258,144 @@
 					.replace(/'/g, "&#39;");
 			}
 
+			function loadPersistedSessionState() {
+				try {
+					const raw = localStorage.getItem(storageKeySession);
+					if (!raw) {
+						return null;
+					}
+
+					const parsed = JSON.parse(raw);
+					return isPlainObject(parsed) ? parsed : null;
+				} catch (error) {
+					return null;
+				}
+			}
+
+			function buildSessionSnapshot() {
+				return {
+					countryCode: state.countryCode,
+					activeModule: state.activeModule,
+					viewMode: state.viewMode,
+					selectedModelId: state.selectedModelId,
+					activeDetailTab: state.activeDetailTab,
+					resultsView: state.resultsView,
+					searchQuery: state.searchQuery,
+					filters: {
+						year: state.filters.year,
+						os: state.filters.os,
+						panel: state.filters.panel
+					},
+					articleBackModelId: state.articleBackModelId,
+					selectedSizeByModelId: state.selectedSizeByModelId,
+					articleViewContext: state.articleViewContext
+				};
+			}
+
+			function persistSessionState() {
+				if (state.isRestoringSession) {
+					return;
+				}
+
+				try {
+					localStorage.setItem(storageKeySession, JSON.stringify(buildSessionSnapshot()));
+				} catch (error) {
+					// Ignore storage quota or privacy mode write failures.
+				}
+			}
+
+			function clearPersistedSessionState() {
+				localStorage.removeItem(storageKeySession);
+			}
+
+			function applyPersistedSessionState(snapshot) {
+				if (!isPlainObject(snapshot)) {
+					return;
+				}
+
+				const viewMode = safeText(snapshot.viewMode, "browse");
+				state.viewMode = ["browse", "detail", "article"].includes(viewMode) ? viewMode : "browse";
+
+				const activeModule = safeText(snapshot.activeModule, "TV");
+				state.activeModule = moduleDescriptions[activeModule] ? activeModule : "TV";
+
+				const resultsView = safeText(snapshot.resultsView, "models");
+				state.resultsView = resultsView === "articles" ? "articles" : "models";
+
+				state.searchQuery = safeText(snapshot.searchQuery, "");
+				state.selectedModelId = safeText(snapshot.selectedModelId, "") || null;
+
+				const activeDetailTab = safeText(snapshot.activeDetailTab, "specs");
+				state.activeDetailTab = ["specs", "ports", "troubleshooting", "policies", "gallery"].includes(activeDetailTab)
+					? activeDetailTab
+					: "specs";
+
+				const rawFilters = isPlainObject(snapshot.filters) ? snapshot.filters : {};
+				state.filters = {
+					year: safeText(rawFilters.year, "all") || "all",
+					os: safeText(rawFilters.os, "all") || "all",
+					panel: safeText(rawFilters.panel, "all") || "all"
+				};
+
+				state.articleBackModelId = safeText(snapshot.articleBackModelId, "") || null;
+				state.selectedSizeByModelId = isPlainObject(snapshot.selectedSizeByModelId)
+					? snapshot.selectedSizeByModelId
+					: {};
+
+				if (isPlainObject(snapshot.articleViewContext)) {
+					const kind = safeText(snapshot.articleViewContext.kind, "");
+					if (kind === "knowledge") {
+						state.articleViewContext = {
+							kind,
+							id: safeText(snapshot.articleViewContext.id, "")
+						};
+					} else if (kind === "policy" && isPlainObject(snapshot.articleViewContext.payload)) {
+						state.articleViewContext = {
+							kind,
+							payload: snapshot.articleViewContext.payload
+						};
+					} else {
+						state.articleViewContext = null;
+					}
+				} else {
+					state.articleViewContext = null;
+				}
+
+				if (globalSearch) {
+					globalSearch.value = state.searchQuery;
+				}
+			}
+
+			function restoreViewFromPersistedSession() {
+				setArticleBackTarget(state.articleBackModelId || null);
+
+				if (state.viewMode === "detail") {
+					const model = getModelById(state.selectedModelId);
+					if (model) {
+						renderModelDetail(model);
+						setViewMode("detail");
+						return;
+					}
+				}
+
+				if (state.viewMode === "article" && isPlainObject(state.articleViewContext)) {
+					if (state.articleViewContext.kind === "knowledge") {
+						const articleId = safeText(state.articleViewContext.id, "");
+						if (articleId && getKnowledgeArticleById(articleId)) {
+							openKnowledgeArticle(articleId, { fromModelId: state.articleBackModelId || state.selectedModelId || null });
+							return;
+						}
+					}
+
+					if (state.articleViewContext.kind === "policy" && isPlainObject(state.articleViewContext.payload)) {
+						openPolicyArticle(state.articleViewContext.payload);
+						return;
+					}
+				}
+
+				setViewMode("browse");
+			}
+
 			function renderKnowledgePill(label, extraClasses, isInteractive) {
 				const text = safeText(label, "-");
 				const interactive = Boolean(isInteractive);
@@ -320,11 +477,13 @@
 				state.articleBackModelId = modelId || null;
 
 				if (!articleBackBtn) {
+					persistSessionState();
 					return;
 				}
 
 				if (!state.articleBackModelId) {
 					articleBackBtn.textContent = "Back to model list";
+					persistSessionState();
 					return;
 				}
 
@@ -332,6 +491,7 @@
 				articleBackBtn.textContent = model
 					? "Back to " + getModelName(model)
 					: "Back to model list";
+				persistSessionState();
 			}
 
 			function getArticleContentPoints(article) {
@@ -1030,68 +1190,6 @@
 				return score;
 			}
 
-			function findKnowledgeArticleByFeatureTerm(term, options) {
-				const normalizedTerm = normalizeText(term);
-				if (!normalizedTerm || !state.data) {
-					return null;
-				}
-
-				const contextModel = options && options.model ? options.model : null;
-				const articles = safeList(state.data.KnowledgeBaseData);
-
-				const ranked = articles.map((article) => {
-					const articleProfile = getArticleFilterProfile(article);
-
-					if (contextModel && !isModelMatchingArticleScope(contextModel, articleProfile)) {
-						return {
-							article,
-							score: -1000
-						};
-					}
-
-					const topicScore = safeList(articleProfile && articleProfile.topics).reduce((bestScore, topic) => {
-						const score = getFeatureTopicMatchScore(normalizedTerm, topic);
-						return score > bestScore ? score : bestScore;
-					}, 0);
-
-					const titleScore = getFeatureTopicMatchScore(normalizedTerm, article && article.title);
-					const tagScore = safeList(article && article.tags).reduce((bestScore, tag) => {
-						const score = getFeatureTopicMatchScore(normalizedTerm, tag);
-						return score > bestScore ? score : bestScore;
-					}, 0);
-
-					let finalScore = Math.max(topicScore, titleScore, tagScore);
-					if (topicScore > 0) {
-						finalScore += 120;
-					}
-
-					if (contextModel && (safeList(articleProfile && articleProfile.os).length > 0 || safeList(articleProfile && articleProfile.panel).length > 0 || safeList(articleProfile && articleProfile.years).length > 0)) {
-						finalScore += 40;
-					}
-
-					return {
-						article,
-						score: finalScore
-					};
-				}).sort((a, b) => b.score - a.score);
-
-				if (ranked.length === 0) {
-					return null;
-				}
-
-				const best = ranked[0];
-				const second = ranked[1];
-				if (!best || best.score < 150) {
-					return null;
-				}
-
-				if (second && best.score < 260 && (best.score - second.score) < 30) {
-					return null;
-				}
-
-				return best.article;
-			}
-
 			function hideQuickInfoModal() {
 				state.quickInfoArticleId = null;
 				if (quickInfoModal) {
@@ -1143,6 +1241,270 @@
 				quickInfoModal.classList.remove("hidden");
 			}
 
+			function hideSpecDetailsModal() {
+				state.specDetailsContext = null;
+				if (specDetailsModal) {
+					specDetailsModal.classList.add("hidden");
+				}
+			}
+
+			function setImageZoomLoadingState(isLoading) {
+				if (imageZoomLoading) {
+					imageZoomLoading.classList.toggle("hidden", !isLoading);
+					imageZoomLoading.classList.toggle("flex", isLoading);
+				}
+
+				if (imageZoomPreview) {
+					imageZoomPreview.classList.toggle("opacity-0", isLoading);
+				}
+			}
+
+			function preloadZoomImage(value) {
+				const imageUrl = getSafeHttpUrl(value);
+				if (!imageUrl || zoomImageCache.has(imageUrl)) {
+					return Promise.resolve(imageUrl);
+				}
+
+				return new Promise((resolve) => {
+					const probe = new Image();
+					probe.decoding = "async";
+					probe.onload = () => {
+						zoomImageCache.add(imageUrl);
+						resolve(imageUrl);
+					};
+					probe.onerror = () => {
+						resolve("");
+					};
+					probe.src = imageUrl;
+				});
+			}
+
+			function primeZoomImageFromTarget(target) {
+				if (!(target instanceof Element)) {
+					return;
+				}
+
+				const zoomableImage = target.closest(".js-zoomable-image");
+				if (!zoomableImage) {
+					return;
+				}
+
+				const zoomSrc = safeText(zoomableImage.getAttribute("data-zoom-src"), zoomableImage.getAttribute("src") || "");
+				if (!zoomSrc) {
+					return;
+				}
+
+				preloadZoomImage(zoomSrc);
+			}
+
+			function primeZoomImagesInContainer(container) {
+				if (!(container instanceof Element)) {
+					return;
+				}
+
+				const zoomUrls = Array.from(container.querySelectorAll(".js-zoomable-image"))
+					.map((image) => safeText(image.getAttribute("data-zoom-src"), image.getAttribute("src") || ""))
+					.filter(Boolean);
+
+				zoomUrls.forEach((zoomUrl, index) => {
+					window.setTimeout(() => {
+						preloadZoomImage(zoomUrl);
+					}, index * 90);
+				});
+			}
+
+			function primeModelMediaZoomImages(model) {
+				const media = getModelMedia(model);
+				if (!media) {
+					return;
+				}
+
+				const zoomCandidates = [
+					getRenderableImageUrl(getSafeHttpUrl(media.frontImageUrl), 2400),
+					getRenderableImageUrl(getSafeHttpUrl(media.remoteImageUrl), 2400),
+					getRenderableImageUrl(getSafeHttpUrl(media.portsImageUrl), 2400)
+				].filter(Boolean);
+
+				zoomCandidates.forEach((zoomUrl, index) => {
+					window.setTimeout(() => {
+						preloadZoomImage(zoomUrl);
+					}, 60 + (index * 120));
+				});
+			}
+
+			function hideImageZoomModal() {
+				imageZoomLoadToken += 1;
+				setImageZoomLoadingState(false);
+
+				if (imageZoomModal) {
+					imageZoomModal.classList.add("hidden");
+				}
+
+				if (imageZoomPreview) {
+					imageZoomPreview.setAttribute("src", "");
+					imageZoomPreview.setAttribute("alt", "Zoom preview");
+				}
+			}
+
+			function showImageZoomModal(src, altText) {
+				const imageUrl = getSafeHttpUrl(src);
+				if (!imageZoomModal || !imageZoomPreview || !imageUrl) {
+					return;
+				}
+
+				const loadToken = imageZoomLoadToken + 1;
+				imageZoomLoadToken = loadToken;
+
+				imageZoomPreview.setAttribute("src", "");
+				imageZoomPreview.setAttribute("alt", safeText(altText, "Zoom preview"));
+				imageZoomModal.classList.remove("hidden");
+
+				if (zoomImageCache.has(imageUrl)) {
+					imageZoomPreview.setAttribute("src", imageUrl);
+					setImageZoomLoadingState(false);
+					return;
+				}
+
+				setImageZoomLoadingState(true);
+				preloadZoomImage(imageUrl).then((loadedUrl) => {
+					if (loadToken !== imageZoomLoadToken) {
+						return;
+					}
+
+					imageZoomPreview.setAttribute("src", loadedUrl || imageUrl);
+					setImageZoomLoadingState(false);
+				});
+			}
+
+			function getSpecDetailsModalConfig(detailType) {
+				const modalConfig = {
+					audio: {
+						title: "Audio Specifications - Full View",
+						summary: "Extended audio fields from Philips technical sheet.",
+						categoryPatterns: [/^Sound$/i, /^Dźwięk$/i],
+						keyPatterns: [/Audio/i, /Dźwięk/i, /Głośnik/i, /Subwoofer/i, /Dolby/i, /DTS/i, /Moc wyjściowa/i, /Output power/i]
+					},
+					connectivity: {
+						title: "Connectivity - Full View",
+						summary: "Wireless and wired communication details for advanced troubleshooting.",
+						categoryPatterns: [/^Connectivity$/i, /^Łączność/i],
+						keyPatterns: [/Wi[-\s]?Fi/i, /Bluetooth/i, /Ethernet/i, /HDMI/i, /USB/i, /ARC/i, /eARC/i, /HDCP/i, /VRR/i]
+					},
+					dimensions: {
+						title: "Dimensions - Full View",
+						summary: "Packed and unpacked dimensions for logistics and support calls.",
+						categoryPatterns: [/^Dimensions$/i, /^Wymiary$/i],
+						keyPatterns: [/Dimensions/i, /Wymiary/i, /Telewizor bez podstawy/i, /TV without stand/i, /Telewizor z podstawą/i, /TV with stand/i, /Packaged/i, /Opakowanie/i, /Weight/i, /Waga/i]
+					}
+				};
+
+				return modalConfig[detailType] || modalConfig.audio;
+			}
+
+			function collectUniqueTechnicalRows(model, modalConfig) {
+				const rowsByCategory = collectTechnicalRowsByCategory(model, modalConfig.categoryPatterns);
+				const rowsByKeys = collectTechnicalRowsByFlatKeys(model, modalConfig.keyPatterns);
+				const uniqueRows = [];
+				const seenKeys = new Set();
+
+				rowsByCategory.concat(rowsByKeys).forEach((row) => {
+					const uniqueKey = [row.category, row.label, row.value].join("||");
+					if (seenKeys.has(uniqueKey)) {
+						return;
+					}
+					seenKeys.add(uniqueKey);
+					uniqueRows.push(row);
+				});
+
+				return uniqueRows;
+			}
+
+			function renderSpecDetailsModalFromContext() {
+				if (!specDetailsModal || !specDetailsTitle || !specDetailsSummary || !specDetailsBody) {
+					return;
+				}
+
+				const context = state.specDetailsContext;
+				if (!context) {
+					return;
+				}
+
+				const model = getModelById(context.modelId);
+				if (!model) {
+					return;
+				}
+
+				const selectedConfig = getSpecDetailsModalConfig(context.detailType);
+				let scopedModel = model;
+				let controlsHtml = "";
+				let selectedSizeLabel = "";
+				let sizeOptionsCount = 0;
+
+				if (context.detailType === "dimensions") {
+					let selectedSize = getModelSelectedSize(model);
+					const sizeOptions = getModelSizes(model);
+					sizeOptionsCount = sizeOptions.length;
+					if (sizeOptions.length > 0 && !sizeOptions.includes(normalizeModelSize(selectedSize))) {
+						const primary = normalizeModelSize(getModelPrimarySize(model));
+						selectedSize = sizeOptions.includes(primary) ? primary : sizeOptions[0];
+					}
+					selectedSizeLabel = formatSizeWithInch(selectedSize);
+					scopedModel = getModelForSize(model, selectedSize, { fallbackToBase: false });
+
+					if (sizeOptions.length > 1) {
+						const sizeButtons = sizeOptions
+							.map((size) => {
+								const normalizedSize = normalizeModelSize(size);
+								const isActive = normalizedSize === normalizeModelSize(selectedSize);
+								const buttonClass = isActive
+									? "border-cyan-300 bg-cyan-50 text-brand-700"
+									: "border-slate-300 bg-white text-slate-700 hover:bg-slate-50";
+								return ""
+									+ "<button type=\"button\" data-spec-size=\"" + escapeHtml(normalizedSize) + "\" class=\"js-spec-size-trigger rounded-md border px-2 py-1 text-xs font-semibold transition " + buttonClass + "\">"
+									+ escapeHtml(formatSizeWithInch(normalizedSize))
+									+ "</button>";
+							})
+							.join("");
+
+						controlsHtml = ""
+							+ "<div class=\"mb-3 rounded-lg border border-slate-200 bg-slate-50 p-3\">"
+							+ "<p class=\"text-xs font-semibold uppercase tracking-[0.12em] text-slate-500\">Screen Size</p>"
+							+ "<div class=\"mt-2 flex flex-wrap gap-2\">" + sizeButtons + "</div>"
+							+ "</div>";
+					}
+				}
+
+				const uniqueRows = collectUniqueTechnicalRows(scopedModel, selectedConfig);
+				const modalModelName = getModelName(scopedModel || model);
+				const modalTitleSuffix = context.detailType === "dimensions" && selectedSizeLabel
+					? modalModelName + " (" + selectedSizeLabel + ")"
+					: modalModelName;
+				let emptyMessage = "No extended technical fields available for this section.";
+				if (context.detailType === "dimensions") {
+					emptyMessage = "No dimensions data for selected size " + (selectedSizeLabel || "-") + ".";
+					if (sizeOptionsCount > 1) {
+						emptyMessage += " Try another size.";
+					}
+				}
+				specDetailsTitle.textContent = selectedConfig.title + " - " + modalTitleSuffix;
+				specDetailsSummary.textContent = selectedConfig.summary;
+				specDetailsBody.innerHTML = controlsHtml + renderTechnicalRowsTable(uniqueRows, emptyMessage);
+				specDetailsModal.classList.remove("hidden");
+			}
+
+			function showSpecDetailsModal(model, detailType) {
+				if (!model) {
+					return;
+				}
+
+				state.specDetailsContext = {
+					modelId: getModelKey(model),
+					detailType: safeText(detailType, "audio")
+				};
+
+				renderSpecDetailsModalFromContext();
+			}
+
 			function getModelKey(model, index) {
 				if (model && model.__key) {
 					return String(model.__key);
@@ -1168,6 +1530,35 @@
 				return safeText(model && model.modelName, "-");
 			}
 
+			function getSafeHttpUrl(value) {
+				const url = safeText(value, "");
+				return /^https?:\/\//i.test(url) ? url : "";
+			}
+
+			function getRenderableImageUrl(value, width) {
+				const url = getSafeHttpUrl(value);
+				if (!url) {
+					return "";
+				}
+
+				if (!/images\.philips\.com\/is\/image\//i.test(url)) {
+					return url;
+				}
+
+				const base = url.split("?")[0];
+				const normalizedWidth = Math.max(320, Number(width) || 1200);
+				return base + "?wid=" + normalizedWidth;
+			}
+
+			function getModelMedia(model) {
+				if (!state.data || !isPlainObject(state.data.ModelMediaData)) {
+					return null;
+				}
+
+				const media = state.data.ModelMediaData[getModelName(model)];
+				return isPlainObject(media) ? media : null;
+			}
+
 			function getModelCommercialName(model) {
 				return safeText(model && model.commercialName, "");
 			}
@@ -1187,8 +1578,25 @@
 				return Number.isFinite(yearNum) ? yearNum : 0;
 			}
 
+			function normalizeOsLabel(value) {
+				const raw = safeText(value, "");
+				if (!raw) {
+					return "";
+				}
+
+				if (/^google\b/i.test(raw)) {
+					return "Google TV";
+				}
+
+				if (/^titan\s*os$/i.test(raw)) {
+					return "Titan OS";
+				}
+
+				return raw;
+			}
+
 			function getModelOS(model) {
-				return safeText(model && (model.osProfileId || model.os), "-");
+				return safeText(normalizeOsLabel(model && (model.osProfileId || model.os)), "-");
 			}
 
 			function getModelPanel(model) {
@@ -1203,8 +1611,41 @@
 				return safeText(getModelSpecs(model).chassis, "");
 			}
 
+			function normalizeModelSize(value) {
+				return safeText(value, "").replace(/\D/g, "");
+			}
+
+			function getModelPrimarySize(model) {
+				const match = getModelName(model).match(/^(\d{2,3})/);
+				return match ? match[1] : "";
+			}
+
+			function getModelFamilyCode(model) {
+				return safeText(getModelName(model), "")
+					.toUpperCase()
+					.replace(/^\d{2,3}/, "")
+					.replace(/\/\d{2}$/i, "");
+			}
+
+			function formatSizeWithInch(size) {
+				const normalized = normalizeModelSize(size);
+				return normalized ? normalized + "\"" : "-";
+			}
+
+			function formatModelSizesWithInches(sizes) {
+				return safeList(sizes)
+					.map((size) => formatSizeWithInch(size))
+					.filter((label) => label !== "-")
+					.join(", ");
+			}
+
 			function getModelVesa(model) {
-				return safeText(getModelSpecs(model).vesa, "");
+				const directVesa = safeText(getModelSpecs(model).vesa, "");
+				if (directVesa) {
+					return directVesa;
+				}
+
+				return getModelTechnicalValue(model, [/Wall-mount compatible/i, /Zgodny uchwyt ścienny/i, /VESA/i]);
 			}
 
 			function extractModelPolicyTags(fullModelName) {
@@ -1314,7 +1755,111 @@
 			}
 
 			function getModelSizes(model) {
-				return safeList(model && model.availableSizes).map((size) => safeText(size, "")).filter(Boolean);
+				const sizes = safeList(model && model.availableSizes)
+					.map((size) => normalizeModelSize(size))
+					.filter(Boolean);
+				const primary = normalizeModelSize(getModelPrimarySize(model));
+
+				if (primary && !sizes.includes(primary)) {
+					sizes.unshift(primary);
+				}
+
+				return Array.from(new Set(sizes));
+			}
+
+			function getModelSelectedSize(model) {
+				if (!model) {
+					return "";
+				}
+
+				const modelId = getModelKey(model);
+				const availableSizes = getModelSizes(model);
+				if (availableSizes.length === 0) {
+					return "";
+				}
+
+				const fromState = normalizeModelSize(state.selectedSizeByModelId[modelId]);
+				if (fromState && availableSizes.includes(fromState)) {
+					return fromState;
+				}
+
+				const primary = normalizeModelSize(getModelPrimarySize(model));
+				if (primary && availableSizes.includes(primary)) {
+					return primary;
+				}
+
+				return availableSizes[0];
+			}
+
+			function setModelSelectedSize(modelId, size) {
+				const model = getModelById(modelId);
+				if (!model) {
+					return false;
+				}
+
+				const normalized = normalizeModelSize(size);
+				if (!normalized) {
+					return false;
+				}
+
+				const available = new Set(getModelSizes(model));
+				if (!available.has(normalized)) {
+					return false;
+				}
+
+				state.selectedSizeByModelId[modelId] = normalized;
+				persistSessionState();
+				return true;
+			}
+
+			function getModelSizeVariantMap(model) {
+				const variants = new Map();
+				if (!model || !state.data || !Array.isArray(state.data.ModelsData)) {
+					return variants;
+				}
+
+				const familyCode = getModelFamilyCode(model);
+				const modelYear = Number(getModelYear(model));
+
+				state.data.ModelsData.forEach((candidate) => {
+					if (!candidate) {
+						return;
+					}
+
+					if (getModelFamilyCode(candidate) !== familyCode) {
+						return;
+					}
+
+					if (Number(getModelYear(candidate)) !== modelYear) {
+						return;
+					}
+
+					const candidateSize = normalizeModelSize(getModelPrimarySize(candidate));
+					if (!candidateSize || variants.has(candidateSize)) {
+						return;
+					}
+
+					variants.set(candidateSize, candidate);
+				});
+
+				return variants;
+			}
+
+			function getModelForSize(model, selectedSize, options) {
+				if (!model || !state.data || !Array.isArray(state.data.ModelsData)) {
+					return model;
+				}
+
+				const shouldFallbackToBase = !options || options.fallbackToBase !== false;
+
+				const targetSize = normalizeModelSize(selectedSize);
+				if (!targetSize) {
+					return shouldFallbackToBase ? model : null;
+				}
+
+				const scopedModel = getModelSizeVariantMap(model).get(targetSize);
+
+				return scopedModel || (shouldFallbackToBase ? model : null);
 			}
 
 			function flattenFeatureValues(features) {
@@ -1339,6 +1884,144 @@
 					bluetoothVersion: safeText(model && model.bluetoothVersion, ""),
 					vrrMaxRefreshRate: safeText(model && model.vrrMaxRefreshRate, "")
 				};
+			}
+
+			function stringifyTechnicalValue(value) {
+				if (Array.isArray(value)) {
+					return value.map((item) => safeText(item, "")).filter(Boolean).join(", ");
+				}
+
+				if (isPlainObject(value)) {
+					return Object.entries(value)
+						.map(([key, item]) => safeText(key, "") + ": " + safeText(item, ""))
+						.filter((entry) => entry !== ": ")
+						.join(" | ");
+				}
+
+				return safeText(value, "");
+			}
+
+			function getModelTechnicalByCategory(model) {
+				const technicalByCategory = getModelSpecs(model).technicalByCategory;
+				return isPlainObject(technicalByCategory) ? technicalByCategory : {};
+			}
+
+			function getModelTechnicalFlat(model) {
+				const technicalFlat = getModelSpecs(model).technicalFlat;
+				return isPlainObject(technicalFlat) ? technicalFlat : {};
+			}
+
+			function collectTechnicalRowsByCategory(model, categoryPatterns) {
+				const rows = [];
+				const technicalByCategory = getModelTechnicalByCategory(model);
+
+				Object.entries(technicalByCategory).forEach(([categoryName, entries]) => {
+					const isWantedCategory = safeList(categoryPatterns).some((pattern) => pattern.test(categoryName));
+					if (!isWantedCategory || !isPlainObject(entries)) {
+						return;
+					}
+
+					Object.entries(entries).forEach(([key, value]) => {
+						const normalizedValue = stringifyTechnicalValue(value);
+						if (!normalizedValue) {
+							return;
+						}
+
+						rows.push({
+							category: safeText(categoryName, "General"),
+							label: safeText(key, "Value"),
+							value: normalizedValue
+						});
+					});
+				});
+
+				return rows;
+			}
+
+			function collectTechnicalRowsByFlatKeys(model, keyPatterns) {
+				const rows = [];
+				const technicalFlat = getModelTechnicalFlat(model);
+
+				Object.entries(technicalFlat).forEach(([flatKey, value]) => {
+					const isWantedKey = safeList(keyPatterns).some((pattern) => pattern.test(flatKey));
+					if (!isWantedKey) {
+						return;
+					}
+
+					const normalizedValue = stringifyTechnicalValue(value);
+					if (!normalizedValue) {
+						return;
+					}
+
+					const keyParts = String(flatKey).split("::").map((part) => safeText(part, "")).filter(Boolean);
+					const categoryName = keyParts.length > 1 ? keyParts[0] : "General";
+					const label = keyParts.length > 1 ? keyParts.slice(1).join(" :: ") : safeText(flatKey, "Value");
+
+					rows.push({
+						category: categoryName,
+						label,
+						value: normalizedValue
+					});
+				});
+
+				return rows;
+			}
+
+			function getModelTechnicalValue(model, keyPatterns) {
+				const rows = collectTechnicalRowsByFlatKeys(model, keyPatterns);
+				if (rows.length === 0) {
+					return "";
+				}
+
+				return safeText(rows[0].value, "");
+			}
+
+			function renderTechnicalRowsTable(rows, emptyMessage) {
+				const groupedRowsByCategory = new Map();
+				const orderedCategories = [];
+
+				safeList(rows).forEach((row) => {
+					const category = safeText(row && row.category, "General");
+					if (!groupedRowsByCategory.has(category)) {
+						groupedRowsByCategory.set(category, []);
+						orderedCategories.push(category);
+					}
+
+					groupedRowsByCategory.get(category).push({
+						label: safeText(row && row.label, "Value"),
+						value: safeText(row && row.value, "-")
+					});
+				});
+
+				const bodyRows = orderedCategories
+					.map((category) => {
+						const rowsInCategory = groupedRowsByCategory.get(category) || [];
+						return rowsInCategory
+							.map((row, index) => ""
+								+ "<tr>"
+								+ (index === 0
+									? "<td class=\"px-3 py-2 text-slate-600 align-top\" rowspan=\"" + String(rowsInCategory.length) + "\">" + escapeHtml(category) + "</td>"
+									: "")
+								+ "<td class=\"px-3 py-2 font-semibold text-slate-800\">" + escapeHtml(row.label) + "</td>"
+								+ "<td class=\"px-3 py-2 text-slate-700\">" + escapeHtml(row.value) + "</td>"
+								+ "</tr>")
+							.join("");
+					})
+					.join("");
+
+				const fallbackRow = "<tr><td class=\"px-3 py-3 text-slate-500\" colspan=\"3\">" + escapeHtml(safeText(emptyMessage, "No technical details found.")) + "</td></tr>";
+
+				return ""
+					+ "<div class=\"overflow-x-auto rounded-xl border border-slate-200\">"
+					+ "<table class=\"min-w-full divide-y divide-slate-200 text-sm\">"
+					+ "<thead class=\"bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500\">"
+					+ "<tr><th class=\"px-3 py-2\">Section</th><th class=\"px-3 py-2\">Field</th><th class=\"px-3 py-2\">Value</th></tr>"
+					+ "</thead>"
+					+ "<tbody class=\"divide-y divide-slate-100 bg-white\">"
+					+ (bodyRows || fallbackRow)
+					+ "</tbody>"
+					+ "</table>"
+					+ "</div>";
 			}
 
 			function isBasicFeatureValue(value) {
@@ -1958,53 +2641,6 @@
 				activePath.textContent = "Path: " + yearLabel + " -> " + osLabel + " -> " + panelLabel + modelLabel;
 			}
 
-			function renderSidebarList(models) {
-				if (!sidebarModelList) {
-					return;
-				}
-
-				sidebarModelList.innerHTML = "";
-
-				if (models.length === 0) {
-					const emptyItem = document.createElement("li");
-					emptyItem.className = "rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs text-slate-500";
-					emptyItem.textContent = "No models in current scope.";
-					sidebarModelList.appendChild(emptyItem);
-					return;
-				}
-
-				models.slice(0, 10).forEach((model) => {
-					const item = document.createElement("li");
-					const button = document.createElement("button");
-					const modelKey = getModelKey(model);
-					const isActive = modelKey === state.selectedModelId;
-
-					button.type = "button";
-					button.className = "w-full rounded-lg border px-2 py-1.5 text-left text-xs transition";
-
-					if (isActive) {
-						button.classList.add("border-cyan-200", "bg-cyan-50", "text-brand-700", "font-semibold");
-					} else {
-						button.classList.add("border-slate-200", "bg-white", "text-slate-700", "hover:border-slate-300", "hover:bg-slate-50");
-					}
-
-					button.textContent = getModelDisplayTitle(model);
-					button.addEventListener("click", () => {
-						selectModel(modelKey);
-					});
-
-					item.appendChild(button);
-					sidebarModelList.appendChild(item);
-				});
-
-				if (models.length > 10) {
-					const moreItem = document.createElement("li");
-					moreItem.className = "px-1 py-1 text-xs text-slate-500";
-					moreItem.textContent = "+" + (models.length - 10) + " more in result set";
-					sidebarModelList.appendChild(moreItem);
-				}
-			}
-
 			function renderModelGrid(models) {
 				modelGrid.innerHTML = "";
 				emptyState.textContent = "No models matched current filters/query.";
@@ -2107,14 +2743,28 @@
 				if (state.data) {
 					refreshModelResults();
 				}
+
+				persistSessionState();
 			}
 
 			function renderSpecsPane(model) {
-				const specs = getModelSpecs(model);
-				const sizes = getModelSizes(model);
-				const featureValues = flattenFeatureValues(model && model.features);
+				const allSizes = getModelSizes(model);
+				const selectedSize = getModelSelectedSize(model);
+				const sizeScopedModel = getModelForSize(model, selectedSize);
+				const dimensionsModel = getModelForSize(model, selectedSize, { fallbackToBase: false });
+				const displayedSize = formatSizeWithInch(selectedSize);
+				const specs = getModelSpecs(sizeScopedModel);
+				const featureValues = flattenFeatureValues(sizeScopedModel && sizeScopedModel.features);
 				const kbFeatureValues = featureValues.filter((item) => !isBasicFeatureValue(item));
-				const standardSpecs = getModelStandardSpecs(model);
+				const standardSpecs = getModelStandardSpecs(sizeScopedModel);
+				const withStandDimensions = getModelTechnicalValue(dimensionsModel, [/Telewizor z podstawą/i, /TV with stand/i]);
+				const withoutStandDimensions = getModelTechnicalValue(dimensionsModel, [/Telewizor bez podstawy/i, /TV without stand/i]);
+				const packagedDimensions = getModelTechnicalValue(dimensionsModel, [/Wymiary opakowania/i, /Packaged dimensions/i]);
+				const dimensionsWeight = getModelTechnicalValue(dimensionsModel, [/Waga telewizora/i, /Waga z opakowaniem/i, /Weight/i]);
+				const audioProcessing = getModelTechnicalValue(sizeScopedModel, [/Przetwarzanie/i, /Processing/i, /Dolby/i, /DTS/i]);
+				const vesaStandard = getModelVesa(sizeScopedModel);
+				const sizeLabel = displayedSize !== "-" ? displayedSize : "-";
+				const allSizesLabel = formatModelSizesWithInches(allSizes) || "-";
 
 				const featureBadges = kbFeatureValues
 					.map((item) => {
@@ -2132,35 +2782,50 @@
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Core Hardware</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm\">"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Panel</dt><dd class=\"font-semibold text-slate-800\">" + getModelPanel(model) + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">OS</dt><dd class=\"font-semibold text-slate-800\">" + getModelOS(model) + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Chassis</dt><dd class=\"font-semibold text-slate-800\">" + getModelChassis(model) + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">VESA</dt><dd class=\"font-semibold text-slate-800\">" + getModelVesa(model) + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Sizes</dt><dd class=\"font-semibold text-slate-800\">" + (sizes.length ? sizes.join(", ") + "\"" : "-") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Panel</dt><dd class=\"font-semibold text-slate-800\">" + getModelPanel(sizeScopedModel) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">OS</dt><dd class=\"font-semibold text-slate-800\">" + getModelOS(sizeScopedModel) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Chassis</dt><dd class=\"font-semibold text-slate-800\">" + getModelChassis(sizeScopedModel) + "</dd></div>"
 					+ "</dl>"
 					+ "</div>"
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Physical Details</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm\">"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Stand</dt><dd class=\"font-semibold text-slate-800\">" + safeText(specs.stand, "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Sizes</dt><dd class=\"font-semibold text-slate-800\">" + (sizes.length ? sizes.join(", ") + "\"" : "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Model Year</dt><dd class=\"font-semibold text-slate-800\">" + getModelYear(model) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Sizes</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(allSizesLabel) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">VESA Standard</dt><dd class=\"font-semibold text-slate-800\">" + safeText(vesaStandard, "-") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Model Year</dt><dd class=\"font-semibold text-slate-800\">" + getModelYear(sizeScopedModel) + "</dd></div>"
 					+ "</dl>"
 					+ "</div>"
-					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4\">"
+					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Audio Specifications</h5>"
-					+ "<dl class=\"mt-3 space-y-2 text-sm\">"
+					+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Channels</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.audioChannels, "-") + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Power</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.audioPower, "-") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Processing</dt><dd class=\"font-semibold text-slate-800\">" + safeText(audioProcessing, "-") + "</dd></div>"
 					+ "</dl>"
+					+ "<button type=\"button\" data-spec-detail=\"audio\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">Show full audio details</button>"
 					+ "</div>"
-					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4\">"
+					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Connectivity</h5>"
-					+ "<dl class=\"mt-3 space-y-2 text-sm\">"
+					+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">WiFi</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.wifiStandard, "-") + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Bluetooth</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.bluetoothVersion, "-") + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Max VRR Refresh Rate</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.vrrMaxRefreshRate, "-") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">HDMI Inputs</dt><dd class=\"font-semibold text-slate-800\">" + safeText(specs.hdmiInputs, "-") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">USB Inputs</dt><dd class=\"font-semibold text-slate-800\">" + safeText(specs.usbInputs, "-") + "</dd></div>"
 					+ "</dl>"
+					+ "<button type=\"button\" data-spec-detail=\"connectivity\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">Show full connectivity details</button>"
+					+ "</div>"
+					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 xl:col-span-2 flex flex-col\">"
+					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Dimensions</h5>"
+					+ "<p class=\"mt-2 text-xs text-slate-500\">Selected size: " + escapeHtml(sizeLabel) + "</p>"
+					+ "<dl class=\"mt-3 grid gap-2 text-sm sm:grid-cols-2 flex-1 pb-2\">"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">TV With Stand</dt><dd class=\"font-semibold text-slate-800\">" + safeText(withStandDimensions, "-") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">TV Without Stand</dt><dd class=\"font-semibold text-slate-800\">" + safeText(withoutStandDimensions, "-") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Packaged</dt><dd class=\"font-semibold text-slate-800\">" + safeText(packagedDimensions, "-") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Weight</dt><dd class=\"font-semibold text-slate-800\">" + safeText(dimensionsWeight, "-") + "</dd></div>"
+					+ "</dl>"
+					+ "<button type=\"button\" data-spec-detail=\"dimensions\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">Show full dimensions details</button>"
 					+ "</div>"
 					+ "</div>"
 					+ "<div class=\"mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4\">"
@@ -2170,7 +2835,28 @@
 			}
 
 			function renderPortsPane(model) {
-				const rows = safeList(model.ports).map((port) => ""
+				const media = getModelMedia(model);
+				const portsImageUrl = getSafeHttpUrl(media && media.portsImageUrl);
+				const portsImageDisplayUrl = getRenderableImageUrl(portsImageUrl, 1800);
+				const portsImageZoomUrl = getRenderableImageUrl(portsImageUrl, 2400);
+				const sourcePageUrl = getSafeHttpUrl((media && media.pageUrl) || (model && model.officialProductUrl));
+				const visualBlock = portsImageUrl
+					? ""
+						+ "<section class=\"mb-4 overflow-hidden rounded-xl border border-slate-200 bg-slate-50\">"
+						+ "<div class=\"border-b border-slate-200 px-3 py-2\">"
+						+ "<p class=\"text-xs font-semibold uppercase tracking-[0.12em] text-slate-500\">Rear Connections Layout</p>"
+						+ (sourcePageUrl
+							? "<a href=\"" + escapeHtml(sourcePageUrl) + "\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-xs font-semibold text-brand-700 hover:underline\">Open official product page</a>"
+							: "")
+						+ "</div>"
+						+ "<div class=\"bg-white p-2\">"
+						+ "<img src=\"" + escapeHtml(portsImageDisplayUrl) + "\" alt=\"" + escapeHtml(getModelName(model) + " rear connectors") + "\" class=\"js-zoomable-image h-auto max-h-[360px] w-full cursor-zoom-in rounded-lg object-contain\" loading=\"lazy\" tabindex=\"0\" role=\"button\" data-zoom-src=\"" + escapeHtml(portsImageZoomUrl) + "\">"
+						+ "</div>"
+						+ "</section>"
+					: "";
+
+				const sourceRows = safeList(model.ports);
+				const rows = sourceRows.map((port) => ""
 					+ "<tr>"
 					+ "<td class=\"px-3 py-2 font-semibold text-slate-800\">" + safeText(port.port, "-") + "</td>"
 					+ "<td class=\"px-3 py-2 text-slate-700\">" + safeText(port.qty, "-") + "</td>"
@@ -2180,6 +2866,7 @@
 				const rowsWithFallback = rows || "<tr><td class=\"px-3 py-3 text-slate-500\" colspan=\"3\">No ports data available for this model.</td></tr>";
 
 				return ""
+					+ visualBlock
 					+ "<div class=\"overflow-x-auto rounded-xl border border-slate-200\">"
 					+ "<table class=\"min-w-full divide-y divide-slate-200 text-sm\">"
 					+ "<thead class=\"bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500\">"
@@ -2253,18 +2940,52 @@
 			}
 
 			function renderGalleryPane(model) {
+				const media = getModelMedia(model);
+				const mediaItems = media
+					? [
+						{
+							label: getModelName(model) + " front view",
+							note: "Official product gallery image.",
+							imageUrl: getSafeHttpUrl(media.frontImageUrl)
+						},
+						{
+							label: getModelName(model) + " remote control",
+							note: getSafeHttpUrl(media.remoteImageUrl)
+								? "Official accessory/remote image."
+								: "No dedicated remote image found in source.",
+							imageUrl: getSafeHttpUrl(media.remoteImageUrl)
+						},
+						{
+							label: getModelName(model) + " connectors",
+							note: getSafeHttpUrl(media.portsImageUrl)
+								? "Official rear ports image."
+								: "No dedicated rear ports image found in source.",
+							imageUrl: getSafeHttpUrl(media.portsImageUrl)
+						}
+					]
+					: [];
+
 				const placeholders = safeList(model.galleryPlaceholders);
 				const fallbackItems = [
 					{ label: getModelName(model) + " front view", note: "Placeholder for product photo." },
-					{ label: getModelName(model) + " side profile", note: "Placeholder for side dimensions view." },
+					{ label: getModelName(model) + " remote control", note: "Placeholder for remote image." },
 					{ label: getModelName(model) + " connectors", note: "Placeholder for rear ports image." }
 				];
-				const sourceItems = placeholders.length ? placeholders : fallbackItems;
+				const sourceItems = mediaItems.length ? mediaItems : (placeholders.length ? placeholders : fallbackItems);
 				const items = sourceItems.map((item) => ""
-					+ "<div class=\"rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 p-5 text-center\">"
-					+ "<p class=\"text-sm font-semibold text-slate-800\">" + safeText(item.label, "Image placeholder") + "</p>"
+					+ (() => {
+						const imageUrl = getSafeHttpUrl(item && item.imageUrl);
+						const displayUrl = getRenderableImageUrl(imageUrl, 1200);
+						const zoomUrl = getRenderableImageUrl(imageUrl, 2400);
+						return ""
+					+ "<div class=\"rounded-xl border border-slate-300 bg-slate-50 p-3\">"
+					+ (imageUrl
+						? "<div class=\"overflow-hidden rounded-lg border border-slate-200 bg-white p-1\"><img src=\"" + escapeHtml(displayUrl) + "\" alt=\"" + escapeHtml(safeText(item.label, "Model image")) + "\" class=\"js-zoomable-image h-40 w-full cursor-zoom-in object-contain\" loading=\"lazy\" tabindex=\"0\" role=\"button\" data-zoom-src=\"" + escapeHtml(zoomUrl) + "\"></div>"
+						: "<div class=\"rounded-lg border-2 border-dashed border-slate-300 bg-white p-8 text-center text-xs text-slate-500\">Image not available</div>")
+					+ "<p class=\"mt-2 text-sm font-semibold text-slate-800\">" + safeText(item.label, "Image placeholder") + "</p>"
 					+ "<p class=\"mt-1 text-xs text-slate-500\">" + safeText(item.note, "") + "</p>"
-					+ "</div>").join("");
+					+ "</div>";
+					})()).join("");
 
 				return ""
 					+ "<div class=\"grid gap-3 sm:grid-cols-2 xl:grid-cols-3\">"
@@ -2309,7 +3030,10 @@
 				const targetPane = detailPanes.find((pane) => pane.dataset.pane === tabName);
 				if (targetPane) {
 					targetPane.innerHTML = renderDetailPane(model, tabName);
+					primeZoomImagesInContainer(targetPane);
 				}
+
+				persistSessionState();
 			}
 
 			function renderModelDetail(model) {
@@ -2340,6 +3064,7 @@
 				});
 
 				setDetailTab(state.activeDetailTab || "specs");
+				primeModelMediaZoomImages(model);
 			}
 
 			function renderArticle(sectionData, typeLabel) {
@@ -2352,32 +3077,12 @@
 				}
 
 				const fragment = document.createDocumentFragment();
-				if (typeLabel === "Knowledge Base Article") {
-					const imageUrl = safeText(sectionData && sectionData.imageUrl, "");
-					if (imageUrl) {
-						const imageContainer = document.createElement("section");
-						imageContainer.className = "rounded-xl border border-slate-200 bg-slate-50 p-3";
+				const articleImageUrl = typeLabel === "Knowledge Base Article"
+					? safeText(sectionData && sectionData.imageUrl, "")
+					: "";
+				const articleSections = safeList(sectionData && sectionData.sections);
 
-						const image = document.createElement("img");
-						image.src = imageUrl;
-						image.alt = safeText(sectionData && sectionData.title, "Knowledge article") + " image";
-						image.className = "h-auto max-h-[420px] w-full rounded-lg object-cover";
-						image.loading = "lazy";
-						image.decoding = "async";
-						image.addEventListener("error", () => {
-							imageContainer.innerHTML = ""
-								+ "<div class=\"rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 p-5 text-center\">"
-								+ "<p class=\"text-sm font-semibold text-slate-800\">" + escapeHtml(safeText(sectionData && sectionData.title, "Knowledge article image")) + "</p>"
-								+ "<p class=\"mt-1 text-xs text-slate-500\">Placeholder for article image.</p>"
-								+ "</div>";
-						});
-
-						imageContainer.appendChild(image);
-						fragment.appendChild(imageContainer);
-					}
-				}
-
-				(sectionData.sections || []).forEach((section) => {
+				const renderArticleSectionCard = (section) => {
 					const container = document.createElement("section");
 					container.className = "rounded-xl border border-slate-200 bg-slate-50 p-4";
 
@@ -2386,17 +3091,17 @@
 					heading.textContent = section.heading;
 					container.appendChild(heading);
 
-					(section.paragraphs || []).forEach((paragraphText) => {
+					safeList(section.paragraphs).forEach((paragraphText) => {
 						const paragraph = document.createElement("p");
 						paragraph.className = "mt-2 text-sm text-slate-700";
 						paragraph.textContent = paragraphText;
 						container.appendChild(paragraph);
 					});
 
-					if (section.bullets && section.bullets.length > 0) {
+					if (safeList(section.bullets).length > 0) {
 						const list = document.createElement("ul");
 						list.className = "mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700";
-						section.bullets.forEach((itemText) => {
+						safeList(section.bullets).forEach((itemText) => {
 							const item = document.createElement("li");
 							item.textContent = itemText;
 							list.appendChild(item);
@@ -2404,8 +3109,55 @@
 						container.appendChild(list);
 					}
 
-					fragment.appendChild(container);
-				});
+					return container;
+				};
+
+				const renderArticleImageCard = () => {
+					const imageCard = document.createElement("section");
+					imageCard.className = "overflow-hidden rounded-xl border border-slate-200 bg-slate-50";
+
+					const imageWrap = document.createElement("div");
+					imageWrap.className = "w-full";
+
+					const image = document.createElement("img");
+					image.src = articleImageUrl;
+					image.alt = safeText(sectionData && sectionData.title, "Knowledge article") + " image";
+					image.className = "block h-auto w-full";
+					image.loading = "lazy";
+					image.decoding = "async";
+					image.addEventListener("error", () => {
+						imageWrap.innerHTML = ""
+							+ "<div class=\"rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 p-5 text-center\">"
+							+ "<p class=\"text-sm font-semibold text-slate-800\">" + escapeHtml(safeText(sectionData && sectionData.title, "Knowledge article image")) + "</p>"
+							+ "<p class=\"mt-1 text-xs text-slate-500\">Placeholder for article image.</p>"
+							+ "</div>";
+					});
+
+					imageWrap.appendChild(image);
+					imageCard.appendChild(imageWrap);
+					return imageCard;
+				};
+
+				if (articleImageUrl && articleSections.length > 0) {
+					const topRow = document.createElement("section");
+					topRow.className = "grid gap-4 xl:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)] xl:items-start";
+
+					topRow.appendChild(renderArticleSectionCard(articleSections[0]));
+					topRow.appendChild(renderArticleImageCard());
+					fragment.appendChild(topRow);
+
+					articleSections.slice(1).forEach((section) => {
+						fragment.appendChild(renderArticleSectionCard(section));
+					});
+				} else {
+					articleSections.forEach((section) => {
+						fragment.appendChild(renderArticleSectionCard(section));
+					});
+
+					if (articleImageUrl) {
+						fragment.appendChild(renderArticleImageCard());
+					}
+				}
 
 				if (typeLabel === "Knowledge Base Article" && articleRecommendationDock) {
 					const relatedArticles = getRelatedKnowledgeArticles(sectionData, 3);
@@ -2472,6 +3224,8 @@
 				modelResultsSection.classList.toggle("hidden", mode !== "browse");
 				modelDetailSection.classList.toggle("hidden", mode !== "detail");
 				articleViewSection.classList.toggle("hidden", mode !== "article");
+
+				persistSessionState();
 			}
 
 			function selectModel(modelId) {
@@ -2482,6 +3236,7 @@
 
 				state.selectedModelId = modelId;
 				state.activeDetailTab = "specs";
+				state.articleViewContext = null;
 				hideQuickInfoModal();
 				renderModelDetail(model);
 				setViewMode("detail");
@@ -2499,6 +3254,10 @@
 					? options.fromModelId
 					: (state.articleBackModelId || state.selectedModelId || null);
 				setArticleBackTarget(modelId);
+				state.articleViewContext = {
+					kind: "knowledge",
+					id: safeText(article && article.id, "")
+				};
 
 				renderArticle(article, "Knowledge Base Article");
 				setViewMode("article");
@@ -2506,6 +3265,10 @@
 
 			function openPolicyArticle(policyPayload) {
 				setArticleBackTarget(null);
+				state.articleViewContext = {
+					kind: "policy",
+					payload: policyPayload
+				};
 				renderArticle(policyPayload, "Contacts and Policy Note");
 				setViewMode("article");
 			}
@@ -2543,6 +3306,7 @@
 					renderModelGrid(state.filteredModels);
 				}
 				updatePath();
+				persistSessionState();
 			}
 
 			function groupedSearchResults(results) {
@@ -2638,6 +3402,7 @@
 					button.classList.toggle("text-slate-600", !isActive);
 				});
 				moduleNotice.textContent = moduleDescriptions[tabKey] || moduleDescriptions.TV;
+				persistSessionState();
 			}
 
 			function applyCountryConfig(countryCode) {
@@ -2655,6 +3420,8 @@
 						renderModelDetail(model);
 					}
 				}
+
+				persistSessionState();
 			}
 
 			function setPrintPreview(enabled) {
@@ -2663,7 +3430,18 @@
 				printModeBtn.textContent = enabled ? "Exit print mode" : "Print mode";
 			}
 
-			function showDashboard() {
+			function showDashboard(options) {
+				const instant = Boolean(options && options.instant);
+				document.documentElement.classList.remove("resume-ready");
+
+				if (instant) {
+					splashScreen.classList.remove("is-hiding");
+					splashScreen.classList.add("hidden");
+					appShell.classList.remove("is-hidden");
+					globalSearch.focus();
+					return;
+				}
+
 				splashScreen.classList.add("is-hiding");
 				window.setTimeout(() => {
 					splashScreen.classList.add("hidden");
@@ -2673,13 +3451,18 @@
 			}
 
 			function returnToSplash() {
+				state.isRestoringSession = true;
+				document.documentElement.classList.remove("resume-ready");
 				appShell.classList.add("is-hidden");
 				splashScreen.classList.remove("hidden");
 				splashScreen.classList.remove("is-hiding");
 				localStorage.removeItem(storageKeyCountry);
+				clearPersistedSessionState();
 				setPrintPreview(false);
 				setViewMode("browse");
 				state.selectedModelId = null;
+				state.articleViewContext = null;
+				setArticleBackTarget(null);
 				state.searchQuery = "";
 				state.resultsView = "models";
 				state.filters = {
@@ -2691,6 +3474,8 @@
 				globalSearch.value = "";
 				updateFilterOptions();
 				refreshModelResults();
+				state.isRestoringSession = false;
+				clearPersistedSessionState();
 
 				window.setTimeout(() => {
 					countrySelect.focus();
@@ -2773,7 +3558,7 @@
 				});
 			}
 
-			async function initializeData() {
+			async function initializeData(restoredSession) {
 				const data = await loadRelationalData();
 				data.ModelsData = normalizeModelsData(data.ModelsData);
 				data.PoliciesData = data.PoliciesData || {};
@@ -2783,8 +3568,21 @@
 				state.data = data;
 				state.modelSearchIndex = buildSearchIndexFromEntries(buildModelSearchEntries(data.ModelsData));
 				state.globalSearchIndex = buildSearchIndexFromEntries(buildGlobalEntries(data));
+
+				if (isPlainObject(restoredSession)) {
+					state.isRestoringSession = true;
+					applyPersistedSessionState(restoredSession);
+					setActiveModule(state.activeModule);
+				}
+
 				updateFilterOptions();
-				refreshModelResults();
+				setResultsView(state.resultsView);
+
+				if (isPlainObject(restoredSession)) {
+					restoreViewFromPersistedSession();
+					state.isRestoringSession = false;
+					persistSessionState();
+				}
 			}
 
 			continueBtn.addEventListener("click", () => {
@@ -2870,6 +3668,42 @@
 						return;
 					}
 
+					const zoomableImage = target.closest(".js-zoomable-image");
+					if (zoomableImage) {
+						const zoomSrc = safeText(zoomableImage.getAttribute("data-zoom-src"), zoomableImage.getAttribute("src") || "");
+						const zoomAlt = safeText(zoomableImage.getAttribute("alt"), "Zoom preview");
+						showImageZoomModal(zoomSrc, zoomAlt);
+						return;
+					}
+
+					const sizeTrigger = target.closest(".js-model-size-trigger");
+					if (sizeTrigger) {
+						const model = getModelById(state.selectedModelId);
+						if (!model) {
+							return;
+						}
+
+						const selectedSize = safeText(sizeTrigger.getAttribute("data-model-size"), "");
+						if (!setModelSelectedSize(getModelKey(model), selectedSize)) {
+							return;
+						}
+
+						setDetailTab(state.activeDetailTab || "specs");
+						return;
+					}
+
+					const trigger = target.closest(".js-spec-detail-trigger");
+					if (trigger) {
+						const model = getModelById(state.selectedModelId);
+						if (!model) {
+							return;
+						}
+
+						const detailType = safeText(trigger.getAttribute("data-spec-detail"), "audio");
+						showSpecDetailsModal(model, detailType);
+						return;
+					}
+
 					const pill = target.closest(".js-kb-pill");
 					if (!pill) {
 						return;
@@ -2879,6 +3713,14 @@
 					openQuickInfoForTerm(term, { modelId: state.selectedModelId });
 				});
 
+				modelDetailSection.addEventListener("mouseover", (event) => {
+					primeZoomImageFromTarget(event.target);
+				});
+
+				modelDetailSection.addEventListener("focusin", (event) => {
+					primeZoomImageFromTarget(event.target);
+				});
+
 				modelDetailSection.addEventListener("keydown", (event) => {
 					const target = event.target;
 					if (!(target instanceof Element)) {
@@ -2886,7 +3728,29 @@
 					}
 
 					const isKeyboardTrigger = event.key === "Enter" || event.key === " ";
-					if (!isKeyboardTrigger || !target.classList.contains("js-kb-pill")) {
+					if (!isKeyboardTrigger) {
+						return;
+					}
+
+					if (target.classList.contains("js-spec-detail-trigger")) {
+						event.preventDefault();
+						const model = getModelById(state.selectedModelId);
+						if (!model) {
+							return;
+						}
+
+						const detailType = safeText(target.getAttribute("data-spec-detail"), "audio");
+						showSpecDetailsModal(model, detailType);
+						return;
+					}
+
+					if (!target.classList.contains("js-kb-pill")) {
+						if (target.classList.contains("js-zoomable-image")) {
+							event.preventDefault();
+							const zoomSrc = safeText(target.getAttribute("data-zoom-src"), target.getAttribute("src") || "");
+							const zoomAlt = safeText(target.getAttribute("alt"), "Zoom preview");
+							showImageZoomModal(zoomSrc, zoomAlt);
+						}
 						return;
 					}
 
@@ -2923,6 +3787,59 @@
 					const currentModelId = state.selectedModelId;
 					hideQuickInfoModal();
 					openKnowledgeArticle(targetArticleId, { fromModelId: currentModelId });
+				});
+			}
+
+			if (specDetailsCloseBtn) {
+				specDetailsCloseBtn.addEventListener("click", hideSpecDetailsModal);
+			}
+
+			if (specDetailsDismissBtn) {
+				specDetailsDismissBtn.addEventListener("click", hideSpecDetailsModal);
+			}
+
+			if (specDetailsModal && specDetailsCard) {
+				specDetailsModal.addEventListener("click", (event) => {
+					if (event.target === specDetailsModal) {
+						hideSpecDetailsModal();
+					}
+				});
+			}
+
+			if (imageZoomCloseBtn) {
+				imageZoomCloseBtn.addEventListener("click", hideImageZoomModal);
+			}
+
+			if (imageZoomModal && imageZoomCard) {
+				imageZoomModal.addEventListener("click", (event) => {
+					if (event.target === imageZoomModal) {
+						hideImageZoomModal();
+					}
+				});
+			}
+
+			if (specDetailsBody) {
+				specDetailsBody.addEventListener("click", (event) => {
+					const target = event.target;
+					if (!(target instanceof Element)) {
+						return;
+					}
+
+					const sizeTrigger = target.closest(".js-spec-size-trigger");
+					if (!sizeTrigger || !state.specDetailsContext) {
+						return;
+					}
+
+					const selectedSize = safeText(sizeTrigger.getAttribute("data-spec-size"), "");
+					if (!setModelSelectedSize(state.specDetailsContext.modelId, selectedSize)) {
+						return;
+					}
+
+					renderSpecDetailsModalFromContext();
+
+					if (state.selectedModelId === state.specDetailsContext.modelId && state.viewMode === "detail") {
+						setDetailTab(state.activeDetailTab || "specs");
+					}
 				});
 			}
 
@@ -3012,6 +3929,8 @@
 
 				if (event.key === "Escape") {
 					hideQuickInfoModal();
+					hideSpecDetailsModal();
+					hideImageZoomModal();
 					toggleChangelog(false);
 					omniSearchDropdown.classList.add("search-dropdown-hidden");
 				}
@@ -3050,6 +3969,21 @@
 				window.scrollTo({ top: 0, behavior: "smooth" });
 			});
 
+			const persistedSession = loadPersistedSessionState();
+			const persistedCountry = isPlainObject(persistedSession) ? safeText(persistedSession.countryCode, "") : "";
+			if (persistedCountry && countryConfigs[persistedCountry]) {
+				countrySelect.value = persistedCountry;
+			}
+
+			const effectiveResumeCountry = (persistedCountry && countryConfigs[persistedCountry])
+				? persistedCountry
+				: ((savedCountry && countryConfigs[savedCountry]) ? savedCountry : "");
+			const shouldAutoResume = Boolean(effectiveResumeCountry);
+
+			if (shouldAutoResume) {
+				showDashboard({ instant: true });
+			}
+
 			setActiveModule("TV");
 			applyCountryConfig(countrySelect.value);
 			loadSeenChangelogIds();
@@ -3059,6 +3993,6 @@
 			toggleChangelog(false);
 			setResultsView("models");
 			setViewMode("browse");
-			initializeData();
+			initializeData(persistedSession);
 		})();
 

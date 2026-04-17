@@ -188,7 +188,6 @@ const KnowledgeBaseData = [
 		"filters": {
 			"topics": ["4-sided Ambilight", "Ambilight"]
 		},
-		"imageUrl": "Images/4sideambi.jpg",
     "summary": "The highest tier of Philips signature bias lighting technology, projecting colors from all four sides of the TV.",
     "contentPoints": [
       "LEDs are placed on the top, bottom, left, and right edges of the rear panel.",
@@ -204,6 +203,7 @@ const KnowledgeBaseData = [
 		"filters": {
 			"topics": ["3-sided Ambilight", "Ambilight"]
 		},
+		"imageUrl": "Images/3sideambi.jpg",
 		"summary": "Ambilight configuration with LEDs on three sides of the TV for immersive bias lighting.",
 		"contentPoints": [
 			"Projects matching light from the left, right, and top edges of the rear panel.",

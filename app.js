@@ -86,7 +86,6 @@
 			const quickInfoCard = document.getElementById("quickInfoCard");
 			const quickInfoTitle = document.getElementById("quickInfoTitle");
 			const quickInfoSummary = document.getElementById("quickInfoSummary");
-			const quickInfoMedia = document.getElementById("quickInfoMedia");
 			const quickInfoPoints = document.getElementById("quickInfoPoints");
 			const quickInfoCloseBtn = document.getElementById("quickInfoCloseBtn");
 			const quickInfoDismissBtn = document.getElementById("quickInfoDismissBtn");
@@ -1118,65 +1117,14 @@
 				}, 2400);
 			}
 
-			function createQuickInfoMediaPlaceholder(article) {
-				const placeholder = document.createElement("div");
-				placeholder.className = "rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 p-5 text-center";
-
-				const heading = document.createElement("p");
-				heading.className = "text-sm font-semibold text-slate-800";
-				heading.textContent = safeText(article && article.title, "Knowledge article image");
-
-				const note = document.createElement("p");
-				note.className = "mt-1 text-xs text-slate-500";
-				note.textContent = "Placeholder for article image.";
-
-				placeholder.appendChild(heading);
-				placeholder.appendChild(note);
-				return placeholder;
-			}
-
-			function renderQuickInfoMedia(article) {
-				if (!quickInfoMedia) {
-					return;
-				}
-
-				quickInfoMedia.innerHTML = "";
-
-				const rawImageUrl = safeText(article && article.imageUrl, "");
-				const imageUrl = rawImageUrl.replace(/\\/g, "/");
-
-				if (!imageUrl) {
-					quickInfoMedia.appendChild(createQuickInfoMediaPlaceholder(article));
-					return;
-				}
-
-				const imageFrame = document.createElement("div");
-				imageFrame.className = "overflow-hidden rounded-xl border border-slate-200 bg-slate-50";
-
-				const image = document.createElement("img");
-				image.src = imageUrl;
-				image.alt = safeText(article && article.title, "Knowledge article") + " image";
-				image.className = "h-56 w-full object-cover";
-				image.loading = "lazy";
-				image.decoding = "async";
-				image.addEventListener("error", () => {
-					quickInfoMedia.innerHTML = "";
-					quickInfoMedia.appendChild(createQuickInfoMediaPlaceholder(article));
-				});
-
-				imageFrame.appendChild(image);
-				quickInfoMedia.appendChild(imageFrame);
-			}
-
 			function showQuickInfoModal(article) {
-				if (!quickInfoModal || !quickInfoTitle || !quickInfoSummary || !quickInfoMedia || !quickInfoPoints) {
+				if (!quickInfoModal || !quickInfoTitle || !quickInfoSummary || !quickInfoPoints) {
 					return;
 				}
 
 				state.quickInfoArticleId = safeText(article && article.id, "");
 				quickInfoTitle.textContent = safeText(article && article.title, "Knowledge Base");
 				quickInfoSummary.textContent = safeText(article && article.summary, "No summary available.");
-				renderQuickInfoMedia(article);
 				quickInfoPoints.innerHTML = "";
 
 				const points = getArticleContentPoints(article);
@@ -2404,6 +2352,31 @@
 				}
 
 				const fragment = document.createDocumentFragment();
+				if (typeLabel === "Knowledge Base Article") {
+					const imageUrl = safeText(sectionData && sectionData.imageUrl, "");
+					if (imageUrl) {
+						const imageContainer = document.createElement("section");
+						imageContainer.className = "rounded-xl border border-slate-200 bg-slate-50 p-3";
+
+						const image = document.createElement("img");
+						image.src = imageUrl;
+						image.alt = safeText(sectionData && sectionData.title, "Knowledge article") + " image";
+						image.className = "h-auto max-h-[420px] w-full rounded-lg object-cover";
+						image.loading = "lazy";
+						image.decoding = "async";
+						image.addEventListener("error", () => {
+							imageContainer.innerHTML = ""
+								+ "<div class=\"rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 p-5 text-center\">"
+								+ "<p class=\"text-sm font-semibold text-slate-800\">" + escapeHtml(safeText(sectionData && sectionData.title, "Knowledge article image")) + "</p>"
+								+ "<p class=\"mt-1 text-xs text-slate-500\">Placeholder for article image.</p>"
+								+ "</div>";
+						});
+
+						imageContainer.appendChild(image);
+						fragment.appendChild(imageContainer);
+					}
+				}
+
 				(sectionData.sections || []).forEach((section) => {
 					const container = document.createElement("section");
 					container.className = "rounded-xl border border-slate-200 bg-slate-50 p-4";

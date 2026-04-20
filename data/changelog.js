@@ -4,11 +4,11 @@ const ChangelogEntriesData = [
     date: "20 Apr 2026",
     dateIso: "2026-04-20",
     version: "v1.0.2",
-    title: "Dimensions View Cleanup",
+    title: "Dimensions: Faster Agent View",
     details: [
-      "Dimensions card: removed the Packaged row from the summary panel.",
-      "Dimensions full view: removed Stand Screw Part and Screw Data Source rows.",
-      "VESA screw fields merged into one line, e.g. M6 10-16mm."
+      "In TV Model Detail > Dimensions, the view now highlights the values most useful during customer calls.",
+      "In Show full dimensions details, VESA screw info is shown as one ready-to-read line (for example: M6 10-16mm).",
+      "Result: faster answers for mounting and fit questions without scanning extra fields."
     ]
   },
   {
@@ -16,11 +16,11 @@ const ChangelogEntriesData = [
     date: "20 Apr 2026",
     dateIso: "2026-04-20",
     version: "v1.0.1",
-    title: "2K21 Screws And Models Import",
+    title: "2021 Models And Mounting Data Added",
     details: [
-      "Imported 2021 sheet data (rows 4-76) from TV screw dimensions workbook.",
-      "Added missing TV models from the sheet and attached mounting screw metadata.",
-      "Skipped rows with Chinese characters per import rule."
+      "Added missing 2021 TV models, now available in Model Results and Global Search.",
+      "Added mounting screw information for these models in TV Model Detail > Dimensions.",
+      "Result: better first-contact support for installation and wall-mount questions on older models."
     ]
   },
   {
@@ -28,11 +28,11 @@ const ChangelogEntriesData = [
     date: "17 Apr 2026",
     dateIso: "2026-04-17",
     version: "v1.0.0",
-    title: "Data Unification And Quality Baseline",
+    title: "More Consistent Model Answers",
     details: [
-      "Consolidated ports data to models.js as the single source.",
-      "Added quality scripts: normalize, validate, language audit, and combined check.",
-      "Cleaned temporary artifacts and removed obsolete helper files."
+      "Model information is now more consistent across Specs and Ports views.",
+      "You can use one model detail page with higher confidence when answering compatibility questions.",
+      "Result: fewer contradictory values during the same customer call."
     ]
   },
   {
@@ -40,11 +40,11 @@ const ChangelogEntriesData = [
     date: "15 Apr 2026",
     dateIso: "2026-04-15",
     version: "v0.9.4",
-    title: "Changelog UX Refactor",
+    title: "Changelog Easier To Follow",
     details: [
-      "Navbar: Replaced changelog icon with a proper bell-style SVG.",
-      "Changelog Panel: Converted flat list into expandable accordion entries.",
-      "Interaction: Added chevron rotation and toggle behavior for each entry."
+      "Use the bell icon in the top bar to quickly check what changed.",
+      "Updates are grouped as expandable entries, so you can scan only what is relevant.",
+      "Result: faster pre-shift update check for agents."
     ]
   },
   {
@@ -52,11 +52,11 @@ const ChangelogEntriesData = [
     date: "15 Apr 2026",
     dateIso: "2026-04-15",
     version: "v0.9.3",
-    title: "Omni-Search Expansion",
+    title: "Global Search Covers More Content",
     details: [
-      "Search Index: Added support for ModelsData, KnowledgeBaseData, and PoliciesData.",
-      "Search UI: Added categorized dropdown (TV Models, Knowledge Base, Contacts and Policies).",
-      "Renderer: Added article/policy view mode when non-model results are selected."
+      "Global Omni-Search now finds TV models, knowledge content, and policy items from one search box.",
+      "Results are grouped by type to help you jump to the right answer faster.",
+      "Selecting a knowledge or policy result opens the relevant article view directly."
     ]
   },
   {
@@ -64,11 +64,11 @@ const ChangelogEntriesData = [
     date: "14 Apr 2026",
     dateIso: "2026-04-14",
     version: "v0.9.2",
-    title: "Detail View Cognitive Load Reduction",
+    title: "Model Detail Organized Into Clear Tabs",
     details: [
-      "Detail View: Split content into strict single-pane tabs.",
-      "Tabs Added: Troubleshooting, Policies, and Gallery placeholders.",
-      "Layout: Hides generic model results when a specific model detail is opened."
+      "TV Model Detail is split into clear tabs: Specs, Ports, Troubleshooting, Policies, and Gallery.",
+      "You can switch context without leaving the selected model.",
+      "Result: smoother call handling when you need specs and troubleshooting in the same conversation."
     ]
   }
 ];

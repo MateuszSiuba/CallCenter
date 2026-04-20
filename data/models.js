@@ -1015,49 +1015,7 @@ const ModelsData = [
       ],
       "remote": "Metal rechargeable remote control",
       "chassis": "TPM25.1E OA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Wall colour adaptive Music Mode Ambilight Suite Game Mode AmbiSleep",
-          "Ambilight Version": "4 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "65 inch",
-          "Diagonal screen size (metric)": "164 cm",
-          "Display": "4K Ultra HD OLED",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "120 Hz",
-          "Picture engine": "P5 AI Dual Picture Engine",
-          "Picture enhancement": "Calman Autocal Ready and Manual Calibration Calman Crystal Clear ECO Film-maker mode Game Home Cinema MEMC / FRC Embedded Micro Dimming Perfect Monitor Personal Perfect Natural Motion",
-          "Variable Refresh Rate": "144 Hz"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576p - 50 Hz, 645 x 480 - 60 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/ 60/100/120/144 Hz, 2560 x 1440 - 60/120/144 Hz, 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Disney+ Apple TV Netflix YouTube Amazon Prime Video NFT app*",
-          "OS": "Google TV",
-          "Memory size (Flash)*": "32 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "RC with Mic. Hey Google Works with Alexa",
-          "Smart Home experience": "MATTER Control4 Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.1 Channel",
           "Output power (RMS)": "70 Watt (RMS)",
@@ -1085,28 +1043,6 @@ const ModelsData = [
           "HDMI 3/4": "HDMI 2.0",
           "HDR": "Dolby Vision HDR10 HDR10+ Adaptive HLG"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2302620",
-          "Energy class for SDR": "G",
-          "On mode power demand for SDR": "112 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "163 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "OLED"
-        },
-        "Power": {
-          "Mains power": "AC 100 - 240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.3 W",
-          "Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "Tabletop stand 1x USB-C cable for remote control charging Quick start guide Power cord Remote Control Safety and Legal Leaflet"
-        },
-        "Design": {
-          "Colours of TV": "Metal bezel frame",
-          "Stand design": "Metal diamond shape black stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "795 mm",
           "Wall-mount compatible": "300 x 300 mm",
@@ -1119,68 +1055,19 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Wall colour adaptive Music Mode Ambilight Suite Game Mode AmbiSleep",
-        "Ambilight :: Ambilight Version": "4 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "65 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "164 cm",
-        "Picture/Display :: Display": "4K Ultra HD OLED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "120 Hz",
-        "Picture/Display :: Picture engine": "P5 AI Dual Picture Engine",
-        "Picture/Display :: Picture enhancement": "Calman Autocal Ready and Manual Calibration Calman Crystal Clear ECO Film-maker mode Game Home Cinema MEMC / FRC Embedded Micro Dimming Perfect Monitor Personal Perfect Natural Motion",
-        "Picture/Display :: Variable Refresh Rate": "144 Hz",
-        "Display input resolution :: Resolution-Refresh rate": "576p - 50 Hz, 645 x 480 - 60 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/ 60/100/120/144 Hz, 2560 x 1440 - 60/120/144 Hz, 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Disney+ Apple TV Netflix YouTube Amazon Prime Video NFT app*",
-        "Smart TV :: OS": "Google TV",
-        "Smart TV :: Memory size (Flash)*": "32 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "RC with Mic. Hey Google Works with Alexa",
-        "Smart TV Features :: Smart Home experience": "MATTER Control4 Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.1 Channel",
         "Sound :: Output power (RMS)": "70 Watt (RMS)",
-        "Sound :: Speaker configuration": "10 W x 4 mid-high speaker, 30 W subwoofer",
-        "Sound :: Codec": "Dolby Atmos Dolby Digital DTS:X",
-        "Sound :: Sound Enhancement": "A.I. EQ AI mode Clear Dialogue Dialogue Dolby Media Intelligence Entertainment Music Spatial Music Personal Original AVL Mode Night mode",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Main Speaker": "2-Way Mid + Tweeter",
-        "Sound :: Woofer": "Triple Ring Balance Quad PR",
         "Connectivity :: Number of HDMI connections": "4",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "One touch play Remote control pass-through System standby System audio control",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ax, 2x2, Dual band Bluetooth 5.2 Works with Apple AirPlay Google Fast Pair",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI2",
         "Connectivity :: HDMI 2.1 features": "eARC/VRR/ALLM supported eARC on HDMI 2 Max 48 Gbps data rate",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: HDMI 1/2": "HDMI 2.1 full bandwidth 48 Gbps up to 4K 144Hz",
         "Supported HDMI video features :: Gaming": "AMD FreeSync Premium Nvidia G-Sync compatible ALLM Dolby Vision Game HDMI VRR HGiG",
         "Supported HDMI video features :: HDMI 3/4": "HDMI 2.0",
         "Supported HDMI video features :: HDR": "Dolby Vision HDR10 HDR10+ Adaptive HLG",
-        "EU Energy card :: EPREL registration numbers": "2302620",
-        "EU Energy card :: Energy class for SDR": "G",
-        "EU Energy card :: On mode power demand for SDR": "112 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "163 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "OLED",
-        "Power :: Mains power": "AC 100 - 240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.3 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "Tabletop stand 1x USB-C cable for remote control charging Quick start guide Power cord Remote Control Safety and Legal Leaflet",
-        "Design :: Colours of TV": "Metal bezel frame",
-        "Design :: Stand design": "Metal diamond shape black stand",
         "Dimensions :: Distance between 2 stands": "795 mm",
         "Dimensions :: Wall-mount compatible": "300 x 300 mm",
         "Dimensions :: TV without stand (W x H x D)": "1444 x 831 x 65 mm",
@@ -1192,9 +1079,7 @@ const ModelsData = [
       },
       "ambilightVersion": "4 sided",
       "hdmiInputs": "4",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T09:43:04.350Z"
+      "usbInputs": "2"
     },
     "apps": [
       "Google TV"
@@ -1297,49 +1182,7 @@ const ModelsData = [
       ],
       "remote": "Metal rechargeable remote control",
       "chassis": "TPM25.1E OA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Wall colour adaptive Music Mode Ambilight Suite Game Mode AmbiSleep",
-          "Ambilight Version": "4 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Display": "4K Ultra HD OLED",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "120 Hz",
-          "Picture engine": "P5 AI Perfect Picture Engine",
-          "Picture enhancement": "Calman Autocal Ready and Manual Calibration Crystal Clear ECO Film-maker mode Game Home Cinema MEMC / FRC Embedded Micro Dimming Perfect Monitor Personal Perfect Natural Motion",
-          "Variable Refresh Rate": "144 Hz"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576p - 50 Hz, 645 x 480 - 60 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/ 60/100/120/144 Hz, 2560 x 1440 - 60/120/144 Hz, 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Disney+ Apple TV Netflix YouTube Amazon Prime Video NFT app*",
-          "OS": "Google TV",
-          "Memory size (Flash)*": "32 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "RC with Mic. Hey Google Works with Alexa",
-          "Smart Home experience": "MATTER Control4 Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "3.1 Channel",
           "Output power (RMS)": "80 Watt (RMS)",
@@ -1367,28 +1210,6 @@ const ModelsData = [
           "HDMI 3/4": "HDMI 2.0",
           "HDR": "Dolby Vision HDR10 HDR10+ Adaptive HLG"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2293800",
-          "Energy class for SDR": "F",
-          "On mode power demand for SDR": "77 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "102 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "OLED"
-        },
-        "Power": {
-          "Mains power": "AC 100 - 240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.3 W",
-          "Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "Tabletop stand 1x USB-C cable for remote control charging Quick start guide Power cord Remote Control Safety and Legal Leaflet"
-        },
-        "Design": {
-          "Colours of TV": "Metal bezel frame",
-          "Stand design": "Metal diamond shape grey stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "625 mm",
           "Wall-mount compatible": "300 x 300 mm",
@@ -1401,68 +1222,19 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Wall colour adaptive Music Mode Ambilight Suite Game Mode AmbiSleep",
-        "Ambilight :: Ambilight Version": "4 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Display": "4K Ultra HD OLED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "120 Hz",
-        "Picture/Display :: Picture engine": "P5 AI Perfect Picture Engine",
-        "Picture/Display :: Picture enhancement": "Calman Autocal Ready and Manual Calibration Crystal Clear ECO Film-maker mode Game Home Cinema MEMC / FRC Embedded Micro Dimming Perfect Monitor Personal Perfect Natural Motion",
-        "Picture/Display :: Variable Refresh Rate": "144 Hz",
-        "Display input resolution :: Resolution-Refresh rate": "576p - 50 Hz, 645 x 480 - 60 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/ 60/100/120/144 Hz, 2560 x 1440 - 60/120/144 Hz, 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Disney+ Apple TV Netflix YouTube Amazon Prime Video NFT app*",
-        "Smart TV :: OS": "Google TV",
-        "Smart TV :: Memory size (Flash)*": "32 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "RC with Mic. Hey Google Works with Alexa",
-        "Smart TV Features :: Smart Home experience": "MATTER Control4 Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "3.1 Channel",
         "Sound :: Output power (RMS)": "80 Watt (RMS)",
-        "Sound :: Speaker configuration": "8.5 W x 6 mid-high speaker, 30 W sub-woofer",
-        "Sound :: Codec": "Dolby Atmos Dolby Digital DTS:X",
-        "Sound :: Sound Enhancement": "A.I. EQ AI mode Clear Dialogue Dialogue Dolby Media Intelligence Entertainment Music Spatial Music Personal Original AVL Mode Night mode",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Main Speaker": "2-Way B&W Mid + Tweeter",
-        "Sound :: Woofer": "B&W Balanced Quad PR",
         "Connectivity :: Number of HDMI connections": "4",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "One touch play Remote control pass-through System standby System audio control",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ax, 2x2, Dual band Bluetooth 5.2 Works with Apple AirPlay Google Fast Pair",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI2",
         "Connectivity :: HDMI 2.1 features": "eARC/VRR/ALLM supported eARC on HDMI 2 Max 48 Gbps data rate",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: HDMI 1/2": "HDMI 2.1 full bandwidth 48 Gbps up to 4K 144Hz",
         "Supported HDMI video features :: Gaming": "AMD FreeSync Premium Pro Nvidia G-Sync compatible ALLM Dolby Vision Game HDMI VRR HGiG",
         "Supported HDMI video features :: HDMI 3/4": "HDMI 2.0",
         "Supported HDMI video features :: HDR": "Dolby Vision HDR10 HDR10+ Adaptive HLG",
-        "EU Energy card :: EPREL registration numbers": "2293800",
-        "EU Energy card :: Energy class for SDR": "F",
-        "EU Energy card :: On mode power demand for SDR": "77 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "102 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "OLED",
-        "Power :: Mains power": "AC 100 - 240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.3 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "Tabletop stand 1x USB-C cable for remote control charging Quick start guide Power cord Remote Control Safety and Legal Leaflet",
-        "Design :: Colours of TV": "Metal bezel frame",
-        "Design :: Stand design": "Metal diamond shape grey stand",
         "Dimensions :: Distance between 2 stands": "625 mm",
         "Dimensions :: Wall-mount compatible": "300 x 300 mm",
         "Dimensions :: TV without stand (W x H x D)": "1225 x 740 x 56 mm",
@@ -1474,9 +1246,7 @@ const ModelsData = [
       },
       "ambilightVersion": "4 sided",
       "hdmiInputs": "4",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T10:19:19.518Z"
+      "usbInputs": "2"
     },
     "apps": [
       "Google TV"
@@ -1579,49 +1349,7 @@ const ModelsData = [
       ],
       "remote": "Metal rechargeable remote control",
       "chassis": "TPM25.1E OA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Ambilight Suite Game Mode Music Mode Wall colour adaptive",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Display": "4K Ultra HD OLED",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "120 Hz",
-          "Picture engine": "P5 AI Perfect Picture Engine",
-          "Picture enhancement": "Auto Film and Filmmaker Mode Calman Calman Autocal Ready and Manual Calibration Crystal Clear ECO Film-maker mode Game Home Cinema MEMC / FRC Embedded Micro Dimming Perfect Monitor Personal Perfect Natural Motion",
-          "Variable Refresh Rate": "144 Hz"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576p - 50 Hz, 645 x 480 - 60 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/ 60/100/120/144 Hz, 2560 x 1440 - 60/120/144 Hz, 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Amazon Prime Video Apple TV Disney+ Netflix* NFT app* YouTube",
-          "OS": "Google TV",
-          "Memory size (Flash)*": "32 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "RC with Mic. Works with Alexa Hey Google",
-          "Smart Home experience": "Home-automation system ready, please visit the Control4 website MATTER Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.1 Channel",
           "Output power (RMS)": "Output power: 70 Watts (RMS)",
@@ -1649,28 +1377,6 @@ const ModelsData = [
           "HDMI 3/4": "HDMI 2.0",
           "HDR": "Dolby Vision HDR10 HDR10+ Adaptive HLG"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2294060",
-          "Energy class for SDR": "G",
-          "On mode power demand for SDR": "84 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "112 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "OLED"
-        },
-        "Power": {
-          "Mains power": "AC 100 - 240 V 50/60 Hz",
-          "Standby power consumption": "0.5 W",
-          "Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "1x USB-C cable for remote control charging Power cord Remote Control with wireless charging Quick start guide Safety and Legal Leaflet Tabletop stand"
-        },
-        "Design": {
-          "Colours of TV": "Metal bezel frame",
-          "Stand design": "Metal satin chrome pill central stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "500 mm",
           "Wall-mount compatible": "300 x 300 mm",
@@ -1683,68 +1389,19 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Ambilight Suite Game Mode Music Mode Wall colour adaptive",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Display": "4K Ultra HD OLED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "120 Hz",
-        "Picture/Display :: Picture engine": "P5 AI Perfect Picture Engine",
-        "Picture/Display :: Picture enhancement": "Auto Film and Filmmaker Mode Calman Calman Autocal Ready and Manual Calibration Crystal Clear ECO Film-maker mode Game Home Cinema MEMC / FRC Embedded Micro Dimming Perfect Monitor Personal Perfect Natural Motion",
-        "Picture/Display :: Variable Refresh Rate": "144 Hz",
-        "Display input resolution :: Resolution-Refresh rate": "576p - 50 Hz, 645 x 480 - 60 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/ 60/100/120/144 Hz, 2560 x 1440 - 60/120/144 Hz, 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Amazon Prime Video Apple TV Disney+ Netflix* NFT app* YouTube",
-        "Smart TV :: OS": "Google TV",
-        "Smart TV :: Memory size (Flash)*": "32 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "RC with Mic. Works with Alexa Hey Google",
-        "Smart TV Features :: Smart Home experience": "Home-automation system ready, please visit the Control4 website MATTER Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.1 Channel",
         "Sound :: Output power (RMS)": "Output power: 70 Watts (RMS)",
-        "Sound :: Speaker configuration": "10 W x 4 mid-high speaker, 30 W subwoofer",
-        "Sound :: Codec": "Dolby Atmos Dolby Digital DTS:X",
-        "Sound :: Sound Enhancement": "A.I. EQ AI mode AVL Mode Clear Dialogue Dialogue Dolby Media Intelligence Dolby Atmos Entertainment Hearing Profile Music Night mode Original Personal Spatial Music",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Main Speaker": "2-Way Mid + Tweeter",
-        "Sound :: Woofer": "Triple Ring Balance Quad PR",
         "Connectivity :: Number of HDMI connections": "4",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "One touch play Remote control pass-through System audio control System standby",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ax, 2x2, Dual band Bluetooth 5.2 Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI2",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 2 eARC/VRR/ALLM supported Max 48 Gbps data rate",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: HDMI 1/2": "HDMI 2.1 full bandwidth 48 Gbps up to 4K 144Hz",
         "Supported HDMI video features :: Gaming": "AMD FreeSync Premium ALLM Dolby Vision Game HDMI VRR HGiG Nvidia G-Sync compatible",
         "Supported HDMI video features :: HDMI 3/4": "HDMI 2.0",
         "Supported HDMI video features :: HDR": "Dolby Vision HDR10 HDR10+ Adaptive HLG",
-        "EU Energy card :: EPREL registration numbers": "2294060",
-        "EU Energy card :: Energy class for SDR": "G",
-        "EU Energy card :: On mode power demand for SDR": "84 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "112 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "OLED",
-        "Power :: Mains power": "AC 100 - 240 V 50/60 Hz",
-        "Power :: Standby power consumption": "0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "1x USB-C cable for remote control charging Power cord Remote Control with wireless charging Quick start guide Safety and Legal Leaflet Tabletop stand",
-        "Design :: Colours of TV": "Metal bezel frame",
-        "Design :: Stand design": "Metal satin chrome pill central stand",
         "Dimensions :: Distance between 2 stands": "500 mm",
         "Dimensions :: Wall-mount compatible": "300 x 300 mm",
         "Dimensions :: TV without stand (W x H x D)": "1226 x 708 x 68 mm",
@@ -1756,9 +1413,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "4",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T10:19:21.680Z"
+      "usbInputs": "2"
     },
     "apps": [
       "Google TV"
@@ -1858,48 +1513,7 @@ const ModelsData = [
         "Compatible with Google Assistant"
       ],
       "chassis": "TPN25.8E OA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Game Mode Wall colour adaptive Sunrise Alarm Music Mode Ambilight Suite",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Display": "4K Ultra HD OLED",
-          "Panel resolution": "3840 x 2160",
-          "Native refresh rate": "120 Hz",
-          "Picture engine": "P5 AI Perfect Picture Engine",
-          "Picture enhancement": "Auto Film and Filmmaker Mode Calman Calman Autocal Ready and Manual Calibration Crystal Clear ECO Game Home Cinema MEMC / FRC Embedded Micro Dimming Perfect Monitor Perfect Natural Motion"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "640 x 480 - 60 Hz 576 p - 50 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60/100/120Hz 2560 x 1440 - 60/120/144Hz 3840 x 2160p - 24/25/30/50/60/100/120 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Disney+ HBO Netflix* YouTube Amazon Prime Video BBC iPlayer NFT app*",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Works with Google Home Amazon Alexa built-in RC with Mic.",
-          "Smart Home experience": "MATTER Home-automation system ready, please visit the Control4 website Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "20 W",
@@ -1925,28 +1539,6 @@ const ModelsData = [
           "Gaming": "HDMI VRR ALLM and Auto Game AMD FreeSync Premium Nvidia G-Sync compatible",
           "HDR": "HDR10+ Adaptive Dolby Vision HLG HGIG"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2262789",
-          "Energy class for SDR": "F",
-          "On mode power demand for SDR": "77 kWh/1000h",
-          "Energy class for HDR": "F",
-          "On mode power demand for HDR": "71 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "OLED"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.3 W",
-          "Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Power cord Quick start guide Safety and Legal Leaflet Remote Control Tabletop stand"
-        },
-        "Design": {
-          "Colours of TV": "Metal bezel frame",
-          "Stand design": "Satin chrome stands"
-        },
         "Dimensions": {
           "Distance between 2 stands": "793 mm",
           "Wall-mount compatible": "300 x 300 mm",
@@ -1959,65 +1551,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Game Mode Wall colour adaptive Sunrise Alarm Music Mode Ambilight Suite",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Display": "4K Ultra HD OLED",
-        "Picture/Display :: Panel resolution": "3840 x 2160",
-        "Picture/Display :: Native refresh rate": "120 Hz",
-        "Picture/Display :: Picture engine": "P5 AI Perfect Picture Engine",
-        "Picture/Display :: Picture enhancement": "Auto Film and Filmmaker Mode Calman Calman Autocal Ready and Manual Calibration Crystal Clear ECO Game Home Cinema MEMC / FRC Embedded Micro Dimming Perfect Monitor Perfect Natural Motion",
-        "Display input resolution :: Resolution-Refresh rate": "640 x 480 - 60 Hz 576 p - 50 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60/100/120Hz 2560 x 1440 - 60/120/144Hz 3840 x 2160p - 24/25/30/50/60/100/120 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Disney+ HBO Netflix* YouTube Amazon Prime Video BBC iPlayer NFT app*",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Works with Google Home Amazon Alexa built-in RC with Mic.",
-        "Smart TV Features :: Smart Home experience": "MATTER Home-automation system ready, please visit the Control4 website Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "20 W",
-        "Sound :: Speaker configuration": "2 x 10 W full-range speakers",
-        "Sound :: Codec": "Dolby Digital MS12 V2.6.2 Dolby Atmos DTS:X",
-        "Sound :: Sound Enhancement": "All Sound Style AVL Mode Bass Enhancement Dialogue Dolby Media Intelligence Entertainment Equalizer Hearing Profile Music Night mode Room Calibration Personal Vocal Boost",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Full Range Large Box",
         "Connectivity :: Number of HDMI connections": "4",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "Remote control pass-through System standby System audio control One touch play",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac, 2 x 2, Dual band Bluetooth 5.2 Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "HDMI 2",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 2",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: Gaming": "HDMI VRR ALLM and Auto Game AMD FreeSync Premium Nvidia G-Sync compatible",
         "Supported HDMI video features :: HDR": "HDR10+ Adaptive Dolby Vision HLG HGIG",
-        "EU Energy card :: EPREL registration numbers": "2262789",
-        "EU Energy card :: Energy class for SDR": "F",
-        "EU Energy card :: On mode power demand for SDR": "77 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "F",
-        "EU Energy card :: On mode power demand for HDR": "71 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "OLED",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.3 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Power cord Quick start guide Safety and Legal Leaflet Remote Control Tabletop stand",
-        "Design :: Colours of TV": "Metal bezel frame",
-        "Design :: Stand design": "Satin chrome stands",
         "Dimensions :: Distance between 2 stands": "793 mm",
         "Dimensions :: Wall-mount compatible": "300 x 300 mm",
         "Dimensions :: TV without stand (W x H x D)": "1228 x 708 x 58 mm",
@@ -2029,9 +1573,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "4",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T09:43:12.223Z"
+      "usbInputs": "2"
     },
     "apps": [
       "Titan OS"
@@ -2128,49 +1670,7 @@ const ModelsData = [
         "Compatible with Google Assistant"
       ],
       "chassis": "TPN25.8E MA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Music Mode Ambilight Suite Wall colour adaptive Game Mode",
-          "Ambilight Version": "3-sided Ambilight Plus"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "65 inch",
-          "Diagonal screen size (metric)": "164 cm",
-          "Display": "4K Ultra HD QD Mini LED",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "120 Hz",
-          "Picture engine": "P5 AI Perfect Picture Engine",
-          "Picture enhancement": "Calman Calman Autocal Ready and Manual Calibration Crystal Clear ECO Game Home Cinema Movie Monitor Micro Dimming Premium Perfect Natural Motion Personal",
-          "Variable Refresh Rate": "144 Hz"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576p - 50 Hz, 645 x 480 - 60 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/ 60/100/120/144 Hz, 2560 x 1440 - 60/120/144 Hz, 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Netflix HBO Disney+ BBC iPlayer YouTube Amazon Prime Video NFT app*",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "RC with Mic. Amazon Alexa Built-in Works with Google Home",
-          "Smart Home experience": "MATTER Control4 Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "4.1 Channel",
           "Output power (RMS)": "60 W",
@@ -2198,28 +1698,6 @@ const ModelsData = [
           "Gaming": "ALLM and Auto Game HDMI VRR AMD FreeSync Premium",
           "HDR": "HDR10+ Compatible Dolby Vision HLG"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2359480",
-          "Energy class for SDR": "F",
-          "On mode power demand for SDR": "102 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "289 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "QLED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Eco mode Auto switch-off timer Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Power cord Quick start guide Remote Control Tabletop stand Safety and Legal Leaflet"
-        },
-        "Design": {
-          "Colours of TV": "Metal satin chrome low bezel",
-          "Stand design": "Metal satin chrome pill central stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "550 mm",
           "Wall-mount compatible": "400 x 200 mm",
@@ -2232,68 +1710,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Music Mode Ambilight Suite Wall colour adaptive Game Mode",
-        "Ambilight :: Ambilight Version": "3-sided Ambilight Plus",
-        "Picture/Display :: Diagonal screen size (inch)": "65 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "164 cm",
-        "Picture/Display :: Display": "4K Ultra HD QD Mini LED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "120 Hz",
-        "Picture/Display :: Picture engine": "P5 AI Perfect Picture Engine",
-        "Picture/Display :: Picture enhancement": "Calman Calman Autocal Ready and Manual Calibration Crystal Clear ECO Game Home Cinema Movie Monitor Micro Dimming Premium Perfect Natural Motion Personal",
-        "Picture/Display :: Variable Refresh Rate": "144 Hz",
-        "Display input resolution :: Resolution-Refresh rate": "576p - 50 Hz, 645 x 480 - 60 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/ 60/100/120/144 Hz, 2560 x 1440 - 60/120/144 Hz, 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Netflix HBO Disney+ BBC iPlayer YouTube Amazon Prime Video NFT app*",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "RC with Mic. Amazon Alexa Built-in Works with Google Home",
-        "Smart TV Features :: Smart Home experience": "MATTER Control4 Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "4.1 Channel",
         "Sound :: Output power (RMS)": "60 W",
-        "Sound :: Speaker configuration": "4 x 10 W full-range speakers + 20 W",
-        "Sound :: Codec": "Dolby Atmos DTS:X Dolby Digital",
-        "Sound :: Sound Enhancement": "All Sound Style AVL Mode Bass Enhancement Dialogue Dolby Media Intelligence Equalizer Entertainment Hearing Profile Music Night mode Room Calibration Personal Vocal Boost",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Slim Full Range",
-        "Sound :: Woofer": "20 mm Slim Bass Reflex",
-        "Sound :: Side Tweeter": "Side Tweeter (L/R)",
         "Connectivity :: Number of HDMI connections": "4",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "One touch play System audio control System standby Remote control pass-through",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac 2 x 2 Dual band Bluetooth 5.2 Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI2",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 2",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: Gaming": "ALLM and Auto Game HDMI VRR AMD FreeSync Premium",
         "Supported HDMI video features :: HDR": "HDR10+ Compatible Dolby Vision HLG",
-        "EU Energy card :: EPREL registration numbers": "2359480",
-        "EU Energy card :: Energy class for SDR": "F",
-        "EU Energy card :: On mode power demand for SDR": "102 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "289 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "QLED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Eco mode Auto switch-off timer Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Power cord Quick start guide Remote Control Tabletop stand Safety and Legal Leaflet",
-        "Design :: Colours of TV": "Metal satin chrome low bezel",
-        "Design :: Stand design": "Metal satin chrome pill central stand",
         "Dimensions :: Distance between 2 stands": "550 mm",
         "Dimensions :: Wall-mount compatible": "400 x 200 mm",
         "Dimensions :: TV without stand (W x H x D)": "1451 x 840 x 52 mm",
@@ -2305,9 +1732,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3-sided Ambilight Plus",
       "hdmiInputs": "4",
-      "usbInputs": "2",
-      "officialSourceScore": "613",
-      "officialSourceCheckedAt": "2026-04-17T10:19:21.314Z"
+      "usbInputs": "2"
     },
     "apps": [
       "Titan OS"
@@ -2409,48 +1834,7 @@ const ModelsData = [
         "Compatible with Google Assistant"
       ],
       "chassis": "TPN25.8E MA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Music Mode Ambilight Suite Wall colour adaptive Game Mode",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "120 Hz",
-          "Picture engine": "P5 Perfect Picture Engine",
-          "Picture enhancement": "Calman Calman Autocal Ready and Manual Calibration Crystal Clear ECO Game Home Cinema Movie Monitor Micro Dimming Premium Perfect Natural Motion Personal",
-          "Variable Refresh Rate": "144 Hz"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576p - 50 Hz, 645 x 480 - 60 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/ 60/100/120/144 Hz, 2560 x 1440 - 60/120/144 Hz, 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Netflix HBO Disney+ BBC iPlayer YouTube Amazon Prime Video NFT app*",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "RC with Mic. Amazon Alexa Built-in Works with Google Home",
-          "Smart Home experience": "MATTER Control4 Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "40 W",
@@ -2476,28 +1860,6 @@ const ModelsData = [
           "Gaming": "ALLM and Auto Game HDMI VRR AMD FreeSync Premium",
           "HDR": "HDR10+ Compatible Dolby Vision HLG"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2271529",
-          "Energy class for SDR": "F",
-          "On mode power demand for SDR": "77 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "193 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "QLED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Eco mode Auto switch-off timer Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Power cord Quick start guide Remote Control Tabletop stand Safety and Legal Leaflet"
-        },
-        "Design": {
-          "Colours of TV": "Plastic black low bezel",
-          "Stand design": "Black arch stands"
-        },
         "Dimensions": {
           "Distance between 2 stands": "994 mm",
           "Wall-mount compatible": "300 x 200 mm",
@@ -2510,65 +1872,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Music Mode Ambilight Suite Wall colour adaptive Game Mode",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "120 Hz",
-        "Picture/Display :: Picture engine": "P5 Perfect Picture Engine",
-        "Picture/Display :: Picture enhancement": "Calman Calman Autocal Ready and Manual Calibration Crystal Clear ECO Game Home Cinema Movie Monitor Micro Dimming Premium Perfect Natural Motion Personal",
-        "Picture/Display :: Variable Refresh Rate": "144 Hz",
-        "Display input resolution :: Resolution-Refresh rate": "576p - 50 Hz, 645 x 480 - 60 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/ 60/100/120/144 Hz, 2560 x 1440 - 60/120/144 Hz, 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Netflix HBO Disney+ BBC iPlayer YouTube Amazon Prime Video NFT app*",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "RC with Mic. Amazon Alexa Built-in Works with Google Home",
-        "Smart TV Features :: Smart Home experience": "MATTER Control4 Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "40 W",
-        "Sound :: Speaker configuration": "4 x 10 W full-range speakers",
-        "Sound :: Codec": "Dolby Atmos DTS:X Dolby Digital",
-        "Sound :: Sound Enhancement": "All Sound Style AVL Mode Bass Enhancement Dialogue Dolby Media Intelligence Equalizer Entertainment Hearing Profile Music Night mode Room Calibration Personal Vocal Boost",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Super Slim Full Range + Tweeter",
         "Connectivity :: Number of HDMI connections": "4",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "One touch play System audio control System standby Remote control pass-through",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac 2 x 2 Dual band Bluetooth 5.2 Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI2",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 2",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: Gaming": "ALLM and Auto Game HDMI VRR AMD FreeSync Premium",
         "Supported HDMI video features :: HDR": "HDR10+ Compatible Dolby Vision HLG",
-        "EU Energy card :: EPREL registration numbers": "2271529",
-        "EU Energy card :: Energy class for SDR": "F",
-        "EU Energy card :: On mode power demand for SDR": "77 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "193 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "QLED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Eco mode Auto switch-off timer Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Power cord Quick start guide Remote Control Tabletop stand Safety and Legal Leaflet",
-        "Design :: Colours of TV": "Plastic black low bezel",
-        "Design :: Stand design": "Black arch stands",
         "Dimensions :: Distance between 2 stands": "994 mm",
         "Dimensions :: Wall-mount compatible": "300 x 200 mm",
         "Dimensions :: TV without stand (W x H x D)": "1226 x 719 x 65 mm",
@@ -2580,9 +1894,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "4",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T09:43:35.359Z"
+      "usbInputs": "2"
     },
     "apps": [
       "Titan OS"
@@ -2675,44 +1987,7 @@ const ModelsData = [
         "Compatible with Google Assistant"
       ],
       "chassis": "TPN25.6E MA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Display": "4K UHD MiniLED",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "60 Hz",
-          "Picture engine": "P5 Perfect Picture Engine",
-          "Picture enhancement": "Calman Calman Autocal Ready and Manual Calibration Crystal Clear Natural Motion ECO Home Cinema Game Movie Monitor Personal Ultra Resolution"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "640 x 480 - 60 Hz, 576p -50 Hz, 720p -50/60 Hz, 1920 x 1080p -24/25/30/50/ 60 Hz, 2560 x 1440 - 60 Hz, 3840 x 2160p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Netflix HBO Disney+ BBC iPlayer YouTube Amazon Prime Video NFT app*",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "RC with Mic. Amazon Alexa Built-in Works with Google Home",
-          "Smart Home experience": "MATTER Control4 Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "20 W",
@@ -2738,28 +2013,6 @@ const ModelsData = [
           "Gaming": "ALLM and Auto Game HDMI VRR",
           "HDR": "HDR10+ Compatible HDR10 HLG"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2366902",
-          "Energy class for SDR": "F",
-          "On mode power demand for SDR": "77 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "180 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "QLED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Eco mode Auto switch-off timer Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Power cord Remote Control Quick start guide Safety and Legal Leaflet Tabletop stand"
-        },
-        "Design": {
-          "Colours of TV": "Plastic black low bezel",
-          "Stand design": "Plastic black triangle small open stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "997 mm",
           "Wall-mount compatible": "300 x 200 mm",
@@ -2772,63 +2025,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Display": "4K UHD MiniLED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "60 Hz",
-        "Picture/Display :: Picture engine": "P5 Perfect Picture Engine",
-        "Picture/Display :: Picture enhancement": "Calman Calman Autocal Ready and Manual Calibration Crystal Clear Natural Motion ECO Home Cinema Game Movie Monitor Personal Ultra Resolution",
-        "Display input resolution :: Resolution-Refresh rate": "640 x 480 - 60 Hz, 576p -50 Hz, 720p -50/60 Hz, 1920 x 1080p -24/25/30/50/ 60 Hz, 2560 x 1440 - 60 Hz, 3840 x 2160p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Netflix HBO Disney+ BBC iPlayer YouTube Amazon Prime Video NFT app*",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "RC with Mic. Amazon Alexa Built-in Works with Google Home",
-        "Smart TV Features :: Smart Home experience": "MATTER Control4 Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "20 W",
-        "Sound :: Speaker configuration": "2 x 10 W full-range speakers",
-        "Sound :: Codec": "Dolby Atmos DTS:X Dolby Digital",
-        "Sound :: Sound Enhancement": "Dialogue All Sound Style Entertainment Music Personal Vocal Boost Bass Enhancement Equalizer Room Calibration Hearing Profile AVL Mode Night mode DTS Play-Fi",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Slim Full Range",
         "Connectivity :: Number of HDMI connections": "3",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "One touch play System audio control System standby Remote control pass-through",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac 2 x 2 Dual band Bluetooth 5.2 easy-pair (RC blue button) Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "HDMI 1",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 1",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: Gaming": "ALLM and Auto Game HDMI VRR",
         "Supported HDMI video features :: HDR": "HDR10+ Compatible HDR10 HLG",
-        "EU Energy card :: EPREL registration numbers": "2366902",
-        "EU Energy card :: Energy class for SDR": "F",
-        "EU Energy card :: On mode power demand for SDR": "77 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "180 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "QLED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Eco mode Auto switch-off timer Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Power cord Remote Control Quick start guide Safety and Legal Leaflet Tabletop stand",
-        "Design :: Colours of TV": "Plastic black low bezel",
-        "Design :: Stand design": "Plastic black triangle small open stand",
         "Dimensions :: Distance between 2 stands": "997 mm",
         "Dimensions :: Wall-mount compatible": "300 x 200 mm",
         "Dimensions :: TV without stand (W x H x D)": "1226 x 718 x 65 mm",
@@ -2839,9 +2046,7 @@ const ModelsData = [
         "Dimensions :: Weight incl. packaging": "15.78 kg"
       },
       "hdmiInputs": "3",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T09:43:31.132Z"
+      "usbInputs": "2"
     },
     "apps": [
       "Titan OS"
@@ -2941,49 +2146,7 @@ const ModelsData = [
         "Compatible with Google Assistant"
       ],
       "chassis": "TPN25.8E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Ambilight Music Game Mode Wall colour adaptive Ambilight Suite",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Display": "4K Ultra HD QLED",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "120 Hz",
-          "Picture engine": "P5 Perfect Picture Engine",
-          "Picture enhancement": "Calman Calman Autocal Ready and Manual Calibration Crystal Clear Dolby Vision ECO Game HDR10+ compatible Home Cinema MEMC / FRC Embedded Micro Dimming Pro Monitor Movie Personal Ultra Resolution",
-          "Variable Refresh Rate": "144 Hz"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60/100/120/144Hz 2560 x 1440 - 60/120/144Hz 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO Netflix* NFT app* YouTube",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Amazon Alexa Built-in Works with Google Home RC with Mic.",
-          "Smart Home experience": "Control4 MATTER",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "40 W",
@@ -3008,28 +2171,6 @@ const ModelsData = [
           "Gaming": "HDMI VRR ALLM AMD FreeSync Premium",
           "HDR": "Dolby Vision HDR10+ Compatible HLG"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2232622",
-          "Energy class for SDR": "F",
-          "On mode power demand for SDR": "77 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "154 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "QLED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.3 W",
-          "Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Legal and safety brochure Power cord Quick Use Guide Tabletop stand Remote Control"
-        },
-        "Design": {
-          "Colours of TV": "Plastic gun metal bezel",
-          "Stand design": "Plastic charcoal-coloured central stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "500 mm",
           "Wall-mount compatible": "200 x 300 mm",
@@ -3042,65 +2183,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Ambilight Music Game Mode Wall colour adaptive Ambilight Suite",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Display": "4K Ultra HD QLED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "120 Hz",
-        "Picture/Display :: Picture engine": "P5 Perfect Picture Engine",
-        "Picture/Display :: Picture enhancement": "Calman Calman Autocal Ready and Manual Calibration Crystal Clear Dolby Vision ECO Game HDR10+ compatible Home Cinema MEMC / FRC Embedded Micro Dimming Pro Monitor Movie Personal Ultra Resolution",
-        "Picture/Display :: Variable Refresh Rate": "144 Hz",
-        "Display input resolution :: Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60/100/120/144Hz 2560 x 1440 - 60/120/144Hz 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO Netflix* NFT app* YouTube",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Amazon Alexa Built-in Works with Google Home RC with Mic.",
-        "Smart TV Features :: Smart Home experience": "Control4 MATTER",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "40 W",
-        "Sound :: Speaker configuration": "4 x 10 W full-range speakers",
-        "Sound :: Codec": "DTS:X Dolby Digital Dolby Atmos",
-        "Sound :: Sound Enhancement": "All Sound Style AVL Mode Bass Enhancement Dolby Media Intelligence Dolby Atmos Virtualiser DTS Play-Fi Equalizer Hearing Profile Night Mode Room Calibration Vocal Boost",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Full Range Bass Reflex (FR01A+)",
         "Connectivity :: Number of HDMI connections": "4",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "One touch play Remote control pass-through System audio control System standby",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac 2 x 2 Dual band Bluetooth 5.2 easy-pair (RC blue button) Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI2",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 2",
         "Supported HDMI video features :: Gaming": "HDMI VRR ALLM AMD FreeSync Premium",
         "Supported HDMI video features :: HDR": "Dolby Vision HDR10+ Compatible HLG",
-        "EU Energy card :: EPREL registration numbers": "2232622",
-        "EU Energy card :: Energy class for SDR": "F",
-        "EU Energy card :: On mode power demand for SDR": "77 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "154 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "QLED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.3 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Legal and safety brochure Power cord Quick Use Guide Tabletop stand Remote Control",
-        "Design :: Colours of TV": "Plastic gun metal bezel",
-        "Design :: Stand design": "Plastic charcoal-coloured central stand",
         "Dimensions :: Distance between 2 stands": "500 mm",
         "Dimensions :: Wall-mount compatible": "200 x 300 mm",
         "Dimensions :: TV without stand (W x H x D)": "1231 x 721 x 82 mm",
@@ -3112,9 +2205,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "4",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T09:43:48.509Z"
+      "usbInputs": "2"
     },
     "apps": [
       "Titan OS"
@@ -3208,49 +2299,7 @@ const ModelsData = [
         "Compatible with Google Assistant"
       ],
       "chassis": "TPN25.6E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Wall colour adaptive Gaming mode Ambilight Music Sunrise Alarm AmbiSleep Lounge light mode Ambilight FTI Animation",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Display": "4K Ultra HD QLED",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "60 Hz",
-          "Picture engine": "P5 Perfect Picture Engine",
-          "Picture enhancement": "Monitor HDR10+ compatible ECO Game Movie Crystal Clear Home Cinema Personal Micro Dimming Natural Motion",
-          "Variable Refresh Rate": "120 Hz"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60Hz 2560 x 1440 - 60 Hz 3840 x 2160p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Disney+ HBO Netflix* YouTube Amazon Prime Video NFT app* BBC iPlayer",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Amazon Alexa Built-in Works with Google Home RC with Mic.",
-          "Smart Home experience": "MATTER Control4 Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "20 W",
@@ -3275,28 +2324,6 @@ const ModelsData = [
           "Gaming": "ALLM HDMI VRR",
           "HDR": "HLG HDR10 HDR10+ Compatible"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2250114",
-          "Energy class for SDR": "F",
-          "On mode power demand for SDR": "77 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "143 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W W",
-          "Panel technology used": "QLED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Light sensor Eco mode Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "Quick Use Guide Remote Control 2 x AAA Batteries Legal and safety brochure Tabletop stand Power cord"
-        },
-        "Design": {
-          "Colours of TV": "Plastic gun metal bezel",
-          "Stand design": "Plastic rectangle gun metal"
-        },
         "Dimensions": {
           "Distance between 2 stands": "330 mm",
           "Wall-mount compatible": "200 x 300 mm",
@@ -3309,65 +2336,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Wall colour adaptive Gaming mode Ambilight Music Sunrise Alarm AmbiSleep Lounge light mode Ambilight FTI Animation",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Display": "4K Ultra HD QLED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "60 Hz",
-        "Picture/Display :: Picture engine": "P5 Perfect Picture Engine",
-        "Picture/Display :: Picture enhancement": "Monitor HDR10+ compatible ECO Game Movie Crystal Clear Home Cinema Personal Micro Dimming Natural Motion",
-        "Picture/Display :: Variable Refresh Rate": "120 Hz",
-        "Display input resolution :: Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60Hz 2560 x 1440 - 60 Hz 3840 x 2160p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Disney+ HBO Netflix* YouTube Amazon Prime Video NFT app* BBC iPlayer",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Amazon Alexa Built-in Works with Google Home RC with Mic.",
-        "Smart TV Features :: Smart Home experience": "MATTER Control4 Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "20 W",
-        "Sound :: Speaker configuration": "2 x 10 W full-range speakers",
-        "Sound :: Sound Enhancement": "Dolby Atmos Vocal Boost All Sound Style DTS-X Entertainment Bass Enhancement Equalizer Hearing Profile AVL Mode Night mode Room Calibration",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Full Range Bass Reflex (FR01A)",
         "Connectivity :: Number of HDMI connections": "3",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "Remote control pass-through System audio control System standby One touch play",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac, 2 x 2, Dual band Bluetooth 5.2 easy-pair (RC blue button) Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI1",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 1 eARC/VRR/ALLM supported",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: Gaming": "ALLM HDMI VRR",
         "Supported HDMI video features :: HDR": "HLG HDR10 HDR10+ Compatible",
-        "EU Energy card :: EPREL registration numbers": "2250114",
-        "EU Energy card :: Energy class for SDR": "F",
-        "EU Energy card :: On mode power demand for SDR": "77 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "143 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W W",
-        "EU Energy card :: Panel technology used": "QLED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Light sensor Eco mode Picture mute (for radio)",
-        "Accessories :: Included accessories": "Quick Use Guide Remote Control 2 x AAA Batteries Legal and safety brochure Tabletop stand Power cord",
-        "Design :: Colours of TV": "Plastic gun metal bezel",
-        "Design :: Stand design": "Plastic rectangle gun metal",
         "Dimensions :: Distance between 2 stands": "330 mm",
         "Dimensions :: Wall-mount compatible": "200 x 300 mm",
         "Dimensions :: TV without stand (W x H x D)": "1231 x 723 x 82 mm",
@@ -3379,9 +2358,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "3",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T09:43:47.289Z"
+      "usbInputs": "2"
     },
     "apps": [
       "Titan OS"
@@ -3478,48 +2455,7 @@ const ModelsData = [
         "Compatible with Google Assistant"
       ],
       "chassis": "TPN25.6E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "AmbiSleep Ambilight Music Gaming mode Lounge light mode Sunrise Alarm Wall colour adaptive",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "43 inch",
-          "Diagonal screen size (metric)": "108 cm",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "60 Hz",
-          "Picture engine": "Pixel Precise Ultra HD",
-          "Picture enhancement": "Crystal Clear ECO Game HDR10+ compatible Home Cinema Monitor Movie Micro Dimming Personal Ultra Resolution",
-          "Display technology": "4K Ultra HD QLED"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60Hz 2560 x 1440 - 60 Hz 3840 x 2160p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO NFT app* Netflix* YouTube",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Amazon Alexa Built-in Works with Google Home RC with Mic.",
-          "Smart Home experience": "MATTER Control4 Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "20 W",
@@ -3545,29 +2481,6 @@ const ModelsData = [
           "Gaming": "ALLM HDMI VRR",
           "HDR": "HLG HDR10 HDR10+ Compatible"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2206259",
-          "Energy class for SDR": "F",
-          "On mode power demand for SDR": "50 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "80 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "LED LCD",
-          "Panel technology used.": "QLED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Light sensor Eco mode Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Legal and safety brochure Remote Control Tabletop stand Power cord Quick Use Guide"
-        },
-        "Design": {
-          "Colours of TV": "Matt black bezel",
-          "Stand design": "Black metal arch stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "756 mm mm",
           "Wall-mount compatible": "200 x 100 mm",
@@ -3580,66 +2493,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "AmbiSleep Ambilight Music Gaming mode Lounge light mode Sunrise Alarm Wall colour adaptive",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "43 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "108 cm",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "60 Hz",
-        "Picture/Display :: Picture engine": "Pixel Precise Ultra HD",
-        "Picture/Display :: Picture enhancement": "Crystal Clear ECO Game HDR10+ compatible Home Cinema Monitor Movie Micro Dimming Personal Ultra Resolution",
-        "Picture/Display :: Display technology": "4K Ultra HD QLED",
-        "Display input resolution :: Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60Hz 2560 x 1440 - 60 Hz 3840 x 2160p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO NFT app* Netflix* YouTube",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Amazon Alexa Built-in Works with Google Home RC with Mic.",
-        "Smart TV Features :: Smart Home experience": "MATTER Control4 Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "20 W",
-        "Sound :: Speaker configuration": "2 x 10 W full-range speakers",
-        "Sound :: Codec": "DTS:X Dolby Atmos Dolby Digital",
-        "Sound :: Sound Enhancement": "AVL Mode Bass Enhancement Dolby Media Intelligence Entertainment Equalizer Hearing Profile Night Mode Room Calibration Personal Vocal Boost",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Full Range Bass Reflex (FR01A)",
         "Connectivity :: Number of HDMI connections": "3",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "One touch play Remote control pass-through System audio control System standby",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac, 2 x 2, Dual band Bluetooth 5.2 Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI1",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 1 eARC/VRR/ALLM supported",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: Gaming": "ALLM HDMI VRR",
         "Supported HDMI video features :: HDR": "HLG HDR10 HDR10+ Compatible",
-        "EU Energy card :: EPREL registration numbers": "2206259",
-        "EU Energy card :: Energy class for SDR": "F",
-        "EU Energy card :: On mode power demand for SDR": "50 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "80 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "LED LCD",
-        "EU Energy card :: Panel technology used.": "QLED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Light sensor Eco mode Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Legal and safety brochure Remote Control Tabletop stand Power cord Quick Use Guide",
-        "Design :: Colours of TV": "Matt black bezel",
-        "Design :: Stand design": "Black metal arch stand",
         "Dimensions :: Distance between 2 stands": "756 mm mm",
         "Dimensions :: Wall-mount compatible": "200 x 100 mm",
         "Dimensions :: TV without stand (W x H x D)": "958 x 563 x 87 mm",
@@ -3651,9 +2515,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "3",
-      "usbInputs": "2",
-      "officialSourceScore": "703",
-      "officialSourceCheckedAt": "2026-04-17T09:43:50.927Z"
+      "usbInputs": "2"
     },
     "apps": [
       "Titan OS"
@@ -3749,48 +2611,7 @@ const ModelsData = [
         "Compatible with Google Assistant"
       ],
       "chassis": "TPN25.6E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Ambilight Suite Wall colour adaptive Music Mode Game Mode Sunrise Alarm",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Display": "4K Ultra HD LED",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "60 Hz Hz",
-          "Picture engine": "Pixel Precise Ultra HD",
-          "Picture enhancement": "Crystal Clear ECO Game HDR10+ compatible Home Cinema Monitor Movie Micro Dimming Personal Ultra Resolution"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "640 x 480 - 60 Hz, 576p -50 Hz, 720p -50/60 Hz,1920 x 1080p -24/25/30/50/60 Hz, 2560 x 1440 - 60 Hz, 3840 x 2160p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "BBC iPlayer Disney+ HBO NFT app* Netflix* YouTube Amazon Prime Video",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Amazon Alexa built-in Works with Google Home RC with Mic.",
-          "Smart Home experience": "MATTER Control4 Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "20 W",
@@ -3816,28 +2637,6 @@ const ModelsData = [
           "Gaming": "ALLM and Auto Game HDMI VRR",
           "HDR": "HDR10+ Compatible HDR10 HLG"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2269636",
-          "Energy class for SDR": "E",
-          "On mode power demand for SDR": "53 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "80 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "LED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Power cord Safety and Legal Leaflet Remote Control Tabletop stand Quick start guide"
-        },
-        "Design": {
-          "Colours of TV": "Plastic black low bezel",
-          "Stand design": "Metal black square arch stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "810 mm",
           "Wall-mount compatible": "200 x 100 mm",
@@ -3850,65 +2649,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Ambilight Suite Wall colour adaptive Music Mode Game Mode Sunrise Alarm",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Display": "4K Ultra HD LED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "60 Hz Hz",
-        "Picture/Display :: Picture engine": "Pixel Precise Ultra HD",
-        "Picture/Display :: Picture enhancement": "Crystal Clear ECO Game HDR10+ compatible Home Cinema Monitor Movie Micro Dimming Personal Ultra Resolution",
-        "Display input resolution :: Resolution-Refresh rate": "640 x 480 - 60 Hz, 576p -50 Hz, 720p -50/60 Hz,1920 x 1080p -24/25/30/50/60 Hz, 2560 x 1440 - 60 Hz, 3840 x 2160p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "BBC iPlayer Disney+ HBO NFT app* Netflix* YouTube Amazon Prime Video",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Amazon Alexa built-in Works with Google Home RC with Mic.",
-        "Smart TV Features :: Smart Home experience": "MATTER Control4 Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "20 W",
-        "Sound :: Speaker configuration": "2 x 10 W full-range speakers",
-        "Sound :: Codec": "Dolby Digital MS12 V2.6.2 Dolby Atmos DTS:X",
-        "Sound :: Sound Enhancement": "AVL Mode Bass Enhancement Dolby Media Intelligence Entertainment Equalizer Hearing Profile Night Mode Room Calibration Personal Vocal Boost",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Full Range Bass Reflex (FR01A)",
         "Connectivity :: Number of HDMI connections": "3",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "Remote control pass-through One touch play System audio control System standby",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac 2 x 2 Dual band Bluetooth 5.2 Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "HDMI 1",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 1 eARC/VRR/ALLM supported",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: Gaming": "ALLM and Auto Game HDMI VRR",
         "Supported HDMI video features :: HDR": "HDR10+ Compatible HDR10 HLG",
-        "EU Energy card :: EPREL registration numbers": "2269636",
-        "EU Energy card :: Energy class for SDR": "E",
-        "EU Energy card :: On mode power demand for SDR": "53 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "80 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "LED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Power cord Safety and Legal Leaflet Remote Control Tabletop stand Quick start guide",
-        "Design :: Colours of TV": "Plastic black low bezel",
-        "Design :: Stand design": "Metal black square arch stand",
         "Dimensions :: Distance between 2 stands": "810 mm",
         "Dimensions :: Wall-mount compatible": "200 x 100 mm",
         "Dimensions :: TV without stand (W x H x D)": "1226 x 713 x 88 mm",
@@ -3920,9 +2671,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "3",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T09:44:09.539Z"
+      "usbInputs": "2"
     },
     "apps": [
       "Titan OS"
@@ -4018,47 +2767,7 @@ const ModelsData = [
         "Compatible with Google Assistant"
       ],
       "chassis": "SPN25.6E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Ambilight FTI Animation Ambilight Music AmbiSleep Gaming mode Lounge light mode Sunrise Alarm Wall colour adaptive",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "43 inch",
-          "Diagonal screen size (metric)": "108 cm",
-          "Display": "4K Ultra HD LED",
-          "Panel resolution": "3840 x 2160p",
-          "Picture engine": "Pixel Precise Ultra HD",
-          "Picture enhancement": "Crystal Clear ECO Game HDR 10+ Compatible Home Cinema Monitor Micro Dimming Movie Personal Pixel Precise Ultra HD Ultra Resolution"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60Hz 2560 x 1440 - 60 Hz 3840 x 2160p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO NFT app* Netflix* YouTube",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Works with Alexa Works with Google Home",
-          "Smart Home experience": "MATTER Control4 Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "20 W",
@@ -4082,28 +2791,6 @@ const ModelsData = [
           "Gaming": "ALLM HDMI VRR",
           "HDR": "HLG HDR10 HDR10+ Compatible"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2230851",
-          "Energy class for SDR": "E",
-          "On mode power demand for SDR": "42 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "76 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "LED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Legal and safety brochure Remote Control Tabletop stand Power cord Quick Use Guide"
-        },
-        "Design": {
-          "Colours of TV": "Matt black bezel",
-          "Stand design": "Black metal arch stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "773 mm mm",
           "Wall-mount compatible": "200 x 100 mm",
@@ -4116,62 +2803,16 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Ambilight FTI Animation Ambilight Music AmbiSleep Gaming mode Lounge light mode Sunrise Alarm Wall colour adaptive",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "43 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "108 cm",
-        "Picture/Display :: Display": "4K Ultra HD LED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Picture engine": "Pixel Precise Ultra HD",
-        "Picture/Display :: Picture enhancement": "Crystal Clear ECO Game HDR 10+ Compatible Home Cinema Monitor Micro Dimming Movie Personal Pixel Precise Ultra HD Ultra Resolution",
-        "Display input resolution :: Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60Hz 2560 x 1440 - 60 Hz 3840 x 2160p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO NFT app* Netflix* YouTube",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Works with Alexa Works with Google Home",
-        "Smart TV Features :: Smart Home experience": "MATTER Control4 Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "20 W",
-        "Sound :: Speaker configuration": "2 x 10 W full-range speakers",
-        "Sound :: Sound Enhancement": "AVL Mode All Sound Style Bass Enhancement Dolby Atmos Dolby Media Intelligence Entertainment Equalizer Hearing Profile Night Mode Personal Vocal Boost DTS-X",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Full Range Bass Reflex (FR01A)",
         "Connectivity :: Number of HDMI connections": "3",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "Remote control pass-through System audio control System standby One touch play",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac, 2 x 2, Dual band Bluetooth 5.2 easy-pair (RC blue button) Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI1",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 1 eARC/VRR/ALLM supported",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: Gaming": "ALLM HDMI VRR",
         "Supported HDMI video features :: HDR": "HLG HDR10 HDR10+ Compatible",
-        "EU Energy card :: EPREL registration numbers": "2230851",
-        "EU Energy card :: Energy class for SDR": "E",
-        "EU Energy card :: On mode power demand for SDR": "42 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "76 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "LED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Legal and safety brochure Remote Control Tabletop stand Power cord Quick Use Guide",
-        "Design :: Colours of TV": "Matt black bezel",
-        "Design :: Stand design": "Black metal arch stand",
         "Dimensions :: Distance between 2 stands": "773 mm mm",
         "Dimensions :: Wall-mount compatible": "200 x 100 mm",
         "Dimensions :: TV without stand (W x H x D)": "957 x 564 x 87 mm",
@@ -4182,9 +2823,7 @@ const ModelsData = [
         "Dimensions :: Weight incl. packaging": "8.96 kg"
       },
       "ambilightVersion": "3 sided",
-      "hdmiInputs": "3",
-      "officialSourceScore": "703",
-      "officialSourceCheckedAt": "2026-04-17T09:44:04.405Z"
+      "hdmiInputs": "3"
     },
     "apps": [
       "Titan OS"
@@ -4243,44 +2882,7 @@ const ModelsData = [
         "Compatible with Alexa"
       ],
       "chassis": "TPN25.6E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "65 inch",
-          "Diagonal screen size (metric)": "164 cm",
-          "Display": "4K Ultra HD QLED",
-          "Panel resolution": "3840 x 2160",
-          "Native refresh rate": "60 Hz",
-          "Picture engine": "Pixel Precise Ultra HD",
-          "Picture enhancement": "Crystal Clear ECO Game HDR10+ compatible Home Cinema Movie Monitor Micro Dimming Personal Pixel Precise Ultra HD Ultra Resolution"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "640 x 480 - 60 Hz, 576p - 50 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz, 2560 x 1440 - 60 Hz, 3840 x 2160p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO NFT app* Netflix* YouTube",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Works with Alexa Works with Google Assistant",
-          "Smart Home experience": "Control4 MATTER Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "20 W",
@@ -4306,28 +2908,6 @@ const ModelsData = [
           "Gaming": "ALLM HDMI VRR",
           "HDR": "HLG HDR10 HDR10+ Compatible"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2250125",
-          "Energy class for SDR": "E",
-          "On mode power demand for SDR": "73 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "120 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "QLED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Power cord Remote Control Tabletop stand Quick start guide Safety and Legal Leaflet"
-        },
-        "Design": {
-          "Colours of TV": "Matt black bezel",
-          "Stand design": "Plastic black soap bar"
-        },
         "Dimensions": {
           "Distance between 2 stands": "569 mm",
           "Wall-mount compatible": "400 x 300 mm",
@@ -4340,63 +2920,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Picture/Display :: Diagonal screen size (inch)": "65 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "164 cm",
-        "Picture/Display :: Display": "4K Ultra HD QLED",
-        "Picture/Display :: Panel resolution": "3840 x 2160",
-        "Picture/Display :: Native refresh rate": "60 Hz",
-        "Picture/Display :: Picture engine": "Pixel Precise Ultra HD",
-        "Picture/Display :: Picture enhancement": "Crystal Clear ECO Game HDR10+ compatible Home Cinema Movie Monitor Micro Dimming Personal Pixel Precise Ultra HD Ultra Resolution",
-        "Display input resolution :: Resolution-Refresh rate": "640 x 480 - 60 Hz, 576p - 50 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz, 2560 x 1440 - 60 Hz, 3840 x 2160p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO NFT app* Netflix* YouTube",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Works with Alexa Works with Google Assistant",
-        "Smart TV Features :: Smart Home experience": "Control4 MATTER Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "20 W",
-        "Sound :: Speaker configuration": "2 x 10 W full-range speakers",
-        "Sound :: Codec": "Dolby Atmos Dolby Digital DTS:X",
-        "Sound :: Sound Enhancement": "AVL Mode All Sound Style Bass Enhancement Dolby Media Intelligence Dolby Atmos Entertainment DTS-X Equalizer Personal Night Mode Hearing Profile Vocal Boost",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Full Range Bass Reflex (FR01A)",
         "Connectivity :: Number of HDMI connections": "3",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "Remote control pass-through System audio control System standby One touch play",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac 2 x 2 Dual band Bluetooth 5.2 Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI1",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 1 eARC/VRR/ALLM supported",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: Gaming": "ALLM HDMI VRR",
         "Supported HDMI video features :: HDR": "HLG HDR10 HDR10+ Compatible",
-        "EU Energy card :: EPREL registration numbers": "2250125",
-        "EU Energy card :: Energy class for SDR": "E",
-        "EU Energy card :: On mode power demand for SDR": "73 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "120 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "QLED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Power cord Remote Control Tabletop stand Quick start guide Safety and Legal Leaflet",
-        "Design :: Colours of TV": "Matt black bezel",
-        "Design :: Stand design": "Plastic black soap bar",
         "Dimensions :: Distance between 2 stands": "569 mm",
         "Dimensions :: Wall-mount compatible": "400 x 300 mm",
         "Dimensions :: TV without stand (W x H x D)": "1446 x 838 x 91 mm",
@@ -4407,9 +2941,7 @@ const ModelsData = [
         "Dimensions :: Weight incl. packaging": "21.4 kg"
       },
       "hdmiInputs": "3",
-      "usbInputs": "2",
-      "officialSourceScore": "703",
-      "officialSourceCheckedAt": "2026-04-17T09:44:10.890Z"
+      "usbInputs": "2"
     },
     "apps": [
       "Titan OS"
@@ -4504,44 +3036,7 @@ const ModelsData = [
         "Compatible with Google Assistant"
       ],
       "chassis": "TPN25.6E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Display": "4K Ultra HD LED",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "60 Hz",
-          "Picture engine": "Pixel Precise Ultra HD",
-          "Picture enhancement": "Crystal Clear ECO HDR 10+ Compatible Game Home Cinema Monitor Movie Micro Dimming Personal Ultra Resolution"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "640 x 480 - 60 Hz, 576p - 50 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz, 2560 x 1440 - 60 Hz, 3840 x 2160p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Netflix* HBO Disney+ BBC iPlayer Amazon Prime Video NFT app* YouTube",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Amazon Alexa built-in Works with Google Assistant RC with Mic.",
-          "Smart Home experience": "MATTER Control4 Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "20 W",
@@ -4567,28 +3062,6 @@ const ModelsData = [
           "Gaming": "ALLM and Auto Game HDMI VRR",
           "HDR": "HLG HDR10 HDR10+ Compatible"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2269626",
-          "Energy class for SDR": "E",
-          "On mode power demand for SDR": "59 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "97 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "LED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Power cord Remote Control Tabletop stand Quick start guide Safety and Legal Leaflet"
-        },
-        "Design": {
-          "Colours of TV": "Plastic black low bezel",
-          "Stand design": "Black soap bar arch stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "810 mm",
           "Wall-mount compatible": "200 x 100 mm",
@@ -4601,63 +3074,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Display": "4K Ultra HD LED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "60 Hz",
-        "Picture/Display :: Picture engine": "Pixel Precise Ultra HD",
-        "Picture/Display :: Picture enhancement": "Crystal Clear ECO HDR 10+ Compatible Game Home Cinema Monitor Movie Micro Dimming Personal Ultra Resolution",
-        "Display input resolution :: Resolution-Refresh rate": "640 x 480 - 60 Hz, 576p - 50 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz, 2560 x 1440 - 60 Hz, 3840 x 2160p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Netflix* HBO Disney+ BBC iPlayer Amazon Prime Video NFT app* YouTube",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Amazon Alexa built-in Works with Google Assistant RC with Mic.",
-        "Smart TV Features :: Smart Home experience": "MATTER Control4 Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "20 W",
-        "Sound :: Speaker configuration": "2 x 10 W full-range speakers",
-        "Sound :: Codec": "Dolby Atmos DTS:X Dolby Digital",
-        "Sound :: Sound Enhancement": "AVL Mode Bass Enhancement Dolby Media Intelligence Entertainment Equalizer Hearing Profile Night mode Room Calibration Personal Vocal Boost",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Full Range Bass Reflex (FR01A)",
         "Connectivity :: Number of HDMI connections": "3",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "Remote control pass-through System standby System audio control One touch play",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac 2 x 2 Dual band Bluetooth 5.2 Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI1",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 1 eARC/VRR/ALLM supported",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: Gaming": "ALLM and Auto Game HDMI VRR",
         "Supported HDMI video features :: HDR": "HLG HDR10 HDR10+ Compatible",
-        "EU Energy card :: EPREL registration numbers": "2269626",
-        "EU Energy card :: Energy class for SDR": "E",
-        "EU Energy card :: On mode power demand for SDR": "59 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "97 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "LED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Power cord Remote Control Tabletop stand Quick start guide Safety and Legal Leaflet",
-        "Design :: Colours of TV": "Plastic black low bezel",
-        "Design :: Stand design": "Black soap bar arch stand",
         "Dimensions :: Distance between 2 stands": "810 mm",
         "Dimensions :: Wall-mount compatible": "200 x 100 mm",
         "Dimensions :: TV without stand (W x H x D)": "1226 x 712 x 88 mm",
@@ -4668,9 +3095,7 @@ const ModelsData = [
         "Dimensions :: Weight incl. packaging": "13.64 kg"
       },
       "hdmiInputs": "3",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T09:44:29.730Z"
+      "usbInputs": "2"
     },
     "apps": [
       "Titan OS"
@@ -4764,44 +3189,7 @@ const ModelsData = [
         "Compatible with Alexa"
       ],
       "chassis": "TPN25.6E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Display": "4K Ultra HD LED",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "60 Hz",
-          "Picture engine": "Pixel Precise Ultra HD",
-          "Picture enhancement": "Crystal Clear ECO Game HDR 10+ Compatible Home Cinema Monitor Micro Dimming Personal Pixel Precise Ultra HD Ultra Resolution"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "640 x 480 - 60 Hz, 576p - 50 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz, 2560 x 1440 - 60 Hz, 3840 x 2160p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Disney+ HBO Netflix* YouTube Amazon Prime Video BBC iPlayer NFT app*",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Works with Alexa Works with Google Home",
-          "Smart Home experience": "MATTER Control4 Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "20 W",
@@ -4826,28 +3214,6 @@ const ModelsData = [
           "Gaming": "ALLM HDMI VRR",
           "HDR": "HDR10+ Compatible HLG HDR10"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2269444",
-          "Energy class for SDR": "E",
-          "On mode power demand for SDR": "64 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "111 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "LED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Light sensor Eco mode Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Power cord Tabletop stand Remote Control Quick start guide Legal and safety brochure"
-        },
-        "Design": {
-          "Colours of TV": "Plastic black low bezel",
-          "Stand design": "Plastic black small triangle stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "810 mm mm",
           "Wall-mount compatible": "200 x 100 mm",
@@ -4860,62 +3226,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Display": "4K Ultra HD LED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "60 Hz",
-        "Picture/Display :: Picture engine": "Pixel Precise Ultra HD",
-        "Picture/Display :: Picture enhancement": "Crystal Clear ECO Game HDR 10+ Compatible Home Cinema Monitor Micro Dimming Personal Pixel Precise Ultra HD Ultra Resolution",
-        "Display input resolution :: Resolution-Refresh rate": "640 x 480 - 60 Hz, 576p - 50 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz, 2560 x 1440 - 60 Hz, 3840 x 2160p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Disney+ HBO Netflix* YouTube Amazon Prime Video BBC iPlayer NFT app*",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Works with Alexa Works with Google Home",
-        "Smart TV Features :: Smart Home experience": "MATTER Control4 Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "20 W",
-        "Sound :: Speaker configuration": "2 x 10 W full-range speakers",
-        "Sound :: Sound Enhancement": "AVL Mode All Sound Style Bass Enhancement Dolby Atmos Dolby Media Intelligence Entertainment Equalizer Hearing Profile Night Mode Personal Vocal Boost DTS-X",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Full Range Bass Reflex (FR01A)",
         "Connectivity :: Number of HDMI connections": "3",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "Remote control pass-through System audio control System standby One touch play",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac 2 x 2 integrated Bluetooth 5.2 easy-pair (RC blue button) Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI1",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 1 eARC/VRR/ALLM supported",
-        "Connectivity :: EasyLink 2.0": "HDMI-CEC for Philips TV/SB External setting via TV UI",
         "Supported HDMI video features :: Gaming": "ALLM HDMI VRR",
         "Supported HDMI video features :: HDR": "HDR10+ Compatible HLG HDR10",
-        "EU Energy card :: EPREL registration numbers": "2269444",
-        "EU Energy card :: Energy class for SDR": "E",
-        "EU Energy card :: On mode power demand for SDR": "64 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "111 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "LED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Light sensor Eco mode Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Power cord Tabletop stand Remote Control Quick start guide Legal and safety brochure",
-        "Design :: Colours of TV": "Plastic black low bezel",
-        "Design :: Stand design": "Plastic black small triangle stand",
         "Dimensions :: Distance between 2 stands": "810 mm mm",
         "Dimensions :: Wall-mount compatible": "200 x 100 mm",
         "Dimensions :: TV without stand (W x H x D)": "1226 x 715 x 88 mm",
@@ -4926,9 +3247,7 @@ const ModelsData = [
         "Dimensions :: Weight incl. packaging": "13.6 kg"
       },
       "hdmiInputs": "3",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T10:19:27.065Z"
+      "usbInputs": "2"
     },
     "apps": [
       "Titan OS"
@@ -5012,47 +3331,7 @@ const ModelsData = [
         "Compatible with Alexa"
       ],
       "chassis": "TPN25.7E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Gaming mode Wall colour adaptive Ambilight Music Lounge light mode Ambilight FTI Animation Sunrise Alarm AmbiSleep",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "32 inch",
-          "Diagonal screen size (metric)": "80 cm",
-          "Display": "LED Full HD",
-          "Panel resolution": "1920 x 1080",
-          "Native refresh rate": "60 Hz",
-          "Picture engine": "Pixel Plus HD",
-          "Picture enhancement": "Crystal Clear ECO Game Movie Monitor Home Cinema Personal Super Resolution"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576p - 50 Hz, 640 x 480 - 60 Hz, 720p - 50 Hz/60 Hz, 1366 x 768 - 60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2 (Supporting 4K decoding)",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Netflix* HBO BBC iPlayer YouTube Amazon Prime Video Disney+",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Works with Alexa Works with Google Home",
-          "Smart Home experience": "MATTER Control4",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "12 W",
@@ -5072,28 +3351,6 @@ const ModelsData = [
         "Supported HDMI video features": {
           "HDR": "HDR10 HLG"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2243669",
-          "Energy class for SDR": "F",
-          "On mode power demand for SDR": "27 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "39 kWh/1000h",
-          "Off mode power consumption": "n.a.",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "LED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100 - 240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Picture mute (for radio) Eco mode Light sensor"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Power cord Remote Control Tabletop stand Quick start guide Safety and Legal Leaflet"
-        },
-        "Design": {
-          "Colours of TV": "Plastic black low bezel",
-          "Stand design": "Plastic charcoal soap bar"
-        },
         "Dimensions": {
           "Distance between 2 stands": "598 mm",
           "Wall-mount compatible": "100 x 100 mm",
@@ -5106,58 +3363,14 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Gaming mode Wall colour adaptive Ambilight Music Lounge light mode Ambilight FTI Animation Sunrise Alarm AmbiSleep",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "32 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "80 cm",
-        "Picture/Display :: Display": "LED Full HD",
-        "Picture/Display :: Panel resolution": "1920 x 1080",
-        "Picture/Display :: Native refresh rate": "60 Hz",
-        "Picture/Display :: Picture engine": "Pixel Plus HD",
-        "Picture/Display :: Picture enhancement": "Crystal Clear ECO Game Movie Monitor Home Cinema Personal Super Resolution",
-        "Display input resolution :: Resolution-Refresh rate": "576p - 50 Hz, 640 x 480 - 60 Hz, 720p - 50 Hz/60 Hz, 1366 x 768 - 60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2 (Supporting 4K decoding)",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Netflix* HBO BBC iPlayer YouTube Amazon Prime Video Disney+",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Works with Alexa Works with Google Home",
-        "Smart TV Features :: Smart Home experience": "MATTER Control4",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "12 W",
-        "Sound :: Speaker configuration": "2 x 6 W full-range speaker",
-        "Sound :: Sound Engine": "Basic Sound Engine",
-        "Sound :: Main Speaker": "Full Range Bass Reflex (FR01A)",
         "Connectivity :: Number of HDMI connections": "3",
         "Connectivity :: EasyLink (HDMI-CEC)": "Remote control pass-through System audio control System standby One touch play",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11n, 2 x 2, Single band",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI1",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: HDR": "HDR10 HLG",
-        "EU Energy card :: EPREL registration numbers": "2243669",
-        "EU Energy card :: Energy class for SDR": "F",
-        "EU Energy card :: On mode power demand for SDR": "27 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "39 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a.",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "LED LCD",
-        "Power :: Mains power": "AC 100 - 240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Picture mute (for radio) Eco mode Light sensor",
-        "Accessories :: Included accessories": "2 x AAA Batteries Power cord Remote Control Tabletop stand Quick start guide Safety and Legal Leaflet",
-        "Design :: Colours of TV": "Plastic black low bezel",
-        "Design :: Stand design": "Plastic charcoal soap bar",
         "Dimensions :: Distance between 2 stands": "598 mm",
         "Dimensions :: Wall-mount compatible": "100 x 100 mm",
         "Dimensions :: TV without stand (W x H x D)": "728 x 433 x 87 mm",
@@ -5169,9 +3382,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "3",
-      "usbInputs": "2",
-      "officialSourceScore": "718",
-      "officialSourceCheckedAt": "2026-04-17T10:19:26.280Z"
+      "usbInputs": "2"
     },
     "apps": [
       "Titan OS"
@@ -5783,44 +3994,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "TPN25.6E MA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Display": "4K UHD MiniLED",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "60 Hz",
-          "Picture engine": "P5 Perfect Picture Engine",
-          "Picture enhancement": "Calman Calman Autocal Ready and Manual Calibration Crystal Clear Natural Motion ECO Home Cinema Game Movie Monitor Personal Ultra Resolution"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "640 x 480 - 60 Hz, 576p -50 Hz, 720p -50/60 Hz, 1920 x 1080p -24/25/30/50/ 60 Hz, 2560 x 1440 - 60 Hz, 3840 x 2160p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Netflix HBO Disney+ BBC iPlayer YouTube Amazon Prime Video NFT app*",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "RC with Mic. Amazon Alexa Built-in Works with Google Home",
-          "Smart Home experience": "MATTER Control4 Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "20 W",
@@ -5846,28 +4020,6 @@ const ModelsData = [
           "Gaming": "ALLM and Auto Game HDMI VRR",
           "HDR": "HDR10+ Compatible HDR10 HLG"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2366916",
-          "Energy class for SDR": "F",
-          "On mode power demand for SDR": "77 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "180 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "QLED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Eco mode Auto switch-off timer Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Power cord Remote Control Quick start guide Safety and Legal Leaflet Tabletop stand"
-        },
-        "Design": {
-          "Colours of TV": "Plastic black low bezel",
-          "Stand design": "Plastic black triangle small open stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "997 mm",
           "Wall-mount compatible": "300 x 200 mm",
@@ -5880,63 +4032,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Display": "4K UHD MiniLED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "60 Hz",
-        "Picture/Display :: Picture engine": "P5 Perfect Picture Engine",
-        "Picture/Display :: Picture enhancement": "Calman Calman Autocal Ready and Manual Calibration Crystal Clear Natural Motion ECO Home Cinema Game Movie Monitor Personal Ultra Resolution",
-        "Display input resolution :: Resolution-Refresh rate": "640 x 480 - 60 Hz, 576p -50 Hz, 720p -50/60 Hz, 1920 x 1080p -24/25/30/50/ 60 Hz, 2560 x 1440 - 60 Hz, 3840 x 2160p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Netflix HBO Disney+ BBC iPlayer YouTube Amazon Prime Video NFT app*",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "RC with Mic. Amazon Alexa Built-in Works with Google Home",
-        "Smart TV Features :: Smart Home experience": "MATTER Control4 Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "20 W",
-        "Sound :: Speaker configuration": "2 x 10 W full-range speakers",
-        "Sound :: Codec": "Dolby Atmos DTS:X Dolby Digital",
-        "Sound :: Sound Enhancement": "Dialogue All Sound Style Entertainment Music Personal Vocal Boost Bass Enhancement Equalizer Room Calibration Hearing Profile AVL Mode Night mode DTS Play-Fi",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Slim Full Range",
         "Connectivity :: Number of HDMI connections": "3",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "One touch play System audio control System standby Remote control pass-through",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac 2 x 2 Dual band Bluetooth 5.2 easy-pair (RC blue button) Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "HDMI 1",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 1",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: Gaming": "ALLM and Auto Game HDMI VRR",
         "Supported HDMI video features :: HDR": "HDR10+ Compatible HDR10 HLG",
-        "EU Energy card :: EPREL registration numbers": "2366916",
-        "EU Energy card :: Energy class for SDR": "F",
-        "EU Energy card :: On mode power demand for SDR": "77 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "180 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "QLED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Eco mode Auto switch-off timer Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Power cord Remote Control Quick start guide Safety and Legal Leaflet Tabletop stand",
-        "Design :: Colours of TV": "Plastic black low bezel",
-        "Design :: Stand design": "Plastic black triangle small open stand",
         "Dimensions :: Distance between 2 stands": "997 mm",
         "Dimensions :: Wall-mount compatible": "300 x 200 mm",
         "Dimensions :: TV without stand (W x H x D)": "1226 x 718 x 65 mm",
@@ -5947,9 +4053,7 @@ const ModelsData = [
         "Dimensions :: Weight incl. packaging": "15.78 kg"
       },
       "hdmiInputs": "3",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T10:19:26.350Z"
+      "usbInputs": "2"
     },
     "audioChannels": "2.0 Channel",
     "audioPower": "20 W",
@@ -6014,48 +4118,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "TPN25.8E MA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Music Mode Ambilight Suite Wall colour adaptive Game Mode",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "120 Hz",
-          "Picture engine": "P5 Perfect Picture Engine",
-          "Picture enhancement": "Calman Calman Autocal Ready and Manual Calibration Crystal Clear ECO Game Home Cinema Movie Monitor Micro Dimming Premium Perfect Natural Motion Personal",
-          "Variable Refresh Rate": "144 Hz"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576p - 50 Hz, 645 x 480 - 60 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/ 60/100/120/144 Hz, 2560 x 1440 - 60/120/144 Hz, 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Netflix HBO Disney+ BBC iPlayer YouTube Amazon Prime Video NFT app*",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "RC with Mic. Amazon Alexa Built-in Works with Google Home",
-          "Smart Home experience": "MATTER Control4 Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "40 W",
@@ -6081,28 +4144,6 @@ const ModelsData = [
           "Gaming": "ALLM and Auto Game HDMI VRR AMD FreeSync Premium",
           "HDR": "HDR10+ Compatible Dolby Vision HLG"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2271586",
-          "Energy class for SDR": "F",
-          "On mode power demand for SDR": "77 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "193 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "QLED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Eco mode Auto switch-off timer Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Power cord Quick start guide Remote Control Tabletop stand Safety and Legal Leaflet"
-        },
-        "Design": {
-          "Colours of TV": "Plastic black low bezel",
-          "Stand design": "Black soap bar arch stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "994 mm",
           "Wall-mount compatible": "300 x 200 mm",
@@ -6115,65 +4156,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Music Mode Ambilight Suite Wall colour adaptive Game Mode",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "120 Hz",
-        "Picture/Display :: Picture engine": "P5 Perfect Picture Engine",
-        "Picture/Display :: Picture enhancement": "Calman Calman Autocal Ready and Manual Calibration Crystal Clear ECO Game Home Cinema Movie Monitor Micro Dimming Premium Perfect Natural Motion Personal",
-        "Picture/Display :: Variable Refresh Rate": "144 Hz",
-        "Display input resolution :: Resolution-Refresh rate": "576p - 50 Hz, 645 x 480 - 60 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/ 60/100/120/144 Hz, 2560 x 1440 - 60/120/144 Hz, 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Netflix HBO Disney+ BBC iPlayer YouTube Amazon Prime Video NFT app*",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "RC with Mic. Amazon Alexa Built-in Works with Google Home",
-        "Smart TV Features :: Smart Home experience": "MATTER Control4 Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "40 W",
-        "Sound :: Speaker configuration": "4 x 10 W full-range speakers",
-        "Sound :: Codec": "Dolby Atmos DTS:X Dolby Digital",
-        "Sound :: Sound Enhancement": "All Sound Style AVL Mode Bass Enhancement Dialogue Dolby Media Intelligence Equalizer Entertainment Hearing Profile Music Night mode Room Calibration Personal Vocal Boost",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Super Slim Full Range + Tweeter",
         "Connectivity :: Number of HDMI connections": "4",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "One touch play System audio control System standby Remote control pass-through",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac 2 x 2 Dual band Bluetooth 5.2 Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI2",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 2",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: Gaming": "ALLM and Auto Game HDMI VRR AMD FreeSync Premium",
         "Supported HDMI video features :: HDR": "HDR10+ Compatible Dolby Vision HLG",
-        "EU Energy card :: EPREL registration numbers": "2271586",
-        "EU Energy card :: Energy class for SDR": "F",
-        "EU Energy card :: On mode power demand for SDR": "77 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "193 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "QLED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Eco mode Auto switch-off timer Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Power cord Quick start guide Remote Control Tabletop stand Safety and Legal Leaflet",
-        "Design :: Colours of TV": "Plastic black low bezel",
-        "Design :: Stand design": "Black soap bar arch stand",
         "Dimensions :: Distance between 2 stands": "994 mm",
         "Dimensions :: Wall-mount compatible": "300 x 200 mm",
         "Dimensions :: TV without stand (W x H x D)": "1226 x 719 x 65 mm",
@@ -6185,9 +4178,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "4",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T10:19:29.288Z"
+      "usbInputs": "2"
     },
     "audioChannels": "2.0 Channel",
     "audioPower": "40 W",
@@ -6278,49 +4269,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "TPM25.1E OA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Ambilight Suite Game Mode Music Mode Wall colour adaptive",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Display": "4K Ultra HD OLED",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "144 Hz",
-          "Picture engine": "P5 AI Perfect Picture Engine",
-          "Picture enhancement": "Auto Film and Filmmaker Mode Calman Calman Autocal Ready and Manual Calibration Crystal Clear ECO Film-maker mode Game Home Cinema MEMC / FRC Embedded Micro Dimming Perfect Monitor Personal Perfect Natural Motion",
-          "Variable Refresh Rate": "144 Hz"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576p - 50 Hz, 645 x 480 - 60 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/ 60/100/120/144 Hz, 2560 x 1440 - 60/120/144 Hz, 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Amazon Prime Video Apple TV Disney+ Netflix* NFT app* YouTube",
-          "OS": "Google TV",
-          "Memory size (Flash)*": "32 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "RC with Mic. Works with Alexa Hey Google",
-          "Smart Home experience": "Home-automation system ready, please visit the Control4 website MATTER Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "4.1 Channel",
           "Output power (RMS)": "Output power: 70 Watts (RMS)",
@@ -6348,28 +4297,6 @@ const ModelsData = [
           "HDMI 3/4": "HDMI 2.0",
           "HDR": "Dolby Vision HDR10 HDR10+ Adaptive HLG"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2294084",
-          "Energy class for SDR": "G",
-          "On mode power demand for SDR": "84 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "112 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "OLED"
-        },
-        "Power": {
-          "Mains power": "AC 100 - 240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "1x USB-C cable for remote control charging Power cord Remote Control with wireless charging Quick start guide Safety and Legal Leaflet Tabletop stand"
-        },
-        "Design": {
-          "Colours of TV": "Metal bezel frame",
-          "Stand design": "Metal satin chrome pill central stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "500 mm",
           "Wall-mount compatible": "300 x 300 mm",
@@ -6382,68 +4309,19 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Ambilight Suite Game Mode Music Mode Wall colour adaptive",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Display": "4K Ultra HD OLED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "144 Hz",
-        "Picture/Display :: Picture engine": "P5 AI Perfect Picture Engine",
-        "Picture/Display :: Picture enhancement": "Auto Film and Filmmaker Mode Calman Calman Autocal Ready and Manual Calibration Crystal Clear ECO Film-maker mode Game Home Cinema MEMC / FRC Embedded Micro Dimming Perfect Monitor Personal Perfect Natural Motion",
-        "Picture/Display :: Variable Refresh Rate": "144 Hz",
-        "Display input resolution :: Resolution-Refresh rate": "576p - 50 Hz, 645 x 480 - 60 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/ 60/100/120/144 Hz, 2560 x 1440 - 60/120/144 Hz, 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Amazon Prime Video Apple TV Disney+ Netflix* NFT app* YouTube",
-        "Smart TV :: OS": "Google TV",
-        "Smart TV :: Memory size (Flash)*": "32 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "RC with Mic. Works with Alexa Hey Google",
-        "Smart TV Features :: Smart Home experience": "Home-automation system ready, please visit the Control4 website MATTER Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "4.1 Channel",
         "Sound :: Output power (RMS)": "Output power: 70 Watts (RMS)",
-        "Sound :: Speaker configuration": "10 W x 4 mid-high speaker, 30 W subwoofer",
-        "Sound :: Codec": "Dolby Atmos Dolby Digital DTS:X",
-        "Sound :: Sound Enhancement": "A.I. EQ AI mode AVL Mode Clear Dialogue Dialogue Dolby Media Intelligence Dolby Atmos Entertainment Hearing Profile Music Night mode Original Personal Spatial Music",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Main Speaker": "2-Way Mid + Tweeter",
-        "Sound :: Woofer": "Triple Ring Balance Quad PR",
         "Connectivity :: Number of HDMI connections": "4",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "One touch play Remote control pass-through System audio control System standby",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ax, 2x2, Dual band Bluetooth 5.2",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI2",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 2 eARC/VRR/ALLM supported Max 48 Gbps data rate",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: HDMI 1/2": "HDMI 2.1 full bandwidth 48 Gbps up to 4K 144Hz",
         "Supported HDMI video features :: Gaming": "AMD FreeSync Premium ALLM Dolby Vision Game HDMI VRR HGiG Nvidia G-Sync compatible",
         "Supported HDMI video features :: HDMI 3/4": "HDMI 2.0",
         "Supported HDMI video features :: HDR": "Dolby Vision HDR10 HDR10+ Adaptive HLG",
-        "EU Energy card :: EPREL registration numbers": "2294084",
-        "EU Energy card :: Energy class for SDR": "G",
-        "EU Energy card :: On mode power demand for SDR": "84 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "112 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "OLED",
-        "Power :: Mains power": "AC 100 - 240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "1x USB-C cable for remote control charging Power cord Remote Control with wireless charging Quick start guide Safety and Legal Leaflet Tabletop stand",
-        "Design :: Colours of TV": "Metal bezel frame",
-        "Design :: Stand design": "Metal satin chrome pill central stand",
         "Dimensions :: Distance between 2 stands": "500 mm",
         "Dimensions :: Wall-mount compatible": "300 x 300 mm",
         "Dimensions :: TV without stand (W x H x D)": "1226 x 708 x 68 mm",
@@ -6455,9 +4333,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "4",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T09:45:33.876Z"
+      "usbInputs": "2"
     },
     "audioChannels": "4.1 Channel",
     "audioPower": "Output power: 70 Watts (RMS)",
@@ -6521,49 +4397,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "TPM25.1E OA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Ambilight Suite Game Mode Music Mode Wall colour adaptive",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Display": "4K Ultra HD OLED",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "120 Hz",
-          "Picture engine": "P5 AI Perfect Picture Engine",
-          "Picture enhancement": "Auto Film and Filmmaker Mode Calman Calman Autocal Ready and Manual Calibration Crystal Clear ECO Film-maker mode Game Home Cinema MEMC / FRC Embedded Micro Dimming Perfect Monitor Personal Perfect Natural Motion",
-          "Variable Refresh Rate": "144 Hz"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576p - 50 Hz, 645 x 480 - 60 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/ 60/100/120/144 Hz, 2560 x 1440 - 60/120/144 Hz, 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Amazon Prime Video Apple TV Disney+ Netflix* NFT app* YouTube",
-          "OS": "Google TV",
-          "Memory size (Flash)*": "32 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "RC with Mic. Works with Alexa Hey Google",
-          "Smart Home experience": "Home-automation system ready, please visit the Control4 website MATTER Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.1 Channel",
           "Output power (RMS)": "Output power: 70 Watts (RMS)",
@@ -6591,28 +4425,6 @@ const ModelsData = [
           "HDMI 3/4": "HDMI 2.0",
           "HDR": "Dolby Vision HDR10 HDR10+ Adaptive HLG"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2294993",
-          "Energy class for SDR": "G",
-          "On mode power demand for SDR": "84 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "112 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "OLED"
-        },
-        "Power": {
-          "Mains power": "AC 100 - 240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.3 W",
-          "Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "1x USB-C cable for remote control charging Power cord Remote Control with wireless charging Quick start guide Safety and Legal Leaflet Tabletop stand"
-        },
-        "Design": {
-          "Colours of TV": "Metal bezel frame",
-          "Stand design": "Metal satin chrome soap bar arch stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "795 mm",
           "Wall-mount compatible": "300 x 300 mm",
@@ -6625,68 +4437,19 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Ambilight Suite Game Mode Music Mode Wall colour adaptive",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Display": "4K Ultra HD OLED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "120 Hz",
-        "Picture/Display :: Picture engine": "P5 AI Perfect Picture Engine",
-        "Picture/Display :: Picture enhancement": "Auto Film and Filmmaker Mode Calman Calman Autocal Ready and Manual Calibration Crystal Clear ECO Film-maker mode Game Home Cinema MEMC / FRC Embedded Micro Dimming Perfect Monitor Personal Perfect Natural Motion",
-        "Picture/Display :: Variable Refresh Rate": "144 Hz",
-        "Display input resolution :: Resolution-Refresh rate": "576p - 50 Hz, 645 x 480 - 60 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/ 60/100/120/144 Hz, 2560 x 1440 - 60/120/144 Hz, 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Amazon Prime Video Apple TV Disney+ Netflix* NFT app* YouTube",
-        "Smart TV :: OS": "Google TV",
-        "Smart TV :: Memory size (Flash)*": "32 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "RC with Mic. Works with Alexa Hey Google",
-        "Smart TV Features :: Smart Home experience": "Home-automation system ready, please visit the Control4 website MATTER Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.1 Channel",
         "Sound :: Output power (RMS)": "Output power: 70 Watts (RMS)",
-        "Sound :: Speaker configuration": "10 W x 4 mid-high speaker, 30 W subwoofer",
-        "Sound :: Codec": "Dolby Atmos Dolby Digital DTS:X",
-        "Sound :: Sound Enhancement": "A.I. EQ AI mode AVL Mode Clear Dialogue Dialogue Dolby Media Intelligence Dolby Atmos Entertainment Hearing Profile Music Night mode Original Personal Spatial Music",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Main Speaker": "2-Way Mid + Tweeter",
-        "Sound :: Woofer": "Triple Ring Balance Quad PR",
         "Connectivity :: Number of HDMI connections": "4",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "One touch play Remote control pass-through System audio control System standby",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ax, 2x2, Dual band Bluetooth 5.2 Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI2",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 2 eARC/VRR/ALLM supported Max 48 Gbps data rate",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: HDMI 1/2": "HDMI 2.1 full bandwidth 48 Gbps up to 4K 144Hz",
         "Supported HDMI video features :: Gaming": "AMD FreeSync Premium ALLM Dolby Vision Game HDMI VRR HGiG Nvidia G-Sync compatible",
         "Supported HDMI video features :: HDMI 3/4": "HDMI 2.0",
         "Supported HDMI video features :: HDR": "Dolby Vision HDR10 HDR10+ Adaptive HLG",
-        "EU Energy card :: EPREL registration numbers": "2294993",
-        "EU Energy card :: Energy class for SDR": "G",
-        "EU Energy card :: On mode power demand for SDR": "84 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "112 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "OLED",
-        "Power :: Mains power": "AC 100 - 240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.3 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "1x USB-C cable for remote control charging Power cord Remote Control with wireless charging Quick start guide Safety and Legal Leaflet Tabletop stand",
-        "Design :: Colours of TV": "Metal bezel frame",
-        "Design :: Stand design": "Metal satin chrome soap bar arch stand",
         "Dimensions :: Distance between 2 stands": "795 mm",
         "Dimensions :: Wall-mount compatible": "300 x 300 mm",
         "Dimensions :: TV without stand (W x H x D)": "1226 x 708 x 68 mm",
@@ -6698,9 +4461,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "4",
-      "usbInputs": "2",
-      "officialSourceScore": "718",
-      "officialSourceCheckedAt": "2026-04-17T09:45:54.425Z"
+      "usbInputs": "2"
     },
     "audioChannels": "2.1 Channel",
     "audioPower": "Output power: 70 Watts (RMS)",
@@ -6782,32 +4543,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "TPS25.1E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "43 inch",
-          "Diagonal screen size (metric)": "108 cm",
-          "Display": "LED Full HD",
-          "Panel resolution": "1920 x 1080p",
-          "Native refresh rate": "60 Hz",
-          "Picture engine": "Pixel Plus HD",
-          "Picture enhancement": "Super Resolution Crystal Clear Home Cinema ECO Movie Game Personal Standard"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576p - 50 Hz, 640 x 480 - 60 Hz, 720p - 50 Hz/60 Hz, 1366 x 768 - 60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1 MPEG-1 MPEG-2 HEVC MPEG-4",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "16 W",
@@ -6827,28 +4563,6 @@ const ModelsData = [
         "Supported HDMI video features": {
           "HDR": "HLG HDR10"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2302448",
-          "Energy class for SDR": "E",
-          "On mode power demand for SDR": "41 kWh/1000h",
-          "Energy class for HDR": "n.a.",
-          "On mode power demand for HDR": "n.a. kWh/1000h",
-          "Off mode power consumption": "n.a.",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "LED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Picture mute (for radio) Eco mode"
-        },
-        "Accessories": {
-          "Included accessories": "Power cord 2 x AAA Batteries Legal and safety brochure Tabletop stand Remote Control Quick start guide"
-        },
-        "Design": {
-          "Colours of TV": "Plastic black low bezel",
-          "Stand design": "Plastic charcoal soap bar"
-        },
         "Dimensions": {
           "Distance between 2 stands": "753 mm",
           "Wall-mount compatible": "200 x 100 mm",
@@ -6861,49 +4575,15 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Picture/Display :: Diagonal screen size (inch)": "43 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "108 cm",
-        "Picture/Display :: Display": "LED Full HD",
-        "Picture/Display :: Panel resolution": "1920 x 1080p",
-        "Picture/Display :: Native refresh rate": "60 Hz",
-        "Picture/Display :: Picture engine": "Pixel Plus HD",
-        "Picture/Display :: Picture enhancement": "Super Resolution Crystal Clear Home Cinema ECO Movie Game Personal Standard",
-        "Display input resolution :: Resolution-Refresh rate": "576p - 50 Hz, 640 x 480 - 60 Hz, 720p - 50 Hz/60 Hz, 1366 x 768 - 60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1 MPEG-1 MPEG-2 HEVC MPEG-4",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "16 W",
-        "Sound :: Speaker configuration": "2 x 8 W full-range speakers",
-        "Sound :: Sound Enhancement": "Incredible Surround",
-        "Sound :: Sound Engine": "Basic Sound Engine",
         "Connectivity :: Number of HDMI connections": "2",
         "Connectivity :: HDMI features": "Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "Remote control pass-through System audio control System standby One touch play",
         "Connectivity :: Number of USBs": "1",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI1",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: HDR": "HLG HDR10",
-        "EU Energy card :: EPREL registration numbers": "2302448",
-        "EU Energy card :: Energy class for SDR": "E",
-        "EU Energy card :: On mode power demand for SDR": "41 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "n.a.",
-        "EU Energy card :: On mode power demand for HDR": "n.a. kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a.",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "LED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Picture mute (for radio) Eco mode",
-        "Accessories :: Included accessories": "Power cord 2 x AAA Batteries Legal and safety brochure Tabletop stand Remote Control Quick start guide",
-        "Design :: Colours of TV": "Plastic black low bezel",
-        "Design :: Stand design": "Plastic charcoal soap bar",
         "Dimensions :: Distance between 2 stands": "753 mm",
         "Dimensions :: Wall-mount compatible": "200 x 100 mm",
         "Dimensions :: TV without stand (W x H x D)": "956 x 564 x 87 mm",
@@ -6914,9 +4594,7 @@ const ModelsData = [
         "Dimensions :: Weight incl. packaging": "8.83 kg"
       },
       "hdmiInputs": "2",
-      "usbInputs": "1",
-      "officialSourceScore": "718",
-      "officialSourceCheckedAt": "2026-04-17T10:19:30.107Z"
+      "usbInputs": "1"
     },
     "audioChannels": "2.0 Channel",
     "audioPower": "16 W",
@@ -6975,42 +4653,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "SPN25.7E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "32 inch",
-          "Diagonal screen size (metric)": "80 cm",
-          "Display": "LED Full HD",
-          "Panel resolution": "1920 x 1080p",
-          "Native refresh rate": "60 Hz",
-          "Picture engine": "Pixel Plus HD",
-          "Picture enhancement": "ECO Crystal Clear Home Cinema Movie Game Monitor Pixel Plus HD Personal"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576p - 50 Hz, 640 x 480 - 60 Hz, 720p - 50 Hz/60 Hz, 1366 x 768 - 60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2 (Supporting 4K decoding)",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Netflix* HBO BBC iPlayer YouTube Amazon Prime Video Disney+",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Works with Alexa Works with Google Assistant",
-          "Smart Home experience": "Control4 MATTER"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "12 W",
@@ -7031,28 +4674,6 @@ const ModelsData = [
         "Supported HDMI video features": {
           "HDR": "HLG HDR10"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2318289",
-          "Energy class for SDR": "E",
-          "On mode power demand for SDR": "25 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "40 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "LED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Light sensor Picture mute (for radio) Eco mode"
-        },
-        "Accessories": {
-          "Included accessories": "Power cord 2 x AAA Batteries Legal and safety brochure Tabletop stand Remote Control Quick start guide"
-        },
-        "Design": {
-          "Colours of TV": "Plastic black low bezel",
-          "Stand design": "Plastic charcoal soap bar"
-        },
         "Dimensions": {
           "Distance between 2 stands": "630 mm",
           "Wall-mount compatible": "100 x 100 mm",
@@ -7065,56 +4686,15 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Picture/Display :: Diagonal screen size (inch)": "32 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "80 cm",
-        "Picture/Display :: Display": "LED Full HD",
-        "Picture/Display :: Panel resolution": "1920 x 1080p",
-        "Picture/Display :: Native refresh rate": "60 Hz",
-        "Picture/Display :: Picture engine": "Pixel Plus HD",
-        "Picture/Display :: Picture enhancement": "ECO Crystal Clear Home Cinema Movie Game Monitor Pixel Plus HD Personal",
-        "Display input resolution :: Resolution-Refresh rate": "576p - 50 Hz, 640 x 480 - 60 Hz, 720p - 50 Hz/60 Hz, 1366 x 768 - 60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2 (Supporting 4K decoding)",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Netflix* HBO BBC iPlayer YouTube Amazon Prime Video Disney+",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Works with Alexa Works with Google Assistant",
-        "Smart TV Features :: Smart Home experience": "Control4 MATTER",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "12 W",
-        "Sound :: Speaker configuration": "2 x 6 W full-range speakers",
-        "Sound :: Sound Enhancement": "Dialogue Music Original Entertainment Equalizer Vocal Boost AVL Mode Night mode",
-        "Sound :: Sound Engine": "Basic Sound Engine",
         "Connectivity :: Number of HDMI connections": "3",
         "Connectivity :: HDMI features": "Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "Remote control pass-through System audio control System standby One touch play",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11n, 2 x 2, Single band",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI1",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: HDR": "HLG HDR10",
-        "EU Energy card :: EPREL registration numbers": "2318289",
-        "EU Energy card :: Energy class for SDR": "E",
-        "EU Energy card :: On mode power demand for SDR": "25 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "40 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "LED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Light sensor Picture mute (for radio) Eco mode",
-        "Accessories :: Included accessories": "Power cord 2 x AAA Batteries Legal and safety brochure Tabletop stand Remote Control Quick start guide",
-        "Design :: Colours of TV": "Plastic black low bezel",
-        "Design :: Stand design": "Plastic charcoal soap bar",
         "Dimensions :: Distance between 2 stands": "630 mm",
         "Dimensions :: Wall-mount compatible": "100 x 100 mm",
         "Dimensions :: TV without stand (W x H x D)": "718 x 431 x 83 mm",
@@ -7125,9 +4705,7 @@ const ModelsData = [
         "Dimensions :: Weight incl. packaging": "4.6 kg"
       },
       "hdmiInputs": "3",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T10:19:32.293Z"
+      "usbInputs": "2"
     },
     "audioChannels": "2.0 Channel",
     "audioPower": "12 W",
@@ -7226,47 +4804,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "TPN25.7E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Gaming mode Wall colour adaptive Ambilight Music Lounge light mode Ambilight FTI Animation Sunrise Alarm AmbiSleep",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "32 inch",
-          "Diagonal screen size (metric)": "80 cm",
-          "Display": "LED Full HD",
-          "Panel resolution": "1920 x 1080",
-          "Native refresh rate": "60 Hz",
-          "Picture engine": "Pixel Plus HD",
-          "Picture enhancement": "Crystal Clear ECO Game Movie Monitor Home Cinema Personal Super Resolution"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576p - 50 Hz, 640 x 480 - 60 Hz, 720p - 50 Hz/60 Hz, 1366 x 768 - 60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Netflix* HBO BBC iPlayer YouTube Amazon Prime Video Disney+",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Works with Alexa Works with Google Home",
-          "Smart Home experience": "MATTER Control4",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "12 W",
@@ -7286,28 +4824,6 @@ const ModelsData = [
         "Supported HDMI video features": {
           "HDR": "HDR10 HLG"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2323836",
-          "Energy class for SDR": "F",
-          "On mode power demand for SDR": "27 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "39 kWh/1000h",
-          "Off mode power consumption": "n.a.",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "LED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100 - 240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Picture mute (for radio) Eco mode Light sensor"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Power cord Remote Control Tabletop stand Quick start guide Safety and Legal Leaflet"
-        },
-        "Design": {
-          "Colours of TV": "Plastic black low bezel",
-          "Stand design": "Anthracite grey plastic pill extrude"
-        },
         "Dimensions": {
           "Distance between 2 stands": "598 mm",
           "Wall-mount compatible": "100 x 100 mm",
@@ -7320,58 +4836,14 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Gaming mode Wall colour adaptive Ambilight Music Lounge light mode Ambilight FTI Animation Sunrise Alarm AmbiSleep",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "32 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "80 cm",
-        "Picture/Display :: Display": "LED Full HD",
-        "Picture/Display :: Panel resolution": "1920 x 1080",
-        "Picture/Display :: Native refresh rate": "60 Hz",
-        "Picture/Display :: Picture engine": "Pixel Plus HD",
-        "Picture/Display :: Picture enhancement": "Crystal Clear ECO Game Movie Monitor Home Cinema Personal Super Resolution",
-        "Display input resolution :: Resolution-Refresh rate": "576p - 50 Hz, 640 x 480 - 60 Hz, 720p - 50 Hz/60 Hz, 1366 x 768 - 60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Netflix* HBO BBC iPlayer YouTube Amazon Prime Video Disney+",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Works with Alexa Works with Google Home",
-        "Smart TV Features :: Smart Home experience": "MATTER Control4",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "12 W",
-        "Sound :: Speaker configuration": "2 x 6 W full-range speaker",
-        "Sound :: Sound Engine": "Basic Sound Engine",
-        "Sound :: Main Speaker": "Full Range Bass Reflex (FR01A)",
         "Connectivity :: Number of HDMI connections": "3",
         "Connectivity :: EasyLink (HDMI-CEC)": "Remote control pass-through System audio control System standby One touch play",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11n, 2 x 2, Single band",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI1",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: HDR": "HDR10 HLG",
-        "EU Energy card :: EPREL registration numbers": "2323836",
-        "EU Energy card :: Energy class for SDR": "F",
-        "EU Energy card :: On mode power demand for SDR": "27 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "39 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a.",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "LED LCD",
-        "Power :: Mains power": "AC 100 - 240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Picture mute (for radio) Eco mode Light sensor",
-        "Accessories :: Included accessories": "2 x AAA Batteries Power cord Remote Control Tabletop stand Quick start guide Safety and Legal Leaflet",
-        "Design :: Colours of TV": "Plastic black low bezel",
-        "Design :: Stand design": "Anthracite grey plastic pill extrude",
         "Dimensions :: Distance between 2 stands": "598 mm",
         "Dimensions :: Wall-mount compatible": "100 x 100 mm",
         "Dimensions :: TV without stand (W x H x D)": "728 x 433 x 87 mm",
@@ -7383,9 +4855,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "3",
-      "usbInputs": "2",
-      "officialSourceScore": "718",
-      "officialSourceCheckedAt": "2026-04-17T09:46:25.639Z"
+      "usbInputs": "2"
     },
     "audioChannels": "2.0 Channel",
     "audioPower": "12 W",
@@ -7448,32 +4918,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "TPS25.1E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "32 inch",
-          "Diagonal screen size (metric)": "80 cm",
-          "Display": "LED HD TV",
-          "Panel resolution": "1280 x 720 (720p)",
-          "Native refresh rate": "60 Hz",
-          "Picture engine": "Pixel Plus HD",
-          "Picture enhancement": "Super Resolution Crystal Clear Home Cinema ECO Movie Game Personal Standard"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576p - 50 Hz, 640 x 480 - 60 Hz, 720p - 50 Hz/60 Hz, 1366 x 768 - 60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1 MPEG-1 MPEG-2 HEVC MPEG-4",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "12 W",
@@ -7493,24 +4938,6 @@ const ModelsData = [
         "Supported HDMI video features": {
           "HDR": "HLG HDR10"
         },
-        "EU Energy card": {
-          "Energy class for SDR": "E",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "LED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Picture mute (for radio) Eco mode"
-        },
-        "Accessories": {
-          "Included accessories": "Power cord 2 x AAA Batteries Legal and safety brochure Tabletop stand Remote Control Quick start guide"
-        },
-        "Design": {
-          "Colours of TV": "Plastic black low bezel",
-          "Stand design": "Plastic charcoal soap bar"
-        },
         "Dimensions": {
           "Distance between 2 stands": "633 mm",
           "Wall-mount compatible": "100 x 100 mm",
@@ -7523,45 +4950,15 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Picture/Display :: Diagonal screen size (inch)": "32 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "80 cm",
-        "Picture/Display :: Display": "LED HD TV",
-        "Picture/Display :: Panel resolution": "1280 x 720 (720p)",
-        "Picture/Display :: Native refresh rate": "60 Hz",
-        "Picture/Display :: Picture engine": "Pixel Plus HD",
-        "Picture/Display :: Picture enhancement": "Super Resolution Crystal Clear Home Cinema ECO Movie Game Personal Standard",
-        "Display input resolution :: Resolution-Refresh rate": "576p - 50 Hz, 640 x 480 - 60 Hz, 720p - 50 Hz/60 Hz, 1366 x 768 - 60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1 MPEG-1 MPEG-2 HEVC MPEG-4",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "12 W",
-        "Sound :: Speaker configuration": "2 x 6 W full-range speakers",
-        "Sound :: Sound Enhancement": "Incredible Surround",
-        "Sound :: Sound Engine": "Basic Sound Engine",
         "Connectivity :: Number of HDMI connections": "2",
         "Connectivity :: HDMI features": "Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "Remote control pass-through System audio control System standby One touch play",
         "Connectivity :: Number of USBs": "1",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI1",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: HDR": "HLG HDR10",
-        "EU Energy card :: Energy class for SDR": "E",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "LED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Picture mute (for radio) Eco mode",
-        "Accessories :: Included accessories": "Power cord 2 x AAA Batteries Legal and safety brochure Tabletop stand Remote Control Quick start guide",
-        "Design :: Colours of TV": "Plastic black low bezel",
-        "Design :: Stand design": "Plastic charcoal soap bar",
         "Dimensions :: Distance between 2 stands": "633 mm",
         "Dimensions :: Wall-mount compatible": "100 x 100 mm",
         "Dimensions :: TV without stand (W x H x D)": "716 x 428 x 69 mm",
@@ -7572,9 +4969,7 @@ const ModelsData = [
         "Dimensions :: Weight incl. packaging": "4.48 kg"
       },
       "hdmiInputs": "2",
-      "usbInputs": "1",
-      "officialSourceScore": "718",
-      "officialSourceCheckedAt": "2026-04-17T10:19:32.312Z"
+      "usbInputs": "1"
     },
     "audioChannels": "2.0 Channel",
     "audioPower": "12 W",
@@ -7633,42 +5028,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "SPN25.7E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "32 inch",
-          "Diagonal screen size (metric)": "80 cm",
-          "Display": "LED HD TV",
-          "Panel resolution": "1366 x 768p",
-          "Native refresh rate": "60 Hz",
-          "Picture engine": "Pixel Plus HD",
-          "Picture enhancement": "ECO Crystal Clear Home Cinema Movie Game Monitor Pixel Plus HD Personal"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576p - 50 Hz, 640 x 480 - 60 Hz, 720p - 50 Hz/60 Hz, 1366 x 768 - 60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2 (Supporting 4K decoding)",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Netflix* HBO BBC iPlayer YouTube Amazon Prime Video Disney+",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Works with Alexa Works with Google Assistant",
-          "Smart Home experience": "Control4 MATTER"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "12 W",
@@ -7689,28 +5049,6 @@ const ModelsData = [
         "Supported HDMI video features": {
           "HDR": "HLG HDR10"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2227040",
-          "Energy class for SDR": "E",
-          "On mode power demand for SDR": "22 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "36 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "LED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Light sensor Picture mute (for radio) Eco mode"
-        },
-        "Accessories": {
-          "Included accessories": "Power cord 2 x AAA Batteries Legal and safety brochure Tabletop stand Remote Control Quick start guide"
-        },
-        "Design": {
-          "Colours of TV": "Plastic black low bezel",
-          "Stand design": "Plastic charcoal soap bar"
-        },
         "Dimensions": {
           "Distance between 2 stands": "630 mm",
           "Wall-mount compatible": "100 x 100 mm",
@@ -7723,56 +5061,15 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Picture/Display :: Diagonal screen size (inch)": "32 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "80 cm",
-        "Picture/Display :: Display": "LED HD TV",
-        "Picture/Display :: Panel resolution": "1366 x 768p",
-        "Picture/Display :: Native refresh rate": "60 Hz",
-        "Picture/Display :: Picture engine": "Pixel Plus HD",
-        "Picture/Display :: Picture enhancement": "ECO Crystal Clear Home Cinema Movie Game Monitor Pixel Plus HD Personal",
-        "Display input resolution :: Resolution-Refresh rate": "576p - 50 Hz, 640 x 480 - 60 Hz, 720p - 50 Hz/60 Hz, 1366 x 768 - 60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2 (Supporting 4K decoding)",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Netflix* HBO BBC iPlayer YouTube Amazon Prime Video Disney+",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Works with Alexa Works with Google Assistant",
-        "Smart TV Features :: Smart Home experience": "Control4 MATTER",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "12 W",
-        "Sound :: Speaker configuration": "2 x 6 W full-range speakers",
-        "Sound :: Sound Enhancement": "Dialogue Music Original Entertainment Equalizer Vocal Boost AVL Mode Night mode",
-        "Sound :: Sound Engine": "Basic Sound Engine",
         "Connectivity :: Number of HDMI connections": "3",
         "Connectivity :: HDMI features": "Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "Remote control pass-through System audio control System standby One touch play",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11n, 2 x 2, Single band",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI1",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: HDR": "HLG HDR10",
-        "EU Energy card :: EPREL registration numbers": "2227040",
-        "EU Energy card :: Energy class for SDR": "E",
-        "EU Energy card :: On mode power demand for SDR": "22 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "36 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "LED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Light sensor Picture mute (for radio) Eco mode",
-        "Accessories :: Included accessories": "Power cord 2 x AAA Batteries Legal and safety brochure Tabletop stand Remote Control Quick start guide",
-        "Design :: Colours of TV": "Plastic black low bezel",
-        "Design :: Stand design": "Plastic charcoal soap bar",
         "Dimensions :: Distance between 2 stands": "630 mm",
         "Dimensions :: Wall-mount compatible": "100 x 100 mm",
         "Dimensions :: TV without stand (W x H x D)": "715 x 432 x 83 mm",
@@ -7783,9 +5080,7 @@ const ModelsData = [
         "Dimensions :: Weight incl. packaging": "4.6 kg"
       },
       "hdmiInputs": "3",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T10:19:37.915Z"
+      "usbInputs": "2"
     },
     "audioChannels": "2.0 Channel",
     "audioPower": "12 W",
@@ -7848,43 +5143,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "TPN25.7E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "32 inch",
-          "Diagonal screen size (metric)": "80 cm",
-          "Display": "LED HD TV",
-          "Panel resolution": "1366 x 768p",
-          "Native refresh rate": "60 Hz",
-          "Picture engine": "Pixel Plus HD",
-          "Picture enhancement": "ECO Crystal Clear Home Cinema Movie Game Monitor Pixel Plus HD Personal"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576p - 50 Hz, 640 x 480 - 60 Hz, 720p - 50 Hz/60 Hz, 1366 x 768 - 60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Netflix* HBO BBC iPlayer YouTube Amazon Prime Video Disney+",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Works with Alexa Works with Google Assistant",
-          "Smart Home experience": "Control4 MATTER",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "12 W",
@@ -7905,28 +5164,6 @@ const ModelsData = [
         "Supported HDMI video features": {
           "HDR": "HLG HDR10"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2302514",
-          "Energy class for SDR": "E",
-          "On mode power demand for SDR": "22 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "36 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "LED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Light sensor Picture mute (for radio) Eco mode"
-        },
-        "Accessories": {
-          "Included accessories": "Power cord 2 x AAA Batteries Legal and safety brochure Tabletop stand Remote Control"
-        },
-        "Design": {
-          "Colours of TV": "Plastic black low bezel",
-          "Stand design": "Plastic charcoal soap bar"
-        },
         "Dimensions": {
           "Distance between 2 stands": "639 mm",
           "Wall-mount compatible": "200 x 150 mm",
@@ -7939,57 +5176,15 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Picture/Display :: Diagonal screen size (inch)": "32 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "80 cm",
-        "Picture/Display :: Display": "LED HD TV",
-        "Picture/Display :: Panel resolution": "1366 x 768p",
-        "Picture/Display :: Native refresh rate": "60 Hz",
-        "Picture/Display :: Picture engine": "Pixel Plus HD",
-        "Picture/Display :: Picture enhancement": "ECO Crystal Clear Home Cinema Movie Game Monitor Pixel Plus HD Personal",
-        "Display input resolution :: Resolution-Refresh rate": "576p - 50 Hz, 640 x 480 - 60 Hz, 720p - 50 Hz/60 Hz, 1366 x 768 - 60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Netflix* HBO BBC iPlayer YouTube Amazon Prime Video Disney+",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Works with Alexa Works with Google Assistant",
-        "Smart TV Features :: Smart Home experience": "Control4 MATTER",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "12 W",
-        "Sound :: Speaker configuration": "2 x 6 W full-range speakers",
-        "Sound :: Sound Enhancement": "Dialogue Music Original Entertainment Equalizer Vocal Boost AVL Mode Night mode",
-        "Sound :: Sound Engine": "Basic Sound Engine",
         "Connectivity :: Number of HDMI connections": "3",
         "Connectivity :: HDMI features": "Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "Remote control pass-through System audio control System standby One touch play",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11n, 2 x 2, Single band",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI1",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: HDR": "HLG HDR10",
-        "EU Energy card :: EPREL registration numbers": "2302514",
-        "EU Energy card :: Energy class for SDR": "E",
-        "EU Energy card :: On mode power demand for SDR": "22 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "36 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "LED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Light sensor Picture mute (for radio) Eco mode",
-        "Accessories :: Included accessories": "Power cord 2 x AAA Batteries Legal and safety brochure Tabletop stand Remote Control",
-        "Design :: Colours of TV": "Plastic black low bezel",
-        "Design :: Stand design": "Plastic charcoal soap bar",
         "Dimensions :: Distance between 2 stands": "639 mm",
         "Dimensions :: Wall-mount compatible": "200 x 150 mm",
         "Dimensions :: TV without stand (W x H x D)": "716 x 428 x 69 mm",
@@ -8000,9 +5195,7 @@ const ModelsData = [
         "Dimensions :: Weight incl. packaging": "4.5 kg"
       },
       "hdmiInputs": "3",
-      "usbInputs": "2",
-      "officialSourceScore": "718",
-      "officialSourceCheckedAt": "2026-04-17T09:46:37.437Z"
+      "usbInputs": "2"
     },
     "audioChannels": "2.0 Channel",
     "audioPower": "12 W",
@@ -8127,43 +5320,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "TPN25.6E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Display": "4K Ultra HD QLED",
-          "Panel resolution": "3840 x 2160",
-          "Native refresh rate": "60 Hz",
-          "Picture engine": "Pixel Precise Ultra HD",
-          "Picture enhancement": "Crystal Clear ECO Game HDR10+ compatible Home Cinema Movie Monitor Micro Dimming Personal Pixel Precise Ultra HD Ultra Resolution"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "640 x 480 - 60 Hz, 576p - 50 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz, 2560 x 1440 - 60 Hz, 3840 x 2160p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO NFT app* Netflix* YouTube",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Works with Alexa Works with Google Assistant",
-          "Smart Home experience": "Control4 MATTER",
-          "Gaming Control Bar": "Gamebar 2.0"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "20 W",
@@ -8189,28 +5346,6 @@ const ModelsData = [
           "Gaming": "ALLM HDMI VRR",
           "HDR": "HLG HDR10 HDR10+ Compatible"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2247066",
-          "Energy class for SDR": "E",
-          "On mode power demand for SDR": "63 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "93 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "QLED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Power cord Remote Control Tabletop stand Quick start guide Safety and Legal Leaflet"
-        },
-        "Design": {
-          "Colours of TV": "Matt black bezel",
-          "Stand design": "Plastic black soap bar"
-        },
         "Dimensions": {
           "Distance between 2 stands": "811 mm",
           "Wall-mount compatible": "200 x 100 mm",
@@ -8223,62 +5358,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Display": "4K Ultra HD QLED",
-        "Picture/Display :: Panel resolution": "3840 x 2160",
-        "Picture/Display :: Native refresh rate": "60 Hz",
-        "Picture/Display :: Picture engine": "Pixel Precise Ultra HD",
-        "Picture/Display :: Picture enhancement": "Crystal Clear ECO Game HDR10+ compatible Home Cinema Movie Monitor Micro Dimming Personal Pixel Precise Ultra HD Ultra Resolution",
-        "Display input resolution :: Resolution-Refresh rate": "640 x 480 - 60 Hz, 576p - 50 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz, 2560 x 1440 - 60 Hz, 3840 x 2160p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO NFT app* Netflix* YouTube",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Works with Alexa Works with Google Assistant",
-        "Smart TV Features :: Smart Home experience": "Control4 MATTER",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "20 W",
-        "Sound :: Speaker configuration": "2 x 10 W full-range speakers",
-        "Sound :: Codec": "Dolby Atmos Dolby Digital DTS:X",
-        "Sound :: Sound Enhancement": "AVL Mode All Sound Style Bass Enhancement Dolby Media Intelligence Dolby Atmos Entertainment DTS-X Equalizer Personal Night Mode Hearing Profile Vocal Boost",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Full Range Bass Reflex (FR01A)",
         "Connectivity :: Number of HDMI connections": "3",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "Remote control pass-through System audio control System standby One touch play",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac 2 x 2 integrated Bluetooth 5.2",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI1",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 1 eARC/VRR/ALLM supported",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: Gaming": "ALLM HDMI VRR",
         "Supported HDMI video features :: HDR": "HLG HDR10 HDR10+ Compatible",
-        "EU Energy card :: EPREL registration numbers": "2247066",
-        "EU Energy card :: Energy class for SDR": "E",
-        "EU Energy card :: On mode power demand for SDR": "63 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "93 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "QLED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Power cord Remote Control Tabletop stand Quick start guide Safety and Legal Leaflet",
-        "Design :: Colours of TV": "Matt black bezel",
-        "Design :: Stand design": "Plastic black soap bar",
         "Dimensions :: Distance between 2 stands": "811 mm",
         "Dimensions :: Wall-mount compatible": "200 x 100 mm",
         "Dimensions :: TV without stand (W x H x D)": "1126 x 715 x 88 mm",
@@ -8289,9 +5379,7 @@ const ModelsData = [
         "Dimensions :: Weight incl. packaging": "13.62 kg"
       },
       "hdmiInputs": "3",
-      "usbInputs": "2",
-      "officialSourceScore": "718",
-      "officialSourceCheckedAt": "2026-04-17T10:19:41.290Z"
+      "usbInputs": "2"
     },
     "audioChannels": "2.0 Channel",
     "audioPower": "20 W",
@@ -8357,47 +5445,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "SPN25.6E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Ambilight FTI Animation Ambilight Music AmbiSleep Gaming mode Lounge light mode Sunrise Alarm Wall colour adaptive",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Display": "4K Ultra HD LED",
-          "Panel resolution": "3840 x 2160p",
-          "Picture engine": "Pixel Precise Ultra HD",
-          "Picture enhancement": "Crystal Clear ECO Game HDR 10+ Compatible Home Cinema Monitor Micro Dimming Movie Personal Pixel Precise Ultra HD Ultra Resolution"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "640 x 480 - 60 Hz, 576p - 50 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz, 2560 x 1440 - 60 Hz, 3840 x 2160p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO NFT app* Netflix* YouTube",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Works with Alexa Works with Google Home",
-          "Smart Home experience": "MATTER Control4 Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "20 W",
@@ -8422,28 +5470,6 @@ const ModelsData = [
           "Gaming": "ALLM HDMI VRR",
           "HDR": "HLG HDR10 HDR10+ Compatible"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2229869",
-          "Energy class for SDR": "E",
-          "On mode power demand for SDR": "63 kWh/1000h",
-          "Energy class for HDR": "F",
-          "On mode power demand for HDR": "121 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "LED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Legal and safety brochure Remote Control Tabletop stand Power cord Quick Use Guide"
-        },
-        "Design": {
-          "Colours of TV": "Matt black bezel",
-          "Stand design": "Black metal arch stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "1041 mm",
           "Wall-mount compatible": "200 x 100 mm",
@@ -8456,63 +5482,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Ambilight FTI Animation Ambilight Music AmbiSleep Gaming mode Lounge light mode Sunrise Alarm Wall colour adaptive",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Display": "4K Ultra HD LED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Picture engine": "Pixel Precise Ultra HD",
-        "Picture/Display :: Picture enhancement": "Crystal Clear ECO Game HDR 10+ Compatible Home Cinema Monitor Micro Dimming Movie Personal Pixel Precise Ultra HD Ultra Resolution",
-        "Display input resolution :: Resolution-Refresh rate": "640 x 480 - 60 Hz, 576p - 50 Hz, 720p - 50/60 Hz, 1920 x 1080p - 24/25/30/50/60 Hz, 2560 x 1440 - 60 Hz, 3840 x 2160p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO NFT app* Netflix* YouTube",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Works with Alexa Works with Google Home",
-        "Smart TV Features :: Smart Home experience": "MATTER Control4 Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "20 W",
-        "Sound :: Speaker configuration": "2 x 10 W full-range speakers",
-        "Sound :: Sound Enhancement": "AVL Mode All Sound Style Bass Enhancement Dolby Atmos Dolby Media Intelligence Entertainment Equalizer Hearing Profile Night Mode Personal Vocal Boost DTS-X",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Full Range Bass Reflex (FR01A)",
         "Connectivity :: Number of HDMI connections": "3",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "Remote control pass-through System audio control System standby One touch play",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac, 2 x 2, Dual band Bluetooth 5.2 easy-pair (RC blue button) Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI1",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 1 eARC/VRR/ALLM supported",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: Gaming": "ALLM HDMI VRR",
         "Supported HDMI video features :: HDR": "HLG HDR10 HDR10+ Compatible",
-        "EU Energy card :: EPREL registration numbers": "2229869",
-        "EU Energy card :: Energy class for SDR": "E",
-        "EU Energy card :: On mode power demand for SDR": "63 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "F",
-        "EU Energy card :: On mode power demand for HDR": "121 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "LED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Legal and safety brochure Remote Control Tabletop stand Power cord Quick Use Guide",
-        "Design :: Colours of TV": "Matt black bezel",
-        "Design :: Stand design": "Black metal arch stand",
         "Dimensions :: Distance between 2 stands": "1041 mm",
         "Dimensions :: Wall-mount compatible": "200 x 100 mm",
         "Dimensions :: TV without stand (W x H x D)": "1226 x 715 x 88 mm",
@@ -8524,9 +5504,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "3",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T10:19:43.420Z"
+      "usbInputs": "2"
     },
     "audioChannels": "2.0 Channel",
     "audioPower": "20 W",
@@ -8583,47 +5561,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "TPM25.2E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Ambilight Suite Gaming mode Wall colour adaptive Lounge light mode",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Display": "4K Ultra HD LED",
-          "Panel resolution": "3840 x 2160p",
-          "Picture engine": "Pixel Precise Ultra HD",
-          "Picture enhancement": "Micro Dimming Ultra Resolution Natural Motion Crystal Clear Personal Home Cinema ECO Movie Game Monitor"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "640 x 480 - 60 Hz, 576p -50 Hz, 720p -50/60 Hz,1920 x 1080p -24/25/30/50/60 Hz, 2560 x 1440 - 60 Hz, 3840 x 2160p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Disney+ Apple TV Netflix* YouTube Amazon Prime Video NFT app* Whalefit",
-          "OS": "Google TV",
-          "Memory size (Flash)*": "16 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "RC with Mic. Google Assistant built in Works with Alexa",
-          "Smart Home experience": "MATTER Control4 Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "20 W",
@@ -8648,27 +5586,6 @@ const ModelsData = [
           "Gaming": "ALLM HDMI VRR",
           "HDR": "HLG HDR10 HDR10+ Compatible"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2361304",
-          "Energy class for SDR": "E",
-          "On mode power demand for SDR": "64 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "94 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "LED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100 - 240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Quick start guide Safety and Legal Leaflet Tabletop stand Remote Control Power cord"
-        },
-        "Design": {
-          "Colours of TV": "Metal black bezel",
-          "Stand design": "Black sticks"
-        },
         "Dimensions": {
           "Distance between 2 stands": "810 mm",
           "Wall-mount compatible": "200 x 100 mm",
@@ -8681,62 +5598,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Ambilight Suite Gaming mode Wall colour adaptive Lounge light mode",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Display": "4K Ultra HD LED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Picture engine": "Pixel Precise Ultra HD",
-        "Picture/Display :: Picture enhancement": "Micro Dimming Ultra Resolution Natural Motion Crystal Clear Personal Home Cinema ECO Movie Game Monitor",
-        "Display input resolution :: Resolution-Refresh rate": "640 x 480 - 60 Hz, 576p -50 Hz, 720p -50/60 Hz,1920 x 1080p -24/25/30/50/60 Hz, 2560 x 1440 - 60 Hz, 3840 x 2160p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Disney+ Apple TV Netflix* YouTube Amazon Prime Video NFT app* Whalefit",
-        "Smart TV :: OS": "Google TV",
-        "Smart TV :: Memory size (Flash)*": "16 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "RC with Mic. Google Assistant built in Works with Alexa",
-        "Smart TV Features :: Smart Home experience": "MATTER Control4 Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "20 W",
-        "Sound :: Speaker configuration": "2 x 10 W full-range speakers",
-        "Sound :: Codec": "Dolby Atmos DTS:X Dolby Digital",
-        "Sound :: Sound Enhancement": "AI mode Original Entertainment Music Spatial Music Dialogue Personal All Sound Style Clear Dialogue Sound Personalisation AVL Mode Night mode",
-        "Sound :: Sound Engine": "Basic Sound Engine",
-        "Sound :: Main Speaker": "Full Range Bass Reflex (FR01A)",
         "Connectivity :: Number of HDMI connections": "3",
         "Connectivity :: HDMI features": "Audio Return Channel 4K",
         "Connectivity :: EasyLink (HDMI-CEC)": "Remote control pass-through System audio control System standby One touch play (auto wake-up)",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac, 2 x 2, Dual band Bluetooth 5.0 Works with Apple AirPlay Google Fast Pair",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI3",
         "Connectivity :: HDMI 2.1 features": "eARC/VRR/ALLM supported eARC on HDMI 3",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: Gaming": "ALLM HDMI VRR",
         "Supported HDMI video features :: HDR": "HLG HDR10 HDR10+ Compatible",
-        "EU Energy card :: EPREL registration numbers": "2361304",
-        "EU Energy card :: Energy class for SDR": "E",
-        "EU Energy card :: On mode power demand for SDR": "64 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "94 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "LED LCD",
-        "Power :: Mains power": "AC 100 - 240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Accessories :: Included accessories": "2 x AAA Batteries Quick start guide Safety and Legal Leaflet Tabletop stand Remote Control Power cord",
-        "Design :: Colours of TV": "Metal black bezel",
-        "Design :: Stand design": "Black sticks",
         "Dimensions :: Distance between 2 stands": "810 mm",
         "Dimensions :: Wall-mount compatible": "200 x 100 mm",
         "Dimensions :: TV without stand (W x H x D)": "1226 x 714 x 88 mm",
@@ -8748,9 +5620,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "3",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T10:19:50.126Z"
+      "usbInputs": "2"
     },
     "audioChannels": "2.0 Channel",
     "audioPower": "20 W",
@@ -8818,48 +5688,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "TPN25.6E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "AmbiSleep Ambilight FTI Animation Ambilight Music Gaming mode Lounge light mode Sunrise Alarm Wall colour adaptive",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Display": "4K Ultra HD QLED",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "60 Hz",
-          "Picture engine": "Pixel Precise Ultra HD",
-          "Picture enhancement": "Crystal Clear ECO Game HDR10+ compatible Home Cinema Monitor Movie Micro Dimming Personal Ultra Resolution"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60Hz 2560 x 1440 - 60 Hz 3840 x 2160p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO NFT app* Netflix* YouTube",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Amazon Alexa Built-in Works with Google Home RC with Mic.",
-          "Smart Home experience": "MATTER Control4 Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "20 W",
@@ -8885,28 +5714,6 @@ const ModelsData = [
           "Gaming": "ALLM HDMI VRR",
           "HDR": "HLG HDR10 HDR10+ Compatible"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2243374",
-          "Energy class for SDR": "F",
-          "On mode power demand for SDR": "68 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "109 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "QLED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Light sensor Eco mode Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Legal and safety brochure Remote Control Tabletop stand Power cord Quick Use Guide"
-        },
-        "Design": {
-          "Colours of TV": "Matt black bezel",
-          "Stand design": "Black metal arch stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "810 mm mm",
           "Wall-mount compatible": "200 x 100 mm",
@@ -8919,65 +5726,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "AmbiSleep Ambilight FTI Animation Ambilight Music Gaming mode Lounge light mode Sunrise Alarm Wall colour adaptive",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Display": "4K Ultra HD QLED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "60 Hz",
-        "Picture/Display :: Picture engine": "Pixel Precise Ultra HD",
-        "Picture/Display :: Picture enhancement": "Crystal Clear ECO Game HDR10+ compatible Home Cinema Monitor Movie Micro Dimming Personal Ultra Resolution",
-        "Display input resolution :: Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60Hz 2560 x 1440 - 60 Hz 3840 x 2160p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO NFT app* Netflix* YouTube",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Amazon Alexa Built-in Works with Google Home RC with Mic.",
-        "Smart TV Features :: Smart Home experience": "MATTER Control4 Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "20 W",
-        "Sound :: Speaker configuration": "2 x 10 W full-range speakers",
-        "Sound :: Codec": "DTS:X Dolby Atmos Dolby Digital",
-        "Sound :: Sound Enhancement": "AVL Mode Bass Enhancement Dolby Media Intelligence Entertainment Equalizer Hearing Profile Night Mode Room Calibration Personal Vocal Boost",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Full Range Bass Reflex (FR01A)",
         "Connectivity :: Number of HDMI connections": "3",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "One touch play Remote control pass-through System audio control System standby",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac, 2 x 2, Dual band Bluetooth 5.2 Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI1",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 1 eARC/VRR/ALLM supported",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: Gaming": "ALLM HDMI VRR",
         "Supported HDMI video features :: HDR": "HLG HDR10 HDR10+ Compatible",
-        "EU Energy card :: EPREL registration numbers": "2243374",
-        "EU Energy card :: Energy class for SDR": "F",
-        "EU Energy card :: On mode power demand for SDR": "68 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "109 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "QLED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Light sensor Eco mode Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Legal and safety brochure Remote Control Tabletop stand Power cord Quick Use Guide",
-        "Design :: Colours of TV": "Matt black bezel",
-        "Design :: Stand design": "Black metal arch stand",
         "Dimensions :: Distance between 2 stands": "810 mm mm",
         "Dimensions :: Wall-mount compatible": "200 x 100 mm",
         "Dimensions :: TV without stand (W x H x D)": "1226 x 715 x 88 mm",
@@ -8989,9 +5748,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "3",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T10:19:50.635Z"
+      "usbInputs": "2"
     },
     "audioChannels": "2.0 Channel",
     "audioPower": "20 W",
@@ -9057,48 +5814,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "TPN25.6E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "AmbiSleep Ambilight FTI Animation Ambilight Music Gaming mode Lounge light mode Sunrise Alarm Wall colour adaptive",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "60 Hz",
-          "Picture engine": "Pixel Precise Ultra HD",
-          "Picture enhancement": "Crystal Clear ECO Game HDR10+ compatible Home Cinema Monitor Movie Micro Dimming Personal Ultra Resolution",
-          "Display technology": "4K Ultra HD QLED"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60Hz 2560 x 1440 - 60 Hz 3840 x 2160p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO NFT app* Netflix* YouTube",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Amazon Alexa Built-in Works with Google Home RC with Mic.",
-          "Smart Home experience": "MATTER Control4 Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "20 W",
@@ -9124,28 +5840,6 @@ const ModelsData = [
           "Gaming": "ALLM HDMI VRR",
           "HDR": "HLG HDR10 HDR10+ Compatible"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2243378",
-          "Energy class for SDR": "F",
-          "On mode power demand for SDR": "68 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "109 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used.": "QLED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Light sensor Eco mode Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Legal and safety brochure Remote Control Tabletop stand Power cord Quick Use Guide"
-        },
-        "Design": {
-          "Colours of TV": "Matt black bezel",
-          "Stand design": "Black metal arch stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "810 mm mm",
           "Wall-mount compatible": "200 x 100 mm",
@@ -9158,65 +5852,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "AmbiSleep Ambilight FTI Animation Ambilight Music Gaming mode Lounge light mode Sunrise Alarm Wall colour adaptive",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "60 Hz",
-        "Picture/Display :: Picture engine": "Pixel Precise Ultra HD",
-        "Picture/Display :: Picture enhancement": "Crystal Clear ECO Game HDR10+ compatible Home Cinema Monitor Movie Micro Dimming Personal Ultra Resolution",
-        "Picture/Display :: Display technology": "4K Ultra HD QLED",
-        "Display input resolution :: Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60Hz 2560 x 1440 - 60 Hz 3840 x 2160p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO NFT app* Netflix* YouTube",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Amazon Alexa Built-in Works with Google Home RC with Mic.",
-        "Smart TV Features :: Smart Home experience": "MATTER Control4 Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "20 W",
-        "Sound :: Speaker configuration": "2 x 10 W full-range speakers",
-        "Sound :: Codec": "DTS:X Dolby Atmos Dolby Digital",
-        "Sound :: Sound Enhancement": "AVL Mode Bass Enhancement Dolby Media Intelligence Entertainment Equalizer Hearing Profile Night Mode Room Calibration Personal Vocal Boost",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Full Range Bass Reflex (FR01A)",
         "Connectivity :: Number of HDMI connections": "3",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "One touch play Remote control pass-through System audio control System standby",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac, 2 x 2, Dual band Bluetooth 5.2 Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI1",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 1 eARC/VRR/ALLM supported",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: Gaming": "ALLM HDMI VRR",
         "Supported HDMI video features :: HDR": "HLG HDR10 HDR10+ Compatible",
-        "EU Energy card :: EPREL registration numbers": "2243378",
-        "EU Energy card :: Energy class for SDR": "F",
-        "EU Energy card :: On mode power demand for SDR": "68 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "109 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used.": "QLED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Light sensor Eco mode Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Legal and safety brochure Remote Control Tabletop stand Power cord Quick Use Guide",
-        "Design :: Colours of TV": "Matt black bezel",
-        "Design :: Stand design": "Black metal arch stand",
         "Dimensions :: Distance between 2 stands": "810 mm mm",
         "Dimensions :: Wall-mount compatible": "200 x 100 mm",
         "Dimensions :: TV without stand (W x H x D)": "1226 x 715 x 88 mm",
@@ -9228,9 +5874,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "3",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T09:47:52.094Z"
+      "usbInputs": "2"
     },
     "audioChannels": "2.0 Channel",
     "audioPower": "20 W",
@@ -9296,48 +5940,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "TPN25.6E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "AmbiSleep Ambilight FTI Animation Ambilight Music Gaming mode Lounge light mode Sunrise Alarm Wall colour adaptive",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Display": "4K Ultra HD QLED",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "60 Hz",
-          "Picture engine": "Pixel Precise Ultra HD",
-          "Picture enhancement": "Crystal Clear ECO Game HDR10+ compatible Home Cinema Monitor Movie Micro Dimming Personal Ultra Resolution"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60Hz 2560 x 1440 - 60 Hz 3840 x 2160p - 24/25/30/50/60 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO NFT app* Netflix* YouTube",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Amazon Alexa Built-in Works with Google Home RC with Mic.",
-          "Smart Home experience": "MATTER Control4 Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "20 W",
@@ -9363,25 +5966,6 @@ const ModelsData = [
           "Gaming": "ALLM HDMI VRR",
           "HDR": "HLG HDR10 HDR10+ Compatible"
         },
-        "EU Energy card": {
-          "Energy class for SDR": "F",
-          "Energy class for HDR": "G",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "QLED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Light sensor Eco mode Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Legal and safety brochure Remote Control Tabletop stand Power cord Quick Use Guide"
-        },
-        "Design": {
-          "Colours of TV": "Matt black bezel",
-          "Stand design": "Black metal arch stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "810 mm mm",
           "Wall-mount compatible": "200 x 100 mm",
@@ -9394,62 +5978,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "AmbiSleep Ambilight FTI Animation Ambilight Music Gaming mode Lounge light mode Sunrise Alarm Wall colour adaptive",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Display": "4K Ultra HD QLED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "60 Hz",
-        "Picture/Display :: Picture engine": "Pixel Precise Ultra HD",
-        "Picture/Display :: Picture enhancement": "Crystal Clear ECO Game HDR10+ compatible Home Cinema Monitor Movie Micro Dimming Personal Ultra Resolution",
-        "Display input resolution :: Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60Hz 2560 x 1440 - 60 Hz 3840 x 2160p - 24/25/30/50/60 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO NFT app* Netflix* YouTube",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Amazon Alexa Built-in Works with Google Home RC with Mic.",
-        "Smart TV Features :: Smart Home experience": "MATTER Control4 Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "20 W",
-        "Sound :: Speaker configuration": "2 x 10 W full-range speakers",
-        "Sound :: Codec": "DTS:X Dolby Atmos Dolby Digital",
-        "Sound :: Sound Enhancement": "AVL Mode Bass Enhancement Dolby Media Intelligence Entertainment Equalizer Hearing Profile Night Mode Room Calibration Personal Vocal Boost",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Full Range Bass Reflex (FR01A)",
         "Connectivity :: Number of HDMI connections": "3",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "One touch play Remote control pass-through System audio control System standby",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac, 2 x 2, Dual band Bluetooth 5.2 Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI1",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 1 eARC/VRR/ALLM supported",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: Gaming": "ALLM HDMI VRR",
         "Supported HDMI video features :: HDR": "HLG HDR10 HDR10+ Compatible",
-        "EU Energy card :: Energy class for SDR": "F",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "QLED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Light sensor Eco mode Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Legal and safety brochure Remote Control Tabletop stand Power cord Quick Use Guide",
-        "Design :: Colours of TV": "Matt black bezel",
-        "Design :: Stand design": "Black metal arch stand",
         "Dimensions :: Distance between 2 stands": "810 mm mm",
         "Dimensions :: Wall-mount compatible": "200 x 100 mm",
         "Dimensions :: TV without stand (W x H x D)": "1226 x 715 x 88 mm",
@@ -9461,9 +6000,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "3",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T09:48:05.961Z"
+      "usbInputs": "2"
     },
     "audioChannels": "2.0 Channel",
     "audioPower": "20 W",
@@ -9531,48 +6068,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "TPN25.8E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Ambilight FTI Animation Ambilight Music AmbiSleep Game Mode Lounge light mode Sunrise Alarm Wall colour adaptive",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Display": "4K Ultra HD QLED",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "120 Hz",
-          "Picture engine": "P5 Perfect Picture Engine",
-          "Picture enhancement": "Calman Calman Autocal Ready and Manual Calibration Crystal Clear Dolby Vision ECO Game HDR10+ compatible Home Cinema MEMC / FRC Embedded Micro Dimming Pro Monitor Movie Personal Ultra Resolution"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60/100/120/144Hz 2560 x 1440 - 60/120/144Hz 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO Netflix* NFT app* YouTube",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Amazon Alexa Built-in Works with Google Home RC with Mic.",
-          "Smart Home experience": "Control4 MATTER Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "40 W",
@@ -9597,28 +6093,6 @@ const ModelsData = [
           "Gaming": "HDMI VRR ALLM",
           "HDR": "Dolby Vision HDR10+ Compatible HLG"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2232655",
-          "Energy class for SDR": "F",
-          "On mode power demand for SDR": "77 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "154 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "QLED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.3 W",
-          "Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Legal and safety brochure Power cord Quick Use Guide Tabletop stand Remote Control"
-        },
-        "Design": {
-          "Colours of TV": "Plastic gun metal bezel",
-          "Stand design": "Plastic charcoal-coloured central stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "500 mm",
           "Wall-mount compatible": "200 x 300 mm",
@@ -9631,64 +6105,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Ambilight FTI Animation Ambilight Music AmbiSleep Game Mode Lounge light mode Sunrise Alarm Wall colour adaptive",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Display": "4K Ultra HD QLED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "120 Hz",
-        "Picture/Display :: Picture engine": "P5 Perfect Picture Engine",
-        "Picture/Display :: Picture enhancement": "Calman Calman Autocal Ready and Manual Calibration Crystal Clear Dolby Vision ECO Game HDR10+ compatible Home Cinema MEMC / FRC Embedded Micro Dimming Pro Monitor Movie Personal Ultra Resolution",
-        "Display input resolution :: Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60/100/120/144Hz 2560 x 1440 - 60/120/144Hz 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO Netflix* NFT app* YouTube",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Amazon Alexa Built-in Works with Google Home RC with Mic.",
-        "Smart TV Features :: Smart Home experience": "Control4 MATTER Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "40 W",
-        "Sound :: Speaker configuration": "4 x 10 W full-range speakers",
-        "Sound :: Codec": "DTS:X Dolby Digital Dolby Atmos",
-        "Sound :: Sound Enhancement": "All Sound Style AVL Mode Bass Enhancement Dolby Media Intelligence Dolby Atmos Virtualiser DTS Play-Fi Equalizer Hearing Profile Night Mode Room Calibration Vocal Boost",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Full Range Bass Reflex (FR01A+)",
         "Connectivity :: Number of HDMI connections": "4",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "One touch play Remote control pass-through System audio control System standby",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac 2 x 2 Dual band Bluetooth 5.2 Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI2",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 2",
         "Supported HDMI video features :: Gaming": "HDMI VRR ALLM",
         "Supported HDMI video features :: HDR": "Dolby Vision HDR10+ Compatible HLG",
-        "EU Energy card :: EPREL registration numbers": "2232655",
-        "EU Energy card :: Energy class for SDR": "F",
-        "EU Energy card :: On mode power demand for SDR": "77 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "154 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "QLED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.3 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Legal and safety brochure Power cord Quick Use Guide Tabletop stand Remote Control",
-        "Design :: Colours of TV": "Plastic gun metal bezel",
-        "Design :: Stand design": "Plastic charcoal-coloured central stand",
         "Dimensions :: Distance between 2 stands": "500 mm",
         "Dimensions :: Wall-mount compatible": "200 x 300 mm",
         "Dimensions :: TV without stand (W x H x D)": "1231 x 721 x 82 mm",
@@ -9700,9 +6127,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "4",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T10:19:54.036Z"
+      "usbInputs": "2"
     },
     "audioChannels": "2.0 Channel",
     "audioPower": "40 W",
@@ -9768,49 +6193,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "TPN25.8E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Ambilight FTI Animation Ambilight Music AmbiSleep Game Mode Lounge light mode Sunrise Alarm Wall colour adaptive",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "43 inch",
-          "Diagonal screen size (metric)": "108 cm",
-          "Display": "4K Ultra HD QLED",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "120 Hz",
-          "Picture engine": "P5 Perfect Picture Engine",
-          "Picture enhancement": "Calman Calman Autocal Ready and Manual Calibration Crystal Clear Dolby Vision ECO Game HDR10+ compatible Home Cinema MEMC / FRC Embedded Micro Dimming Pro Monitor Movie Personal Ultra Resolution",
-          "Variable Refresh Rate": "144 Hz"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60/100/120/144Hz 2560 x 1440 - 60/120/144Hz 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO Netflix* NFT app* YouTube",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Amazon Alexa Built-in Works with Google Home RC with Mic.",
-          "Smart Home experience": "Control4 MATTER Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "20 W",
@@ -9835,28 +6218,6 @@ const ModelsData = [
           "Gaming": "HDMI VRR ALLM",
           "HDR": "Dolby Vision HDR10+ Compatible HLG"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2232490",
-          "Energy class for SDR": "F",
-          "On mode power demand for SDR": "51 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "114 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "QLED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.3 W",
-          "Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Legal and safety brochure Power cord Quick Use Guide Tabletop stand Remote Control"
-        },
-        "Design": {
-          "Colours of TV": "Plastic gun metal bezel",
-          "Stand design": "Plastic charcoal-coloured central stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "399 mm",
           "Wall-mount compatible": "100 x 200 mm",
@@ -9869,65 +6230,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Ambilight FTI Animation Ambilight Music AmbiSleep Game Mode Lounge light mode Sunrise Alarm Wall colour adaptive",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "43 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "108 cm",
-        "Picture/Display :: Display": "4K Ultra HD QLED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "120 Hz",
-        "Picture/Display :: Picture engine": "P5 Perfect Picture Engine",
-        "Picture/Display :: Picture enhancement": "Calman Calman Autocal Ready and Manual Calibration Crystal Clear Dolby Vision ECO Game HDR10+ compatible Home Cinema MEMC / FRC Embedded Micro Dimming Pro Monitor Movie Personal Ultra Resolution",
-        "Picture/Display :: Variable Refresh Rate": "144 Hz",
-        "Display input resolution :: Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60/100/120/144Hz 2560 x 1440 - 60/120/144Hz 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO Netflix* NFT app* YouTube",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Amazon Alexa Built-in Works with Google Home RC with Mic.",
-        "Smart TV Features :: Smart Home experience": "Control4 MATTER Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "20 W",
-        "Sound :: Speaker configuration": "2 x 10 W full-range speakers",
-        "Sound :: Codec": "DTS:X Dolby Digital Dolby Atmos",
-        "Sound :: Sound Enhancement": "All Sound Style AVL Mode Bass Enhancement Dolby Media Intelligence Dolby Atmos Virtualiser DTS Play-Fi Equalizer Hearing Profile Night Mode Room Calibration Vocal Boost",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Full Range Bass Reflex (FR01A)",
         "Connectivity :: Number of HDMI connections": "4",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "One touch play Remote control pass-through System audio control System standby",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac 2 x 2 Dual band Bluetooth 5.2 Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI2",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 2",
         "Supported HDMI video features :: Gaming": "HDMI VRR ALLM",
         "Supported HDMI video features :: HDR": "Dolby Vision HDR10+ Compatible HLG",
-        "EU Energy card :: EPREL registration numbers": "2232490",
-        "EU Energy card :: Energy class for SDR": "F",
-        "EU Energy card :: On mode power demand for SDR": "51 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "114 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "QLED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.3 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Legal and safety brochure Power cord Quick Use Guide Tabletop stand Remote Control",
-        "Design :: Colours of TV": "Plastic gun metal bezel",
-        "Design :: Stand design": "Plastic charcoal-coloured central stand",
         "Dimensions :: Distance between 2 stands": "399 mm",
         "Dimensions :: Wall-mount compatible": "100 x 200 mm",
         "Dimensions :: TV without stand (W x H x D)": "962 x 567 x 77 mm",
@@ -9939,9 +6252,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "4",
-      "usbInputs": "2",
-      "officialSourceScore": "703",
-      "officialSourceCheckedAt": "2026-04-17T09:48:24.027Z"
+      "usbInputs": "2"
     },
     "audioChannels": "2.0 Channel",
     "audioPower": "20 W",
@@ -10007,49 +6318,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "TPN25.8E LA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Ambilight FTI Animation Ambilight Music AmbiSleep Game Mode Lounge light mode Sunrise Alarm Wall colour adaptive",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Display": "4K Ultra HD QLED",
-          "Panel resolution": "3840 x 2160p",
-          "Native refresh rate": "120 Hz",
-          "Picture engine": "P5 Perfect Picture Engine",
-          "Picture enhancement": "Calman Calman Autocal Ready and Manual Calibration Crystal Clear Dolby Vision ECO Game HDR10+ compatible Home Cinema MEMC / FRC Embedded Micro Dimming Pro Monitor Movie Personal Ultra Resolution",
-          "Variable Refresh Rate": "144 Hz"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60/100/120/144Hz 2560 x 1440 - 60/120/144Hz 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "Signal strength indication": "Yes",
-          "Teletext": "1000 page Hypertext",
-          "HEVC support": "Yes"
-        },
-        "Smart TV": {
-          "SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO Netflix* NFT app* YouTube",
-          "OS": "Titan OS",
-          "Memory size (Flash)*": "8 GB"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Amazon Alexa Built-in Works with Google Home RC with Mic.",
-          "Smart Home experience": "Control4 MATTER Works with Apple Home",
-          "Gaming Control Bar": "Gamebar 2.0",
-          "TTS support": "Yes"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "40 W",
@@ -10074,28 +6343,6 @@ const ModelsData = [
           "Gaming": "HDMI VRR ALLM",
           "HDR": "Dolby Vision HDR10+ Compatible HLG"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "2232673",
-          "Energy class for SDR": "F",
-          "On mode power demand for SDR": "77 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "154 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "QLED LCD"
-        },
-        "Power": {
-          "Mains power": "AC 100-240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.3 W",
-          "Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)"
-        },
-        "Accessories": {
-          "Included accessories": "2 x AAA Batteries Legal and safety brochure Power cord Quick Use Guide Tabletop stand Remote Control"
-        },
-        "Design": {
-          "Colours of TV": "Plastic gun metal bezel",
-          "Stand design": "Plastic charcoal-coloured central stand"
-        },
         "Dimensions": {
           "Distance between 2 stands": "500 mm",
           "Wall-mount compatible": "200 x 300 mm",
@@ -10108,65 +6355,17 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Ambilight FTI Animation Ambilight Music AmbiSleep Game Mode Lounge light mode Sunrise Alarm Wall colour adaptive",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Display": "4K Ultra HD QLED",
-        "Picture/Display :: Panel resolution": "3840 x 2160p",
-        "Picture/Display :: Native refresh rate": "120 Hz",
-        "Picture/Display :: Picture engine": "P5 Perfect Picture Engine",
-        "Picture/Display :: Picture enhancement": "Calman Calman Autocal Ready and Manual Calibration Crystal Clear Dolby Vision ECO Game HDR10+ compatible Home Cinema MEMC / FRC Embedded Micro Dimming Pro Monitor Movie Personal Ultra Resolution",
-        "Picture/Display :: Variable Refresh Rate": "144 Hz",
-        "Display input resolution :: Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60/100/120/144Hz 2560 x 1440 - 60/120/144Hz 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: Signal strength indication": "Yes",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Tuner/Reception/Transmission :: HEVC support": "Yes",
-        "Smart TV :: SmartTV apps*": "Amazon Prime Video BBC iPlayer Disney+ HBO Netflix* NFT app* YouTube",
-        "Smart TV :: OS": "Titan OS",
-        "Smart TV :: Memory size (Flash)*": "8 GB",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Amazon Alexa Built-in Works with Google Home RC with Mic.",
-        "Smart TV Features :: Smart Home experience": "Control4 MATTER Works with Apple Home",
-        "Smart TV Features :: Gaming Control Bar": "Gamebar 2.0",
-        "Smart TV Features :: TTS support": "Yes",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "40 W",
-        "Sound :: Speaker configuration": "4 x 10 W full-range speakers",
-        "Sound :: Codec": "DTS:X Dolby Digital Dolby Atmos",
-        "Sound :: Sound Enhancement": "All Sound Style AVL Mode Bass Enhancement Dolby Media Intelligence Dolby Atmos Virtualiser DTS Play-Fi Equalizer Hearing Profile Night Mode Room Calibration Vocal Boost",
-        "Sound :: Headphone Features": "Dolby Atmos for Headphone",
-        "Sound :: Sound Engine": "IntelliSound",
-        "Sound :: Main Speaker": "Full Range Bass Reflex (FR01A+)",
         "Connectivity :: Number of HDMI connections": "4",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "One touch play Remote control pass-through System audio control System standby",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac 2 x 2 Dual band Bluetooth 5.2 Works with Apple AirPlay",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI2",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 2",
         "Supported HDMI video features :: Gaming": "HDMI VRR ALLM",
         "Supported HDMI video features :: HDR": "Dolby Vision HDR10+ Compatible HLG",
-        "EU Energy card :: EPREL registration numbers": "2232673",
-        "EU Energy card :: Energy class for SDR": "F",
-        "EU Energy card :: On mode power demand for SDR": "77 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "154 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "QLED LCD",
-        "Power :: Mains power": "AC 100-240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.3 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Eco mode Light sensor Picture mute (for radio)",
-        "Accessories :: Included accessories": "2 x AAA Batteries Legal and safety brochure Power cord Quick Use Guide Tabletop stand Remote Control",
-        "Design :: Colours of TV": "Plastic gun metal bezel",
-        "Design :: Stand design": "Plastic charcoal-coloured central stand",
         "Dimensions :: Distance between 2 stands": "500 mm",
         "Dimensions :: Wall-mount compatible": "200 x 300 mm",
         "Dimensions :: TV without stand (W x H x D)": "1231 x 721 x 82 mm",
@@ -10178,9 +6377,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "4",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T10:19:55.211Z"
+      "usbInputs": "2"
     },
     "audioChannels": "2.0 Channel",
     "audioPower": "40 W",
@@ -10267,39 +6464,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "TPN24.8E OA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Wall colour adaptive Lounge light mode Ambilight Music AmbiSleep Sunrise Alarm Works with Philips Wireless Home Speakers Ambilight FTI Animation",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (metric)": "164 cm",
-          "Display": "4K Ultra HD OLED",
-          "Panel resolution": "3840 x 2160",
-          "Picture engine": "P5 AI Perfect Picture Engine",
-          "Diagonal screen size (inches)": "65"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 1920 x 1080p -24/25/30/50/ 60/100/120Hz 2560 x 1440 - 60/120Hz 3840 x 2160p - 24/25/30/50/60/100/120 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "TV Programme guide*": "8-day Electronic Programme Guide",
-          "Teletext": "1000 page Hypertext"
-        },
-        "Smart TV Features": {
-          "User Interaction": "Screen mirroring",
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Amazon Alexa built-in RC with Mic.",
-          "Smart Home experience": "Works with Amazon Alexa Works with Google Home Compatible with Matter Connects with Control4"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "2 x 10 W full-range speakers",
@@ -10322,28 +6487,6 @@ const ModelsData = [
           "HDR": "Dolby Vision HDR10 HDR10+ HDR10+ Adaptive HLG",
           "HDMI 1/2/3/4": "HDMI 2.1 full bandwidth 48 Gbps Up to 4K 120 HZ"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "1943987",
-          "Energy class for SDR": "F",
-          "On mode power demand for SDR": "96 kWh/1000h",
-          "Energy class for HDR": "E",
-          "On mode power demand for HDR": "84 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "OLED"
-        },
-        "Power": {
-          "Mains power": "OLED",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Picture mute (for radio) Eco mode Light sensor"
-        },
-        "Accessories": {
-          "Included accessories": "Remote Control 2 x AAA Batteries Tabletop stand Power cord Quick start guide Legal and safety brochure"
-        },
-        "Design": {
-          "Colours of TV": "Metal bezel frame",
-          "Stand design": "Metal anthracite sticks"
-        },
         "Dimensions": {
           "Weight incl. Packaging": "29.5 kg",
           "Distance between 2 stands": "795 mm",
@@ -10357,55 +6500,18 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Wall colour adaptive Lounge light mode Ambilight Music AmbiSleep Sunrise Alarm Works with Philips Wireless Home Speakers Ambilight FTI Animation",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (metric)": "164 cm",
-        "Picture/Display :: Display": "4K Ultra HD OLED",
-        "Picture/Display :: Panel resolution": "3840 x 2160",
-        "Picture/Display :: Picture engine": "P5 AI Perfect Picture Engine",
-        "Picture/Display :: Diagonal screen size (inches)": "65",
-        "Display input resolution :: Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 1920 x 1080p -24/25/30/50/ 60/100/120Hz 2560 x 1440 - 60/120Hz 3840 x 2160p - 24/25/30/50/60/100/120 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: TV Programme guide*": "8-day Electronic Programme Guide",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Smart TV Features :: User Interaction": "Screen mirroring",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Amazon Alexa built-in RC with Mic.",
-        "Smart TV Features :: Smart Home experience": "Works with Amazon Alexa Works with Google Home Compatible with Matter Connects with Control4",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "2 x 10 W full-range speakers",
-        "Sound :: Codec": "Dolby Digital MS12 V2.6.2 Dolby Atmos DTS:X",
-        "Sound :: Sound Enhancement": "Dolby Bass Enhancement Clear Dialogue A.I. Sound A.I. EQ Dolby Volume Leveller Night mode Sound Personalisation",
         "Connectivity :: Number of HDMI connections": "4",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "Remote control pass-through System audio control System standby One touch play",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac, 2 x 2, Dual band Bluetooth 5.2",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI2",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 2 eARC/VRR/ALLM supported",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: Gaming": "ALLM HDMI VRR AMD FreeSync Premium Nvidia G-Sync compatible",
         "Supported HDMI video features :: HDR": "Dolby Vision HDR10 HDR10+ HDR10+ Adaptive HLG",
         "Supported HDMI video features :: HDMI 1/2/3/4": "HDMI 2.1 full bandwidth 48 Gbps Up to 4K 120 HZ",
-        "EU Energy card :: EPREL registration numbers": "1943987",
-        "EU Energy card :: Energy class for SDR": "F",
-        "EU Energy card :: On mode power demand for SDR": "96 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "E",
-        "EU Energy card :: On mode power demand for HDR": "84 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "OLED",
-        "Power :: Mains power": "OLED",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Picture mute (for radio) Eco mode Light sensor",
-        "Accessories :: Included accessories": "Remote Control 2 x AAA Batteries Tabletop stand Power cord Quick start guide Legal and safety brochure",
-        "Design :: Colours of TV": "Metal bezel frame",
-        "Design :: Stand design": "Metal anthracite sticks",
         "Dimensions :: Weight incl. Packaging": "29.5 kg",
         "Dimensions :: Distance between 2 stands": "795 mm",
         "Dimensions :: Stand height to TV bottom edge": "23 mm",
@@ -10418,9 +6524,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "4",
-      "usbInputs": "2",
-      "officialSourceScore": "703",
-      "officialSourceCheckedAt": "2026-04-17T09:48:40.712Z"
+      "usbInputs": "2"
     },
     "audioChannels": "2.0 Channel",
     "audioPower": "2 x 10 W full-range speakers",
@@ -10486,39 +6590,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "TPN24.8E OA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Wall colour adaptive Lounge light mode Ambilight Music AmbiSleep Sunrise Alarm Works with Philips Wireless Home Speakers Ambilight FTI Animation",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (metric)": "121 cm",
-          "Display": "4K Ultra HD OLED",
-          "Panel resolution": "3840 x 2160",
-          "Picture engine": "P5 AI Perfect Picture Engine",
-          "Diagonal screen size (inches)": "48"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 1920 x 1080p -24/25/30/50/ 60/100/120Hz 2560 x 1440 - 60/120Hz 3840 x 2160p - 24/25/30/50/60/100/120 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "TV Programme guide*": "8-day Electronic Programme Guide",
-          "Teletext": "1000 page Hypertext"
-        },
-        "Smart TV Features": {
-          "User Interaction": "Screen mirroring",
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Amazon Alexa built-in RC with Mic.",
-          "Smart Home experience": "Works with Amazon Alexa Works with Google Home Compatible with Matter Connects with Control4"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
         "Sound": {
           "Audio": "2.0 Channel",
           "Output power (RMS)": "2 x 10 W full-range speakers",
@@ -10541,28 +6613,6 @@ const ModelsData = [
           "HDR": "Dolby Vision HDR10 HDR10+ HDR10+ Adaptive HLG",
           "HDMI 1/2/3/4": "HDMI 2.1 full bandwidth 48 Gbps Up to 4K 120 HZ"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "1933314",
-          "Energy class for SDR": "F",
-          "On mode power demand for SDR": "60 kWh/1000h",
-          "Energy class for HDR": "G",
-          "On mode power demand for HDR": "63 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "OLED"
-        },
-        "Power": {
-          "Mains power": "OLED",
-          "Standby power consumption": "less than 0.5 W",
-          "Power Saving Features": "Auto switch-off timer Picture mute (for radio) Eco mode Light sensor"
-        },
-        "Accessories": {
-          "Included accessories": "Remote Control 2 x AAA Batteries Tabletop stand Power cord Quick start guide Legal and safety brochure"
-        },
-        "Design": {
-          "Colours of TV": "Metal bezel frame",
-          "Stand design": "Satin chrome stands"
-        },
         "Dimensions": {
           "Weight incl. Packaging": "16.8 kg",
           "Distance between 2 stands": "783 mm",
@@ -10575,55 +6625,18 @@ const ModelsData = [
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Wall colour adaptive Lounge light mode Ambilight Music AmbiSleep Sunrise Alarm Works with Philips Wireless Home Speakers Ambilight FTI Animation",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (metric)": "121 cm",
-        "Picture/Display :: Display": "4K Ultra HD OLED",
-        "Picture/Display :: Panel resolution": "3840 x 2160",
-        "Picture/Display :: Picture engine": "P5 AI Perfect Picture Engine",
-        "Picture/Display :: Diagonal screen size (inches)": "48",
-        "Display input resolution :: Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 1920 x 1080p -24/25/30/50/ 60/100/120Hz 2560 x 1440 - 60/120Hz 3840 x 2160p - 24/25/30/50/60/100/120 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: TV Programme guide*": "8-day Electronic Programme Guide",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Smart TV Features :: User Interaction": "Screen mirroring",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Amazon Alexa built-in RC with Mic.",
-        "Smart TV Features :: Smart Home experience": "Works with Amazon Alexa Works with Google Home Compatible with Matter Connects with Control4",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Sound :: Audio": "2.0 Channel",
         "Sound :: Output power (RMS)": "2 x 10 W full-range speakers",
-        "Sound :: Codec": "Dolby Digital MS12 V2.6.2 Dolby Atmos DTS:X",
-        "Sound :: Sound Enhancement": "Dolby Bass Enhancement Clear Dialogue A.I. Sound A.I. EQ Dolby Volume Leveller Night mode Sound Personalisation",
         "Connectivity :: Number of HDMI connections": "4",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "Remote control pass-through System audio control System standby One touch play",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ac, 2 x 2, Dual band Bluetooth 5.2",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI2",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 2 eARC/VRR/ALLM supported",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: Gaming": "ALLM HDMI VRR AMD FreeSync Premium Nvidia G-Sync compatible",
         "Supported HDMI video features :: HDR": "Dolby Vision HDR10 HDR10+ HDR10+ Adaptive HLG",
         "Supported HDMI video features :: HDMI 1/2/3/4": "HDMI 2.1 full bandwidth 48 Gbps Up to 4K 120 HZ",
-        "EU Energy card :: EPREL registration numbers": "1933314",
-        "EU Energy card :: Energy class for SDR": "F",
-        "EU Energy card :: On mode power demand for SDR": "60 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "G",
-        "EU Energy card :: On mode power demand for HDR": "63 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "OLED",
-        "Power :: Mains power": "OLED",
-        "Power :: Standby power consumption": "less than 0.5 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Picture mute (for radio) Eco mode Light sensor",
-        "Accessories :: Included accessories": "Remote Control 2 x AAA Batteries Tabletop stand Power cord Quick start guide Legal and safety brochure",
-        "Design :: Colours of TV": "Metal bezel frame",
-        "Design :: Stand design": "Satin chrome stands",
         "Dimensions :: Weight incl. Packaging": "16.8 kg",
         "Dimensions :: Distance between 2 stands": "783 mm",
         "Dimensions :: Wall-mount compatible": "300 x 300 mm",
@@ -10635,9 +6648,7 @@ const ModelsData = [
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "4",
-      "usbInputs": "2",
-      "officialSourceScore": "613",
-      "officialSourceCheckedAt": "2026-04-17T10:19:54.789Z"
+      "usbInputs": "2"
     },
     "audioChannels": "2.0 Channel",
     "audioPower": "2 x 10 W full-range speakers",
@@ -10704,44 +6715,7 @@ const ModelsData = [
     "features": {},
     "specs": {
       "chassis": "TPM24.1E OA",
-      "officialSourceDomain": "www.philips.co.uk",
       "technicalByCategory": {
-        "Ambilight": {
-          "Ambilight Features": "Wall colour adaptive Lounge light mode Game Mode Ambilight Music Sunrise Alarm AmbiSleep Ambilight FTI Animation Works with Philips Wireless Home Speakers",
-          "Ambilight Version": "3 sided"
-        },
-        "Picture/Display": {
-          "Diagonal screen size (inch)": "55 inch",
-          "Diagonal screen size (metric)": "139 cm",
-          "Display": "4K Ultra HD OLED",
-          "Panel resolution": "3840 x 2160",
-          "Native refresh rate": "120 Hz",
-          "Picture engine": "P5 AI Perfect Picture Engine",
-          "Picture enhancement": "Perfect Natural Motion Micro Dimming Perfect Dolby Vision HLG (Hybrid Log Gamma) CalMAN Ready IMAX enhanced mode HDR10+ Adaptive Film-maker mode",
-          "Multi-view": "Yes"
-        },
-        "Display input resolution": {
-          "Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60/100/120/144Hz 2560 x 1440 - 60/120/144Hz 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz"
-        },
-        "Tuner/Reception/Transmission": {
-          "Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-          "TV Programme guide*": "8-day Electronic Programme Guide",
-          "Teletext": "1000 page Hypertext"
-        },
-        "Smart TV Features": {
-          "Interactive TV": "HbbTV",
-          "Voice assistant*": "Google Assistant built in Works with Alexa RC with Mic.",
-          "Smart Home experience": "Works with Google assistant Works with Amazon Alexa Compatible with Matter Connects with Control4"
-        },
-        "Multimedia Applications": {
-          "Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-          "Music Playback Formats": "MP3, WAV, AAC, FLAC",
-          "Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-          "Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF"
-        },
-        "Processing": {
-          "Processing Power": "Quad Core"
-        },
         "Sound": {
           "Audio": "2.1 Channel",
           "Output power (RMS)": "Output power: 70 Watts (RMS)",
@@ -10767,28 +6741,6 @@ const ModelsData = [
           "HDMI 3/4": "HDMI 2.0",
           "HDR": "Dolby Vision HDR10 HDR10+ HDR10+ Adaptive HLG UHDA"
         },
-        "EU Energy card": {
-          "EPREL registration numbers": "1863616",
-          "Energy class for SDR": "G",
-          "On mode power demand for SDR": "84 kWh/1000h",
-          "Energy class for HDR": "F",
-          "On mode power demand for HDR": "77 kWh/1000h",
-          "Off mode power consumption": "n.a",
-          "Networked standby mode": "2.0 W",
-          "Panel technology used": "OLED"
-        },
-        "Power": {
-          "Mains power": "AC 220 - 240 V 50/60 Hz",
-          "Standby power consumption": "less than 0.3 W",
-          "Power Saving Features": "Auto switch-off timer Picture mute (for radio) Eco mode Light sensor"
-        },
-        "Accessories": {
-          "Included accessories": "Remote Control Tabletop stand Power cord Quick start guide Legal and safety brochure 1 x Li-on battery 1x USB-C cable for remote control charging"
-        },
-        "Design": {
-          "Colours of TV": "Metal bezel frame",
-          "Stand design": "Satin chrome stand"
-        },
         "Dimensions": {
           "Stand height to TV bottom edge": "72 mm",
           "Wall-mount compatible": "300 x 300 mm",
@@ -10799,68 +6751,23 @@ const ModelsData = [
           "Weight of TV with stand": "20.8 kg",
           "Weight incl. packaging": "25.8 kg",
           "Stand (H x W x D)": "70 x 500 x 179 mm"
-        },
-        "Google TV": {
-          "Memory size (Flash)": "16 GB*",
-          "Pre-installed apps": "Disney+, Apple TV, Netflix, YouTube, Amazon Prime video, Aurora, NFT, STB controller"
         }
       },
       "technicalFlat": {
-        "Ambilight :: Ambilight Features": "Wall colour adaptive Lounge light mode Game Mode Ambilight Music Sunrise Alarm AmbiSleep Ambilight FTI Animation Works with Philips Wireless Home Speakers",
-        "Ambilight :: Ambilight Version": "3 sided",
-        "Picture/Display :: Diagonal screen size (inch)": "55 inch",
-        "Picture/Display :: Diagonal screen size (metric)": "139 cm",
-        "Picture/Display :: Display": "4K Ultra HD OLED",
-        "Picture/Display :: Panel resolution": "3840 x 2160",
-        "Picture/Display :: Native refresh rate": "120 Hz",
-        "Picture/Display :: Picture engine": "P5 AI Perfect Picture Engine",
-        "Picture/Display :: Picture enhancement": "Perfect Natural Motion Micro Dimming Perfect Dolby Vision HLG (Hybrid Log Gamma) CalMAN Ready IMAX enhanced mode HDR10+ Adaptive Film-maker mode",
-        "Picture/Display :: Multi-view": "Yes",
-        "Display input resolution :: Resolution-Refresh rate": "576 p - 50 Hz 640 x 480 - 60 Hz 720 p - 50 Hz, 60 Hz 1920 x 1080p -24/25/30/50/ 60/100/120/144Hz 2560 x 1440 - 60/120/144Hz 3840 x 2160p - 24/25/30/50/60/100/120/144 Hz",
-        "Tuner/Reception/Transmission :: Digital TV": "DVB-T/T2/T2-HD/C/S/S2",
-        "Tuner/Reception/Transmission :: TV Programme guide*": "8-day Electronic Programme Guide",
-        "Tuner/Reception/Transmission :: Teletext": "1000 page Hypertext",
-        "Smart TV Features :: Interactive TV": "HbbTV",
-        "Smart TV Features :: Voice assistant*": "Google Assistant built in Works with Alexa RC with Mic.",
-        "Smart TV Features :: Smart Home experience": "Works with Google assistant Works with Amazon Alexa Compatible with Matter Connects with Control4",
-        "Multimedia Applications :: Video Playback Formats": "AVI, MKV, HEVC, H.264/MPEG-4 AVC, MPEG1, MPEG2, MPEG4, VP9, HEVC (H.265), AV1",
-        "Multimedia Applications :: Music Playback Formats": "MP3, WAV, AAC, FLAC",
-        "Multimedia Applications :: Subtitles Formats Support": "SRT, SMI, SSA, SUB, ASS, TXT",
-        "Multimedia Applications :: Picture Playback Formats": "JPEG, GIF, PNG, BMP, HEIF",
         "Processing :: Processing Power": "Quad Core",
         "Sound :: Audio": "2.1 Channel",
         "Sound :: Output power (RMS)": "Output power: 70 Watts (RMS)",
-        "Sound :: Speaker configuration": "10 W x 4 mid-high speaker, 30 W subwoofer",
-        "Sound :: Codec": "Dolby Digital MS12 V2.6.2 DTS:X",
-        "Sound :: Sound Enhancement": "Dolby Atmos Clear Dialogue A.I. Sound A.I. EQ Dolby Volume Leveller Night mode Dolby Bass Enhancement Room Calibration DTS Play-Fi",
         "Connectivity :: Number of HDMI connections": "4",
         "Connectivity :: HDMI features": "4K Audio Return Channel",
         "Connectivity :: EasyLink (HDMI-CEC)": "Remote control pass-through System audio control System standby One touch play",
         "Connectivity :: Number of USBs": "2",
-        "Connectivity :: Wireless connection": "Wi-Fi 802.11ax, 2x2, Dual band Bluetooth 5.2 Wi-Fi 6",
-        "Connectivity :: Other connections": "Common Interface Plus (CI+) Ethernet-LAN RJ-45 Digital audio out (optical) Headphone out Service connector Satellite Connector",
         "Connectivity :: HDCP 2.3": "Yes on all HDMI",
         "Connectivity :: HDMI ARC": "Yes on HDMI2",
         "Connectivity :: HDMI 2.1 features": "eARC on HDMI 2 eARC/VRR/ALLM supported Max 48 Gbps data rate",
-        "Connectivity :: EasyLink 2.0": "External setting via TV UI HDMI-CEC for Philips TV/SB",
         "Supported HDMI video features :: HDMI 1/2": "HDMI 2.1 full bandwidth 48 Gbps up to 4K 120 Hz",
         "Supported HDMI video features :: Gaming": "ALLM Dolby Vision Game HDMI VRR HGiG AMD FreeSync Premium Nvidia G-Sync compatible",
         "Supported HDMI video features :: HDMI 3/4": "HDMI 2.0",
         "Supported HDMI video features :: HDR": "Dolby Vision HDR10 HDR10+ HDR10+ Adaptive HLG UHDA",
-        "EU Energy card :: EPREL registration numbers": "1863616",
-        "EU Energy card :: Energy class for SDR": "G",
-        "EU Energy card :: On mode power demand for SDR": "84 kWh/1000h",
-        "EU Energy card :: Energy class for HDR": "F",
-        "EU Energy card :: On mode power demand for HDR": "77 kWh/1000h",
-        "EU Energy card :: Off mode power consumption": "n.a",
-        "EU Energy card :: Networked standby mode": "2.0 W",
-        "EU Energy card :: Panel technology used": "OLED",
-        "Power :: Mains power": "AC 220 - 240 V 50/60 Hz",
-        "Power :: Standby power consumption": "less than 0.3 W",
-        "Power :: Power Saving Features": "Auto switch-off timer Picture mute (for radio) Eco mode Light sensor",
-        "Accessories :: Included accessories": "Remote Control Tabletop stand Power cord Quick start guide Legal and safety brochure 1 x Li-on battery 1x USB-C cable for remote control charging",
-        "Design :: Colours of TV": "Metal bezel frame",
-        "Design :: Stand design": "Satin chrome stand",
         "Dimensions :: Stand height to TV bottom edge": "72 mm",
         "Dimensions :: Wall-mount compatible": "300 x 300 mm",
         "Dimensions :: TV without stand (H x W x D)": "701 x 1225 x 113 mm",
@@ -10869,15 +6776,11 @@ const ModelsData = [
         "Dimensions :: Weight of TV without stand": "17.0 kg",
         "Dimensions :: Weight of TV with stand": "20.8 kg",
         "Dimensions :: Weight incl. packaging": "25.8 kg",
-        "Dimensions :: Stand (H x W x D)": "70 x 500 x 179 mm",
-        "Google TV :: Memory size (Flash)": "16 GB*",
-        "Google TV :: Pre-installed apps": "Disney+, Apple TV, Netflix, YouTube, Amazon Prime video, Aurora, NFT, STB controller"
+        "Dimensions :: Stand (H x W x D)": "70 x 500 x 179 mm"
       },
       "ambilightVersion": "3 sided",
       "hdmiInputs": "4",
-      "usbInputs": "2",
-      "officialSourceScore": "788",
-      "officialSourceCheckedAt": "2026-04-17T09:48:56.217Z"
+      "usbInputs": "2"
     },
     "audioChannels": "2.1 Channel",
     "audioPower": "Output power: 70 Watts (RMS)",
@@ -12681,6 +8584,1174 @@ const ModelsData = [
     "wifiStandard": "",
     "bluetoothVersion": "",
     "vrrMaxRefreshRate": ""
+  },
+  {
+    "modelName": "65OLED936",
+    "year": 2021,
+    "availableSizes": [
+      "65"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 15 /4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "65OLED856",
+    "year": 2021,
+    "availableSizes": [
+      "65"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 15 /4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "65OLED806",
+    "year": 2021,
+    "availableSizes": [
+      "65"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 15 /4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "65OLED706",
+    "year": 2021,
+    "availableSizes": [
+      "65"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 15 /4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "50PUS7406",
+    "year": 2021,
+    "availableSizes": [
+      "50"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x18/4pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~20"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "50PUS7506",
+    "year": 2021,
+    "availableSizes": [
+      "50"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x18/4pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~20"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "50PUS7556",
+    "year": 2021,
+    "availableSizes": [
+      "50"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x18/4pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~20"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "55PUS7906",
+    "year": 2021,
+    "availableSizes": [
+      "55"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x18/4pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "55PUS7956",
+    "year": 2021,
+    "availableSizes": [
+      "55"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x18/4pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "55PUS8106",
+    "year": 2021,
+    "availableSizes": [
+      "55"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x18/4pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "32PFS6906",
+    "year": 2021,
+    "availableSizes": [
+      "32"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x16/4pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~12"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "43PUS7406",
+    "year": 2021,
+    "availableSizes": [
+      "43"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x16/4pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~12"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "43PUS7506",
+    "year": 2021,
+    "availableSizes": [
+      "43"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x16/4pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~12"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "43PUS7556",
+    "year": 2021,
+    "availableSizes": [
+      "43"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x16/4pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~12"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "65OLED986",
+    "year": 2021,
+    "availableSizes": [
+      "65"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x16/9PCs | M4x12/4PCS",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "70PUS8506",
+    "year": 2021,
+    "availableSizes": [
+      "70"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 22 / 6PCs",
+      "vesaScrewType": "M8",
+      "vesaScrewLengthMm": "12~25"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "70PUS8536",
+    "year": 2021,
+    "availableSizes": [
+      "70"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 22 / 6PCs",
+      "vesaScrewType": "M8",
+      "vesaScrewLengthMm": "12~25"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "70PUS8546",
+    "year": 2021,
+    "availableSizes": [
+      "70"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 22 / 6PCs",
+      "vesaScrewType": "M8",
+      "vesaScrewLengthMm": "12~25"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "70PUS8556",
+    "year": 2021,
+    "availableSizes": [
+      "70"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 22 / 6PCs",
+      "vesaScrewType": "M8",
+      "vesaScrewLengthMm": "12~25"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "70PUS9006",
+    "year": 2021,
+    "availableSizes": [
+      "70"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 22 / 6PCs",
+      "vesaScrewType": "M8",
+      "vesaScrewLengthMm": "12~25"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "70PUS7906",
+    "year": 2021,
+    "availableSizes": [
+      "70"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 22 / 6PCs",
+      "vesaScrewType": "M8",
+      "vesaScrewLengthMm": "12~25"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "70PUS7956",
+    "year": 2021,
+    "availableSizes": [
+      "70"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 22 / 6PCs",
+      "vesaScrewType": "M8",
+      "vesaScrewLengthMm": "12~25"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "55OLED706",
+    "year": 2021,
+    "availableSizes": [
+      "55"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 15 /4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "55OLED806",
+    "year": 2021,
+    "availableSizes": [
+      "55"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 15 /4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "55OLED856",
+    "year": 2021,
+    "availableSizes": [
+      "55"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 15 /4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "55OLED936",
+    "year": 2021,
+    "availableSizes": [
+      "55"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 15 /4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "65PUS8506",
+    "year": 2021,
+    "availableSizes": [
+      "65"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4 x 22 / 4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "12~20"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "65PUS8536",
+    "year": 2021,
+    "availableSizes": [
+      "65"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4 x 22 / 4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "12~20"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "65PUS8546",
+    "year": 2021,
+    "availableSizes": [
+      "65"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4 x 22 / 4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "12~20"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "65PUS8556",
+    "year": 2021,
+    "availableSizes": [
+      "65"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4 x 22 / 4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "12~20"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "65PUS9206",
+    "year": 2021,
+    "availableSizes": [
+      "65"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4 x 20 / 4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "12~18"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "65PUS7906",
+    "year": 2021,
+    "availableSizes": [
+      "65"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4 x 22 / 4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "12~20"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "65PUS7956",
+    "year": 2021,
+    "availableSizes": [
+      "65"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4 x 22 / 4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "12~20"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "65PUS8106",
+    "year": 2021,
+    "availableSizes": [
+      "65"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4 x 22 / 4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "12~20"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "75PUS8506",
+    "year": 2021,
+    "availableSizes": [
+      "75"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 22 / 6PCs",
+      "vesaScrewType": "M8",
+      "vesaScrewLengthMm": "12~25"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "75PUS8536",
+    "year": 2021,
+    "availableSizes": [
+      "75"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 22 / 6PCs",
+      "vesaScrewType": "M8",
+      "vesaScrewLengthMm": "12~25"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "75PUS8546",
+    "year": 2021,
+    "availableSizes": [
+      "75"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 22 / 6PCs",
+      "vesaScrewType": "M8",
+      "vesaScrewLengthMm": "12~25"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "75PUS8556",
+    "year": 2021,
+    "availableSizes": [
+      "75"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 22 / 6PCs",
+      "vesaScrewType": "M8",
+      "vesaScrewLengthMm": "12~25"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "75PUS7906",
+    "year": 2021,
+    "availableSizes": [
+      "75"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 22 / 6PCs",
+      "vesaScrewType": "M8",
+      "vesaScrewLengthMm": "12~25"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "65PUS7406",
+    "year": 2021,
+    "availableSizes": [
+      "65"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4 x 20 / 4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "12~18"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "65PUS7506",
+    "year": 2021,
+    "availableSizes": [
+      "65"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4 x 20 / 4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "12~18"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "65PUS7556",
+    "year": 2021,
+    "availableSizes": [
+      "65"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4 x 20 / 4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "12~18"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "55PUS7506",
+    "year": 2021,
+    "availableSizes": [
+      "55"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4 x 20 / 4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~20"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "55PUS7556",
+    "year": 2021,
+    "availableSizes": [
+      "55"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4 x 20 / 4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~20"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "55PUS7406",
+    "year": 2021,
+    "availableSizes": [
+      "55"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4 x 20 / 4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~20"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "48OLED806",
+    "year": 2021,
+    "availableSizes": [
+      "48"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 15 /4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "48OLED936",
+    "year": 2021,
+    "availableSizes": [
+      "48"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 15 /4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "77OLED806",
+    "year": 2021,
+    "availableSizes": [
+      "77"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 20 /6 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "65PML9636",
+    "year": 2021,
+    "availableSizes": [
+      "65"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5 x 15 /4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "12~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "65PML9506",
+    "year": 2021,
+    "availableSizes": [
+      "65"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4 x 22 /4 PCs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "12~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "75PML9636",
+    "year": 2021,
+    "availableSizes": [
+      "75"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5x16 / 14Pcs",
+      "vesaScrewType": "M8",
+      "vesaScrewLengthMm": "20~25"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "75PML9506",
+    "year": 2021,
+    "availableSizes": [
+      "75"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M5x22L / 4Pcs",
+      "vesaScrewType": "M8",
+      "vesaScrewLengthMm": "20~25"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "50PUS8506",
+    "year": 2021,
+    "availableSizes": [
+      "50"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x12/4pcs | M5x16/3pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "50PUS8536",
+    "year": 2021,
+    "availableSizes": [
+      "50"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x12/4pcs | M5x16/3pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "50PUS8546",
+    "year": 2021,
+    "availableSizes": [
+      "50"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x12/4pcs | M5x16/3pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "50PUS8556",
+    "year": 2021,
+    "availableSizes": [
+      "50"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x12/4pcs | M5x16/3pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "50PUS9006",
+    "year": 2021,
+    "availableSizes": [
+      "50"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x12/4pcs | M5x16/3pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "50PUS7906",
+    "year": 2021,
+    "availableSizes": [
+      "50"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x18/4pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "50PUS7956",
+    "year": 2021,
+    "availableSizes": [
+      "50"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x18/4pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "50PUS8106",
+    "year": 2021,
+    "availableSizes": [
+      "50"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x18/4pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "43PUS8506",
+    "year": 2021,
+    "availableSizes": [
+      "43"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x12/4pcs | M5x15/3pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~12"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "43PUS8536",
+    "year": 2021,
+    "availableSizes": [
+      "43"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x12/4pcs | M5x15/3pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~12"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "43PUS8546",
+    "year": 2021,
+    "availableSizes": [
+      "43"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x12/4pcs | M5x15/3pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~12"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "43PUS8556",
+    "year": 2021,
+    "availableSizes": [
+      "43"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x12/4pcs | M5x15/3pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~12"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "43PUS7906",
+    "year": 2021,
+    "availableSizes": [
+      "43"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "Q4 x 16 / 4 Pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~12"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "43PUS7956",
+    "year": 2021,
+    "availableSizes": [
+      "43"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "Q4 x 16 / 4 Pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~12"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "43PUS8106",
+    "year": 2021,
+    "availableSizes": [
+      "43"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "Q4 x 16 / 4 Pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~12"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "55PUS9206",
+    "year": 2021,
+    "availableSizes": [
+      "55"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x18/4pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "58PUS8506",
+    "year": 2021,
+    "availableSizes": [
+      "58"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x18/4pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "58PUS8536",
+    "year": 2021,
+    "availableSizes": [
+      "58"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x18/4pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "58PUS8546",
+    "year": 2021,
+    "availableSizes": [
+      "58"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x18/4pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "58PUS8556",
+    "year": 2021,
+    "availableSizes": [
+      "58"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x18/4pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "58PUS9006",
+    "year": 2021,
+    "availableSizes": [
+      "58"
+    ],
+    "osProfileId": "Unknown",
+    "panelType": "Unknown",
+    "features": {},
+    "specs": {
+      "standMountScrew": "M4x18/4pcs",
+      "vesaScrewType": "M6",
+      "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
   }
 ];
 if (typeof window !== "undefined") {

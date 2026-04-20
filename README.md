@@ -16,7 +16,6 @@ Open `index.html` directly in browser or use any static server.
 - `app.js`: UI state, rendering, filtering, search, modals
 - `data/`: data sources consumed by UI
 - `scripts/`: maintenance and data quality scripts
-	- `scripts/migrate-models.js`
 	- `scripts/normalize-models-data.js`
 	- `scripts/validate-models-data.js`
 	- `scripts/audit-models-language.js`
@@ -84,7 +83,6 @@ node scripts/check-data-quality.js
 
 ### P2 - Data Completeness (high value)
 - [ ] Audit `data/model-media.js` for missing `remoteImageUrl` or `portsImageUrl` and prepare a short gap list.
-- [ ] Add/refresh media for highest-priority models used most often by agents.
 
 ### P2 - UX Regression Smoke (high value)
 - [ ] Quick manual test of session restore flow (browse/detail/article after refresh).

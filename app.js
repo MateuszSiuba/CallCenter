@@ -25,7 +25,8 @@
 					...((Array.isArray(window.KnowledgeBaseData) ? window.KnowledgeBaseData : [])),
 					...((typeof KnowledgeBaseData !== "undefined" && Array.isArray(KnowledgeBaseData)) ? KnowledgeBaseData : [])
 				],
-								ModelMediaData: window.ModelMediaData || (typeof ModelMediaData !== "undefined" ? ModelMediaData : {})
+								ModelMediaData: window.ModelMediaData || (typeof ModelMediaData !== "undefined" ? ModelMediaData : {}),
+					ModelPlatformChassisData: window.ModelPlatformChassisData || (typeof ModelPlatformChassisData !== "undefined" ? ModelPlatformChassisData : [])
 			};
 
 			const storageKeyCountry = "support-hub-country";
@@ -134,13 +135,15 @@
 				selectedSizeByModelId: {},
 				specDetailsContext: null,
 				articleViewContext: null,
-				isRestoringSession: false
+				isRestoringSession: false,
+				modelPlatformChassisLookup: null
 			};
 
-			const changelogEntries = [
+			const defaultChangelogEntries = [
 				{
 					id: "2026-04-15-v094",
 					date: "15 Apr 2026",
+					dateIso: "2026-04-15",
 					version: "v0.9.4",
 					title: "Changelog UX Refactor",
 					details: [
@@ -148,30 +151,38 @@
 						"Changelog Panel: Converted flat list into expandable accordion entries.",
 						"Interaction: Added chevron rotation and toggle behavior for each entry."
 					]
-				},
-				{
-					id: "2026-04-15-v093",
-					date: "15 Apr 2026",
-					version: "v0.9.3",
-					title: "Omni-Search Expansion",
-					details: [
-						"Search Index: Added support for ModelsData, KnowledgeBaseData, and PoliciesData.",
-						"Search UI: Added categorized dropdown (TV Models, Knowledge Base, Contacts and Policies).",
-						"Renderer: Added article/policy view mode when non-model results are selected."
-					]
-				},
-				{
-					id: "2026-04-14-v092",
-					date: "14 Apr 2026",
-					version: "v0.9.2",
-					title: "Detail View Cognitive Load Reduction",
-					details: [
-						"Detail View: Split content into strict single-pane tabs.",
-						"Tabs Added: Troubleshooting, Policies, and Gallery placeholders.",
-						"Layout: Hides generic model results when a specific model detail is opened."
-					]
 				}
 			];
+
+			const externalChangelogEntries = Array.isArray(window.ChangelogEntriesData)
+				? window.ChangelogEntriesData
+				: ((typeof ChangelogEntriesData !== "undefined" && Array.isArray(ChangelogEntriesData)) ? ChangelogEntriesData : []);
+
+			const changelogEntries = (externalChangelogEntries.length > 0 ? externalChangelogEntries : defaultChangelogEntries)
+				.map((entry, index) => {
+					const parsedDate = Date.parse(safeText(entry && entry.dateIso, ""));
+					return {
+						id: safeText(entry && entry.id, "changelog-entry-" + String(index)),
+						date: safeText(entry && entry.date, "Date not set"),
+						dateIso: Number.isFinite(parsedDate) ? new Date(parsedDate).toISOString() : "",
+						version: safeText(entry && entry.version, "v0.0.0"),
+						title: safeText(entry && entry.title, "Untitled update"),
+						details: safeList(entry && entry.details)
+							.map((detail) => safeText(detail, ""))
+							.filter(Boolean)
+					};
+				})
+				.sort((a, b) => {
+					const tsA = a.dateIso ? Date.parse(a.dateIso) : 0;
+					const tsB = b.dateIso ? Date.parse(b.dateIso) : 0;
+					if (tsA !== tsB) {
+						return tsB - tsA;
+					}
+					return b.id.localeCompare(a.id);
+				});
+
+			const changelogVisibleLimit = 4;
+			const changelogVisibleEntries = changelogEntries.slice(0, changelogVisibleLimit);
 
 			const changelogSeenStorageKey = "support-hub-changelog-seen-v1";
 			const seenChangelogIds = new Set();
@@ -211,7 +222,7 @@
 					return;
 				}
 
-				const allSeen = changelogEntries.every((entry) => seenChangelogIds.has(entry.id));
+				const allSeen = changelogVisibleEntries.every((entry) => seenChangelogIds.has(entry.id));
 				changelogUnreadDot.classList.toggle("hidden", allSeen);
 			}
 
@@ -1419,6 +1430,38 @@
 				return uniqueRows;
 			}
 
+			function collectDimensionsScrewRows(model) {
+				const specs = getModelSpecs(model);
+				const rows = [];
+
+				const standMountScrew = safeText(specs.standMountScrew, "");
+				if (standMountScrew) {
+					rows.push({
+						category: "Mounting Screws",
+						label: "Stand Mount Screw",
+						value: standMountScrew
+					});
+				}
+
+				const vesaScrewType = safeText(specs.vesaScrewType, "");
+				const rawVesaLength = safeText(specs.vesaScrewLengthMm, "");
+				let normalizedVesaLength = rawVesaLength.replace(/\s+/g, "").replace(/~/g, "-");
+				if (normalizedVesaLength && !/mm$/i.test(normalizedVesaLength)) {
+					normalizedVesaLength += "mm";
+				}
+
+				const vesaScrewCombined = [vesaScrewType, normalizedVesaLength].filter(Boolean).join(" ");
+				if (vesaScrewCombined) {
+					rows.push({
+						category: "Mounting Screws",
+						label: "VESA Screw",
+						value: vesaScrewCombined
+					});
+				}
+
+				return rows;
+			}
+
 			function renderSpecDetailsModalFromContext() {
 				if (!specDetailsModal || !specDetailsTitle || !specDetailsSummary || !specDetailsBody) {
 					return;
@@ -1474,7 +1517,32 @@
 					}
 				}
 
-				const uniqueRows = collectUniqueTechnicalRows(scopedModel, selectedConfig);
+				let uniqueRows = collectUniqueTechnicalRows(scopedModel, selectedConfig);
+				if (context.detailType === "connectivity") {
+					const hiddenConnectivityFieldPatterns = [
+						/^Number of HDMI connections$/i,
+						/^Number of USBs?$/i,
+						/^HDMI ARC$/i,
+						/^HDMI 2\.1 features$/i,
+						/^EasyLink 2\.0$/i
+					];
+
+					uniqueRows = uniqueRows.filter((row) => {
+						const label = safeText(row && row.label, "");
+						return !hiddenConnectivityFieldPatterns.some((pattern) => pattern.test(label));
+					});
+				}
+				if (context.detailType === "dimensions") {
+					const screwRows = collectDimensionsScrewRows(scopedModel || model);
+					screwRows.forEach((row) => {
+						const duplicate = uniqueRows.some((existing) => {
+							return existing.category === row.category && existing.label === row.label && existing.value === row.value;
+						});
+						if (!duplicate) {
+							uniqueRows.push(row);
+						}
+					});
+				}
 				const modalModelName = getModelName(scopedModel || model);
 				const modalTitleSuffix = context.detailType === "dimensions" && selectedSizeLabel
 					? modalModelName + " (" + selectedSizeLabel + ")"
@@ -1528,6 +1596,83 @@
 
 			function getModelName(model) {
 				return safeText(model && model.modelName, "-");
+			}
+
+			function normalizeModelLookupName(value) {
+				return safeText(value, "")
+					.toUpperCase()
+					.replace(/\s+/g, "")
+					.replace(/_/g, "")
+					.replace(/\/.*$/, "");
+			}
+
+			function getModelLookupKeys(modelName, yearValue) {
+				const normalized = normalizeModelLookupName(modelName);
+				if (!normalized) {
+					return [];
+				}
+
+				const yearNumber = Number(yearValue);
+				const keys = [];
+
+				if (Number.isFinite(yearNumber) && yearNumber > 0) {
+					keys.push(String(yearNumber) + "|" + normalized);
+				}
+
+				keys.push("*|" + normalized);
+
+				return keys;
+			}
+
+			function buildModelPlatformChassisLookup(records) {
+				const lookup = new Map();
+
+				const mergeEntry = (key, nextValue) => {
+					const existing = lookup.get(key) || { platform: "", chassis: "" };
+					lookup.set(key, {
+						platform: existing.platform || nextValue.platform,
+						chassis: existing.chassis || nextValue.chassis
+					});
+				};
+
+				safeList(records).forEach((record) => {
+					const modelName = safeText(record && record.modelName, "");
+					const year = Number(record && record.year);
+					const platform = safeText(record && record.platform, "");
+					const chassis = safeText(record && record.chassis, "");
+
+					if (!modelName || (!platform && !chassis)) {
+						return;
+					}
+
+					const keys = getModelLookupKeys(modelName, year);
+					if (keys.length === 0) {
+						return;
+					}
+
+					const value = { platform, chassis };
+					keys.forEach((key) => {
+						mergeEntry(key, value);
+					});
+				});
+
+				return lookup;
+			}
+
+			function getModelLookupMeta(model) {
+				if (!model || !(state.modelPlatformChassisLookup instanceof Map)) {
+					return null;
+				}
+
+				const keys = getModelLookupKeys(getModelName(model), getModelYearNumber(model));
+				for (let index = 0; index < keys.length; index += 1) {
+					const value = state.modelPlatformChassisLookup.get(keys[index]);
+					if (value) {
+						return value;
+					}
+				}
+
+				return null;
 			}
 
 			function getSafeHttpUrl(value) {
@@ -1608,7 +1753,23 @@
 			}
 
 			function getModelChassis(model) {
-				return safeText(getModelSpecs(model).chassis, "");
+				const directValue = safeText(getModelSpecs(model).chassis, "");
+				if (directValue) {
+					return directValue;
+				}
+
+				const lookupValue = getModelLookupMeta(model);
+				return safeText(lookupValue && lookupValue.chassis, "");
+			}
+
+			function getModelPlatform(model) {
+				const directValue = safeText(getModelSpecs(model).platform, "");
+				if (directValue) {
+					return directValue;
+				}
+
+				const lookupValue = getModelLookupMeta(model);
+				return safeText(lookupValue && lookupValue.platform, "");
 			}
 
 			function normalizeModelSize(value) {
@@ -1977,19 +2138,112 @@
 			}
 
 			function renderTechnicalRowsTable(rows, emptyMessage) {
+				function normalizeTechnicalValue(value) {
+					const text = safeText(value, "-");
+					return text.replace(/\bmm\s+mm\b/gi, "mm").replace(/\s{2,}/g, " ").trim();
+				}
+
+				function escapeRegex(value) {
+					return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+				}
+
+				function formatTechnicalListValue(category, label, value) {
+					const normalized = normalizeTechnicalValue(value);
+					if (!normalized || normalized === "-" || normalized.includes("|")) {
+						return normalized;
+					}
+
+					const categoryText = safeText(category, "");
+					const labelText = safeText(label, "");
+					const shouldFormat = /^(Sound|Connectivity|Supported HDMI video features)$/i.test(categoryText)
+						|| /(codec|sound enhancement|headphone features|hdmi features|hdmi 2\.1 features|easylink|gaming|hdr)/i.test(labelText);
+
+					if (!shouldFormat) {
+						return normalized;
+					}
+
+					const commaParts = normalized
+						.split(",")
+						.map((part) => safeText(part, ""))
+						.filter(Boolean);
+
+					if (commaParts.length >= 2) {
+						return commaParts.join(" | ");
+					}
+
+					const knownListTerms = [
+						"Dolby Media Intelligence",
+						"Personal Vocal Boost",
+						"Bass Enhancement",
+						"Room Calibration",
+						"Hearing Profile",
+						"Night Mode",
+						"Night mode",
+						"Clear Dialogue",
+						"Dialogue",
+						"Equalizer",
+						"All Sound Style",
+						"Entertainment",
+						"Spatial Music",
+						"Original",
+						"Music",
+						"AVL Mode",
+						"AI mode",
+						"DTS Play-Fi",
+						"DTS:X",
+						"Dolby Atmos",
+						"Dolby Digital",
+						"Dolby Vision 2 Max",
+						"Dolby Vision",
+						"HDR10+ Compatible",
+						"HDR10+ Adaptive",
+						"HDR10+",
+						"HDR10",
+						"HLG",
+						"One touch play",
+						"Remote control pass-through",
+						"System audio control",
+						"System standby",
+						"External setting via TV UI",
+						"HDMI-CEC for Philips TV/SB",
+						"4K Audio Return Channel",
+						"Audio Return Channel",
+						"eARC",
+						"VRR",
+						"ALLM"
+					];
+
+					const knownTermsPattern = new RegExp(
+						knownListTerms
+							.map((term) => escapeRegex(term))
+							.sort((a, b) => b.length - a.length)
+							.join("|"),
+						"gi"
+					);
+
+					const matches = normalized.match(knownTermsPattern) || [];
+					const matchedLength = matches.reduce((sum, item) => sum + item.length, 0);
+					if (matches.length >= 2 && matchedLength >= normalized.length * 0.45) {
+						return matches.map((item) => safeText(item, "")).filter(Boolean).join(" | ");
+					}
+
+					return normalized;
+				}
+
 				const groupedRowsByCategory = new Map();
 				const orderedCategories = [];
 
 				safeList(rows).forEach((row) => {
 					const category = safeText(row && row.category, "General");
+						const label = safeText(row && row.label, "Value");
 					if (!groupedRowsByCategory.has(category)) {
 						groupedRowsByCategory.set(category, []);
 						orderedCategories.push(category);
 					}
 
 					groupedRowsByCategory.get(category).push({
-						label: safeText(row && row.label, "Value"),
-						value: safeText(row && row.value, "-")
+							label,
+							value: formatTechnicalListValue(category, label, row && row.value)
 					});
 				});
 
@@ -2252,6 +2506,10 @@
 					return [];
 				}
 
+				if (!index || !(index.tokenMap instanceof Map) || !(index.entriesById instanceof Map) || !(index.vectors instanceof Map)) {
+					return [];
+				}
+
 				const normalizedQuery = normalizeText(query);
 				if (!normalizedQuery) {
 					return [];
@@ -2281,11 +2539,15 @@
 				const ranked = candidates
 					.map((entry) => {
 						const vector = index.vectors.get(entry.id);
+						if (!vector) {
+							return null;
+						}
 						return {
 							entry,
 							score: scoreEntry(entry, vector, normalizedQuery, queryTokens)
 						};
 					})
+					.filter(Boolean)
 					.filter((item) => item.score > 0)
 					.sort((a, b) => b.score - a.score)
 					.slice(0, 14)
@@ -2300,10 +2562,11 @@
 					const modelName = getModelName(model);
 					const commercialName = getModelCommercialName(model);
 					const osName = getModelOS(model);
+					const platform = getModelPlatform(model);
 					const panelType = getModelPanel(model);
 					const chassis = getModelChassis(model);
 					const year = getModelYear(model);
-					const subtitle = joinNonEmpty([year, osName, panelType, chassis], " | ");
+					const subtitle = joinNonEmpty([year, osName, platform, panelType, chassis], " | ");
 
 					return {
 					id: "model:" + modelKey,
@@ -2317,6 +2580,7 @@
 						commercialName,
 						panelType,
 						osName,
+						platform,
 						chassis,
 						getModelVesa(model),
 						...getModelSizes(model),
@@ -2324,7 +2588,7 @@
 						...(model.aliases || []),
 						...(model.keywords || [])
 					],
-					identifiers: [modelName, chassis, ...getModelSizes(model), ...(model.aliases || [])],
+					identifiers: [modelName, platform, chassis, ...getModelSizes(model), ...(model.aliases || [])],
 					payload: { modelId: modelKey }
 					};
 				});
@@ -2668,10 +2932,10 @@
 						+ "<span class=\"rounded-full border border-slate-200 bg-white px-2 py-0.5 text-xs font-semibold text-slate-600\">" + getModelYear(model) + "</span>"
 						+ "</div>"
 						+ "<p class=\"mt-1 text-sm font-semibold text-slate-700\">" + safeText(getModelCommercialName(model), "-") + "</p>"
+						+ "<p class=\"mt-2 text-xs text-slate-500\">Platform: " + safeText(getModelPlatform(model), "-") + "</p>"
 						+ "<p class=\"mt-2 text-xs text-slate-500\">Chassis: " + safeText(getModelChassis(model), "-") + "</p>"
 						+ "<div class=\"mt-3 flex flex-wrap gap-2\">"
 						+ "<span class=\"rounded-full border border-cyan-200 bg-cyan-50 px-2 py-0.5 text-xs font-semibold text-brand-700\">" + getModelOS(model) + "</span>"
-						+ "<span class=\"rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs font-semibold text-slate-700\">" + getModelPanel(model) + "</span>"
 						+ "</div>";
 
 					card.addEventListener("click", () => {
@@ -2759,9 +3023,7 @@
 				const standardSpecs = getModelStandardSpecs(sizeScopedModel);
 				const withStandDimensions = getModelTechnicalValue(dimensionsModel, [/Telewizor z podstawą/i, /TV with stand/i]);
 				const withoutStandDimensions = getModelTechnicalValue(dimensionsModel, [/Telewizor bez podstawy/i, /TV without stand/i]);
-				const packagedDimensions = getModelTechnicalValue(dimensionsModel, [/Wymiary opakowania/i, /Packaged dimensions/i]);
 				const dimensionsWeight = getModelTechnicalValue(dimensionsModel, [/Waga telewizora/i, /Waga z opakowaniem/i, /Weight/i]);
-				const audioProcessing = getModelTechnicalValue(sizeScopedModel, [/Przetwarzanie/i, /Processing/i, /Dolby/i, /DTS/i]);
 				const vesaStandard = getModelVesa(sizeScopedModel);
 				const sizeLabel = displayedSize !== "-" ? displayedSize : "-";
 				const allSizesLabel = formatModelSizesWithInches(allSizes) || "-";
@@ -2784,6 +3046,7 @@
 					+ "<dl class=\"mt-3 space-y-2 text-sm\">"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Panel</dt><dd class=\"font-semibold text-slate-800\">" + getModelPanel(sizeScopedModel) + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">OS</dt><dd class=\"font-semibold text-slate-800\">" + getModelOS(sizeScopedModel) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Platform</dt><dd class=\"font-semibold text-slate-800\">" + safeText(getModelPlatform(sizeScopedModel), "-") + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Chassis</dt><dd class=\"font-semibold text-slate-800\">" + getModelChassis(sizeScopedModel) + "</dd></div>"
 					+ "</dl>"
 					+ "</div>"
@@ -2801,7 +3064,6 @@
 					+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Channels</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.audioChannels, "-") + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Power</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.audioPower, "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Processing</dt><dd class=\"font-semibold text-slate-800\">" + safeText(audioProcessing, "-") + "</dd></div>"
 					+ "</dl>"
 					+ "<button type=\"button\" data-spec-detail=\"audio\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">Show full audio details</button>"
 					+ "</div>"
@@ -2811,8 +3073,6 @@
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">WiFi</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.wifiStandard, "-") + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Bluetooth</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.bluetoothVersion, "-") + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Max VRR Refresh Rate</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.vrrMaxRefreshRate, "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">HDMI Inputs</dt><dd class=\"font-semibold text-slate-800\">" + safeText(specs.hdmiInputs, "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">USB Inputs</dt><dd class=\"font-semibold text-slate-800\">" + safeText(specs.usbInputs, "-") + "</dd></div>"
 					+ "</dl>"
 					+ "<button type=\"button\" data-spec-detail=\"connectivity\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">Show full connectivity details</button>"
 					+ "</div>"
@@ -2822,7 +3082,6 @@
 					+ "<dl class=\"mt-3 grid gap-2 text-sm sm:grid-cols-2 flex-1 pb-2\">"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">TV With Stand</dt><dd class=\"font-semibold text-slate-800\">" + safeText(withStandDimensions, "-") + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">TV Without Stand</dt><dd class=\"font-semibold text-slate-800\">" + safeText(withoutStandDimensions, "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Packaged</dt><dd class=\"font-semibold text-slate-800\">" + safeText(packagedDimensions, "-") + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Weight</dt><dd class=\"font-semibold text-slate-800\">" + safeText(dimensionsWeight, "-") + "</dd></div>"
 					+ "</dl>"
 					+ "<button type=\"button\" data-spec-detail=\"dimensions\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">Show full dimensions details</button>"
@@ -3037,25 +3296,20 @@
 			}
 
 			function renderModelDetail(model) {
-				const chassis = getModelChassis(model);
+				const platform = getModelPlatform(model);
 				detailTitle.textContent = getModelDisplayTitle(model);
-				detailSubTitle.textContent = "Model linked to " + getModelPanel(model) + " policy, " + countryConfigs[state.countryCode].label + " country context, " + getModelOS(model) + " OS guides" + (chassis ? ", and " + chassis + " chassis guides." : ".");
+				detailSubTitle.textContent = "Model linked to " + countryConfigs[state.countryCode].label + " country context and " + getModelOS(model) + " OS guides.";
 
-				const yearLabel = "Year " + getModelYear(model);
+				const yearLabel = getModelYear(model);
 				const isYearInteractive = Boolean(getExplicitKnowledgeArticleByTerm(yearLabel, { model }));
 				const isOsInteractive = Boolean(getExplicitKnowledgeArticleByTerm(getModelOS(model), { model }));
-				const isPanelInteractive = Boolean(getExplicitKnowledgeArticleByTerm(getModelPanel(model), { model }));
-				const isChassisInteractive = chassis ? Boolean(getExplicitKnowledgeArticleByTerm(chassis, { model })) : false;
+				const isPlatformInteractive = platform ? Boolean(getExplicitKnowledgeArticleByTerm(platform, { model })) : false;
 
 				const badges = [
 					renderKnowledgePill(yearLabel, "rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700", isYearInteractive),
 					renderKnowledgePill(getModelOS(model), "rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-semibold text-brand-700", isOsInteractive),
-					renderKnowledgePill(getModelPanel(model), "rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700", isPanelInteractive)
+					renderKnowledgePill(platform || "Platform: -", "rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700", isPlatformInteractive)
 				];
-
-				if (chassis) {
-					badges.push(renderKnowledgePill(chassis, "rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700", isChassisInteractive));
-				}
 
 				detailBadges.innerHTML = badges.join("");
 
@@ -3497,7 +3751,7 @@
 
 				changelogAccordion.innerHTML = "";
 
-				changelogEntries.forEach((entry, index) => {
+				changelogVisibleEntries.forEach((entry, index) => {
 					const item = document.createElement("section");
 					item.className = "changelog-accordion-item rounded-xl border border-slate-200 bg-white";
 
@@ -3564,8 +3818,10 @@
 				data.PoliciesData = data.PoliciesData || {};
 				data.TroubleshootingData = data.TroubleshootingData || {};
 				data.KnowledgeBaseData = normalizeKnowledgeData(data.KnowledgeBaseData);
+				data.ModelPlatformChassisData = safeList(data.ModelPlatformChassisData);
 
 				state.data = data;
+				state.modelPlatformChassisLookup = buildModelPlatformChassisLookup(data.ModelPlatformChassisData);
 				state.modelSearchIndex = buildSearchIndexFromEntries(buildModelSearchEntries(data.ModelsData));
 				state.globalSearchIndex = buildSearchIndexFromEntries(buildGlobalEntries(data));
 

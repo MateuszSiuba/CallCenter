@@ -67,54 +67,6 @@ const ModelsData = [
     "vrrMaxRefreshRate": "165 Hz"
   },
   {
-    "modelName": "75PUS9001",
-    "year": 2026,
-    "availableSizes": [
-      "75",
-      "85",
-      "100"
-    ],
-    "osProfileId": "Titan OS",
-    "panelType": "DLED QD",
-    "features": {
-      "video": [
-        "HDR10+ compatible"
-      ],
-      "gaming": [
-        "HDMI-VRR",
-        "FreeSync Premium"
-      ],
-      "smart": [
-        "Airplay",
-        "Apple HomeKit",
-        "MATTER Dash (Ambiscape)",
-        "Easylink+"
-      ]
-    },
-    "specs": {
-      "stand": "Metal Float Gun Metal",
-      "voice": [
-        "Push to talk RC with Mic",
-        "TPV Voice Assistant built-in",
-        "Works with Alexa"
-      ],
-      "chassis": "TPN25.8E LA"
-    },
-    "apps": [
-      "Netflix",
-      "Prime Video",
-      "Disney+",
-      "Titan Channel",
-      "YouTube",
-      "Apps"
-    ],
-    "audioChannels": "",
-    "audioPower": "",
-    "wifiStandard": "WIFI 11ax 2x2 DB",
-    "bluetoothVersion": "Bluetooth 5.4",
-    "vrrMaxRefreshRate": ""
-  },
-  {
     "modelName": "55OLED911",
     "year": 2026,
     "availableSizes": [
@@ -3559,6 +3511,14 @@ const ModelsData = [
       "75",
       "85",
       "100"
+    ],
+    "aliases": [
+      "43PUS9001",
+      "50PUS9001",
+      "65PUS9001",
+      "75PUS9001",
+      "85PUS9001",
+      "100PUS9001"
     ],
     "osProfileId": "Titan OS",
     "panelType": "QLED",

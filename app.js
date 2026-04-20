@@ -26,7 +26,8 @@
 					...((typeof KnowledgeBaseData !== "undefined" && Array.isArray(KnowledgeBaseData)) ? KnowledgeBaseData : [])
 				],
 								ModelMediaData: window.ModelMediaData || (typeof ModelMediaData !== "undefined" ? ModelMediaData : {}),
-					ModelPlatformChassisData: window.ModelPlatformChassisData || (typeof ModelPlatformChassisData !== "undefined" ? ModelPlatformChassisData : [])
+						ModelPlatformChassisData: window.ModelPlatformChassisData || (typeof ModelPlatformChassisData !== "undefined" ? ModelPlatformChassisData : []),
+						DocumentationLinksData: window.DocumentationLinksData || (typeof DocumentationLinksData !== "undefined" ? DocumentationLinksData : {})
 			};
 
 			const storageKeyCountry = "support-hub-country";
@@ -254,6 +255,44 @@
 
 			function isPlainObject(value) {
 				return value !== null && typeof value === "object" && !Array.isArray(value);
+			}
+
+			function normalizeDocumentationLinksData(value) {
+				const source = isPlainObject(value) ? value : {};
+				const woodpecker = isPlainObject(source.woodpecker) ? source.woodpecker : {};
+				const manualsByModelRaw = isPlainObject(source.manualsByModel) ? source.manualsByModel : {};
+
+				const manualsByModel = {};
+				Object.entries(manualsByModelRaw).forEach(([modelCode, links]) => {
+					const normalizedModelCode = safeText(modelCode, "").toUpperCase();
+					if (!normalizedModelCode) {
+						return;
+					}
+
+					const normalizedLinks = safeList(links)
+						.map((entry) => {
+							const label = safeText(entry && entry.label, "");
+							const url = getSafeHttpUrl(entry && entry.url);
+							if (!label || !url) {
+								return null;
+							}
+
+							return { label, url };
+						})
+						.filter(Boolean);
+
+					if (normalizedLinks.length > 0) {
+						manualsByModel[normalizedModelCode] = normalizedLinks;
+					}
+				});
+
+				return {
+					woodpecker: {
+						portalUrl: getSafeHttpUrl(woodpecker.portalUrl),
+						searchUrlTemplate: safeText(woodpecker.searchUrlTemplate, "")
+					},
+					manualsByModel
+				};
 			}
 
 			function joinNonEmpty(parts, separator) {
@@ -1772,6 +1811,139 @@
 				return safeText(lookupValue && lookupValue.platform, "");
 			}
 
+			function normalizeModelCodeWithRegion(value) {
+				return safeText(value, "")
+					.toUpperCase()
+					.replace(/\s+/g, "")
+					.replace(/_/g, "/")
+					.replace(/-(\d{2})$/, "/$1")
+					.replace(/[^A-Z0-9/]/g, "");
+			}
+
+			function getModelDocumentationCodes(model) {
+				const rawBaseModelName = safeText(getModelName(model), "").toUpperCase();
+				const baseModelName = rawBaseModelName.replace(/\/\d{2}$/i, "");
+				if (!baseModelName) {
+					return [];
+				}
+
+				const modelYear = getModelYearNumber(model);
+				const suffixes = [];
+				const addSuffix = (suffix) => {
+					const normalized = safeText(suffix, "").replace(/\D/g, "");
+					if (!/^\d{2}$/.test(normalized) || suffixes.includes(normalized)) {
+						return;
+					}
+					suffixes.push(normalized);
+				};
+
+				safeList(state.data && state.data.ModelPlatformChassisData).forEach((record) => {
+					const recordModelName = normalizeModelCodeWithRegion(record && record.modelName);
+					if (!recordModelName) {
+						return;
+					}
+
+					const recordBaseName = recordModelName.replace(/\/\d{2}$/i, "");
+					if (recordBaseName !== baseModelName) {
+						return;
+					}
+
+					const recordYear = Number(record && record.year);
+					if (modelYear > 0 && Number.isFinite(recordYear) && recordYear > 0 && recordYear !== modelYear) {
+						return;
+					}
+
+					const suffixMatch = recordModelName.match(/\/(\d{2})$/i);
+					if (suffixMatch) {
+						addSuffix(suffixMatch[1]);
+					}
+				});
+
+				const officialProductUrl = safeText(model && model.officialProductUrl, "");
+				const officialUrlSuffixMatch = officialProductUrl.match(/_(\d{2})(?:[\/?#]|$)/i);
+				if (officialUrlSuffixMatch) {
+					addSuffix(officialUrlSuffixMatch[1]);
+				}
+
+				addSuffix("12");
+				addSuffix("05");
+
+				return suffixes.map((suffix) => baseModelName + "/" + suffix);
+			}
+
+			function buildWoodpeckerSearchUrl(template, modelCode) {
+				const normalizedTemplate = safeText(template, "");
+				if (!normalizedTemplate || normalizedTemplate.indexOf("{model}") === -1) {
+					return "";
+				}
+
+				const resolvedUrl = normalizedTemplate.replace("{model}", encodeURIComponent(modelCode));
+				return getSafeHttpUrl(resolvedUrl);
+			}
+
+			function getModelDocumentationContext(model) {
+				const docsData = isPlainObject(state.data && state.data.DocumentationLinksData)
+					? state.data.DocumentationLinksData
+					: normalizeDocumentationLinksData(null);
+
+				const modelCodes = getModelDocumentationCodes(model);
+				const manualsByModel = isPlainObject(docsData.manualsByModel) ? docsData.manualsByModel : {};
+				const manualLinks = [];
+
+				modelCodes.forEach((modelCode) => {
+					safeList(manualsByModel[modelCode]).forEach((entry) => {
+						manualLinks.push({
+							modelCode,
+							label: safeText(entry && entry.label, "Manual"),
+							url: getSafeHttpUrl(entry && entry.url)
+						});
+					});
+				});
+
+				const uniqueManualLinks = [];
+				const seenManualKeys = new Set();
+				manualLinks.forEach((entry) => {
+					if (!entry.url) {
+						return;
+					}
+
+					const dedupeKey = entry.modelCode + "|" + entry.label + "|" + entry.url;
+					if (seenManualKeys.has(dedupeKey)) {
+						return;
+					}
+
+					seenManualKeys.add(dedupeKey);
+					uniqueManualLinks.push(entry);
+				});
+
+				const woodpecker = isPlainObject(docsData.woodpecker) ? docsData.woodpecker : {};
+				const woodpeckerPortalUrl = getSafeHttpUrl(woodpecker.portalUrl);
+				const searchUrlTemplate = safeText(woodpecker.searchUrlTemplate, "");
+
+				const woodpeckerSearchLinks = modelCodes
+					.map((modelCode) => {
+						const searchUrl = buildWoodpeckerSearchUrl(searchUrlTemplate, modelCode);
+						if (!searchUrl) {
+							return null;
+						}
+
+						return {
+							modelCode,
+							label: "Search in Woodpecker",
+							url: searchUrl
+						};
+					})
+					.filter(Boolean);
+
+				return {
+					modelCodes,
+					manualLinks: uniqueManualLinks,
+					woodpeckerSearchLinks,
+					woodpeckerPortalUrl,
+					hasSearchTemplate: Boolean(searchUrlTemplate)
+				};
+			}
+
 			function normalizeModelSize(value) {
 				return safeText(value, "").replace(/\D/g, "");
 			}
@@ -3136,40 +3308,77 @@
 			}
 
 			function renderTroubleshootingPane(model) {
-				const osName = getModelOS(model);
-				const chassis = getModelChassis(model);
-				const byOS = (state.data.TroubleshootingData && state.data.TroubleshootingData.byOS) || {};
-				const byChassis = (state.data.TroubleshootingData && state.data.TroubleshootingData.byChassis) || {};
-				const osGuides = safeList(byOS[osName]);
-				const chassisGuides = chassis ? safeList(byChassis[chassis]) : [];
+				const docsContext = getModelDocumentationContext(model);
 
-				const osBlock = osGuides.map((guide) => ""
-					+ "<li class=\"rounded-lg border border-slate-200 bg-white p-3\">"
-					+ "<p class=\"text-sm font-semibold text-slate-900\">OS Issue: " + guide.issue + "</p>"
-					+ "<ol class=\"mt-1 list-decimal space-y-1 pl-4 text-xs text-slate-700\">"
-					+ guide.steps.map((step) => "<li>" + step + "</li>").join("")
-					+ "</ol>"
-					+ "</li>").join("");
+				const manualLabelPriority = {
+					"user manual": 0,
+					"quick start guide": 1,
+					"leaflet": 2
+				};
 
-				const chassisBlock = chassisGuides.map((guide) => ""
-					+ "<li class=\"rounded-lg border border-slate-200 bg-white p-3\">"
-					+ "<p class=\"text-sm font-semibold text-slate-900\">Chassis Issue: " + guide.issue + "</p>"
-					+ "<ol class=\"mt-1 list-decimal space-y-1 pl-4 text-xs text-slate-700\">"
-					+ guide.steps.map((step) => "<li>" + step + "</li>").join("")
-					+ "</ol>"
-					+ "</li>").join("");
+				const orderedManualLinks = safeList(docsContext.manualLinks)
+					.slice()
+					.sort((left, right) => {
+						const leftLabel = safeText(left && left.label, "").toLowerCase();
+						const rightLabel = safeText(right && right.label, "").toLowerCase();
 
-				return ""
-					+ "<div class=\"grid gap-4 xl:grid-cols-2\">"
-					+ "<section class=\"rounded-xl border border-slate-200 bg-slate-50 p-4\">"
-					+ "<h5 class=\"text-sm font-semibold text-slate-900\">By OS: " + osName + "</h5>"
-					+ "<ul class=\"mt-2 space-y-2\">" + (osBlock || "<li class=\"text-xs text-slate-500\">No OS guide available.</li>") + "</ul>"
-					+ "</section>"
-					+ "<section class=\"rounded-xl border border-slate-200 bg-slate-50 p-4\">"
-					+ "<h5 class=\"text-sm font-semibold text-slate-900\">By Chassis: " + (chassis || "") + "</h5>"
-					+ "<ul class=\"mt-2 space-y-2\">" + (chassisBlock || "<li class=\"text-xs text-slate-500\">No chassis guide available.</li>") + "</ul>"
-					+ "</section>"
-					+ "</div>";
+						const leftRank = Object.prototype.hasOwnProperty.call(manualLabelPriority, leftLabel)
+							? manualLabelPriority[leftLabel]
+							: 99;
+						const rightRank = Object.prototype.hasOwnProperty.call(manualLabelPriority, rightLabel)
+							? manualLabelPriority[rightLabel]
+							: 99;
+
+						if (leftRank !== rightRank) {
+							return leftRank - rightRank;
+						}
+
+						return leftLabel.localeCompare(rightLabel);
+					});
+
+				const directManualLinksBlock = orderedManualLinks.map((entry) => {
+					const label = safeText(entry && entry.label, "Manual");
+					const url = getSafeHttpUrl(entry && entry.url);
+					if (!url) {
+						return "";
+					}
+
+					return ""
+						+ "<a href=\"" + escapeHtml(url) + "\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-white px-3 py-1 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100\">"
+						+ "<span>" + escapeHtml(label) + "</span>"
+						+ "</a>";
+				}).join("");
+
+				const woodpeckerLinksBlock = docsContext.woodpeckerSearchLinks.map((entry) => {
+					const modelCode = safeText(entry && entry.modelCode, "");
+					const url = getSafeHttpUrl(entry && entry.url);
+					if (!url) {
+						return "";
+					}
+
+					return ""
+						+ "<a href=\"" + escapeHtml(url) + "\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"inline-flex items-center gap-2 rounded-full border border-cyan-300 bg-white px-3 py-1 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">"
+						+ "<span>Open Woodpecker Search</span>"
+						+ (modelCode ? "<span class=\"text-brand-700/80\">" + escapeHtml(modelCode) + "</span>" : "")
+						+ "</a>";
+				}).join("");
+
+				const docsBlock = ""
+					+ "<section class=\"rounded-xl border border-emerald-200 bg-emerald-50 p-4\">"
+					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Manuals & Documentation</h5>"
+					+ "<p class=\"mt-1 text-xs text-slate-600\">Open manuals directly during troubleshooting.</p>"
+					+ (directManualLinksBlock
+						? "<div class=\"mt-3 flex flex-wrap gap-2\">" + directManualLinksBlock + "</div>"
+						: "<p class=\"mt-3 text-xs text-slate-600\">No direct manual links configured for this model yet.</p>")
+					+ (woodpeckerLinksBlock
+						? "<div class=\"mt-2 flex flex-wrap gap-2\">" + woodpeckerLinksBlock + "</div>"
+						: "")
+					+ (docsContext.woodpeckerPortalUrl
+						? "<a href=\"" + escapeHtml(docsContext.woodpeckerPortalUrl) + "\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"mt-2 inline-flex text-xs font-semibold text-brand-700 hover:underline\">Open Woodpecker portal</a>"
+						: "")
+					+ "</section>";
+
+				return docsBlock;
 			}
 
 			function renderPoliciesPane(model) {
@@ -3818,6 +4027,7 @@
 				data.TroubleshootingData = data.TroubleshootingData || {};
 				data.KnowledgeBaseData = normalizeKnowledgeData(data.KnowledgeBaseData);
 				data.ModelPlatformChassisData = safeList(data.ModelPlatformChassisData);
+				data.DocumentationLinksData = normalizeDocumentationLinksData(data.DocumentationLinksData);
 
 				state.data = data;
 				state.modelPlatformChassisLookup = buildModelPlatformChassisLookup(data.ModelPlatformChassisData);

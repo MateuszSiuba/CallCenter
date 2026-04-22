@@ -170,11 +170,8 @@
 				}
 			];
 
-			const externalChangelogEntries = Array.isArray(window.ChangelogEntriesData)
-				? window.ChangelogEntriesData
-				: ((typeof ChangelogEntriesData !== "undefined" && Array.isArray(ChangelogEntriesData)) ? ChangelogEntriesData : []);
-
-			const changelogEntries = (externalChangelogEntries.length > 0 ? externalChangelogEntries : defaultChangelogEntries)
+			function normalizeChangelogEntries(rawEntries) {
+				return safeList(rawEntries)
 				.map((entry, index) => {
 					const parsedDate = Date.parse(safeText(entry && entry.dateIso, ""));
 					return {
@@ -196,9 +193,18 @@
 					}
 					return b.id.localeCompare(a.id);
 				});
+			}
+
+			const externalChangelogEntries = Array.isArray(window.ChangelogEntriesData)
+				? window.ChangelogEntriesData
+				: ((typeof ChangelogEntriesData !== "undefined" && Array.isArray(ChangelogEntriesData)) ? ChangelogEntriesData : []);
+
+			let changelogEntries = normalizeChangelogEntries(
+				externalChangelogEntries.length > 0 ? externalChangelogEntries : defaultChangelogEntries
+			);
 
 			const changelogVisibleLimit = 4;
-			const changelogVisibleEntries = changelogEntries.slice(0, changelogVisibleLimit);
+			let changelogVisibleEntries = changelogEntries.slice(0, changelogVisibleLimit);
 
 			const changelogSeenStorageKey = "support-hub-changelog-seen-v1";
 			const seenChangelogIds = new Set();
@@ -240,6 +246,14 @@
 
 				const allSeen = changelogVisibleEntries.every((entry) => seenChangelogIds.has(entry.id));
 				changelogUnreadDot.classList.toggle("hidden", allSeen);
+			}
+
+			function setChangelogEntries(nextEntries) {
+				const normalized = normalizeChangelogEntries(nextEntries);
+				changelogEntries = normalized.length > 0 ? normalized : normalizeChangelogEntries(defaultChangelogEntries);
+				changelogVisibleEntries = changelogEntries.slice(0, changelogVisibleLimit);
+				renderChangelogAccordion();
+				updateChangelogUnreadDot();
 			}
 
 			function normalizeText(value) {
@@ -2583,18 +2597,18 @@
 				});
 			}
 
-			function buildBootstrapApiCandidates() {
+			function buildApiCandidates(pathSuffix) {
 				const candidates = [];
 
 				if (runtimeApiBaseUrl) {
-					candidates.push(runtimeApiBaseUrl + "/api/bootstrap");
+					candidates.push(runtimeApiBaseUrl + pathSuffix);
 				} else if (window.location.protocol !== "file:") {
-					candidates.push("/api/bootstrap");
+					candidates.push(pathSuffix);
 				}
 
 				const isLocalHost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
 				if (window.location.protocol === "file:" || isLocalHost) {
-					candidates.push("http://localhost:4000/api/bootstrap");
+					candidates.push("http://localhost:4000" + pathSuffix);
 				}
 
 				return Array.from(new Set(candidates));
@@ -2613,7 +2627,8 @@
 						KnowledgeBaseData: safeList(rawPayload.KnowledgeBaseData),
 						ModelMediaData: rawPayload.ModelMediaData || {},
 						ModelPlatformChassisData: safeList(rawPayload.ModelPlatformChassisData),
-						DocumentationLinksData: rawPayload.DocumentationLinksData || {}
+						DocumentationLinksData: rawPayload.DocumentationLinksData || {},
+						ChangelogEntriesData: safeList(rawPayload.ChangelogEntriesData)
 					};
 				}
 
@@ -2625,7 +2640,8 @@
 						KnowledgeBaseData: safeList(rawPayload.knowledge),
 						ModelMediaData: rawPayload.modelMedia || {},
 						ModelPlatformChassisData: safeList(rawPayload.modelPlatformChassis),
-						DocumentationLinksData: rawPayload.documentationLinks || {}
+						DocumentationLinksData: rawPayload.documentationLinks || {},
+						ChangelogEntriesData: safeList(rawPayload.changelogEntries)
 					};
 				}
 
@@ -2657,15 +2673,47 @@
 			}
 
 			async function fetchRelationalDataFromApi() {
-				const candidates = buildBootstrapApiCandidates();
-				for (const url of candidates) {
+				const modelsCandidates = buildApiCandidates("/api/models");
+				for (const baseModelsUrl of modelsCandidates) {
+					const baseUrl = baseModelsUrl.replace(/\/api\/models$/, "");
+					const modelsPayload = await fetchJsonWithTimeout(baseUrl + "/api/models", 4500);
+					const knowledgePayload = await fetchJsonWithTimeout(baseUrl + "/api/knowledge", 4500);
+					const policiesPayload = await fetchJsonWithTimeout(baseUrl + "/api/policies", 4500);
+					const changelogPayload = await fetchJsonWithTimeout(baseUrl + "/api/changelog", 4500);
+					const docsPayload = await fetchJsonWithTimeout(baseUrl + "/api/documentation-links", 4500);
+
+					if (
+						modelsPayload && modelsPayload.ok &&
+						knowledgePayload && knowledgePayload.ok &&
+						policiesPayload && policiesPayload.ok
+					) {
+						return {
+							ModelsData: safeList(modelsPayload.ModelsData),
+							ModelPlatformChassisData: safeList(modelsPayload.ModelPlatformChassisData),
+							ModelMediaData: modelsPayload.ModelMediaData || {},
+							KnowledgeBaseData: safeList(knowledgePayload.KnowledgeBaseData),
+							TroubleshootingData: knowledgePayload.TroubleshootingData || {},
+							PoliciesData: policiesPayload.PoliciesData || {},
+							DocumentationLinksData:
+								(docsPayload && docsPayload.ok && isPlainObject(docsPayload.DocumentationLinksData))
+									? docsPayload.DocumentationLinksData
+									: {},
+							ChangelogEntriesData:
+								(changelogPayload && changelogPayload.ok)
+									? safeList(changelogPayload.ChangelogEntriesData)
+									: []
+						};
+					}
+				}
+
+				const bootstrapCandidates = buildApiCandidates("/api/bootstrap");
+				for (const url of bootstrapCandidates) {
 					const payload = await fetchJsonWithTimeout(url, 4500);
 					const normalized = normalizeBootstrapPayload(payload);
 					if (normalized) {
 						return normalized;
 					}
 				}
-
 				return null;
 			}
 
@@ -2677,7 +2725,11 @@
 					return JSON.parse(JSON.stringify(apiData));
 				}
 
-				return JSON.parse(JSON.stringify(RelationalMockData));
+				if (Array.isArray(RelationalMockData.ModelsData) && RelationalMockData.ModelsData.length > 0) {
+					return JSON.parse(JSON.stringify(RelationalMockData));
+				}
+
+				throw new Error("API data unavailable and no local fallback data loaded.");
 			}
 
 			function addIdentifierFragments(identifier, tokenSet) {
@@ -4135,11 +4187,13 @@
 				data.KnowledgeBaseData = normalizeKnowledgeData(data.KnowledgeBaseData);
 				data.ModelPlatformChassisData = safeList(data.ModelPlatformChassisData);
 				data.DocumentationLinksData = normalizeDocumentationLinksData(data.DocumentationLinksData);
+				data.ChangelogEntriesData = safeList(data.ChangelogEntriesData);
 
 				state.data = data;
 				state.modelPlatformChassisLookup = buildModelPlatformChassisLookup(data.ModelPlatformChassisData);
 				state.modelSearchIndex = buildSearchIndexFromEntries(buildModelSearchEntries(data.ModelsData));
 				state.globalSearchIndex = buildSearchIndexFromEntries(buildGlobalEntries(data));
+				setChangelogEntries(data.ChangelogEntriesData);
 
 				if (isPlainObject(restoredSession)) {
 					state.isRestoringSession = true;
@@ -4565,6 +4619,10 @@
 			toggleChangelog(false);
 			setResultsView("models");
 			setViewMode("browse");
-			initializeData(persistedSession);
+			initializeData(persistedSession).catch((error) => {
+				console.error("Failed to initialize Support Hub data:", error);
+				splashHint.textContent = "Could not load backend data. Check API URL and service health, then try again.";
+				returnToSplash();
+			});
 		})();
 

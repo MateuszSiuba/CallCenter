@@ -33,6 +33,23 @@ app.get("/health", (_req, res) => {
   res.json({ ok: true, service: "callcenter-backend" });
 });
 
+app.get("/", (_req, res) => {
+  res.json({
+    ok: true,
+    service: "callcenter-backend",
+    message: "Backend is running. Use /health or /api/bootstrap.",
+    endpoints: [
+      "/health",
+      "/api/bootstrap",
+      "/api/models",
+      "/api/knowledge",
+      "/api/policies",
+      "/api/changelog",
+      "/api/documentation-links"
+    ]
+  });
+});
+
 app.get("/api/bootstrap", (_req, res) => {
   try {
     const data = loadBootstrapData(projectRoot);

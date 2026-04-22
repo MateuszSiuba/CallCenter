@@ -1,0 +1,17 @@
+{
+  "name": "callcenter",
+  "private": true,
+  "version": "0.1.0",
+  "description": "CallCenter Support Hub monorepo",
+  "workspaces": [
+    "backend"
+  ],
+  "scripts": {
+    "start": "node backend/src/server.js",
+    "start:backend": "npm --prefix backend start",
+    "dev:backend": "npm --prefix backend run dev"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

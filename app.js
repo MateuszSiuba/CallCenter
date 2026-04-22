@@ -30,6 +30,21 @@
 						DocumentationLinksData: window.DocumentationLinksData || (typeof DocumentationLinksData !== "undefined" ? DocumentationLinksData : {})
 			};
 
+							function getRuntimeApiBaseUrl() {
+								const runtimeConfig = (window && window.SupportHubConfig && typeof window.SupportHubConfig === "object")
+									? window.SupportHubConfig
+									: {};
+
+								const rawUrl = String(runtimeConfig.apiBaseUrl || "").trim();
+								if (!rawUrl) {
+									return "";
+								}
+
+								return rawUrl.replace(/\/+$/, "");
+							}
+
+							const runtimeApiBaseUrl = getRuntimeApiBaseUrl();
+
 			const storageKeyCountry = "support-hub-country";
 			const storageKeySession = "support-hub-session-v1";
 
@@ -2568,8 +2583,100 @@
 				});
 			}
 
+			function buildBootstrapApiCandidates() {
+				const candidates = [];
+
+				if (runtimeApiBaseUrl) {
+					candidates.push(runtimeApiBaseUrl + "/api/bootstrap");
+				} else if (window.location.protocol !== "file:") {
+					candidates.push("/api/bootstrap");
+				}
+
+				const isLocalHost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+				if (window.location.protocol === "file:" || isLocalHost) {
+					candidates.push("http://localhost:4000/api/bootstrap");
+				}
+
+				return Array.from(new Set(candidates));
+			}
+
+			function normalizeBootstrapPayload(rawPayload) {
+				if (!isPlainObject(rawPayload)) {
+					return null;
+				}
+
+				if (Array.isArray(rawPayload.ModelsData)) {
+					return {
+						ModelsData: safeList(rawPayload.ModelsData),
+						PoliciesData: rawPayload.PoliciesData || {},
+						TroubleshootingData: rawPayload.TroubleshootingData || {},
+						KnowledgeBaseData: safeList(rawPayload.KnowledgeBaseData),
+						ModelMediaData: rawPayload.ModelMediaData || {},
+						ModelPlatformChassisData: safeList(rawPayload.ModelPlatformChassisData),
+						DocumentationLinksData: rawPayload.DocumentationLinksData || {}
+					};
+				}
+
+				if (Array.isArray(rawPayload.models)) {
+					return {
+						ModelsData: safeList(rawPayload.models),
+						PoliciesData: rawPayload.policies || {},
+						TroubleshootingData: rawPayload.troubleshooting || {},
+						KnowledgeBaseData: safeList(rawPayload.knowledge),
+						ModelMediaData: rawPayload.modelMedia || {},
+						ModelPlatformChassisData: safeList(rawPayload.modelPlatformChassis),
+						DocumentationLinksData: rawPayload.documentationLinks || {}
+					};
+				}
+
+				return null;
+			}
+
+			async function fetchJsonWithTimeout(url, timeoutMs) {
+				const controller = new AbortController();
+				const timer = window.setTimeout(() => controller.abort(), timeoutMs);
+
+				try {
+					const response = await fetch(url, {
+						headers: {
+							"Accept": "application/json"
+						},
+						signal: controller.signal
+					});
+
+					if (!response.ok) {
+						return null;
+					}
+
+					return response.json();
+				} catch (error) {
+					return null;
+				} finally {
+					window.clearTimeout(timer);
+				}
+			}
+
+			async function fetchRelationalDataFromApi() {
+				const candidates = buildBootstrapApiCandidates();
+				for (const url of candidates) {
+					const payload = await fetchJsonWithTimeout(url, 4500);
+					const normalized = normalizeBootstrapPayload(payload);
+					if (normalized) {
+						return normalized;
+					}
+				}
+
+				return null;
+			}
+
 			async function loadRelationalData() {
 				await wait(90);
+
+				const apiData = await fetchRelationalDataFromApi();
+				if (apiData) {
+					return JSON.parse(JSON.stringify(apiData));
+				}
+
 				return JSON.parse(JSON.stringify(RelationalMockData));
 			}
 

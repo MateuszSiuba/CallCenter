@@ -8,6 +8,7 @@ Lightweight knowledge base UI for call center agents (TV-focused currently), pow
 	- `data/models.js`
 	- `data/policies.js`
 	- `data/knowledge.js`
+	- `data/documentation-links.js`
 
 ## Run Locally
 Open `index.html` directly in browser or use any static server.
@@ -20,7 +21,10 @@ Open `index.html` directly in browser or use any static server.
 	- `scripts/validate-models-data.js`
 	- `scripts/audit-models-language.js`
 	- `scripts/check-data-quality.js`
+	- `scripts/sync-documentation-links.js`
+	- `scripts/scrape-woodpecker-manuals.js`
 	- `scripts/lib/models-io.js`
+	- `scripts/lib/documentation-links-io.js`
 
 ## Data Maintenance Workflow
 Run from project root.
@@ -47,6 +51,61 @@ node scripts/audit-models-language.js
 
 ```bash
 node scripts/check-data-quality.js
+```
+
+## Documentation Links Workflow (Woodpecker At Scale)
+Use this flow when you need to add manuals for many models.
+
+### Full Browser Automation (no manual copy-paste)
+This mode opens Woodpecker, searches models, clicks `TV Info`, sets English, and collects links.
+
+1. Install Playwright once:
+
+```bash
+npm install playwright
+```
+
+2. Run scraper (manual login):
+
+```bash
+node scripts/scrape-woodpecker-manuals.js --manual-login --merge-docs
+```
+
+3. Or run scraper with env credentials:
+
+```bash
+set WOODPECKER_USER=your_username
+set WOODPECKER_PASS=your_password
+node scripts/scrape-woodpecker-manuals.js --merge-docs --headless
+```
+
+Outputs:
+- `data/woodpecker-manual-links.csv`
+- `data/woodpecker-manual-links.json`
+- optional direct merge into `data/documentation-links.js` via `--merge-docs`
+
+1. Generate a template with model codes (for example `/12`, `/05`):
+
+```bash
+node scripts/sync-documentation-links.js --template
+```
+
+This creates `data/documentation-links-template.csv`.
+
+2. Fill the CSV from Woodpecker output:
+- Keep columns: `modelCode,label,url,source,notes`
+- Add only direct manual URLs in `url`.
+
+3. Import CSV back to app data:
+
+```bash
+node scripts/sync-documentation-links.js --import data/documentation-links-template.csv
+```
+
+4. Optional: set Woodpecker links for one-click search from Troubleshooting pane:
+
+```bash
+node scripts/sync-documentation-links.js --set-portal "https://your-woodpecker-host" --set-search-template "https://your-woodpecker-host/search?q={model}"
 ```
 
 ## Conventions

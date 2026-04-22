@@ -6,3 +6,5 @@ scripts/enrich-models-from-philips-web.js
 scripts/sync-models-from-project-overview.js
 scripts/tmp_port_images/
 scripts/*.tmp.js
+backend/node_modules/
+backend/.env

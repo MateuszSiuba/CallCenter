@@ -219,6 +219,51 @@ textarea:focus {
   gap: 12px;
 }
 
+.editor-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 4px;
+  border: 1px solid #c4d4e7;
+  border-radius: 12px;
+  padding: 6px;
+  background: #f8fbff;
+}
+
+.editor-tab {
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 10px;
+  padding: 8px 12px;
+  color: #3a4b61;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.editor-tab:hover {
+  background: #edf5ff;
+}
+
+.editor-tab.is-active {
+  background: #e6fbf8;
+  border-color: #9ad7cf;
+  color: #0f766e;
+}
+
+.editor-pane {
+  border: 1px solid #dbe6f4;
+  border-radius: 12px;
+  padding: 14px;
+  background: #fbfdff;
+}
+
+.pane-title {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: #1e2e41;
+}
+
 .grid-2,
 .grid-3 {
   display: grid;
@@ -279,6 +324,11 @@ textarea:focus {
   .grid-3,
   .delete-field-box {
     grid-template-columns: 1fr;
+  }
+
+  .editor-tabs {
+    overflow: auto;
+    flex-wrap: nowrap;
   }
 
   .toolbar {

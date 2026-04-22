@@ -5,7 +5,9 @@
     token: localStorage.getItem(storageTokenKey) || "",
     models: [],
     selectedModel: null,
-    selectedKey: ""
+    selectedBundle: null,
+    selectedKey: "",
+    activeTab: "specs"
   };
 
   const els = {
@@ -25,25 +27,50 @@
     modelsList: document.getElementById("modelsList"),
 
     modelForm: document.getElementById("modelForm"),
+    editorTabs: Array.from(document.querySelectorAll(".editor-tab")),
+    editorPanes: Array.from(document.querySelectorAll(".editor-pane")),
+
     modelNameInput: document.getElementById("modelNameInput"),
     yearInput: document.getElementById("yearInput"),
     osProfileInput: document.getElementById("osProfileInput"),
     panelTypeInput: document.getElementById("panelTypeInput"),
     availableSizesInput: document.getElementById("availableSizesInput"),
+    aliasesInput: document.getElementById("aliasesInput"),
+
+    platformInput: document.getElementById("platformInput"),
     chassisInput: document.getElementById("chassisInput"),
+    vesaInput: document.getElementById("vesaInput"),
     standInput: document.getElementById("standInput"),
+
     audioChannelsInput: document.getElementById("audioChannelsInput"),
     audioPowerInput: document.getElementById("audioPowerInput"),
     vrrInput: document.getElementById("vrrInput"),
     wifiInput: document.getElementById("wifiInput"),
     bluetoothInput: document.getElementById("bluetoothInput"),
-    aliasesInput: document.getElementById("aliasesInput"),
+
     featureAmbilightInput: document.getElementById("featureAmbilightInput"),
     featureVideoInput: document.getElementById("featureVideoInput"),
     featureAudioInput: document.getElementById("featureAudioInput"),
     featureGamingInput: document.getElementById("featureGamingInput"),
     featureSmartInput: document.getElementById("featureSmartInput"),
     appsInput: document.getElementById("appsInput"),
+
+    dimWithStandInput: document.getElementById("dimWithStandInput"),
+    dimWithoutStandInput: document.getElementById("dimWithoutStandInput"),
+    dimWeightWithoutInput: document.getElementById("dimWeightWithoutInput"),
+    dimWeightWithInput: document.getElementById("dimWeightWithInput"),
+    vesaScrewTypeInput: document.getElementById("vesaScrewTypeInput"),
+    vesaScrewLengthInput: document.getElementById("vesaScrewLengthInput"),
+
+    pageUrlInput: document.getElementById("pageUrlInput"),
+    frontImageInput: document.getElementById("frontImageInput"),
+    sideImageInput: document.getElementById("sideImageInput"),
+    remoteImageInput: document.getElementById("remoteImageInput"),
+    portsImageInput: document.getElementById("portsImageInput"),
+
+    documentationModelCodeInput: document.getElementById("documentationModelCodeInput"),
+    documentationLinksInput: document.getElementById("documentationLinksInput"),
+
     jsonOverrideInput: document.getElementById("jsonOverrideInput"),
     unsetPathInput: document.getElementById("unsetPathInput"),
     deleteBtn: document.getElementById("deleteBtn"),
@@ -64,6 +91,22 @@
     return String(value).trim();
   }
 
+  function deepClone(value) {
+    return JSON.parse(JSON.stringify(value));
+  }
+
+  function isPlainObject(value) {
+    return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+  }
+
+  function ensureObject(value) {
+    if (isPlainObject(value)) {
+      return value;
+    }
+
+    return {};
+  }
+
   function parseCsv(text) {
     return toText(text)
       .split(",")
@@ -80,6 +123,49 @@
 
   function toLines(values) {
     return Array.isArray(values) ? values.join("\n") : "";
+  }
+
+  function parseDocumentationLinks(text) {
+    const rows = parseLines(text);
+    return rows
+      .map((row) => {
+        const separatorIndex = row.indexOf("|");
+        if (separatorIndex <= 0) {
+          return null;
+        }
+
+        const label = toText(row.slice(0, separatorIndex));
+        const url = toText(row.slice(separatorIndex + 1));
+        if (!label || !url) {
+          return null;
+        }
+
+        return { label, url };
+      })
+      .filter(Boolean);
+  }
+
+  function formatDocumentationLinks(links) {
+    if (!Array.isArray(links)) {
+      return "";
+    }
+
+    return links
+      .map((entry) => {
+        if (!isPlainObject(entry)) {
+          return "";
+        }
+
+        const label = toText(entry.label);
+        const url = toText(entry.url);
+        if (!label || !url) {
+          return "";
+        }
+
+        return label + " | " + url;
+      })
+      .filter(Boolean)
+      .join("\n");
   }
 
   function api(path, options = {}, requireAuth = true) {
@@ -99,13 +185,24 @@
     });
   }
 
-  function deepClone(value) {
-    return JSON.parse(JSON.stringify(value));
-  }
-
   function setLoggedInUi(isLoggedIn) {
     els.loginSection.classList.toggle("hidden", isLoggedIn);
     els.adminSection.classList.toggle("hidden", !isLoggedIn);
+  }
+
+  function setActiveTab(tabName) {
+    const target = toText(tabName) || "specs";
+    state.activeTab = target;
+
+    els.editorTabs.forEach((button) => {
+      const tab = toText(button.dataset.tab);
+      button.classList.toggle("is-active", tab === target);
+    });
+
+    els.editorPanes.forEach((pane) => {
+      const tab = toText(pane.dataset.pane);
+      pane.classList.toggle("hidden", tab !== target);
+    });
   }
 
   function renderModelList(models) {
@@ -121,31 +218,22 @@
     els.modelsList.innerHTML = models
       .map((model) => {
         const modelName = toText(model && model.modelName);
-        const isActive = activeKey && modelName.toUpperCase() === activeKey;
         const year = toText(model && model.year);
         const panel = toText(model && model.panelType);
+        const isActive = activeKey && modelName.toUpperCase() === activeKey;
 
-        return `
-          <button class="model-item ${isActive ? "active" : ""}" data-model="${encodeURIComponent(modelName)}" type="button">
-            <div class="model-name">${modelName || "(no name)"}</div>
-            <div class="model-meta">${year || "-"} | ${panel || "-"}</div>
-          </button>
-        `;
+        return ""
+          + "<button class=\"model-item " + (isActive ? "active" : "") + "\" data-model=\"" + encodeURIComponent(modelName) + "\" type=\"button\">"
+          + "<div class=\"model-name\">" + (modelName || "(no name)") + "</div>"
+          + "<div class=\"model-meta\">" + (year || "-") + " | " + (panel || "-") + "</div>"
+          + "</button>";
       })
       .join("");
 
     Array.from(els.modelsList.querySelectorAll(".model-item")).forEach((button) => {
-      button.addEventListener("click", () => {
-        const modelName = decodeURIComponent(button.dataset.model || "");
-        const model = state.models.find((item) => toText(item && item.modelName).toUpperCase() === modelName.toUpperCase());
-        if (!model) {
-          return;
-        }
-
-        state.selectedModel = deepClone(model);
-        state.selectedKey = toText(model.modelName);
-        fillFormFromModel(state.selectedModel);
-        renderModelList(filterModels());
+      button.addEventListener("click", async () => {
+        const selectedModelName = decodeURIComponent(button.dataset.model || "");
+        await loadModelBundle(selectedModelName);
       });
     });
   }
@@ -159,12 +247,84 @@
     return state.models.filter((model) => toText(model && model.modelName).toLowerCase().includes(query));
   }
 
-  function ensureObject(value) {
-    if (value && typeof value === "object" && !Array.isArray(value)) {
-      return value;
-    }
+  function getDimensionValue(model, keyLabel) {
+    const specs = ensureObject(model && model.specs);
+    const technicalFlat = ensureObject(specs.technicalFlat);
+    const technicalByCategory = ensureObject(specs.technicalByCategory);
+    const dimensions = ensureObject(technicalByCategory.Dimensions);
 
-    return {};
+    const flatKey = "Dimensions :: " + keyLabel;
+    return toText(technicalFlat[flatKey]) || toText(dimensions[keyLabel]);
+  }
+
+  function fillFormFromBundle(bundle) {
+    const model = ensureObject(bundle && bundle.model);
+    const media = ensureObject(bundle && bundle.media);
+    const documentation = ensureObject(bundle && bundle.documentation);
+    const platformChassis = ensureObject(bundle && bundle.platformChassis);
+
+    state.selectedBundle = deepClone(bundle);
+    state.selectedModel = deepClone(model);
+    state.selectedKey = toText(model.modelName);
+
+    const specs = ensureObject(model.specs);
+    const features = ensureObject(model.features);
+
+    els.modelNameInput.value = toText(model.modelName);
+    els.yearInput.value = toText(model.year);
+    els.osProfileInput.value = toText(model.osProfileId);
+    els.panelTypeInput.value = toText(model.panelType);
+    els.availableSizesInput.value = Array.isArray(model.availableSizes) ? model.availableSizes.join(", ") : "";
+    els.aliasesInput.value = Array.isArray(model.aliases) ? model.aliases.join(", ") : "";
+
+    els.platformInput.value = toText(platformChassis.platform);
+    els.chassisInput.value = toText(platformChassis.chassis) || toText(specs.chassis);
+    els.vesaInput.value = toText(specs.vesa);
+    els.standInput.value = toText(specs.stand);
+
+    els.audioChannelsInput.value = toText(model.audioChannels);
+    els.audioPowerInput.value = toText(model.audioPower);
+    els.vrrInput.value = toText(model.vrrMaxRefreshRate);
+    els.wifiInput.value = toText(model.wifiStandard);
+    els.bluetoothInput.value = toText(model.bluetoothVersion);
+
+    els.featureAmbilightInput.value = toText(features.ambilight);
+    els.featureVideoInput.value = toLines(features.video);
+    els.featureAudioInput.value = toLines(features.audio);
+    els.featureGamingInput.value = toLines(features.gaming);
+    els.featureSmartInput.value = toLines(features.smart);
+    els.appsInput.value = toLines(model.apps);
+
+    els.dimWithStandInput.value = getDimensionValue(model, "TV with stand (W x H x D)");
+    els.dimWithoutStandInput.value = getDimensionValue(model, "TV without stand (W x H x D)");
+    els.dimWeightWithoutInput.value = getDimensionValue(model, "Weight of TV without stand");
+    els.dimWeightWithInput.value = getDimensionValue(model, "Weight of TV with stand");
+    els.vesaScrewTypeInput.value = toText(specs.vesaScrewType);
+    els.vesaScrewLengthInput.value = toText(specs.vesaScrewLengthMm);
+
+    els.pageUrlInput.value = toText(media.pageUrl);
+    els.frontImageInput.value = toText(media.frontImageUrl);
+    els.sideImageInput.value = toText(media.sideImageUrl);
+    els.remoteImageInput.value = toText(media.remoteImageUrl);
+    els.portsImageInput.value = toText(media.portsImageUrl);
+
+    els.documentationModelCodeInput.value = toText(documentation.modelCode);
+    els.documentationLinksInput.value = formatDocumentationLinks(documentation.links);
+
+    els.jsonOverrideInput.value = "";
+    els.unsetPathInput.value = "";
+
+    renderModelList(filterModels());
+  }
+
+  function clearForm() {
+    state.selectedModel = null;
+    state.selectedBundle = null;
+    state.selectedKey = "";
+    els.modelForm.reset();
+    setActiveTab("specs");
+    setStatus(els.editorStatus, "Creating a new model.", "");
+    renderModelList(filterModels());
   }
 
   function writeTextField(target, key, value) {
@@ -186,11 +346,46 @@
     delete target[key];
   }
 
+  function writeDimensionField(specs, label, value) {
+    const technicalByCategory = ensureObject(specs.technicalByCategory);
+    const dimensions = ensureObject(technicalByCategory.Dimensions);
+    const technicalFlat = ensureObject(specs.technicalFlat);
+
+    const normalized = toText(value);
+    const flatKey = "Dimensions :: " + label;
+
+    if (normalized) {
+      dimensions[label] = normalized;
+      technicalFlat[flatKey] = normalized;
+    } else {
+      delete dimensions[label];
+      delete technicalFlat[flatKey];
+    }
+
+    if (Object.keys(dimensions).length > 0) {
+      technicalByCategory.Dimensions = dimensions;
+    } else {
+      delete technicalByCategory.Dimensions;
+    }
+
+    if (Object.keys(technicalByCategory).length > 0) {
+      specs.technicalByCategory = technicalByCategory;
+    } else {
+      delete specs.technicalByCategory;
+    }
+
+    if (Object.keys(technicalFlat).length > 0) {
+      specs.technicalFlat = technicalFlat;
+    } else {
+      delete specs.technicalFlat;
+    }
+  }
+
   function buildModelFromForm() {
     const overrideText = toText(els.jsonOverrideInput.value);
     if (overrideText) {
       const parsed = JSON.parse(overrideText);
-      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      if (!isPlainObject(parsed)) {
         throw new Error("JSON override must be a model object");
       }
 
@@ -203,12 +398,11 @@
 
     const yearText = toText(els.yearInput.value);
     if (yearText) {
-      const year = Number(yearText);
-      if (!Number.isFinite(year)) {
+      const parsedYear = Number(yearText);
+      if (!Number.isFinite(parsedYear)) {
         throw new Error("Year must be a number");
       }
-
-      model.year = Math.round(year);
+      model.year = Math.round(parsedYear);
     } else {
       delete model.year;
     }
@@ -217,20 +411,12 @@
     writeTextField(model, "panelType", els.panelTypeInput.value);
     writeArrayField(model, "availableSizes", parseCsv(els.availableSizesInput.value));
     writeArrayField(model, "aliases", parseCsv(els.aliasesInput.value));
-    writeArrayField(model, "apps", parseLines(els.appsInput.value));
 
     writeTextField(model, "audioChannels", els.audioChannelsInput.value);
     writeTextField(model, "audioPower", els.audioPowerInput.value);
+    writeTextField(model, "vrrMaxRefreshRate", els.vrrInput.value);
     writeTextField(model, "wifiStandard", els.wifiInput.value);
     writeTextField(model, "bluetoothVersion", els.bluetoothInput.value);
-    writeTextField(model, "vrrMaxRefreshRate", els.vrrInput.value);
-
-    model.specs = ensureObject(model.specs);
-    writeTextField(model.specs, "chassis", els.chassisInput.value);
-    writeTextField(model.specs, "stand", els.standInput.value);
-    if (Object.keys(model.specs).length === 0) {
-      delete model.specs;
-    }
 
     model.features = ensureObject(model.features);
     writeTextField(model.features, "ambilight", els.featureAmbilightInput.value);
@@ -242,47 +428,56 @@
       delete model.features;
     }
 
+    writeArrayField(model, "apps", parseLines(els.appsInput.value));
+
+    model.specs = ensureObject(model.specs);
+    writeTextField(model.specs, "stand", els.standInput.value);
+    writeTextField(model.specs, "chassis", els.chassisInput.value);
+    writeTextField(model.specs, "vesa", els.vesaInput.value);
+    writeTextField(model.specs, "vesaScrewType", els.vesaScrewTypeInput.value);
+    writeTextField(model.specs, "vesaScrewLengthMm", els.vesaScrewLengthInput.value);
+
+    writeDimensionField(model.specs, "TV with stand (W x H x D)", els.dimWithStandInput.value);
+    writeDimensionField(model.specs, "TV without stand (W x H x D)", els.dimWithoutStandInput.value);
+    writeDimensionField(model.specs, "Weight of TV without stand", els.dimWeightWithoutInput.value);
+    writeDimensionField(model.specs, "Weight of TV with stand", els.dimWeightWithInput.value);
+
+    if (Object.keys(model.specs).length === 0) {
+      delete model.specs;
+    }
+
     return model;
   }
 
-  function fillFormFromModel(model) {
-    const item = model || {};
-    const specs = ensureObject(item.specs);
-    const features = ensureObject(item.features);
+  function buildBundlePayload() {
+    const model = buildModelFromForm();
 
-    els.modelNameInput.value = toText(item.modelName);
-    els.yearInput.value = toText(item.year);
-    els.osProfileInput.value = toText(item.osProfileId);
-    els.panelTypeInput.value = toText(item.panelType);
-    els.availableSizesInput.value = Array.isArray(item.availableSizes) ? item.availableSizes.join(", ") : "";
-    els.aliasesInput.value = Array.isArray(item.aliases) ? item.aliases.join(", ") : "";
+    const media = {
+      pageUrl: toText(els.pageUrlInput.value),
+      frontImageUrl: toText(els.frontImageInput.value),
+      sideImageUrl: toText(els.sideImageInput.value),
+      remoteImageUrl: toText(els.remoteImageInput.value),
+      portsImageUrl: toText(els.portsImageInput.value)
+    };
 
-    els.chassisInput.value = toText(specs.chassis);
-    els.standInput.value = toText(specs.stand);
+    const documentation = {
+      modelCode: toText(els.documentationModelCodeInput.value) || toText(model.modelName),
+      links: parseDocumentationLinks(els.documentationLinksInput.value)
+    };
 
-    els.audioChannelsInput.value = toText(item.audioChannels);
-    els.audioPowerInput.value = toText(item.audioPower);
-    els.vrrInput.value = toText(item.vrrMaxRefreshRate);
-    els.wifiInput.value = toText(item.wifiStandard);
-    els.bluetoothInput.value = toText(item.bluetoothVersion);
+    const platformChassis = {
+      year: model.year,
+      modelName: toText(model.modelName),
+      platform: toText(els.platformInput.value),
+      chassis: toText(els.chassisInput.value)
+    };
 
-    els.featureAmbilightInput.value = toText(features.ambilight);
-    els.featureVideoInput.value = toLines(features.video);
-    els.featureAudioInput.value = toLines(features.audio);
-    els.featureGamingInput.value = toLines(features.gaming);
-    els.featureSmartInput.value = toLines(features.smart);
-
-    els.appsInput.value = toLines(item.apps);
-    els.jsonOverrideInput.value = "";
-    els.unsetPathInput.value = "";
-  }
-
-  function clearForm() {
-    state.selectedModel = null;
-    state.selectedKey = "";
-    els.modelForm.reset();
-    setStatus(els.editorStatus, "Creating a new model.", "");
-    renderModelList(filterModels());
+    return {
+      model,
+      media,
+      documentation,
+      platformChassis
+    };
   }
 
   async function loadModels() {
@@ -297,8 +492,23 @@
     }
 
     state.models = Array.isArray(data.items) ? data.items : [];
-    const filtered = filterModels();
-    renderModelList(filtered);
+    renderModelList(filterModels());
+  }
+
+  async function loadModelBundle(modelName) {
+    try {
+      setStatus(els.editorStatus, "Loading model bundle...", "");
+      const response = await api("/api/admin/model-bundle/" + encodeURIComponent(modelName));
+      const data = await response.json();
+      if (!response.ok || !data.ok || !isPlainObject(data.bundle)) {
+        throw new Error(data.message || "Failed to load model details");
+      }
+
+      fillFormFromBundle(data.bundle);
+      setStatus(els.editorStatus, "Model loaded.", "success");
+    } catch (error) {
+      setStatus(els.editorStatus, error.message || "Could not load model details.", "error");
+    }
   }
 
   async function handleLoginSubmit(event) {
@@ -358,45 +568,41 @@
 
   async function handleSave(event) {
     event.preventDefault();
-    setStatus(els.editorStatus, "Saving model...", "");
+    setStatus(els.editorStatus, "Saving all sections...", "");
 
     try {
-      const payload = buildModelFromForm();
-      const hasSelected = Boolean(state.selectedModel && state.selectedModel.modelName);
-      const endpoint = hasSelected
-        ? "/api/admin/models/" + encodeURIComponent(state.selectedModel.modelName)
-        : "/api/admin/models";
-      const method = hasSelected ? "PUT" : "POST";
+      const payload = buildBundlePayload();
+      const hasSelectedModel = Boolean(state.selectedKey);
+      const method = hasSelectedModel ? "PUT" : "POST";
+      const path = hasSelectedModel
+        ? "/api/admin/model-bundle/" + encodeURIComponent(state.selectedKey)
+        : "/api/admin/model-bundle";
 
-      const response = await api(endpoint, {
+      const response = await api(path, {
         method,
-        body: {
-          model: payload
-        }
+        body: payload
       });
 
       const data = await response.json();
-      if (!response.ok || !data.ok || !data.item) {
+      if (!response.ok || !data.ok || !isPlainObject(data.bundle)) {
         throw new Error(data.message || "Save failed");
       }
 
-      state.selectedModel = deepClone(data.item);
-      state.selectedKey = toText(data.item.modelName);
-      fillFormFromModel(state.selectedModel);
+      fillFormFromBundle(data.bundle);
       await loadModels();
-      setStatus(els.editorStatus, "Model saved.", "success");
+      setStatus(els.editorStatus, "Model, dimensions, images and docs saved.", "success");
     } catch (error) {
       setStatus(els.editorStatus, error.message || "Save failed", "error");
     }
   }
 
   async function handleDeleteModel() {
-    if (!state.selectedModel || !state.selectedModel.modelName) {
+    if (!state.selectedKey) {
       setStatus(els.editorStatus, "Select a model to delete.", "error");
       return;
     }
 
-    const confirmed = window.confirm("Delete model " + state.selectedModel.modelName + "?");
+    const confirmed = window.confirm("Delete whole model " + state.selectedKey + " including linked admin data?");
     if (!confirmed) {
       return;
     }
@@ -404,10 +610,9 @@
     setStatus(els.editorStatus, "Deleting model...", "");
 
     try {
-      const response = await api("/api/admin/models/" + encodeURIComponent(state.selectedModel.modelName), {
+      const response = await api("/api/admin/models/" + encodeURIComponent(state.selectedKey), {
         method: "DELETE"
       });
-
       const data = await response.json();
       if (!response.ok || !data.ok) {
         throw new Error(data.message || "Delete failed");
@@ -422,7 +627,7 @@
   }
 
   async function handleUnsetField() {
-    if (!state.selectedModel || !state.selectedModel.modelName) {
+    if (!state.selectedKey) {
       setStatus(els.editorStatus, "Select a model first.", "error");
       return;
     }
@@ -436,22 +641,19 @@
     setStatus(els.editorStatus, "Deleting field path...", "");
 
     try {
-      const response = await api("/api/admin/models/" + encodeURIComponent(state.selectedModel.modelName) + "/unset", {
+      const response = await api("/api/admin/models/" + encodeURIComponent(state.selectedKey) + "/unset", {
         method: "PATCH",
         body: {
           unsetPaths: [path]
         }
       });
-
       const data = await response.json();
       if (!response.ok || !data.ok) {
         throw new Error(data.message || "Delete field failed");
       }
 
-      state.selectedModel = deepClone(data.item);
-      fillFormFromModel(state.selectedModel);
-      await loadModels();
-      setStatus(els.editorStatus, data.removed && data.removed.length > 0 ? "Field removed." : "Path not found.", "success");
+      await loadModelBundle(state.selectedKey);
+      setStatus(els.editorStatus, (data.removed && data.removed.length > 0) ? "Field removed." : "Path not found.", "success");
     } catch (error) {
       setStatus(els.editorStatus, error.message || "Delete field failed", "error");
     }
@@ -471,6 +673,7 @@
     els.modelForm.addEventListener("submit", handleSave);
     els.deleteBtn.addEventListener("click", handleDeleteModel);
     els.unsetFieldBtn.addEventListener("click", handleUnsetField);
+
     els.refreshBtn.addEventListener("click", async () => {
       try {
         await loadModels();
@@ -483,8 +686,16 @@
     els.newModelBtn.addEventListener("click", clearForm);
     els.logoutBtn.addEventListener("click", handleLogout);
     els.searchInput.addEventListener("input", () => renderModelList(filterModels()));
+
+    els.editorTabs.forEach((button) => {
+      button.addEventListener("click", () => {
+        const tabName = toText(button.dataset.tab);
+        setActiveTab(tabName);
+      });
+    });
   }
 
   bindEvents();
+  setActiveTab("specs");
   bootstrapSession();
 })();

@@ -10,7 +10,7 @@
   <main class="page">
     <section id="loginSection" class="card login-card">
       <h1>CallCenter Admin</h1>
-      <p class="muted">Sign in to manage models (create, edit, delete).</p>
+      <p class="muted">Login and manage model data in sections similar to the main website.</p>
 
       <form id="loginForm" class="stack">
         <label class="field">
@@ -26,7 +26,7 @@
         <button type="submit" class="btn btn-primary">Login</button>
       </form>
 
-      <p class="muted small">Default credentials should be changed in backend environment variables.</p>
+      <p class="muted small">You can configure multiple accounts with ADMIN_CREDENTIALS.</p>
       <p id="loginStatus" class="status"></p>
     </section>
 
@@ -34,7 +34,7 @@
       <header class="toolbar card">
         <div>
           <h2>Model Administration</h2>
-          <p class="muted">Add, edit and remove models and selected fields.</p>
+          <p class="muted">Edit model, dimensions, gallery images, manuals and platform/chassis data.</p>
         </div>
         <div class="toolbar-actions">
           <input id="searchInput" type="search" placeholder="Search model...">
@@ -55,123 +55,227 @@
 
         <section class="card editor-card">
           <form id="modelForm" class="model-form">
-            <div class="grid-2">
-              <label class="field">
-                <span>Model Name</span>
-                <input id="modelNameInput" type="text" required>
-              </label>
-              <label class="field">
-                <span>Year</span>
-                <input id="yearInput" type="number" min="2000" max="2100">
-              </label>
+            <div id="editorTabs" class="editor-tabs">
+              <button type="button" class="editor-tab is-active" data-tab="specs">Specs</button>
+              <button type="button" class="editor-tab" data-tab="dimensions">Dimensions</button>
+              <button type="button" class="editor-tab" data-tab="media">Gallery / Images</button>
+              <button type="button" class="editor-tab" data-tab="docs">Manuals / Leaflets</button>
+              <button type="button" class="editor-tab" data-tab="advanced">Advanced</button>
             </div>
 
-            <div class="grid-3">
-              <label class="field">
-                <span>OS Profile</span>
-                <input id="osProfileInput" type="text" placeholder="Google TV / Titan OS / Saphi">
-              </label>
-              <label class="field">
-                <span>Panel Type</span>
-                <input id="panelTypeInput" type="text" placeholder="OLED / MiniLED / QLED">
-              </label>
-              <label class="field">
-                <span>Available Sizes (comma)</span>
-                <input id="availableSizesInput" type="text" placeholder="55, 65, 75">
-              </label>
-            </div>
+            <section class="editor-pane" data-pane="specs">
+              <h4 class="pane-title">Core Hardware</h4>
+              <div class="grid-2">
+                <label class="field">
+                  <span>Model Name</span>
+                  <input id="modelNameInput" type="text" required>
+                </label>
+                <label class="field">
+                  <span>Year</span>
+                  <input id="yearInput" type="number" min="2000" max="2100">
+                </label>
+              </div>
 
-            <div class="grid-2">
-              <label class="field">
-                <span>Chassis</span>
-                <input id="chassisInput" type="text" placeholder="TPM25.1E OA">
-              </label>
-              <label class="field">
-                <span>Stand</span>
-                <input id="standInput" type="text">
-              </label>
-            </div>
+              <div class="grid-3">
+                <label class="field">
+                  <span>OS Profile</span>
+                  <input id="osProfileInput" type="text" placeholder="Google TV / Titan OS">
+                </label>
+                <label class="field">
+                  <span>Panel Type</span>
+                  <input id="panelTypeInput" type="text" placeholder="OLED / MiniLED / QLED">
+                </label>
+                <label class="field">
+                  <span>Available Sizes</span>
+                  <input id="availableSizesInput" type="text" placeholder="55, 65, 75">
+                </label>
+              </div>
 
-            <div class="grid-3">
-              <label class="field">
-                <span>Audio Channels</span>
-                <input id="audioChannelsInput" type="text">
-              </label>
-              <label class="field">
-                <span>Audio Power</span>
-                <input id="audioPowerInput" type="text">
-              </label>
-              <label class="field">
-                <span>VRR Max Refresh Rate</span>
-                <input id="vrrInput" type="text" placeholder="144 Hz">
-              </label>
-            </div>
+              <h4 class="pane-title">Physical Details</h4>
+              <div class="grid-3">
+                <label class="field">
+                  <span>Platform</span>
+                  <input id="platformInput" type="text" placeholder="MT9972">
+                </label>
+                <label class="field">
+                  <span>Chassis</span>
+                  <input id="chassisInput" type="text" placeholder="TPM25.1E OA">
+                </label>
+                <label class="field">
+                  <span>VESA Standard</span>
+                  <input id="vesaInput" type="text" placeholder="300 x 300 mm">
+                </label>
+              </div>
 
-            <div class="grid-2">
-              <label class="field">
-                <span>Wi-Fi Standard</span>
-                <input id="wifiInput" type="text">
-              </label>
-              <label class="field">
-                <span>Bluetooth Version</span>
-                <input id="bluetoothInput" type="text">
-              </label>
-            </div>
+              <div class="grid-2">
+                <label class="field">
+                  <span>Stand</span>
+                  <input id="standInput" type="text">
+                </label>
+                <label class="field">
+                  <span>Aliases</span>
+                  <input id="aliasesInput" type="text" placeholder="75PUS9001, 65PUS9001">
+                </label>
+              </div>
 
-            <div class="grid-2">
-              <label class="field">
-                <span>Aliases (comma)</span>
-                <input id="aliasesInput" type="text" placeholder="75PUS9001, 65PUS9001">
-              </label>
-              <label class="field">
-                <span>Ambilight</span>
-                <input id="featureAmbilightInput" type="text" placeholder="3-sided Ambilight">
-              </label>
-            </div>
+              <h4 class="pane-title">Audio & Connectivity</h4>
+              <div class="grid-3">
+                <label class="field">
+                  <span>Audio Channels</span>
+                  <input id="audioChannelsInput" type="text" placeholder="3.1 CH">
+                </label>
+                <label class="field">
+                  <span>Audio Power</span>
+                  <input id="audioPowerInput" type="text" placeholder="80W">
+                </label>
+                <label class="field">
+                  <span>Max VRR Refresh Rate</span>
+                  <input id="vrrInput" type="text" placeholder="144 Hz">
+                </label>
+              </div>
 
-            <div class="grid-2">
-              <label class="field">
-                <span>Feature: Video (line-by-line)</span>
-                <textarea id="featureVideoInput" rows="4"></textarea>
-              </label>
-              <label class="field">
-                <span>Feature: Audio (line-by-line)</span>
-                <textarea id="featureAudioInput" rows="4"></textarea>
-              </label>
-            </div>
+              <div class="grid-2">
+                <label class="field">
+                  <span>Wi-Fi Standard</span>
+                  <input id="wifiInput" type="text">
+                </label>
+                <label class="field">
+                  <span>Bluetooth Version</span>
+                  <input id="bluetoothInput" type="text">
+                </label>
+              </div>
 
-            <div class="grid-2">
+              <div class="grid-2">
+                <label class="field">
+                  <span>Ambilight</span>
+                  <input id="featureAmbilightInput" type="text" placeholder="3-sided Ambilight">
+                </label>
+                <label class="field">
+                  <span>Apps</span>
+                  <textarea id="appsInput" rows="4" placeholder="One app per line"></textarea>
+                </label>
+              </div>
+            </section>
+
+            <section class="editor-pane hidden" data-pane="dimensions">
+              <h4 class="pane-title">Dimensions</h4>
+              <p class="muted small">These values populate the same dimensions cards used on the main site.</p>
+              <div class="grid-2">
+                <label class="field">
+                  <span>TV With Stand (W x H x D)</span>
+                  <input id="dimWithStandInput" type="text" placeholder="1225 x 762 x 240 mm">
+                </label>
+                <label class="field">
+                  <span>TV Without Stand (W x H x D)</span>
+                  <input id="dimWithoutStandInput" type="text" placeholder="1225 x 740 x 56 mm">
+                </label>
+              </div>
+
+              <div class="grid-2">
+                <label class="field">
+                  <span>Weight of TV Without Stand</span>
+                  <input id="dimWeightWithoutInput" type="text" placeholder="17.32 kg">
+                </label>
+                <label class="field">
+                  <span>Weight of TV With Stand</span>
+                  <input id="dimWeightWithInput" type="text" placeholder="17.58 kg">
+                </label>
+              </div>
+
+              <div class="grid-2">
+                <label class="field">
+                  <span>VESA Screw Type</span>
+                  <input id="vesaScrewTypeInput" type="text" placeholder="M6">
+                </label>
+                <label class="field">
+                  <span>VESA Screw Length (mm)</span>
+                  <input id="vesaScrewLengthInput" type="text" placeholder="12-16">
+                </label>
+              </div>
+            </section>
+
+            <section class="editor-pane hidden" data-pane="media">
+              <h4 class="pane-title">Gallery / Images</h4>
+              <p class="muted small">Use direct image links (https) to populate main-site Gallery and Ports tabs.</p>
               <label class="field">
-                <span>Feature: Gaming (line-by-line)</span>
-                <textarea id="featureGamingInput" rows="4"></textarea>
+                <span>Official Product Page URL</span>
+                <input id="pageUrlInput" type="url" placeholder="https://www.philips...">
+              </label>
+              <div class="grid-2">
+                <label class="field">
+                  <span>Front Image URL</span>
+                  <input id="frontImageInput" type="url">
+                </label>
+                <label class="field">
+                  <span>Side Image URL</span>
+                  <input id="sideImageInput" type="url">
+                </label>
+              </div>
+              <div class="grid-2">
+                <label class="field">
+                  <span>Remote Image URL</span>
+                  <input id="remoteImageInput" type="url">
+                </label>
+                <label class="field">
+                  <span>Ports Image URL</span>
+                  <input id="portsImageInput" type="url">
+                </label>
+              </div>
+            </section>
+
+            <section class="editor-pane hidden" data-pane="docs">
+              <h4 class="pane-title">Manuals & Leaflets</h4>
+              <p class="muted small">Format: one line per document in this format: Label | URL</p>
+              <label class="field">
+                <span>Documentation Model Code</span>
+                <input id="documentationModelCodeInput" type="text" placeholder="55OLED910/12">
               </label>
               <label class="field">
-                <span>Feature: Smart (line-by-line)</span>
-                <textarea id="featureSmartInput" rows="4"></textarea>
+                <span>Manual Links</span>
+                <textarea id="documentationLinksInput" rows="8" placeholder="User Manual | https://...pdf&#10;Quick Start Guide | https://...pdf&#10;Leaflet | https://...pdf"></textarea>
               </label>
-            </div>
+            </section>
 
-            <label class="field">
-              <span>Apps (line-by-line)</span>
-              <textarea id="appsInput" rows="4"></textarea>
-            </label>
+            <section class="editor-pane hidden" data-pane="advanced">
+              <h4 class="pane-title">Features & Advanced</h4>
+              <div class="grid-2">
+                <label class="field">
+                  <span>Feature: Video</span>
+                  <textarea id="featureVideoInput" rows="5" placeholder="One item per line"></textarea>
+                </label>
+                <label class="field">
+                  <span>Feature: Audio</span>
+                  <textarea id="featureAudioInput" rows="5" placeholder="One item per line"></textarea>
+                </label>
+              </div>
+              <div class="grid-2">
+                <label class="field">
+                  <span>Feature: Gaming</span>
+                  <textarea id="featureGamingInput" rows="5" placeholder="One item per line"></textarea>
+                </label>
+                <label class="field">
+                  <span>Feature: Smart</span>
+                  <textarea id="featureSmartInput" rows="5" placeholder="One item per line"></textarea>
+                </label>
+              </div>
 
-            <label class="field">
-              <span>JSON Override (optional, full model object)</span>
-              <textarea id="jsonOverrideInput" rows="8" placeholder='{"modelName":"55PUS9001"}'></textarea>
-            </label>
+              <label class="field">
+                <span>JSON Override (optional full model object)</span>
+                <textarea id="jsonOverrideInput" rows="8" placeholder='{"modelName":"55PUS9001"}'></textarea>
+              </label>
+
+              <div class="delete-field-box">
+                <label class="field">
+                  <span>Delete model field path</span>
+                  <input id="unsetPathInput" type="text" placeholder="specs.remote or features.smart">
+                </label>
+                <button id="unsetFieldBtn" type="button" class="btn">Delete field path</button>
+              </div>
+            </section>
 
             <div class="actions-row">
-              <button id="saveBtn" type="submit" class="btn btn-primary">Save model</button>
-              <button id="deleteBtn" type="button" class="btn btn-danger">Delete model</button>
-            </div>
-
-            <div class="delete-field-box">
-              <label class="field">
-                <span>Delete field path (dot path)</span>
-                <input id="unsetPathInput" type="text" placeholder="specs.remote or features.smart">
-              </label>
-              <button id="unsetFieldBtn" type="button" class="btn">Delete field</button>
+              <button id="saveBtn" type="submit" class="btn btn-primary">Save model and all sections</button>
+              <button id="deleteBtn" type="button" class="btn btn-danger">Delete whole model</button>
             </div>
 
             <p id="editorStatus" class="status"></p>

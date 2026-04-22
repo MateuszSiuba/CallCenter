@@ -22,40 +22,107 @@ function normalizeModelKey(value) {
   return toText(value).toUpperCase();
 }
 
-function getModelsFilePath(projectRoot) {
-  return path.join(projectRoot, "data", "models.js");
-}
-
-function loadModelsData(projectRoot) {
-  const modelsPath = getModelsFilePath(projectRoot);
-  const source = fs.readFileSync(modelsPath, "utf8");
+function readJsVariable(filePath, variableName) {
+  const source = fs.readFileSync(filePath, "utf8");
   const context = { window: {} };
 
   vm.createContext(context);
   vm.runInContext(source, context);
 
-  const models = Array.isArray(context.window.ModelsData)
-    ? context.window.ModelsData
-    : (Array.isArray(context.ModelsData) ? context.ModelsData : null);
+  const value = context.window[variableName] !== undefined
+    ? context.window[variableName]
+    : context[variableName];
+
+  return deepClone(value);
+}
+
+function writeJsVariable(filePath, variableName, value) {
+  const output = [
+    "const " + variableName + " = " + JSON.stringify(value, null, 2) + ";",
+    "if (typeof window !== \"undefined\") {",
+    "  window." + variableName + " = " + variableName + ";",
+    "}",
+    ""
+  ].join("\n");
+
+  fs.writeFileSync(filePath, output, "utf8");
+}
+
+function getModelsFilePath(projectRoot) {
+  return path.join(projectRoot, "data", "models.js");
+}
+
+function getModelMediaFilePath(projectRoot) {
+  return path.join(projectRoot, "data", "model-media.js");
+}
+
+function getDocumentationLinksFilePath(projectRoot) {
+  return path.join(projectRoot, "data", "documentation-links.js");
+}
+
+function getModelPlatformChassisFilePath(projectRoot) {
+  return path.join(projectRoot, "data", "model-platform-chassis.js");
+}
+
+function loadModelsData(projectRoot) {
+  const modelsPath = getModelsFilePath(projectRoot);
+  const models = readJsVariable(modelsPath, "ModelsData");
 
   if (!Array.isArray(models)) {
     throw new Error("ModelsData array not found in " + modelsPath);
   }
 
-  return deepClone(models);
+  return models;
 }
 
 function saveModelsData(projectRoot, models) {
-  const modelsPath = getModelsFilePath(projectRoot);
-  const output = [
-    "const ModelsData = " + JSON.stringify(models, null, 2) + ";",
-    "if (typeof window !== \"undefined\") {",
-    "  window.ModelsData = ModelsData;",
-    "}",
-    ""
-  ].join("\n");
+  writeJsVariable(getModelsFilePath(projectRoot), "ModelsData", models);
+}
 
-  fs.writeFileSync(modelsPath, output, "utf8");
+function loadModelMediaData(projectRoot) {
+  const filePath = getModelMediaFilePath(projectRoot);
+  const data = readJsVariable(filePath, "ModelMediaData");
+  if (!isPlainObject(data)) {
+    throw new Error("ModelMediaData object not found in " + filePath);
+  }
+
+  return data;
+}
+
+function saveModelMediaData(projectRoot, mediaData) {
+  writeJsVariable(getModelMediaFilePath(projectRoot), "ModelMediaData", mediaData);
+}
+
+function loadDocumentationLinksData(projectRoot) {
+  const filePath = getDocumentationLinksFilePath(projectRoot);
+  const data = readJsVariable(filePath, "DocumentationLinksData");
+  if (!isPlainObject(data)) {
+    throw new Error("DocumentationLinksData object not found in " + filePath);
+  }
+
+  if (!isPlainObject(data.manualsByModel)) {
+    data.manualsByModel = {};
+  }
+
+  return data;
+}
+
+function saveDocumentationLinksData(projectRoot, documentationLinksData) {
+  writeJsVariable(getDocumentationLinksFilePath(projectRoot), "DocumentationLinksData", documentationLinksData);
+}
+
+function loadModelPlatformChassisData(projectRoot) {
+  const filePath = getModelPlatformChassisFilePath(projectRoot);
+  const data = readJsVariable(filePath, "ModelPlatformChassisData");
+  if (!Array.isArray(data)) {
+    throw new Error("ModelPlatformChassisData array not found in " + filePath);
+  }
+
+  return data;
+}
+
+function saveModelPlatformChassisData(projectRoot, platformChassisData) {
+  writeJsVariable(getModelPlatformChassisFilePath(projectRoot), "ModelPlatformChassisData", platformChassisData);
 }
 
 function findModelIndex(models, modelNameOrAlias) {
@@ -219,7 +286,13 @@ module.exports = {
   applyUnsetPaths,
   deleteModel,
   findModelIndex,
+  loadDocumentationLinksData,
+  loadModelMediaData,
+  loadModelPlatformChassisData,
   loadModelsData,
+  saveDocumentationLinksData,
+  saveModelMediaData,
+  saveModelPlatformChassisData,
   saveModelsData,
   setModel,
   toText

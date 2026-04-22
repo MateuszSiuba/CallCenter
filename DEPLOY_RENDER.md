@@ -25,6 +25,9 @@ After deploy, verify:
 In Render service -> **Environment** add:
 
 - `ALLOWED_ORIGIN=https://YOUR-FRONTEND-DOMAIN`
+- `ADMIN_CREDENTIALS=admin:SET-STRONG-PASSWORD`
+- `ADMIN_TOKEN_SECRET=SET-LONG-RANDOM-SECRET`
+- `ADMIN_TOKEN_TTL_MINUTES=525600`
 
 You can provide multiple domains separated by commas.
 
@@ -48,3 +51,9 @@ If this config is missing, frontend still works from local in-browser data fallb
 2. Search a model.
 3. Confirm troubleshooting and manuals still load.
 4. If backend is unreachable, app should still work from fallback data.
+
+## 5. Admin panel
+
+1. Open `https://YOUR-BACKEND.onrender.com/admin/`.
+2. Login using credentials from `ADMIN_CREDENTIALS`.
+3. Add/edit/delete models and use field-path delete for nested keys (for example `specs.remote`).

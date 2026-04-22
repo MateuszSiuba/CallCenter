@@ -7,7 +7,8 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "node src/server.js",
-    "mirror-media": "node src/mirrorMediaAssets.js"
+    "mirror-media": "node src/mirrorMediaAssets.js",
+    "admin:token": "node src/generateAdminToken.js"
   },
   "engines": {
     "node": ">=18"

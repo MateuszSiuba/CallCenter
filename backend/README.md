@@ -22,11 +22,31 @@ Server starts on `http://localhost:4000` by default.
 
 - `PORT` - API port (default `4000`)
 - `ALLOWED_ORIGIN` - CORS origin (`*` or comma-separated origins)
+- `ADMIN_CREDENTIALS` - comma-separated `username:password` pairs for admin login
+- `ADMIN_TOKEN_SECRET` - HMAC secret for admin bearer tokens
+- `ADMIN_TOKEN_TTL_MINUTES` - token lifetime in minutes (default `720`, one year `525600`)
 
 Example:
 
 ```bash
 ALLOWED_ORIGIN=https://your-frontend.onrender.com,https://your-other-host.com
+ADMIN_CREDENTIALS=CallCenterAdmin:TPV11112222,manager:another-strong-password
+ADMIN_TOKEN_SECRET=replace-with-long-random-secret
+ADMIN_TOKEN_TTL_MINUTES=525600
+```
+
+## Generate admin token
+
+Generate token for default admin user:
+
+```bash
+npm run admin:token
+```
+
+Generate token for specific user and TTL minutes (example: one year):
+
+```bash
+npm run admin:token -- CallCenterAdmin 525600
 ```
 
 ## Endpoints
@@ -39,6 +59,17 @@ ALLOWED_ORIGIN=https://your-frontend.onrender.com,https://your-other-host.com
 - `GET /api/policies`
 - `GET /api/changelog`
 - `GET /api/documentation-links`
+- `POST /api/admin/login`
+- `GET /api/admin/session`
+- `GET /api/admin/models`
+- `GET /api/admin/models/:modelName`
+- `POST /api/admin/models`
+- `PUT /api/admin/models/:modelName`
+- `PATCH /api/admin/models/:modelName/unset`
+- `DELETE /api/admin/models/:modelName`
+
+Admin web UI is served from:
+- `/admin/`
 
 ## Media Mirroring (recommended)
 

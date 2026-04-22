@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CallCenter Admin</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="page">
+    <section id="loginSection" class="card login-card">
+      <h1>CallCenter Admin</h1>
+      <p class="muted">Sign in to manage models (create, edit, delete).</p>
+
+      <form id="loginForm" class="stack">
+        <label class="field">
+          <span>Username</span>
+          <input id="usernameInput" type="text" autocomplete="username" required>
+        </label>
+
+        <label class="field">
+          <span>Password</span>
+          <input id="passwordInput" type="password" autocomplete="current-password" required>
+        </label>
+
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+
+      <p class="muted small">Default credentials should be changed in backend environment variables.</p>
+      <p id="loginStatus" class="status"></p>
+    </section>
+
+    <section id="adminSection" class="hidden">
+      <header class="toolbar card">
+        <div>
+          <h2>Model Administration</h2>
+          <p class="muted">Add, edit and remove models and selected fields.</p>
+        </div>
+        <div class="toolbar-actions">
+          <input id="searchInput" type="search" placeholder="Search model...">
+          <button id="refreshBtn" type="button" class="btn">Refresh</button>
+          <button id="newModelBtn" type="button" class="btn">New model</button>
+          <button id="logoutBtn" type="button" class="btn btn-danger">Logout</button>
+        </div>
+      </header>
+
+      <div class="layout">
+        <aside class="card model-list-card">
+          <div class="list-head">
+            <h3>Models</h3>
+            <span id="modelCountBadge" class="badge">0</span>
+          </div>
+          <div id="modelsList" class="models-list"></div>
+        </aside>
+
+        <section class="card editor-card">
+          <form id="modelForm" class="model-form">
+            <div class="grid-2">
+              <label class="field">
+                <span>Model Name</span>
+                <input id="modelNameInput" type="text" required>
+              </label>
+              <label class="field">
+                <span>Year</span>
+                <input id="yearInput" type="number" min="2000" max="2100">
+              </label>
+            </div>
+
+            <div class="grid-3">
+              <label class="field">
+                <span>OS Profile</span>
+                <input id="osProfileInput" type="text" placeholder="Google TV / Titan OS / Saphi">
+              </label>
+              <label class="field">
+                <span>Panel Type</span>
+                <input id="panelTypeInput" type="text" placeholder="OLED / MiniLED / QLED">
+              </label>
+              <label class="field">
+                <span>Available Sizes (comma)</span>
+                <input id="availableSizesInput" type="text" placeholder="55, 65, 75">
+              </label>
+            </div>
+
+            <div class="grid-2">
+              <label class="field">
+                <span>Chassis</span>
+                <input id="chassisInput" type="text" placeholder="TPM25.1E OA">
+              </label>
+              <label class="field">
+                <span>Stand</span>
+                <input id="standInput" type="text">
+              </label>
+            </div>
+
+            <div class="grid-3">
+              <label class="field">
+                <span>Audio Channels</span>
+                <input id="audioChannelsInput" type="text">
+              </label>
+              <label class="field">
+                <span>Audio Power</span>
+                <input id="audioPowerInput" type="text">
+              </label>
+              <label class="field">
+                <span>VRR Max Refresh Rate</span>
+                <input id="vrrInput" type="text" placeholder="144 Hz">
+              </label>
+            </div>
+
+            <div class="grid-2">
+              <label class="field">
+                <span>Wi-Fi Standard</span>
+                <input id="wifiInput" type="text">
+              </label>
+              <label class="field">
+                <span>Bluetooth Version</span>
+                <input id="bluetoothInput" type="text">
+              </label>
+            </div>
+
+            <div class="grid-2">
+              <label class="field">
+                <span>Aliases (comma)</span>
+                <input id="aliasesInput" type="text" placeholder="75PUS9001, 65PUS9001">
+              </label>
+              <label class="field">
+                <span>Ambilight</span>
+                <input id="featureAmbilightInput" type="text" placeholder="3-sided Ambilight">
+              </label>
+            </div>
+
+            <div class="grid-2">
+              <label class="field">
+                <span>Feature: Video (line-by-line)</span>
+                <textarea id="featureVideoInput" rows="4"></textarea>
+              </label>
+              <label class="field">
+                <span>Feature: Audio (line-by-line)</span>
+                <textarea id="featureAudioInput" rows="4"></textarea>
+              </label>
+            </div>
+
+            <div class="grid-2">
+              <label class="field">
+                <span>Feature: Gaming (line-by-line)</span>
+                <textarea id="featureGamingInput" rows="4"></textarea>
+              </label>
+              <label class="field">
+                <span>Feature: Smart (line-by-line)</span>
+                <textarea id="featureSmartInput" rows="4"></textarea>
+              </label>
+            </div>
+
+            <label class="field">
+              <span>Apps (line-by-line)</span>
+              <textarea id="appsInput" rows="4"></textarea>
+            </label>
+
+            <label class="field">
+              <span>JSON Override (optional, full model object)</span>
+              <textarea id="jsonOverrideInput" rows="8" placeholder='{"modelName":"55PUS9001"}'></textarea>
+            </label>
+
+            <div class="actions-row">
+              <button id="saveBtn" type="submit" class="btn btn-primary">Save model</button>
+              <button id="deleteBtn" type="button" class="btn btn-danger">Delete model</button>
+            </div>
+
+            <div class="delete-field-box">
+              <label class="field">
+                <span>Delete field path (dot path)</span>
+                <input id="unsetPathInput" type="text" placeholder="specs.remote or features.smart">
+              </label>
+              <button id="unsetFieldBtn" type="button" class="btn">Delete field</button>
+            </div>
+
+            <p id="editorStatus" class="status"></p>
+          </form>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script src="./admin.js"></script>
+</body>
+</html>

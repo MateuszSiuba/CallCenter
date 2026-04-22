@@ -12,3 +12,9 @@ services:
         value: 20
       - key: ALLOWED_ORIGIN
         value: "*"
+      - key: ADMIN_CREDENTIALS
+        sync: false
+      - key: ADMIN_TOKEN_SECRET
+        sync: false
+      - key: ADMIN_TOKEN_TTL_MINUTES
+        value: "525600"

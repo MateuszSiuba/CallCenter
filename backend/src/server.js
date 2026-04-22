@@ -2,6 +2,7 @@ const path = require("node:path");
 const express = require("express");
 const cors = require("cors");
 const { loadBootstrapData } = require("./loadJsData");
+const { applyMirroredMediaUrls } = require("./mediaMirror");
 
 const app = express();
 const port = Number(process.env.PORT || 4000);
@@ -28,6 +29,14 @@ function buildCorsOriginRule(value) {
 
 app.use(cors({ origin: buildCorsOriginRule(allowedOrigin) }));
 app.use(express.json({ limit: "2mb" }));
+app.use("/media", express.static(path.join(__dirname, "..", "public", "media")));
+
+function getPublicBaseUrl(req) {
+  const forwardedProtoRaw = String(req.headers["x-forwarded-proto"] || "").trim();
+  const forwardedProto = forwardedProtoRaw ? forwardedProtoRaw.split(",")[0].trim() : "";
+  const protocol = forwardedProto || req.protocol || "https";
+  return protocol + "://" + req.get("host");
+}
 
 app.get("/health", (_req, res) => {
   res.json({ ok: true, service: "callcenter-backend" });
@@ -50,10 +59,13 @@ app.get("/", (_req, res) => {
   });
 });
 
-app.get("/api/bootstrap", (_req, res) => {
+app.get("/api/bootstrap", (req, res) => {
   try {
     const data = loadBootstrapData(projectRoot);
-    res.json(data);
+    res.json({
+      ...data,
+      ModelMediaData: applyMirroredMediaUrls(data.ModelMediaData, getPublicBaseUrl(req))
+    });
   } catch (error) {
     res.status(500).json({
       ok: false,
@@ -63,14 +75,14 @@ app.get("/api/bootstrap", (_req, res) => {
   }
 });
 
-app.get("/api/models", (_req, res) => {
+app.get("/api/models", (req, res) => {
   try {
     const data = loadBootstrapData(projectRoot);
     res.json({
       ok: true,
       ModelsData: data.ModelsData || [],
       ModelPlatformChassisData: data.ModelPlatformChassisData || [],
-      ModelMediaData: data.ModelMediaData || {}
+      ModelMediaData: applyMirroredMediaUrls(data.ModelMediaData, getPublicBaseUrl(req)) || {}
     });
   } catch (error) {
     res.status(500).json({

@@ -32,12 +32,28 @@ ALLOWED_ORIGIN=https://your-frontend.onrender.com,https://your-other-host.com
 ## Endpoints
 
 - `GET /health`
+- `GET /`
 - `GET /api/bootstrap`
 - `GET /api/models`
 - `GET /api/knowledge`
 - `GET /api/policies`
 - `GET /api/changelog`
 - `GET /api/documentation-links`
+
+## Media Mirroring (recommended)
+
+To avoid relying on third-party image availability, mirror Philips media assets into backend storage:
+
+```bash
+npm run mirror-media
+```
+
+This downloads image URLs from `data/model-media.js` into:
+- `backend/public/media/philips/*`
+- `backend/public/media/manifest.json`
+
+When manifest entries exist, API responses rewrite `frontImageUrl`, `sideImageUrl`,
+`remoteImageUrl`, and `portsImageUrl` to backend-hosted URLs automatically.
 
 `/api/bootstrap` returns data in the same key format expected by current frontend:
 - `meta` (`bootstrapVersion`, `loadedAt`)

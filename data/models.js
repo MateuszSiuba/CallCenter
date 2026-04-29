@@ -44,7 +44,7 @@ const ModelsData = [
       ]
     },
     "specs": {
-      "stand": "Rounded Stick Metal Satin Chrome",
+      "stand": "Rounded Stick Metal Satin Chrome (edge stand), central stand as option-2",
       "voice": [
         "Push to talk RC with Mic",
         "TPV Voice Assistant built-in"
@@ -269,7 +269,7 @@ const ModelsData = [
     "vrrMaxRefreshRate": "165 Hz"
   },
   {
-    "modelName": "55OLED771",
+    "modelName": "55OLED711",
     "year": 2026,
     "availableSizes": [
       "42",
@@ -330,7 +330,7 @@ const ModelsData = [
     ],
     "audioChannels": "",
     "audioPower": "20W",
-    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "wifiStandard": "WIFI 11ac 2x2 DB",
     "bluetoothVersion": "Bluetooth 5.2",
     "vrrMaxRefreshRate": "120 Hz"
   },
@@ -397,7 +397,7 @@ const ModelsData = [
     ],
     "audioChannels": "",
     "audioPower": "50W",
-    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "wifiStandard": "WIFI 11ac 2x2 DB",
     "bluetoothVersion": "Bluetooth 5.2",
     "vrrMaxRefreshRate": "120 Hz"
   },
@@ -449,7 +449,10 @@ const ModelsData = [
         "Works with Alexa"
       ],
       "remote": "Wireless rechargeable metal remote",
-      "chassis": "TPN25.8E MA"
+      "chassis": "TPN25.8E MA",
+      "localDimmingZones": {
+        "85": 3840
+      }
     },
     "apps": [
       "Netflix",
@@ -466,7 +469,7 @@ const ModelsData = [
     "vrrMaxRefreshRate": "165 Hz"
   },
   {
-    "modelName": "55PUS8601",
+    "modelName": "55PUS8681",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -525,12 +528,12 @@ const ModelsData = [
     ],
     "audioChannels": "2 CH",
     "audioPower": "20W",
-    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "wifiStandard": "WIFI 11ac 2x2 DB",
     "bluetoothVersion": "Bluetooth 5.2",
     "vrrMaxRefreshRate": ""
   },
   {
-    "modelName": "55PUS8501",
+    "modelName": "55PUS8601",
     "year": 2026,
     "availableSizes": [
       "43",
@@ -588,7 +591,7 @@ const ModelsData = [
     ],
     "audioChannels": "2 CH",
     "audioPower": "20W",
-    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "wifiStandard": "WIFI 11ac 2x2 DB",
     "bluetoothVersion": "Bluetooth 5.2",
     "vrrMaxRefreshRate": "60 Hz"
   },
@@ -705,7 +708,7 @@ const ModelsData = [
     ],
     "audioChannels": "2 CH",
     "audioPower": "20W",
-    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "wifiStandard": "WIFI 11ac 2x2 DB",
     "bluetoothVersion": "Bluetooth 5.2",
     "vrrMaxRefreshRate": "60 Hz"
   },
@@ -764,7 +767,7 @@ const ModelsData = [
     ],
     "audioChannels": "2 CH",
     "audioPower": "20W",
-    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "wifiStandard": "WIFI 11ac 2x2 DB",
     "bluetoothVersion": "Bluetooth 5.2",
     "vrrMaxRefreshRate": "60 Hz"
   },
@@ -814,7 +817,7 @@ const ModelsData = [
     ],
     "audioChannels": "",
     "audioPower": "",
-    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "wifiStandard": "WIFI 11ac 2x2 DB",
     "bluetoothVersion": "Bluetooth 5.0",
     "vrrMaxRefreshRate": ""
   },
@@ -851,7 +854,6 @@ const ModelsData = [
         "Airplay",
         "Apple HomeKit",
         "Easylink+",
-        "Auracast",
         "Matter",
         "AirPlay 2",
         "Works with Alexa",
@@ -876,7 +878,7 @@ const ModelsData = [
     ],
     "audioChannels": "2 CH",
     "audioPower": "20W",
-    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "wifiStandard": "WIFI 11ac 2x2 DB",
     "bluetoothVersion": "Bluetooth 5.0",
     "vrrMaxRefreshRate": "60 Hz"
   },
@@ -906,11 +908,10 @@ const ModelsData = [
       "voice": [
         "Works with Alexa"
       ],
-      "chassis": "TPN25.7E LA"
+      "chassis": "MT9676"
     },
     "apps": [
-      "Netflix",
-      "Prime Video",
+      "Easylink+",
       "Disney+",
       "Titan Channel",
       "YouTube",
@@ -1693,7 +1694,7 @@ const ModelsData = [
     "audioPower": "60 W",
     "wifiStandard": "Wi-Fi 802.11ac 2 x 2 Dual band Bluetooth 5.2 Works with Apple AirPlay",
     "bluetoothVersion": "Bluetooth 5.2",
-    "vrrMaxRefreshRate": "144 Hz",
+    "vrrMaxRefreshRate": "165 Hz",
     "commercialName": "4K Ambilight TV",
     "officialProductUrl": "https://www.philips.co.uk/c-p/65MLED950_12/qd-miniled-4k-ambilight-tv",
     "ports": [
@@ -1855,7 +1856,7 @@ const ModelsData = [
     "audioPower": "50W",
     "wifiStandard": "WiFi 5",
     "bluetoothVersion": "Bluetooth 5.2",
-    "vrrMaxRefreshRate": "144 Hz",
+    "vrrMaxRefreshRate": "165 Hz",
     "commercialName": "4K Ambilight TV",
     "officialProductUrl": "https://www.philips.co.uk/c-p/55MLED910_12/qd-miniled-4k-ambilight-tv",
     "ports": [
@@ -3549,11 +3550,11 @@ const ModelsData = [
     },
     "specs": {
       "stand": "Central swivel stand (43-65\"), Edge stand (75-100\")",
-      "chassis": "TPN25.8E LA"
+      "chassis": "MT9620"
     },
     "audioChannels": "2.1 CH",
     "audioPower": "50W",
-    "wifiStandard": "WiFi 5",
+    "wifiStandard": "WIFI 11ax 2x2 DB",
     "bluetoothVersion": "Bluetooth 5.4",
     "vrrMaxRefreshRate": "144 Hz"
   },
@@ -3899,7 +3900,7 @@ const ModelsData = [
     },
     "specs": {
       "stand": "Edge stand, Color: Black Sheen/Matt",
-      "chassis": "TPN25.7E LA"
+      "chassis": "MT9676"
     },
     "audioChannels": "2 CH",
     "audioPower": "12W",
@@ -4144,7 +4145,7 @@ const ModelsData = [
     "audioPower": "40 W",
     "wifiStandard": "Wi-Fi 802.11ac 2 x 2 Dual band Bluetooth 5.2 Works with Apple AirPlay",
     "bluetoothVersion": "Bluetooth 5.2",
-    "vrrMaxRefreshRate": "144 Hz",
+    "vrrMaxRefreshRate": "165 Hz",
     "commercialName": "4K Ambilight TV",
     "officialProductUrl": "https://www.philips.co.uk/c-p/55MLED920_12/qd-miniled-4k-ambilight-tv",
     "ports": [
@@ -9710,6 +9711,322 @@ const ModelsData = [
       "standMountScrew": "M4x18/4pcs",
       "vesaScrewType": "M6",
       "vesaScrewLengthMm": "10~16"
+    },
+    "apps": []
+  },
+  {
+    "modelName": "55MLED911",
+    "year": 2026,
+    "availableSizes": [
+      "55",
+      "65",
+      "75",
+      "100"
+    ],
+    "osProfileId": "Titan OS",
+    "panelType": "MiniLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": [
+        "HDR10+ compatible",
+        "Dolby Vision 2",
+        "HDR10+ Adaptive"
+      ],
+      "audio": [
+        "Dolby Atmos",
+        "DTS:X",
+        "IntelliSound",
+        "Multiple speakers"
+      ],
+      "gaming": [
+        "HDMI-VRR",
+        "FreeSync Premium Pro (TBC)",
+        "G-Sync Compatible",
+        "ALLM",
+        "120Hz native / 165Hz max",
+        "DLG 48Hz~288Hz support"
+      ],
+      "smart": [
+        "Auracast",
+        "Airplay",
+        "Apple HomeKit",
+        "MATTER Dash (Ambiscape)",
+        "Easylink+",
+        "Matter",
+        "AmbiScape",
+        "AirPlay 2",
+        "Works with Alexa",
+        "Voice control",
+        "Casting"
+      ]
+    },
+    "specs": {
+      "stand": "Central stand, swivel",
+      "voice": [
+        "Push to talk RC with Mic",
+        "TPV Voice Assistant built-in"
+      ],
+      "remote": "R53-EB Li-ion battery wireless charging RC",
+      "chassis": "TPN25.8E MA",
+      "localDimmingZones": {
+        "55": 288,
+        "65": 384,
+        "75": 448,
+        "100": 576
+      }
+    },
+    "apps": [
+      "Netflix",
+      "Prime Video",
+      "Disney+",
+      "Titan Channel",
+      "YouTube",
+      "Apps"
+    ],
+    "audioChannels": "2.0 CH",
+    "audioPower": "20W",
+    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "bluetoothVersion": "Bluetooth 5.4",
+    "vrrMaxRefreshRate": "165 Hz"
+  },
+  {
+    "modelName": "65MLED911",
+    "year": 2026,
+    "availableSizes": [
+      "55",
+      "65",
+      "75",
+      "100"
+    ],
+    "osProfileId": "Titan OS",
+    "panelType": "MiniLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": [
+        "HDR10+ compatible",
+        "Dolby Vision 2",
+        "HDR10+ Adaptive"
+      ],
+      "audio": [
+        "Dolby Atmos",
+        "DTS:X",
+        "IntelliSound",
+        "Multiple speakers"
+      ],
+      "gaming": [
+        "HDMI-VRR",
+        "FreeSync Premium Pro (TBC)",
+        "G-Sync Compatible",
+        "ALLM",
+        "120Hz native / 165Hz max",
+        "DLG 48Hz~288Hz support"
+      ],
+      "smart": [
+        "Auracast",
+        "Airplay",
+        "Apple HomeKit",
+        "MATTER Dash (Ambiscape)",
+        "Easylink+",
+        "Matter",
+        "AmbiScape",
+        "AirPlay 2",
+        "Works with Alexa",
+        "Voice control",
+        "Casting"
+      ]
+    },
+    "specs": {
+      "stand": "Central stand, swivel",
+      "voice": [
+        "Push to talk RC with Mic",
+        "TPV Voice Assistant built-in"
+      ],
+      "remote": "R53-EB Li-ion battery wireless charging RC",
+      "chassis": "TPN25.8E MA",
+      "localDimmingZones": {
+        "55": 288,
+        "65": 384,
+        "75": 448,
+        "100": 576
+      }
+    },
+    "apps": [
+      "Netflix",
+      "Prime Video",
+      "Disney+",
+      "Titan Channel",
+      "YouTube",
+      "Apps"
+    ],
+    "audioChannels": "2.0 CH",
+    "audioPower": "20W",
+    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "bluetoothVersion": "Bluetooth 5.4",
+    "vrrMaxRefreshRate": "165 Hz"
+  },
+  {
+    "modelName": "75MLED911",
+    "year": 2026,
+    "availableSizes": [
+      "55",
+      "65",
+      "75",
+      "100"
+    ],
+    "osProfileId": "Titan OS",
+    "panelType": "MiniLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": [
+        "HDR10+ compatible",
+        "Dolby Vision 2",
+        "HDR10+ Adaptive"
+      ],
+      "audio": [
+        "Dolby Atmos",
+        "DTS:X",
+        "IntelliSound",
+        "Multiple speakers"
+      ],
+      "gaming": [
+        "HDMI-VRR",
+        "FreeSync Premium Pro (TBC)",
+        "G-Sync Compatible",
+        "ALLM",
+        "120Hz native / 165Hz max",
+        "DLG 48Hz~288Hz support"
+      ],
+      "smart": [
+        "Auracast",
+        "Airplay",
+        "Apple HomeKit",
+        "MATTER Dash (Ambiscape)",
+        "Easylink+",
+        "Matter",
+        "AmbiScape",
+        "AirPlay 2",
+        "Works with Alexa",
+        "Voice control",
+        "Casting"
+      ]
+    },
+    "specs": {
+      "stand": "Central stand, swivel",
+      "voice": [
+        "Push to talk RC with Mic",
+        "TPV Voice Assistant built-in"
+      ],
+      "remote": "R53-EB Li-ion battery wireless charging RC",
+      "chassis": "TPN25.8E MA",
+      "localDimmingZones": {
+        "55": 288,
+        "65": 384,
+        "75": 448,
+        "100": 576
+      }
+    },
+    "apps": [
+      "Netflix",
+      "Prime Video",
+      "Disney+",
+      "Titan Channel",
+      "YouTube",
+      "Apps"
+    ],
+    "audioChannels": "2.0 CH",
+    "audioPower": "20W",
+    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "bluetoothVersion": "Bluetooth 5.4",
+    "vrrMaxRefreshRate": "165 Hz"
+  },
+  {
+    "modelName": "100MLED911",
+    "year": 2026,
+    "availableSizes": [
+      "55",
+      "65",
+      "75",
+      "100"
+    ],
+    "osProfileId": "Titan OS",
+    "panelType": "MiniLED",
+    "features": {
+      "ambilight": "3-sided Ambilight",
+      "video": [
+        "HDR10+ compatible",
+        "Dolby Vision 2",
+        "HDR10+ Adaptive"
+      ],
+      "audio": [
+        "Dolby Atmos",
+        "DTS:X",
+        "IntelliSound",
+        "Multiple speakers"
+      ],
+      "gaming": [
+        "HDMI-VRR",
+        "FreeSync Premium Pro (TBC)",
+        "G-Sync Compatible",
+        "ALLM",
+        "120Hz native / 165Hz max",
+        "DLG 48Hz~288Hz support"
+      ],
+      "smart": [
+        "Auracast",
+        "Airplay",
+        "Apple HomeKit",
+        "MATTER Dash (Ambiscape)",
+        "Easylink+",
+        "Matter",
+        "AmbiScape",
+        "AirPlay 2",
+        "Works with Alexa",
+        "Voice control",
+        "Casting"
+      ]
+    },
+    "specs": {
+      "stand": "Central stand, swivel",
+      "voice": [
+        "Push to talk RC with Mic",
+        "TPV Voice Assistant built-in"
+      ],
+      "remote": "R53-EB Li-ion battery wireless charging RC",
+      "chassis": "TPN25.8E MA",
+      "localDimmingZones": {
+        "55": 288,
+        "65": 384,
+        "75": 448,
+        "100": 576
+      }
+    },
+    "apps": [
+      "Netflix",
+      "Prime Video",
+      "Disney+",
+      "Titan Channel",
+      "YouTube",
+      "Apps"
+    ],
+    "audioChannels": "2.0 CH",
+    "audioPower": "20W",
+    "wifiStandard": "WIFI 11ax 2x2 DB",
+    "bluetoothVersion": "Bluetooth 5.4",
+    "vrrMaxRefreshRate": "165 Hz"
+  },
+  {
+    "modelName": "24PFS6101",
+    "year": 2026,
+    "availableSizes": [
+      "24",
+      "32"
+    ],
+    "osProfileId": "Titan OS",
+    "panelType": "LED",
+    "features": {},
+    "specs": {
+      "chassis": "MT9676",
+      "description": "12V/24V CamperVan TV"
     },
     "apps": []
   }

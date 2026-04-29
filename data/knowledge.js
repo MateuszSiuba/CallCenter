@@ -164,7 +164,7 @@ window.KnowledgeBaseData = [
 						]
 					}
 				]; 
-const KnowledgeBaseData = [
+window.KnowledgeBaseData.push(...[
   {
     "id": "kb_titan_os",
     "title": "Titan OS",
@@ -323,4 +323,4 @@ const KnowledgeBaseData = [
       "Results in much richer reds and greens compared to standard LED TVs."
     ]
   }
-];
+]);

@@ -466,8 +466,579 @@ const ModelPlatformChassisData = [
     "modelName": "55OLED810/12",
     "platform": "NT72676",
     "chassis": "TPN25.8E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65OLED951",
+    "platform": "MT9620",
+    "chassis": "TPM25.1E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "77OLED951",
+    "platform": "MT9620",
+    "chassis": "TPM25.1E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "48OLED911",
+    "platform": "MT9620",
+    "chassis": "TPM25.1E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "55OLED911",
+    "platform": "MT9620",
+    "chassis": "TPM25.1E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65OLED911",
+    "platform": "MT9620",
+    "chassis": "TPM25.1E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "77OLED911",
+    "platform": "MT9620",
+    "chassis": "TPM25.1E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "42OLED901",
+    "platform": "MT9972",
+    "chassis": "TPM25.1E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "48OLED901",
+    "platform": "MT9972",
+    "chassis": "TPM25.1E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "42OLED811",
+    "platform": "MT9620",
+    "chassis": "TPM25.1E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "48OLED811",
+    "platform": "MT9620",
+    "chassis": "TPM25.1E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "55OLED811",
+    "platform": "MT9620",
+    "chassis": "TPM25.1E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65OLED811",
+    "platform": "MT9620",
+    "chassis": "TPM25.1E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "77OLED811",
+    "platform": "MT9620",
+    "chassis": "TPM25.1E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "83OLED811",
+    "platform": "MT9620",
+    "chassis": "TPM25.1E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "42OLED771",
+    "platform": "NT676",
+    "chassis": "TPN25.8E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "48OLED771",
+    "platform": "NT676",
+    "chassis": "TPN25.8E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "55OLED771",
+    "platform": "NT676",
+    "chassis": "TPN25.8E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65OLED771",
+    "platform": "NT676",
+    "chassis": "TPN25.8E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "48OLED761",
+    "platform": "NT676",
+    "chassis": "TPN25.8E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "55OLED761",
+    "platform": "NT676",
+    "chassis": "TPN25.8E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65OLED761",
+    "platform": "NT676",
+    "chassis": "TPN25.8E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "77OLED761",
+    "platform": "NT676",
+    "chassis": "TPN25.8E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "83OLED761",
+    "platform": "NT676",
+    "chassis": "TPN25.8E OA"
+  },
+  {
+    "year": 2026,
+    "modelName": "85MLED981",
+    "platform": "MT9620",
+    "chassis": "TPN25.8E MA"
+  },
+  {
+    "year": 2026,
+    "modelName": "55MLED911",
+    "platform": "MT9620",
+    "chassis": "TPN25.8E MA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65MLED911",
+    "platform": "MT9620",
+    "chassis": "TPN25.8E MA"
+  },
+  {
+    "year": 2026,
+    "modelName": "75MLED911",
+    "platform": "MT9620",
+    "chassis": "TPN25.8E MA"
+  },
+  {
+    "year": 2026,
+    "modelName": "100MLED911",
+    "platform": "MT9620",
+    "chassis": "TPN25.8E MA"
+  },
+  {
+    "year": 2026,
+    "modelName": "43PUS9001",
+    "platform": "MT9620",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "50PUS9001",
+    "platform": "MT9620",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "55PUS9001",
+    "platform": "MT9620",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65PUS9001",
+    "platform": "MT9620",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "75PUS9001",
+    "platform": "MT9620",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "85PUS9001",
+    "platform": "MT9620",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "100PUS9001",
+    "platform": "MT9620",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "43PUS8601",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "50PUS8601",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "55PUS8601",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65PUS8601",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "75PUS8601",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "43PUS8501",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "50PUS8501",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "55PUS8501",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65PUS8501",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "85PUS8501",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "43PUS8401",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "55PUS8401",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65PUS8401",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "43PUS8001",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "50PUS8001",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "55PUS8001",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65PUS8001",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "43PUS7801",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "50PUS7801",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "55PUS7801",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65PUS7801",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "75PUS7801",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "43PUS7201",
+    "platform": "MT9676",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "50PUS7201",
+    "platform": "MT9676",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "55PUS7201",
+    "platform": "MT9676",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65PUS7201",
+    "platform": "MT9676",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "43PUS7001",
+    "platform": "MT9676",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "50PUS7001",
+    "platform": "MT9676",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "55PUS7001",
+    "platform": "MT9676",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65PUS7001",
+    "platform": "MT9676",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "75PUS7001",
+    "platform": "MT9676",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "32PUS6901",
+    "platform": "NT690",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "40PUS6901",
+    "platform": "NT690",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "43PUS9081",
+    "platform": "MT9620",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "50PUS9081",
+    "platform": "MT9620",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "55PUS9081",
+    "platform": "MT9620",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65PUS9081",
+    "platform": "MT9620",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "43PUS9011",
+    "platform": "MT9620",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "50PUS9011",
+    "platform": "MT9620",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "55PUS9011",
+    "platform": "MT9620",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65PUS9011",
+    "platform": "MT9620",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "85PUS9011",
+    "platform": "MT9620",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "43PUS8701",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "50PUS8701",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "55PUS8701",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65PUS8701",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "43PUS8651",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "55PUS8651",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65PUS8651",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "43PUS8631",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "55PUS8631",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65PUS8631",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "43PUS8611",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "55PUS8611",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65PUS8611",
+    "platform": "NT690E",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "43PUS7061",
+    "platform": "MT9676",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "50PUS7061",
+    "platform": "MT9676",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "55PUS7061",
+    "platform": "MT9676",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "65PUS7061",
+    "platform": "MT9676",
+    "chassis": "TPN25.6E LA"
+  },
+  {
+    "year": 2026,
+    "modelName": "32PFS6951",
+    "platform": "NT690",
+    "chassis": "TPN25.6E LA"
   }
 ];
-if (typeof window !== "undefined") {
-  window.ModelPlatformChassisData = ModelPlatformChassisData;
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = ModelPlatformChassisData;
 }

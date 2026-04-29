@@ -110,7 +110,7 @@
               <div class="grid-2">
                 <label class="field">
                   <span>Stand</span>
-                  <input id="standInput" type="text">
+                  <input id="standInput" type="text" placeholder="Metal diamante angle grey">
                 </label>
                 <label class="field">
                   <span>Aliases</span>
@@ -137,11 +137,11 @@
               <div class="grid-2">
                 <label class="field">
                   <span>Wi-Fi Standard</span>
-                  <input id="wifiInput" type="text">
+                  <input id="wifiInput" type="text" placeholder="Wi-Fi 802.11ax">
                 </label>
                 <label class="field">
                   <span>Bluetooth Version</span>
-                  <input id="bluetoothInput" type="text">
+                  <input id="bluetoothInput" type="text" placeholder="Bluetooth 5.2">
                 </label>
               </div>
 
@@ -204,21 +204,21 @@
               <div class="grid-2">
                 <label class="field">
                   <span>Front Image URL</span>
-                  <input id="frontImageInput" type="url">
+                  <input id="frontImageInput" type="url" placeholder="https://images.philips.com/is/image/...">
                 </label>
                 <label class="field">
                   <span>Side Image URL</span>
-                  <input id="sideImageInput" type="url">
+                  <input id="sideImageInput" type="url" placeholder="https://images.philips.com/is/image/...">
                 </label>
               </div>
               <div class="grid-2">
                 <label class="field">
                   <span>Remote Image URL</span>
-                  <input id="remoteImageInput" type="url">
+                  <input id="remoteImageInput" type="url" placeholder="https://images.philips.com/is/image/...">
                 </label>
                 <label class="field">
                   <span>Ports Image URL</span>
-                  <input id="portsImageInput" type="url">
+                  <input id="portsImageInput" type="url" placeholder="https://images.philips.com/is/image/...">
                 </label>
               </div>
             </section>
@@ -260,17 +260,23 @@
               </div>
 
               <label class="field">
-                <span>JSON Override (optional full model object)</span>
-                <textarea id="jsonOverrideInput" rows="8" placeholder='{"modelName":"55PUS9001"}'></textarea>
+                <span>JSON Override (advanced: paste full model object to overwrite all model fields)</span>
+                <textarea id="jsonOverrideInput" rows="8" placeholder='{
+  "modelName": "55PUS9001",
+  "year": 2025,
+  "osProfileId": "Google TV"
+}'></textarea>
               </label>
+              <p class="muted small">Leave this empty for normal editing. Use only if you want to replace the whole model object directly.</p>
 
               <div class="delete-field-box">
                 <label class="field">
-                  <span>Delete model field path</span>
-                  <input id="unsetPathInput" type="text" placeholder="specs.remote or features.smart">
+                  <span>Delete one field by path (advanced)</span>
+                  <input id="unsetPathInput" type="text" placeholder="Example: specs.stand or features.smart or specs.vesaScrewType">
                 </label>
                 <button id="unsetFieldBtn" type="button" class="btn">Delete field path</button>
               </div>
+              <p class="muted small">This removes only one field from the selected model. It does not delete the whole model.</p>
             </section>
 
             <div class="actions-row">

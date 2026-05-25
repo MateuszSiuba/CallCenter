@@ -90,237 +90,641 @@
 				};
 
 window.KnowledgeBaseData = [
-					{
-						id: "kb-matter-standard",
-						title: "What Is Matter (Smart Home Standard)?",
-						summary: "Agent-ready overview of Matter for quick customer explanations.",
-						tags: ["matter", "smart home", "pairing", "thread", "wifi"],
-						filters: {
-							topics: ["matter"],
-							os: ["Google TV", "Google OS", "Android TV"]
-						},
-						sections: [
-							{
-								heading: "Definition",
-								paragraphs: [
-									"Matter is a smart home interoperability standard that allows devices from different brands to work together.",
-									"It runs over existing local networks such as Wi-Fi and Thread, with Bluetooth Low Energy used for onboarding."
-								],
-								bullets: [
-									"Focuses on local control and reliability.",
-									"Supports multi-admin so users can manage devices in multiple ecosystems.",
-									"Reduces app and ecosystem lock-in."
-								]
-							},
-							{
-								heading: "Agent Script",
-								paragraphs: [
-									"Use this one-liner: Matter helps your devices talk the same language across brands, so setup and control are easier.",
-									"If pairing fails, check same-network conditions and mDNS visibility first."
-								],
-								bullets: []
-							}
-						]
-					},
-					{
-						id: "kb-contact-numbers",
-						title: "Contact Numbers and Escalation Channels",
-						summary: "Region-based call routing, logistics, and panel-lab channels.",
-						tags: ["contacts", "hotline", "escalation", "logistics", "panel lab"],
-						sections: [
-							{
-								heading: "Primary Hotlines",
-								paragraphs: [
-									"UK Tier1: 0800-100-7744",
-									"PL Tier1: +48 22 390 88 11",
-									"DE Tier1: +49 30 5683 4410"
-								],
-								bullets: [
-									"Logistics mailboxes are region-specific.",
-									"Panel-lab escalation requires fault evidence and serial number.",
-									"Use country-specific template before transfer."
-								]
-							}
-						]
-					},
-					{
-						id: "kb-known-issues-bulletin",
-						title: "Known Issues Bulletin - Q2 2026",
-						summary: "Cross-model issues currently monitored by Tier2 and engineering.",
-						tags: ["known issues", "firmware", "wifi", "hdmi", "audio"],
-						sections: [
-							{
-								heading: "Active Bulletins",
-								paragraphs: [
-									"Intermittent eARC drop on certain soundbars with quick-start enabled.",
-									"Android Play Store login loop on outdated Google Services package."
-								],
-								bullets: [
-									"Temporary fix for eARC: disable quick-start and reboot TV + soundbar.",
-									"Temporary fix for Play Store: clear cache for Play Store and Play Services.",
-									"Collect firmware build and timestamp before escalation."
-								]
-							}
-						]
-					}
-				]; 
+    {
+        "id": "kb-matter-standard",
+        "title": "What Is Matter (Smart Home Standard)?",
+        "summary": "Agent-ready overview of Matter for quick customer explanations.",
+        "tags": [
+            "matter",
+            "smart home",
+            "pairing",
+            "thread",
+            "wifi"
+        ],
+        "filters": {
+            "topics": [
+                "matter"
+            ],
+            "os": [
+                "Google TV",
+                "Google OS",
+                "Android TV"
+            ]
+        },
+        "sections": [
+            {
+                "heading": "Definition",
+                "paragraphs": [
+                    "Matter is a smart home interoperability standard that allows devices from different brands to work together.",
+                    "It runs over existing local networks such as Wi-Fi and Thread, with Bluetooth Low Energy used for onboarding."
+                ],
+                "bullets": [
+                    "Focuses on local control and reliability.",
+                    "Supports multi-admin so users can manage devices in multiple ecosystems.",
+                    "Reduces app and ecosystem lock-in."
+                ]
+            },
+            {
+                "heading": "Agent Script",
+                "paragraphs": [
+                    "Use this one-liner: Matter helps your devices talk the same language across brands, so setup and control are easier.",
+                    "If pairing fails, check same-network conditions and mDNS visibility first."
+                ],
+                "bullets": []
+            }
+        ]
+    },
+    {
+        "id": "kb-contact-numbers",
+        "title": "Contact Numbers and Escalation Channels",
+        "summary": "Region-based call routing, logistics, and panel-lab channels.",
+        "tags": [
+            "contacts",
+            "hotline",
+            "escalation",
+            "logistics",
+            "panel lab"
+        ],
+        "sections": [
+            {
+                "heading": "Primary Hotlines",
+                "paragraphs": [
+                    "UK Tier1: 0800-100-7744",
+                    "PL Tier1: +48 22 390 88 11",
+                    "DE Tier1: +49 30 5683 4410"
+                ],
+                "bullets": [
+                    "Logistics mailboxes are region-specific.",
+                    "Panel-lab escalation requires fault evidence and serial number.",
+                    "Use country-specific template before transfer."
+                ]
+            }
+        ]
+    },
+    {
+        "id": "kb-known-issues-bulletin",
+        "title": "Known Issues Bulletin - Q2 2026",
+        "summary": "Cross-model issues currently monitored by Tier2 and engineering.",
+        "tags": [
+            "known issues",
+            "firmware",
+            "wifi",
+            "hdmi",
+            "audio"
+        ],
+        "sections": [
+            {
+                "heading": "Active Bulletins",
+                "paragraphs": [
+                    "Intermittent eARC drop on certain soundbars with quick-start enabled.",
+                    "Android Play Store login loop on outdated Google Services package."
+                ],
+                "bullets": [
+                    "Temporary fix for eARC: disable quick-start and reboot TV + soundbar.",
+                    "Temporary fix for Play Store: clear cache for Play Store and Play Services.",
+                    "Collect firmware build and timestamp before escalation."
+                ]
+            }
+        ]
+    }
+];
+
 window.KnowledgeBaseData.push(...[
-  {
-    "id": "kb_titan_os",
-    "title": "Titan OS",
-    "tags": ["Titan OS", "Smart TV", "System"],
-		"filters": {
-			"topics": ["Titan OS", "App Gallery"],
-			"os": ["Titan OS"]
-		},
-    "summary": "Philips' proprietary Smart TV operating system introduced for modern LED and OLED TVs, focusing on speed and ease of use.",
-    "contentPoints": [
-      "Extremely fast and lightweight compared to older Android TV versions.",
-      "Supports major VOD apps out of the box (Netflix, Prime Video, Disney+, YouTube).",
-      "Features 'Titan Channel' - a built-in free streaming service with curated content.",
-      "Note for customers: It does not have the Google Play Store. Apps are managed via the dedicated Titan App Gallery."
-    ]
-  },
-  {
-    "id": "kb_ambilight_4sided",
-    "title": "4-sided Ambilight",
-    "tags": ["4-sided Ambilight", "Ambilight", "Lighting"],
-		"filters": {
-			"topics": ["4-sided Ambilight", "Ambilight"]
-		},
-    "summary": "The highest tier of Philips signature bias lighting technology, projecting colors from all four sides of the TV.",
-    "contentPoints": [
-      "LEDs are placed on the top, bottom, left, and right edges of the rear panel.",
-      "Creates a 'floating' screen effect, significantly reducing eye strain in dark rooms.",
-      "Syncs perfectly with on-screen action, music, or can be set to a static lounge light mode.",
-      "Best performance requires wall-mounting or placing the TV at least 15cm away from the wall."
-    ]
-  },
-  {
-		"id": "kb_ambilight_3sided",
-		"title": "3-sided Ambilight",
-		"tags": ["3-sided Ambilight", "Ambilight", "Lighting"],
-		"filters": {
-			"topics": ["3-sided Ambilight", "Ambilight"]
-		},
-		"imageUrl": "Images/3sideambi.jpg",
-		"summary": "Ambilight configuration with LEDs on three sides of the TV for immersive bias lighting.",
-		"contentPoints": [
-			"Projects matching light from the left, right, and top edges of the rear panel.",
-			"Delivers a strong immersion effect while being available on a wider model range than 4-sided variants.",
-			"Works best when the TV is placed close to a neutral-color wall for cleaner color reflection.",
-			"Supports Ambilight styles such as video-follow, audio-reactive, and static lounge modes."
-		]
-	},
-	{
-    "id": "kb_dolby_vision_2_max",
-    "title": "Dolby Vision 2 Max",
-    "tags": ["Dolby Vision 2 Max", "Dolby Vision", "HDR", "Video"],
-		"filters": {
-			"topics": ["Dolby Vision 2 Max"],
-			"years": [2026]
-		},
-    "summary": "The latest and most advanced High Dynamic Range (HDR) standard supported by high-end Philips displays.",
-    "contentPoints": [
-      "Dynamically optimizes brightness, contrast, and color frame-by-frame.",
-      "'Max' designation implies full utilization of high-peak brightness panels (like OLED META or MiniLED) without clipping highlights.",
-      "Automatically adjusts the picture based on the ambient light sensor in the TV (Dolby Vision IQ features)."
-    ]
-  },
-	{
-		"id": "kb_dolby_vision",
-		"title": "Dolby Vision",
-		"tags": ["Dolby Vision", "HDR Format", "Video"],
-		"filters": {
-			"topics": ["Dolby Vision"]
-		},
-		"summary": "Dynamic HDR format that improves brightness, contrast, and color scene-by-scene on supported content.",
-		"contentPoints": [
-			"Dolby Vision uses dynamic metadata, so each scene can be optimized instead of one static HDR profile for the whole movie.",
-			"It helps preserve highlight details and dark-scene visibility, especially in difficult mixed-light scenes.",
-			"Customers need Dolby Vision content from streaming apps or external players to see the full benefit.",
-			"Compared with Dolby Vision 2 Max, this is the standard Dolby Vision capability used across many 2025 and 2026 models."
-		]
-	},
-  {
-    "id": "kb_auracast",
-    "title": "Bluetooth Auracast",
-    "tags": ["Auracast", "Bluetooth", "Audio", "Smart"],
-    "summary": "A next-generation Bluetooth audio broadcasting technology available in 2025/2026 models.",
-    "contentPoints": [
-      "Allows the TV to broadcast audio to an unlimited number of nearby Auracast-compatible headphones or speakers simultaneously.",
-      "Perfect for couples watching TV late at night with two separate pairs of headphones.",
-      "Eliminates the traditional pairing process – users just 'tune in' to the TV's audio stream like a radio station."
-    ]
-  },
-  {
-    "id": "kb_matter_dash",
-    "title": "MATTER Dash (Ambiscape)",
-    "tags": ["MATTER Dash", "Ambiscape", "Matter", "Smart Home"],
-		"filters": {
-			"topics": ["MATTER Dash", "Matter", "Ambiscape"],
-			"os": ["Titan OS"]
-		},
-    "summary": "The central smart home dashboard integrated into the TV, using the universal Matter protocol.",
-    "contentPoints": [
-      "Allows the TV to act as a control hub for smart home devices (lights, thermostats, locks) from any brand that supports Matter (Apple, Google, Amazon, Philips Hue).",
-      "'Ambiscape' feature specifically integrates Ambilight with other smart lighting in the room to create a unified lighting environment.",
-      "Accessible directly from the TV remote without interrupting the viewing experience."
-    ]
-  },
-  {
-    "id": "kb_easylink_plus",
-    "title": "Easylink+",
-    "tags": ["Easylink+", "Easylink", "HDMI-CEC"],
-    "summary": "Philips' enhanced version of HDMI-CEC for seamless device control.",
-    "contentPoints": [
-      "Allows controlling connected devices (Soundbars, Blu-ray players, Consoles) using just the TV remote.",
-      "The '+' version includes deeper UI integration – for example, adjusting Soundbar EQ settings directly on the TV screen.",
-      "Ensures automatic power on/off sync between the TV and the connected audio system."
-    ]
-  },
-  {
-    "id": "kb_ai_art_aurora",
-    "title": "AI Art (Aurora 3.0)",
-    "tags": ["AI Art (Aurora 3.0)", "Aurora", "Screensaver"],
-    "summary": "A smart screensaver mode that turns the TV into a digital canvas when not in use.",
-    "contentPoints": [
-      "Displays curated high-quality artwork, photography, or AI-generated images.",
-      "Integrates with Ambilight to create a relaxing atmosphere in the room.",
-      "Helps prevent screen burn-in on OLED panels by slowly shifting pixels and limiting brightness."
-    ]
-  },
-  {
-    "id": "kb_hdmi_vrr",
-    "title": "HDMI-VRR (Variable Refresh Rate)",
-    "tags": ["HDMI-VRR", "VRR", "Gaming"],
-    "summary": "A crucial gaming feature that syncs the TV's refresh rate with the console/PC's frame rate.",
-    "contentPoints": [
-      "Eliminates screen tearing and stuttering during fast-paced games.",
-      "Works natively with PlayStation 5 and Xbox Series X/S via HDMI 2.1.",
-      "Operates smoothly within a wide range (e.g., 40Hz up to 144Hz or 165Hz depending on the panel)."
-    ]
-  },
-  {
-    "id": "kb_freesync_premium",
-    "title": "FreeSync Premium",
-    "tags": ["FreeSync Premium", "FreeSync", "Gaming"],
-    "summary": "AMD's certified tier of variable refresh rate technology, ensuring top-tier gaming performance.",
-    "contentPoints": [
-      "Guarantees tear-free, low flicker, and low latency gaming.",
-      "Includes Low Framerate Compensation (LFC) – if the game drops below the TV's minimum refresh rate, the TV will display frames multiple times to keep gameplay smooth.",
-      "Highly recommended for PC gamers using AMD Radeon graphics cards."
-    ]
-  },
-  {
-    "id": "kb_dled_qd",
-    "title": "DLED QD (Quantum Dot)",
-    "tags": ["DLED QD", "DLED", "PanelType", "Quantum Dot"],
-    "summary": "Direct LED backlighting combined with a Quantum Dot layer for enhanced color and brightness.",
-    "contentPoints": [
-      "DLED (Direct LED) means the LEDs are directly behind the screen, offering better contrast and uniformity than Edge-LED.",
-      "QD (Quantum Dot) is a nanoparticle layer that dramatically increases the color gamut and peak brightness.",
-      "Results in much richer reds and greens compared to standard LED TVs."
-    ]
-  }
+    {
+        "id": "kb_titan_os",
+        "title": "Titan OS",
+        "tags": [
+            "Titan OS",
+            "Smart TV",
+            "System"
+        ],
+        "filters": {
+            "topics": [
+                "Titan OS",
+                "App Gallery"
+            ],
+            "os": [
+                "Titan OS"
+            ]
+        },
+        "summary": "Philips' proprietary Smart TV operating system introduced for modern LED and OLED TVs, focusing on speed and ease of use.",
+        "contentPoints": [
+            "Extremely fast and lightweight compared to older Android TV versions.",
+            "Supports major VOD apps out of the box (Netflix, Prime Video, Disney+, YouTube).",
+            "Features 'Titan Channel' - a built-in free streaming service with curated content.",
+            "Note for customers: It does not have the Google Play Store. Apps are managed via the dedicated Titan App Gallery."
+        ]
+    },
+    {
+        "id": "kb_ambilight_4sided",
+        "title": "4-sided Ambilight",
+        "tags": [
+            "4-sided Ambilight",
+            "Ambilight",
+            "Lighting"
+        ],
+        "filters": {
+            "topics": [
+                "4-sided Ambilight",
+                "Ambilight"
+            ]
+        },
+        "summary": "The highest tier of Philips signature bias lighting technology, projecting colors from all four sides of the TV.",
+        "contentPoints": [
+            "LEDs are placed on the top, bottom, left, and right edges of the rear panel.",
+            "Creates a 'floating' screen effect, significantly reducing eye strain in dark rooms.",
+            "Syncs perfectly with on-screen action, music, or can be set to a static lounge light mode.",
+            "Best performance requires wall-mounting or placing the TV at least 15cm away from the wall."
+        ]
+    },
+    {
+        "id": "kb_ambilight_3sided",
+        "title": "3-sided Ambilight",
+        "tags": [
+            "3-sided Ambilight",
+            "Ambilight",
+            "Lighting"
+        ],
+        "filters": {
+            "topics": [
+                "3-sided Ambilight",
+                "Ambilight"
+            ]
+        },
+        "imageUrl": "Images/3sideambi.jpg",
+        "summary": "Ambilight configuration with LEDs on three sides of the TV for immersive bias lighting.",
+        "contentPoints": [
+            "Projects matching light from the left, right, and top edges of the rear panel.",
+            "Delivers a strong immersion effect while being available on a wider model range than 4-sided variants.",
+            "Works best when the TV is placed close to a neutral-color wall for cleaner color reflection.",
+            "Supports Ambilight styles such as video-follow, audio-reactive, and static lounge modes."
+        ]
+    },
+    {
+        "id": "kb_dolby_vision_2_max",
+        "title": "Dolby Vision 2 Max",
+        "tags": [
+            "Dolby Vision 2 Max",
+            "Dolby Vision",
+            "HDR",
+            "Video"
+        ],
+        "filters": {
+            "topics": [
+                "Dolby Vision 2 Max"
+            ],
+            "years": [
+                2026
+            ]
+        },
+        "summary": "The latest and most advanced High Dynamic Range (HDR) standard supported by high-end Philips displays.",
+        "contentPoints": [
+            "Dynamically optimizes brightness, contrast, and color frame-by-frame.",
+            "'Max' designation implies full utilization of high-peak brightness panels (like OLED META or MiniLED) without clipping highlights.",
+            "Automatically adjusts the picture based on the ambient light sensor in the TV (Dolby Vision IQ features)."
+        ]
+    },
+    {
+        "id": "kb_dolby_vision",
+        "title": "Dolby Vision",
+        "tags": [
+            "Dolby Vision",
+            "HDR Format",
+            "Video"
+        ],
+        "filters": {
+            "topics": [
+                "Dolby Vision"
+            ]
+        },
+        "summary": "Dynamic HDR format that improves brightness, contrast, and color scene-by-scene on supported content.",
+        "contentPoints": [
+            "Dolby Vision uses dynamic metadata, so each scene can be optimized instead of one static HDR profile for the whole movie.",
+            "It helps preserve highlight details and dark-scene visibility, especially in difficult mixed-light scenes.",
+            "Customers need Dolby Vision content from streaming apps or external players to see the full benefit.",
+            "Compared with Dolby Vision 2 Max, this is the standard Dolby Vision capability used across many 2025 and 2026 models."
+        ]
+    },
+    {
+        "id": "kb_auracast",
+        "title": "Bluetooth Auracast",
+        "tags": [
+            "Auracast",
+            "Bluetooth",
+            "Audio",
+            "Smart"
+        ],
+        "summary": "A next-generation Bluetooth audio broadcasting technology available in 2025/2026 models.",
+        "contentPoints": [
+            "Allows the TV to broadcast audio to an unlimited number of nearby Auracast-compatible headphones or speakers simultaneously.",
+            "Perfect for couples watching TV late at night with two separate pairs of headphones.",
+            "Eliminates the traditional pairing process – users just 'tune in' to the TV's audio stream like a radio station."
+        ]
+    },
+    {
+        "id": "kb_matter_dash",
+        "title": "MATTER Dash (Ambiscape)",
+        "tags": [
+            "MATTER Dash",
+            "Ambiscape",
+            "Matter",
+            "Smart Home"
+        ],
+        "filters": {
+            "topics": [
+                "MATTER Dash",
+                "Matter",
+                "Ambiscape"
+            ],
+            "os": [
+                "Titan OS"
+            ]
+        },
+        "summary": "The central smart home dashboard integrated into the TV, using the universal Matter protocol.",
+        "contentPoints": [
+            "Allows the TV to act as a control hub for smart home devices (lights, thermostats, locks) from any brand that supports Matter (Apple, Google, Amazon, Philips Hue).",
+            "'Ambiscape' feature specifically integrates Ambilight with other smart lighting in the room to create a unified lighting environment.",
+            "Accessible directly from the TV remote without interrupting the viewing experience."
+        ]
+    },
+    {
+        "id": "kb_easylink_plus",
+        "title": "Easylink+",
+        "tags": [
+            "Easylink+",
+            "Easylink",
+            "HDMI-CEC"
+        ],
+        "summary": "Philips' enhanced version of HDMI-CEC for seamless device control.",
+        "contentPoints": [
+            "Allows controlling connected devices (Soundbars, Blu-ray players, Consoles) using just the TV remote.",
+            "The '+' version includes deeper UI integration – for example, adjusting Soundbar EQ settings directly on the TV screen.",
+            "Ensures automatic power on/off sync between the TV and the connected audio system."
+        ]
+    },
+    {
+        "id": "kb_ai_art_aurora",
+        "title": "AI Art (Aurora 3.0)",
+        "tags": [
+            "AI Art (Aurora 3.0)",
+            "Aurora",
+            "Screensaver"
+        ],
+        "summary": "A smart screensaver mode that turns the TV into a digital canvas when not in use.",
+        "contentPoints": [
+            "Displays curated high-quality artwork, photography, or AI-generated images.",
+            "Integrates with Ambilight to create a relaxing atmosphere in the room.",
+            "Helps prevent screen burn-in on OLED panels by slowly shifting pixels and limiting brightness."
+        ]
+    },
+    {
+        "id": "kb_hdmi_vrr",
+        "title": "HDMI-VRR (Variable Refresh Rate)",
+        "tags": [
+            "HDMI-VRR",
+            "VRR",
+            "Gaming"
+        ],
+        "summary": "A crucial gaming feature that syncs the TV's refresh rate with the console/PC's frame rate.",
+        "contentPoints": [
+            "Eliminates screen tearing and stuttering during fast-paced games.",
+            "Works natively with PlayStation 5 and Xbox Series X/S via HDMI 2.1.",
+            "Operates smoothly within a wide range (e.g., 40Hz up to 144Hz or 165Hz depending on the panel)."
+        ]
+    },
+    {
+        "id": "kb_freesync_premium",
+        "title": "FreeSync Premium",
+        "tags": [
+            "FreeSync Premium",
+            "FreeSync",
+            "Gaming"
+        ],
+        "summary": "AMD's certified tier of variable refresh rate technology, ensuring top-tier gaming performance.",
+        "contentPoints": [
+            "Guarantees tear-free, low flicker, and low latency gaming.",
+            "Includes Low Framerate Compensation (LFC) – if the game drops below the TV's minimum refresh rate, the TV will display frames multiple times to keep gameplay smooth.",
+            "Highly recommended for PC gamers using AMD Radeon graphics cards."
+        ]
+    },
+    {
+        "id": "kb_dled_qd",
+        "title": "DLED QD (Quantum Dot)",
+        "tags": [
+            "DLED QD",
+            "DLED",
+            "PanelType",
+            "Quantum Dot"
+        ],
+        "summary": "Direct LED backlighting combined with a Quantum Dot layer for enhanced color and brightness.",
+        "contentPoints": [
+            "DLED (Direct LED) means the LEDs are directly behind the screen, offering better contrast and uniformity than Edge-LED.",
+            "QD (Quantum Dot) is a nanoparticle layer that dramatically increases the color gamut and peak brightness.",
+            "Results in much richer reds and greens compared to standard LED TVs."
+        ]
+    },
+    {
+        "id": "kb-airplay-2",
+        "title": "Apple AirPlay 2",
+        "summary": "Stream, share, and mirror content from your Apple devices to your TV.",
+        "tags": [
+            "AirPlay 2",
+            "Airplay",
+            "Apple",
+            "Apple AirPlay 2"
+        ],
+        "sections": [
+            {
+                "heading": "Overview",
+                "paragraphs": [
+                    "AirPlay 2 lets you stream audio, video, photos, and more from your iPhone, iPad, or Mac directly to the TV."
+                ],
+                "bullets": [
+                    "Requires the TV and Apple device to be on the same Wi-Fi network.",
+                    "Supports multi-room audio with other AirPlay 2 compatible speakers."
+                ]
+            }
+        ]
+    },
+    {
+        "id": "kb-works-with-alexa",
+        "title": "Works with Alexa",
+        "summary": "Control basic TV functions using an Amazon Echo device.",
+        "tags": [
+            "Works with Alexa",
+            "Alexa",
+            "Amazon Alexa",
+            "Voice"
+        ],
+        "sections": [
+            {
+                "heading": "Features",
+                "paragraphs": [
+                    "This TV works with Amazon Alexa. You can use your voice on an Alexa-enabled device to turn the TV on/off, change the volume, switch channels, and more."
+                ],
+                "bullets": [
+                    "Requires an external Amazon Echo or Alexa device.",
+                    "Must be paired through the Smart TV settings and the Amazon Alexa app."
+                ]
+            }
+        ]
+    },
+    {
+        "id": "kb-voice-control",
+        "title": "Voice Control",
+        "summary": "Built-in voice assistant or compatibility for voice commands.",
+        "tags": [
+            "Voice control",
+            "Voice",
+            "Voice Assistant",
+            "Microphone"
+        ],
+        "sections": [
+            {
+                "heading": "Usage",
+                "paragraphs": [
+                    "Use the built-in microphone on the remote control, or a far-field microphone on the TV (if equipped), to issue voice commands."
+                ],
+                "bullets": [
+                    "Search for content across multiple streaming apps seamlessly.",
+                    "Control TV settings without navigating deep menus."
+                ]
+            }
+        ]
+    },
+    {
+        "id": "kb-casting",
+        "title": "Casting",
+        "summary": "Send video and audio from mobile apps to your TV screen.",
+        "tags": [
+            "Casting",
+            "Chromecast",
+            "Miracast",
+            "Screen Mirroring"
+        ],
+        "sections": [
+            {
+                "heading": "How it works",
+                "paragraphs": [
+                    "Depending on your TV's operating system, Casting uses Google Cast (Chromecast built-in) or Miracast standards to stream content from apps like YouTube and Netflix straight to the display."
+                ],
+                "bullets": [
+                    "Look for the Cast icon in supported mobile apps.",
+                    "Does not mirror the whole screen unless explicitly chosen (unlike pure Screen Mirroring/Miracast)."
+                ]
+            }
+        ]
+    },
+    {
+        "id": "kb-gsync-compatible",
+        "title": "G-Sync Compatible",
+        "summary": "NVIDIA-certified variable refresh rate for tear-free gaming.",
+        "tags": [
+            "G-Sync Compatible",
+            "G-Sync",
+            "NVIDIA",
+            "Gaming",
+            "VRR"
+        ],
+        "sections": [
+            {
+                "heading": "NVIDIA G-Sync",
+                "paragraphs": [
+                    "Ensures smooth, tear-free gaming when connected to a compatible NVIDIA GeForce graphics card."
+                ],
+                "bullets": [
+                    "Dynamically matches the display's refresh rate to the GPU's frame rate.",
+                    "Reduces stuttering and input lag."
+                ]
+            }
+        ]
+    },
+    {
+        "id": "kb-allm",
+        "title": "ALLM (Auto Low Latency Mode)",
+        "summary": "Automatically switches the TV to Game Mode for the lowest input lag.",
+        "tags": [
+            "ALLM",
+            "Auto Low Latency Mode",
+            "Game Mode",
+            "Gaming"
+        ],
+        "sections": [
+            {
+                "heading": "Gaming Performance",
+                "paragraphs": [
+                    "When the TV detects a gaming signal from a console or PC, it automatically turns off unnecessary video processing features to reduce input delay."
+                ],
+                "bullets": [
+                    "No need to manually toggle Game Mode.",
+                    "Switches back to standard picture modes for movies."
+                ]
+            }
+        ]
+    },
+    {
+        "id": "kb-apple-homekit",
+        "title": "Apple HomeKit",
+        "summary": "Integrate the TV into your Apple Home smart ecosystem.",
+        "tags": [
+            "Apple HomeKit",
+            "HomeKit",
+            "Apple",
+            "Smart Home"
+        ],
+        "sections": [
+            {
+                "heading": "Smart Home Integration",
+                "paragraphs": [
+                    "Control the TV using the Apple Home app or Siri."
+                ],
+                "bullets": [
+                    "Turn TV on/off, change inputs, or adjust volume from your iOS device.",
+                    "Include the TV in HomeKit scenes (e.g., 'Movie Night' dims the lights and turns on the TV)."
+                ]
+            }
+        ]
+    },
+    {
+        "id": "kb-hdr10-plus-compatible",
+        "title": "HDR10+ Compatible",
+        "summary": "Advanced High Dynamic Range with dynamic metadata.",
+        "tags": [
+            "HDR10+ compatible",
+            "HDR10+",
+            "HDR",
+            "Video"
+        ],
+        "sections": [
+            {
+                "heading": "Dynamic HDR",
+                "paragraphs": [
+                    "HDR10+ adjusts brightness and contrast scene-by-scene or frame-by-frame, ensuring that each moment is shown at its ideal visual parameters."
+                ],
+                "bullets": [
+                    "Open-standard alternative to Dolby Vision.",
+                    "Maintains detail in both extremely bright and dark scenes."
+                ]
+            }
+        ]
+    },
+    {
+        "id": "kb-hdr10-plus-adaptive",
+        "title": "HDR10+ Adaptive",
+        "summary": "HDR10+ matched with room lighting conditions.",
+        "tags": [
+            "HDR10+ Adaptive",
+            "HDR10+",
+            "HDR",
+            "Video",
+            "Light Sensor"
+        ],
+        "sections": [
+            {
+                "heading": "Room Lighting Optimization",
+                "paragraphs": [
+                    "Uses the TV's light sensor to analyze the ambient light in your room and automatically adjusts the HDR10+ tone mapping."
+                ],
+                "bullets": [
+                    "Provides the optimum HDR experience even in brightly lit rooms.",
+                    "Prevents dark scenes from becoming unwatchable during the day."
+                ]
+            }
+        ]
+    },
+    {
+        "id": "kb-bass-plus",
+        "title": "Bass+ (Dolby)",
+        "summary": "Enhanced low-frequency audio processing.",
+        "tags": [
+            "Bass+ (Dolby)",
+            "Bass+",
+            "Dolby",
+            "Audio",
+            "Bass"
+        ],
+        "sections": [
+            {
+                "heading": "Sound Processing",
+                "paragraphs": [
+                    "A Dolby audio enhancement specifically tuned to maximize low-frequency response and deliver deeper, punchier bass from the TV's built-in speakers."
+                ],
+                "bullets": [
+                    "Reduces distortion at high volumes.",
+                    "Provides cinematic rumble without an external subwoofer."
+                ]
+            }
+        ]
+    },
+    {
+        "id": "kb-dolby-atmos",
+        "title": "Dolby Atmos",
+        "summary": "Immersive spatial audio technology.",
+        "tags": [
+            "Dolby Atmos",
+            "Atmos",
+            "Spatial Audio",
+            "Audio",
+            "Sound"
+        ],
+        "sections": [
+            {
+                "heading": "3D Sound",
+                "paragraphs": [
+                    "Dolby Atmos frees sound from channels. It places sounds precisely in a 3D space, meaning you hear audio from all around you, including overhead."
+                ],
+                "bullets": [
+                    "Creates a dome of sound for a cinema-like experience.",
+                    "Can be passed through via eARC to compatible soundbars and receivers."
+                ]
+            }
+        ]
+    },
+    {
+        "id": "kb-dtsx",
+        "title": "DTS:X",
+        "summary": "Object-based surround sound standard by DTS.",
+        "tags": [
+            "DTS:X",
+            "DTS",
+            "Audio",
+            "Spatial Audio",
+            "Surround"
+        ],
+        "sections": [
+            {
+                "heading": "Object-based Audio",
+                "paragraphs": [
+                    "Similar to Dolby Atmos, DTS:X is an object-based audio codec that creates multi-dimensional sound that moves around you."
+                ],
+                "bullets": [
+                    "Does not require a specific speaker layout.",
+                    "Highly dynamic soundscape for supported content."
+                ]
+            }
+        ]
+    },
+    {
+        "id": "kb-intellisound",
+        "title": "IntelliSound",
+        "summary": "AI-driven automatic audio adjustment.",
+        "tags": [
+            "IntelliSound",
+            "Audio",
+            "Sound",
+            "AI Sound"
+        ],
+        "sections": [
+            {
+                "heading": "AI Tracking",
+                "paragraphs": [
+                    "IntelliSound uses artificial intelligence to analyze the audio signal in real-time and fine-tunes the equalization to match the content."
+                ],
+                "bullets": [
+                    "Enhances dialogue clarity during news or movies.",
+                    "Boosts dynamics automatically during action scenes or sports."
+                ]
+            }
+        ]
+    }
 ]);

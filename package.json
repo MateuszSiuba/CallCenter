@@ -9,9 +9,18 @@
   "scripts": {
     "start": "node backend/src/server.js",
     "start:backend": "npm --prefix backend start",
-    "dev:backend": "npm --prefix backend run dev"
+    "dev:backend": "npm --prefix backend run dev",
+    "dev": "vite",
+    "build": "vite build"
   },
   "engines": {
     "node": ">=18"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.0",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^4.3.0",
+    "vite": "^8.0.14"
   }
 }

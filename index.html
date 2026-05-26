@@ -448,6 +448,132 @@
 		apiBaseUrl: "https://callcenter-yskc.onrender.com"
 	};
 </script>
+<script>
+	(() => {
+		const trainingMaterials = {
+			TV: [
+				{ title: "2026 TV Alignments", type: "PDF Guides", meta: "PDF Document - 2.4 MB" },
+				{ title: "Titan OS Overview", type: "Video Courses", meta: "Video Course - 15 mins" }
+			],
+			MNT: [
+				{ title: "MNT Display Alignment Guide", type: "PDF Guides", meta: "PDF Document - 1.8 MB" },
+				{ title: "Smart Monitor OS Overview", type: "Video Courses", meta: "Video Course - 12 mins" }
+			],
+			AVA: [
+				{ title: "AVA Product Alignment Guide", type: "PDF Guides", meta: "PDF Document - 2.1 MB" },
+				{ title: "Audio Setup Overview", type: "Video Courses", meta: "Video Course - 10 mins" }
+			]
+		};
+
+		function view(name) {
+			return document.getElementById(name);
+		}
+
+		function showOnly(name) {
+			["portalLanding", "splashScreen", "trainingShell", "appShell"].forEach((id) => {
+				const el = view(id);
+				if (el) {
+					el.classList.add("hidden");
+				}
+			});
+
+			const target = view(name);
+			if (target) {
+				target.classList.remove("hidden");
+			}
+		}
+
+		function showSplash() {
+			document.documentElement.classList.remove("resume-ready");
+			showOnly("splashScreen");
+			view("splashScreen")?.classList.remove("is-hiding");
+			view("appShell")?.classList.add("is-hidden");
+		}
+
+		function showTraining() {
+			showOnly("trainingShell");
+			updateTrainingMaterials();
+		}
+
+		function showDashboardFallback() {
+			showOnly("appShell");
+			view("appShell")?.classList.remove("is-hidden");
+			view("countryBadge").textContent = view("countrySelect")?.selectedOptions?.[0]?.textContent || "";
+			localStorage.setItem("support-hub-country", view("countrySelect")?.value || "UK");
+		}
+
+		let currentTrainModule = "TV";
+		let currentTrainFilter = "All Materials";
+
+		function updateTrainingMaterials() {
+			const title = view("trainingModuleTitle");
+			const cards = Array.from(document.querySelectorAll("#trainingGrid > div"));
+			const materials = trainingMaterials[currentTrainModule] || trainingMaterials.TV;
+
+			if (title) {
+				title.textContent = currentTrainModule + " Training Materials";
+			}
+
+			cards.forEach((card, index) => {
+				const material = materials[index];
+				const heading = card.querySelector("h3");
+				const meta = card.querySelector("p");
+
+				if (!material) {
+					card.style.display = "none";
+					return;
+				}
+
+				card.dataset.type = material.type;
+				if (heading) {
+					heading.textContent = material.title;
+				}
+				if (meta) {
+					meta.textContent = material.meta;
+				}
+				card.style.display = currentTrainFilter === "All Materials" || currentTrainFilter === material.type ? "" : "none";
+			});
+		}
+
+		function bindFallbackNavigation() {
+			view("btnGoToCallCenter")?.addEventListener("click", showSplash);
+			view("btnGoToTraining")?.addEventListener("click", showTraining);
+			view("btnBackToPortal")?.addEventListener("click", () => showOnly("portalLanding"));
+			view("btnBackToPortalApp")?.addEventListener("click", () => showOnly("portalLanding"));
+			view("continueBtn")?.addEventListener("click", showDashboardFallback);
+
+			document.querySelectorAll(".training-tab").forEach((tab) => {
+				tab.addEventListener("click", () => {
+					document.querySelectorAll(".training-tab").forEach((item) => {
+						item.classList.remove("is-active", "bg-slate-100", "shadow-sm", "text-slate-900");
+						item.classList.add("text-slate-600");
+					});
+					tab.classList.add("is-active", "bg-slate-100", "shadow-sm", "text-slate-900");
+					tab.classList.remove("text-slate-600");
+					currentTrainModule = tab.dataset.trainTab || "TV";
+					updateTrainingMaterials();
+				});
+			});
+
+			document.querySelectorAll(".w-full.lg\\:w-72.lg\\:shrink-0 .space-y-2 button").forEach((button) => {
+				button.addEventListener("click", () => {
+					currentTrainFilter = button.textContent.trim();
+					const label = document.querySelector(".w-full.lg\\:w-72.lg\\:shrink-0 p.text-xs");
+					if (label) {
+						label.textContent = "Filter applied: " + currentTrainFilter.replace(" Materials", "");
+					}
+					updateTrainingMaterials();
+				});
+			});
+		}
+
+		if (document.readyState === "loading") {
+			document.addEventListener("DOMContentLoaded", bindFallbackNavigation);
+		} else {
+			bindFallbackNavigation();
+		}
+	})();
+</script>
 <script type="module" src="src/main.js"></script>
 </body>
 </html>

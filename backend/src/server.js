@@ -1,4 +1,6 @@
 const path = require("node:path");
+const fs = require("node:fs");
+const crypto = require("node:crypto");
 const express = require("express");
 const cors = require("cors");
 const { loadBootstrapData } = require("./loadJsData");
@@ -23,7 +25,96 @@ const {
 const app = express();
 const port = Number(process.env.PORT || 4000);
 const projectRoot = path.resolve(__dirname, "..", "..");
+const imageProxyCacheDir = path.join(projectRoot, ".cache", "image-proxy");
+const IMAGE_PROXY_MAX_CACHE_BYTES = Number(process.env.IMAGE_PROXY_MAX_CACHE_BYTES || 200 * 1024 * 1024); // 200MB default
+const IMAGE_PROXY_RATE_LIMIT_REQS = Number(process.env.IMAGE_PROXY_RATE_LIMIT_REQS || 120); // requests per window
+const IMAGE_PROXY_RATE_LIMIT_WINDOW_MS = Number(process.env.IMAGE_PROXY_RATE_LIMIT_WINDOW_MS || 60 * 1000); // 1 minute
 const allowedOrigin = process.env.ALLOWED_ORIGIN || "*";
+
+fs.mkdirSync(imageProxyCacheDir, { recursive: true });
+
+// Simple in-memory rate limiter per IP for the image proxy endpoint.
+const _imageProxyRateMap = new Map(); // ip -> { windowStart, count }
+function rateLimitImageProxy(req, res) {
+  try {
+    const ip = String(req.ip || req.connection && req.connection.remoteAddress || "unknown");
+    const now = Date.now();
+    const record = _imageProxyRateMap.get(ip) || { windowStart: now, count: 0 };
+    if (now - record.windowStart > IMAGE_PROXY_RATE_LIMIT_WINDOW_MS) {
+      record.windowStart = now;
+      record.count = 0;
+    }
+    record.count = (record.count || 0) + 1;
+    _imageProxyRateMap.set(ip, record);
+    if (record.count > IMAGE_PROXY_RATE_LIMIT_REQS) {
+      res.status(429).json({ ok: false, error: "RATE_LIMIT_EXCEEDED", message: "Too many requests, slow down" });
+      return false;
+    }
+    return true;
+  } catch (e) {
+    return true; // fail open on unexpected errors
+  }
+}
+
+// Cache management helpers
+function listCacheEntries() {
+  try {
+    const files = fs.readdirSync(imageProxyCacheDir).filter((f) => f.endsWith(".bin"));
+    return files.map((bin) => {
+      const key = bin.replace(/\.bin$/, "");
+      const filePath = path.join(imageProxyCacheDir, bin);
+      const metaPath = path.join(imageProxyCacheDir, key + ".json");
+      let stat = null;
+      try {
+        stat = fs.statSync(filePath);
+      } catch (_e) {
+        return null;
+      }
+      return { key, filePath, metaPath, size: stat.size, mtimeMs: stat.mtimeMs };
+    }).filter(Boolean);
+  } catch (e) {
+    return [];
+  }
+}
+
+function getTotalCacheSize() {
+  try {
+    return listCacheEntries().reduce((sum, e) => sum + (e.size || 0), 0);
+  } catch (_e) {
+    return 0;
+  }
+}
+
+function enforceCacheSizeLimit() {
+  try {
+    const maxBytes = Math.max(0, Number(IMAGE_PROXY_MAX_CACHE_BYTES || 0));
+    if (!maxBytes || maxBytes <= 0) return;
+    let entries = listCacheEntries();
+    let total = entries.reduce((s, e) => s + (e.size || 0), 0);
+    if (total <= maxBytes) return;
+
+    // Sort by oldest first (mtime ascending) and remove until under limit
+    entries = entries.sort((a, b) => (a.mtimeMs || 0) - (b.mtimeMs || 0));
+    for (const e of entries) {
+      try {
+        fs.unlinkSync(e.filePath);
+      } catch (_err) {}
+      try {
+        fs.unlinkSync(e.metaPath);
+      } catch (_err) {}
+      total -= e.size || 0;
+      if (total <= maxBytes) break;
+    }
+  } catch (e) {
+    // swallow errors
+  }
+}
+
+function removeCacheKey(cacheKey) {
+  const paths = buildCachedImagePaths(cacheKey);
+  try { if (fs.existsSync(paths.filePath)) fs.unlinkSync(paths.filePath); } catch (e) {}
+  try { if (fs.existsSync(paths.metaPath)) fs.unlinkSync(paths.metaPath); } catch (e) {}
+}
 
 function buildCorsOriginRule(value) {
   const raw = String(value || "").trim();
@@ -309,6 +400,137 @@ function getPublicBaseUrl(req) {
   return protocol + "://" + req.get("host");
 }
 
+function buildProxyCacheKey(sourceUrl, width) {
+  return crypto.createHash("sha256").update(String(sourceUrl || "") + "|" + String(width || "")).digest("hex");
+}
+
+function buildCachedImagePaths(cacheKey) {
+  return {
+    filePath: path.join(imageProxyCacheDir, cacheKey + ".bin"),
+    metaPath: path.join(imageProxyCacheDir, cacheKey + ".json")
+  };
+}
+
+function normalizeProxyWidth(value) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) {
+    return 0;
+  }
+
+  return Math.max(320, Math.round(parsed));
+}
+
+function normalizeProxySourceUrl(rawUrl) {
+  const candidate = String(rawUrl || "").trim();
+  if (!candidate) {
+    return null;
+  }
+
+  try {
+    const parsed = new URL(candidate);
+    if (parsed.protocol !== "https:" || parsed.hostname !== "images.philips.com" || !parsed.pathname.startsWith("/is/image/")) {
+      return null;
+    }
+
+    return parsed;
+  } catch (_error) {
+    return null;
+  }
+}
+
+function respondWithCachedImage(res, filePath, metaPath, cacheKey) {
+  let contentType = "image/jpeg";
+
+  try {
+    const meta = JSON.parse(fs.readFileSync(metaPath, "utf8"));
+    if (meta && typeof meta.contentType === "string" && meta.contentType) {
+      contentType = meta.contentType;
+    }
+  } catch (_error) {
+    // Fall back to the default JPEG type.
+  }
+
+  res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+  res.setHeader("ETag", '"' + cacheKey + '"');
+  res.type(contentType);
+  res.sendFile(filePath);
+}
+
+app.get("/api/image-proxy", async (req, res) => {
+  // Basic rate limiting per-IP
+  if (!rateLimitImageProxy(req, res)) return;
+
+  const source = normalizeProxySourceUrl(req.query.url);
+  if (!source) {
+    res.status(400).json({ ok: false, error: "INVALID_SOURCE_URL", message: "Only Philips image URLs are supported" });
+    return;
+  }
+
+  const width = normalizeProxyWidth(req.query.wid);
+  if (width) {
+    source.searchParams.set("wid", String(width));
+  }
+
+  const sourceUrl = source.toString();
+  const cacheKey = buildProxyCacheKey(sourceUrl, width);
+  const cachePaths = buildCachedImagePaths(cacheKey);
+
+  if (fs.existsSync(cachePaths.filePath) && fs.existsSync(cachePaths.metaPath)) {
+    respondWithCachedImage(res, cachePaths.filePath, cachePaths.metaPath, cacheKey);
+    return;
+  }
+
+  let timeoutId = null;
+  try {
+    const controller = new AbortController();
+    timeoutId = setTimeout(() => controller.abort(), 20000);
+    const remoteResponse = await fetch(sourceUrl, {
+      signal: controller.signal,
+      headers: {
+        Accept: "image/avif,image/webp,image/*,*/*;q=0.8"
+      }
+    });
+
+    if (!remoteResponse.ok) {
+      res.status(remoteResponse.status).json({
+        ok: false,
+        error: "IMAGE_FETCH_FAILED",
+        message: "Upstream image request failed"
+      });
+      return;
+    }
+
+    const contentType = String(remoteResponse.headers.get("content-type") || "image/jpeg");
+    if (!contentType.toLowerCase().startsWith("image/")) {
+      res.status(502).json({
+        ok: false,
+        error: "INVALID_IMAGE_RESPONSE",
+        message: "Upstream response is not an image"
+      });
+      return;
+    }
+
+    const buffer = Buffer.from(await remoteResponse.arrayBuffer());
+    fs.writeFileSync(cachePaths.filePath, buffer);
+    fs.writeFileSync(cachePaths.metaPath, JSON.stringify({ sourceUrl, contentType, createdAt: Date.now() }, null, 2));
+
+    // Ensure cache does not grow unbounded.
+    try { enforceCacheSizeLimit(); } catch (_e) {}
+
+    respondWithCachedImage(res, cachePaths.filePath, cachePaths.metaPath, cacheKey);
+  } catch (error) {
+    res.status(502).json({
+      ok: false,
+      error: "IMAGE_PROXY_FAILED",
+      message: error && error.message ? error.message : "Unknown error"
+    });
+  } finally {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  }
+});
+
 app.get("/health", (_req, res) => {
   res.json({ ok: true, service: "callcenter-backend" });
 });
@@ -321,6 +543,7 @@ app.get("/", (_req, res) => {
     endpoints: [
       "/health",
       "/api/bootstrap",
+      "/api/image-proxy",
       "/api/models",
       "/api/knowledge",
       "/api/policies",
@@ -727,6 +950,31 @@ app.delete("/api/admin/models/:modelName", requireAdminAuth, (req, res) => {
       error: mapped.code,
       message: mapped.message
     });
+  }
+});
+
+// Admin: purge image-proxy cache. If `key` is provided (body.key or query.key) it removes that entry,
+// otherwise it clears the whole cache. Protected by admin auth.
+app.post("/api/admin/image-proxy/purge", requireAdminAuth, (req, res) => {
+  try {
+    const key = toText(req.body && req.body.key) || toText(req.query && req.query.key);
+    if (key) {
+      removeCacheKey(key);
+      res.json({ ok: true, action: "removed", key });
+      return;
+    }
+
+    // remove all cache files
+    const entries = listCacheEntries();
+    let removed = 0;
+    for (const e of entries) {
+      try { fs.unlinkSync(e.filePath); removed++; } catch (_e) {}
+      try { fs.unlinkSync(e.metaPath); } catch (_e) {}
+    }
+
+    res.json({ ok: true, action: "cleared", removed });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: "PURGE_FAILED", message: error && error.message ? error.message : "Unknown" });
   }
 });
 

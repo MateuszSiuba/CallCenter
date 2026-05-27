@@ -1748,6 +1748,18 @@
 				return /^https?:\/\//i.test(url) ? url : "";
 			}
 
+			function getImageProxyBaseUrl() {
+				return runtimeApiBaseUrl || "";
+			}
+
+			function buildImageProxyUrl(sourceUrl, width) {
+				const baseUrl = getImageProxyBaseUrl();
+				const endpoint = "/api/image-proxy";
+				const proxyBase = baseUrl ? baseUrl + endpoint : endpoint;
+				const normalizedWidth = Math.max(320, Number(width) || 1200);
+				return proxyBase + "?url=" + encodeURIComponent(String(sourceUrl || "")) + "&wid=" + normalizedWidth;
+			}
+
 			function getRenderableImageUrl(value, width) {
 				const url = getSafeHttpUrl(value);
 				if (!url) {
@@ -1758,9 +1770,7 @@
 					return url;
 				}
 
-				const base = url.split("?")[0];
-				const normalizedWidth = Math.max(320, Number(width) || 1200);
-				return base + "?wid=" + normalizedWidth;
+				return buildImageProxyUrl(url, width);
 			}
 
 			function getRenderableImageVariants(value, options) {
@@ -1783,7 +1793,6 @@
 					};
 				}
 
-				const base = url.split("?")[0];
 				const widthList = Array.isArray(options && options.widths) && options.widths.length > 0
 					? options.widths
 					: [640, 960, 1200, 1600, 2400, 3200];
@@ -1792,9 +1801,9 @@
 				const zoomWidth = Math.max(displayWidth, Number(options && options.zoomWidth) || 2400);
 
 				return {
-					src: base + "?wid=" + displayWidth,
-					zoomSrc: base + "?wid=" + zoomWidth,
-					srcSet: uniqueWidths.map((item) => base + "?wid=" + item + " " + item + "w").join(", "),
+					src: buildImageProxyUrl(url, displayWidth),
+					zoomSrc: buildImageProxyUrl(url, zoomWidth),
+					srcSet: uniqueWidths.map((item) => buildImageProxyUrl(url, item) + " " + item + "w").join(", "),
 					sizes: safeText(options && options.sizes, "")
 				};
 			}

@@ -37,6 +37,12 @@ function rewriteField(value, manifest, publicBaseUrl) {
   if (!url) {
     return value;
   }
+
+  const useLocalMirror = /^(1|true|yes)$/i.test(String(process.env.USE_LOCAL_MEDIA_MIRROR || ""));
+  if (!useLocalMirror) {
+    return value;
+  }
+
   const mirroredPath = manifest[url];
   if (!mirroredPath) {
     return value;

@@ -1398,9 +1398,9 @@ export async function initCallCenterApp(api, options) {
 				}
 
 				const zoomCandidates = [
-					getRenderableImageUrl(getSafeHttpUrl(media.frontImageUrl), 2400),
-					getRenderableImageUrl(getSafeHttpUrl(media.remoteImageUrl), 2400),
-					getRenderableImageUrl(getSafeHttpUrl(media.portsImageUrl), 2400)
+					getRenderableImageVariants(media.frontImageUrl, { displayWidth: 1600, zoomWidth: 3200 }).zoomSrc,
+					getRenderableImageVariants(media.remoteImageUrl, { displayWidth: 1600, zoomWidth: 3200 }).zoomSrc,
+					getRenderableImageVariants(media.portsImageUrl, { displayWidth: 1800, zoomWidth: 3200 }).zoomSrc
 				].filter(Boolean);
 
 				zoomCandidates.forEach((zoomUrl, index) => {
@@ -1760,6 +1760,42 @@ export async function initCallCenterApp(api, options) {
 				const base = url.split("?")[0];
 				const normalizedWidth = Math.max(320, Number(width) || 1200);
 				return base + "?wid=" + normalizedWidth;
+			}
+
+			function getRenderableImageVariants(value, options) {
+				const url = getSafeHttpUrl(value);
+				if (!url) {
+					return {
+						src: "",
+						zoomSrc: "",
+						srcSet: "",
+						sizes: ""
+					};
+				}
+
+				if (!/images\.philips\.com\/is\/image\//i.test(url)) {
+					return {
+						src: url,
+						zoomSrc: url,
+						srcSet: "",
+						sizes: ""
+					};
+				}
+
+				const base = url.split("?")[0];
+				const widthList = Array.isArray(options && options.widths) && options.widths.length > 0
+					? options.widths
+					: [640, 960, 1200, 1600, 2400, 3200];
+				const uniqueWidths = [...new Set(widthList.map((item) => Math.max(320, Number(item) || 0)).filter(Boolean))].sort((a, b) => a - b);
+				const displayWidth = Math.max(320, Number(options && options.displayWidth) || 1200);
+				const zoomWidth = Math.max(displayWidth, Number(options && options.zoomWidth) || 2400);
+
+				return {
+					src: base + "?wid=" + displayWidth,
+					zoomSrc: base + "?wid=" + zoomWidth,
+					srcSet: uniqueWidths.map((item) => base + "?wid=" + item + " " + item + "w").join(", "),
+					sizes: safeText(options && options.sizes, "")
+				};
 			}
 
 			function getModelMedia(model) {
@@ -3425,8 +3461,14 @@ export async function initCallCenterApp(api, options) {
 			function renderPortsPane(model) {
 				const media = getModelMedia(model);
 				const portsImageUrl = getSafeHttpUrl(media && media.portsImageUrl);
-				const portsImageDisplayUrl = getRenderableImageUrl(portsImageUrl, 1800);
-				const portsImageZoomUrl = getRenderableImageUrl(portsImageUrl, 2400);
+				const portsImageSet = getRenderableImageVariants(portsImageUrl, {
+					displayWidth: 1800,
+					zoomWidth: 3200,
+					widths: [800, 1200, 1600, 1800, 2400, 3200],
+					sizes: "100vw"
+				});
+				const portsImageDisplayUrl = portsImageSet.src;
+				const portsImageZoomUrl = portsImageSet.zoomSrc;
 				const sourcePageUrl = getSafeHttpUrl((media && media.pageUrl) || (model && model.officialProductUrl));
 				const visualBlock = portsImageUrl
 					? ""
@@ -3438,7 +3480,7 @@ export async function initCallCenterApp(api, options) {
 							: "")
 						+ "</div>"
 						+ "<div class=\"bg-white p-2\">"
-						+ "<img src=\"" + escapeHtml(portsImageDisplayUrl) + "\" alt=\"" + escapeHtml(getModelName(model) + " rear connectors") + "\" class=\"js-zoomable-image h-auto max-h-[360px] w-full cursor-zoom-in rounded-lg object-contain\" loading=\"lazy\" tabindex=\"0\" role=\"button\" data-zoom-src=\"" + escapeHtml(portsImageZoomUrl) + "\">"
+						+ "<img src=\"" + escapeHtml(portsImageDisplayUrl) + "\" srcset=\"" + escapeHtml(portsImageSet.srcSet) + "\" sizes=\"" + escapeHtml(portsImageSet.sizes || "100vw") + "\" alt=\"" + escapeHtml(getModelName(model) + " rear connectors") + "\" class=\"js-zoomable-image h-auto max-h-[360px] w-full cursor-zoom-in rounded-lg object-contain\" loading=\"lazy\" tabindex=\"0\" role=\"button\" data-zoom-src=\"" + escapeHtml(portsImageZoomUrl) + "\">"
 						+ "</div>"
 						+ "</section>"
 					: "";
@@ -3600,12 +3642,18 @@ export async function initCallCenterApp(api, options) {
 				const items = sourceItems.map((item) => ""
 					+ (() => {
 						const imageUrl = getSafeHttpUrl(item && item.imageUrl);
-						const displayUrl = getRenderableImageUrl(imageUrl, 1200);
-						const zoomUrl = getRenderableImageUrl(imageUrl, 2400);
+						const imageSet = getRenderableImageVariants(imageUrl, {
+							displayWidth: 1600,
+							zoomWidth: 3200,
+							widths: [480, 800, 1200, 1600, 2400, 3200],
+							sizes: "(min-width: 1280px) 460px, (min-width: 768px) 50vw, 100vw"
+						});
+						const displayUrl = imageSet.src;
+						const zoomUrl = imageSet.zoomSrc;
 						return ""
 					+ "<div class=\"rounded-xl border border-slate-300 bg-slate-50 p-3\">"
 					+ (imageUrl
-						? "<div class=\"overflow-hidden rounded-lg border border-slate-200 bg-white p-1\"><img src=\"" + escapeHtml(displayUrl) + "\" alt=\"" + escapeHtml(safeText(item.label, "Model image")) + "\" class=\"js-zoomable-image h-40 w-full cursor-zoom-in object-contain\" loading=\"lazy\" tabindex=\"0\" role=\"button\" data-zoom-src=\"" + escapeHtml(zoomUrl) + "\"></div>"
+						? "<div class=\"overflow-hidden rounded-lg border border-slate-200 bg-white p-1\"><img src=\"" + escapeHtml(displayUrl) + "\" srcset=\"" + escapeHtml(imageSet.srcSet) + "\" sizes=\"" + escapeHtml(imageSet.sizes || "100vw") + "\" alt=\"" + escapeHtml(safeText(item.label, "Model image")) + "\" class=\"js-zoomable-image h-40 w-full cursor-zoom-in object-contain\" loading=\"lazy\" tabindex=\"0\" role=\"button\" data-zoom-src=\"" + escapeHtml(zoomUrl) + "\"></div>"
 						: "<div class=\"rounded-lg border-2 border-dashed border-slate-300 bg-white p-8 text-center text-xs text-slate-500\">Image not available</div>")
 					+ "<p class=\"mt-2 text-sm font-semibold text-slate-800\">" + safeText(item.label, "Image placeholder") + "</p>"
 					+ "<p class=\"mt-1 text-xs text-slate-500\">" + safeText(item.note, "") + "</p>"

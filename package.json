@@ -11,7 +11,8 @@
     "start:backend": "npm --prefix backend start",
     "dev:backend": "npm --prefix backend run dev",
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "regen-models": "node ./scripts/regenerate_public_models.js"
   },
   "engines": {
     "node": ">=18"

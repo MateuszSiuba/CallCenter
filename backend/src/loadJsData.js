@@ -37,7 +37,11 @@ function loadBootstrapData(projectRoot) {
   // merge platform/chassis hints into ModelsData for 2026 models ending with '1'
   mergePlatformChassis(projectRoot, bootstrap);
   // collapse per-size models into single base entries (e.g., 55MLED911 -> MLED911)
-  mergeModelsByBase(bootstrap);
+  // This behavior can be toggled via env var `COLLAPSE_MODELS`.
+  // Set COLLAPSE_MODELS=1 to enable collapsing; leaving it unset preserves per-size models.
+  if (process.env.COLLAPSE_MODELS === '1') {
+    mergeModelsByBase(bootstrap);
+  }
 
   return bootstrap;
 }

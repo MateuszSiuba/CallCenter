@@ -14,51 +14,14 @@ function readDataVariable(filePath, variableName) {
   return context.window[variableName] || context[variableName] || null;
 }
 
-const models = readDataVariable(path.join(dataDir, 'models.js'), 'ModelsData') || [];
-const mappings = readDataVariable(path.join(dataDir, 'model-platform-chassis.js'), 'ModelPlatformChassisData') || [];
-
-const map = new Map();
-for (const entry of mappings) {
-  if (!entry || !entry.modelName) continue;
-  map.set(String(entry.modelName).trim(), { platform: entry.platform || '', chassis: entry.chassis || '' });
-}
-
-for (const model of models) {
-  if (!model || !model.modelName) continue;
-  const is2026 = model.year === 2026;
-  const endsWith1 = /1$/.test(model.modelName);
-  if (!is2026 || !endsWith1) continue;
-  const lookupKeys = [model.modelName];
-  if (Array.isArray(model.aliases)) lookupKeys.push(...model.aliases);
-
-  let found = null;
-  for (const k of lookupKeys) {
-    if (!k) continue;
-    const normalized = String(k).trim();
-    if (map.has(normalized)) {
-      found = map.get(normalized);
-      break;
-    }
-    const alt = normalized.replace(/\/.+$/, '');
-    if (map.has(alt)) {
-      found = map.get(alt);
-      break;
-    }
-  }
-
-  if (found) {
-    if (!model.platform || model.platform === '') model.platform = found.platform || '';
-    if ((!model.specs || !model.specs.chassis) && found.chassis) {
-      model.specs = model.specs || {};
-      model.specs.chassis = found.chassis;
-    }
-  }
-}
-
+// Use backend loader so the same merge logic applies
+const loader = require(path.join(projectRoot, 'backend', 'src', 'loadJsData.js'));
+const bootstrap = loader.loadBootstrapData(projectRoot);
+const models = bootstrap.ModelsData || [];
 try {
   fs.mkdirSync(publicDir, { recursive: true });
   fs.writeFileSync(path.join(publicDir, 'models.json'), JSON.stringify(models, null, 2), 'utf8');
-  console.log('Wrote public/data/models.json with merged platform/chassis for 2026 models ending with 1');
+  console.log('Wrote public/data/models.json from backend bootstrap (merged)');
 } catch (err) {
   console.error('Failed to write public models.json:', err && err.message);
   process.exit(2);

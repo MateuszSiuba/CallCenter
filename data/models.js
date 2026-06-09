@@ -9773,6 +9773,14 @@ const ModelsData = [
         "65": 384,
         "75": 448,
         "100": 576
+      },
+      "technicalFlat": {
+        "Proposal-A": "MINI900",
+        "Proposal-C": "MLED910",
+        "Region": "2",
+        "Countries": "Georgia",
+        "Market": "CEE",
+        "Region all": "v"
       }
     },
     "apps": [
@@ -10031,6 +10039,5 @@ const ModelsData = [
     "apps": []
   }
 ];
-if (typeof window !== "undefined") {
-  window.ModelsData = ModelsData;
-}
+
+if (typeof module !== 'undefined') module.exports = { ModelsData };

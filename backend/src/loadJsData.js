@@ -122,38 +122,70 @@ function mergeModelsByBase(bootstrap) {
     const processed = new Set();
     for (const [base, entries] of groups.entries()) {
       if (!entries || entries.length <= 1) continue;
-      // check if there is already an exact model with name === base
-      const existingExact = bootstrap.ModelsData.find((m) => m.modelName === base);
+
+      // collect sizes, years and source models
       const sizesSet = new Set();
-      const merged = existingExact ? Object.assign({}, existingExact) : { modelName: base, year: 2026 };
+      const yearCounts = new Map();
+      const merged = {};
+      const sources = [];
 
       for (const item of entries) {
         const m = item.model || item;
         const size = (item.size || (Array.isArray(m.availableSizes) && m.availableSizes[0])) || null;
         if (size) sizesSet.add(String(size));
-        // merge availableSizes array
         if (Array.isArray(m.availableSizes)) {
           for (const s of m.availableSizes) sizesSet.add(String(s));
         }
-        // shallow fill fields when missing on merged
-        for (const k of Object.keys(m)) {
-          if (k === 'modelName' || k === 'availableSizes') continue;
-          if (merged[k] == null || merged[k] === '' || (Array.isArray(merged[k]) && merged[k].length === 0)) {
-            merged[k] = m[k];
-          }
-        }
+        const y = Number(m.year) || 0;
+        if (y > 0) yearCounts.set(y, (yearCounts.get(y) || 0) + 1);
+        sources.push(m);
         processed.add(m.modelName);
       }
 
+      // Choose canonical year: most common among sources, fallback to 2026
+      let chosenYear = 2026;
+      if (yearCounts.size > 0) {
+        chosenYear = Array.from(yearCounts.entries()).sort((a, b) => b[1] - a[1])[0][0];
+      }
+
+      // Determine preferred canonical size using explicit preference order
+      const preferredOrder = [50, 55, 48, 42, 40, 32, 24, 22, 21];
+      let chosenSize = null;
+      const sizesArr = Array.from(sizesSet).map((s) => Number(s)).filter((n) => Number.isFinite(n));
+      // try preference order
+      for (const p of preferredOrder) {
+        if (sizesArr.includes(p)) {
+          chosenSize = String(p);
+          break;
+        }
+      }
+      // fallback to smallest numeric size if no preferred found
+      if (!chosenSize && sizesArr.length > 0) {
+        chosenSize = String(sizesArr.sort((a, b) => a - b)[0]);
+      }
+
+      // Build merged object by shallow-filling from sources (preserve first non-empty seen)
+      for (const s of sources) {
+        for (const k of Object.keys(s)) {
+          if (k === 'modelName' || k === 'availableSizes') continue;
+          if (merged[k] == null || merged[k] === '' || (Array.isArray(merged[k]) && merged[k].length === 0)) {
+            merged[k] = s[k];
+          }
+        }
+      }
+
+      merged.year = chosenYear;
       merged.availableSizes = Array.from(sizesSet).sort((a, b) => Number(a) - Number(b));
 
-      // remove original entries from ModelsData and push merged (avoid duplicates)
-      // filter out entries that were processed
-      // First, remove processed models
-      bootstrap.ModelsData = bootstrap.ModelsData.filter((m) => !processed.has(m.modelName) || m.modelName === base);
+      // Set the canonical modelName to include preferred size when available (e.g., 50PML9000)
+      const canonicalName = chosenSize ? String(chosenSize) + base : base;
+      merged.modelName = canonicalName;
 
-      // if base already existed, replace it, otherwise push merged
-      const idx = bootstrap.ModelsData.findIndex((m) => m.modelName === base);
+      // remove processed models from ModelsData (but keep any unrelated entries)
+      bootstrap.ModelsData = bootstrap.ModelsData.filter((m) => !processed.has(m.modelName));
+
+      // ensure we don't duplicate an existing entry for canonicalName
+      const idx = bootstrap.ModelsData.findIndex((m) => m.modelName === canonicalName);
       if (idx >= 0) bootstrap.ModelsData[idx] = merged;
       else bootstrap.ModelsData.push(merged);
     }

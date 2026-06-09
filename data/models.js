@@ -60,7 +60,7 @@ const ModelsData = [
       "YouTube",
       "Apps"
     ],
-    "audioChannels": "",
+    "audioChannels": "2.2 CH",
     "audioPower": "70W",
     "wifiStandard": "WIFI 11ax 2x2 DB",
     "bluetoothVersion": "Bluetooth 5.4",
@@ -262,7 +262,7 @@ const ModelsData = [
       "YouTube",
       "Apps"
     ],
-    "audioChannels": "",
+    "audioChannels": "2.2 CH",
     "audioPower": "70W",
     "wifiStandard": "WIFI 11ax 2x2 DB",
     "bluetoothVersion": "Bluetooth 5.4",
@@ -328,7 +328,7 @@ const ModelsData = [
       "YouTube",
       "Apps"
     ],
-    "audioChannels": "",
+    "audioChannels": "2 CH",
     "audioPower": "20W",
     "wifiStandard": "WIFI 11ac 2x2 DB",
     "bluetoothVersion": "Bluetooth 5.2",
@@ -395,7 +395,7 @@ const ModelsData = [
       "YouTube",
       "Apps"
     ],
-    "audioChannels": "",
+    "audioChannels": "2 CH",
     "audioPower": "50W",
     "wifiStandard": "WIFI 11ac 2x2 DB",
     "bluetoothVersion": "Bluetooth 5.2",
@@ -530,7 +530,7 @@ const ModelsData = [
     "audioPower": "20W",
     "wifiStandard": "WIFI 11ac 2x2 DB",
     "bluetoothVersion": "Bluetooth 5.2",
-    "vrrMaxRefreshRate": ""
+    "vrrMaxRefreshRate": "60 Hz"
   },
   {
     "modelName": "55PUS8601",
@@ -815,11 +815,11 @@ const ModelsData = [
       "YouTube",
       "Apps"
     ],
-    "audioChannels": "",
-    "audioPower": "",
+    "audioChannels": "2 CH",
+    "audioPower": "20W",
     "wifiStandard": "WIFI 11ac 2x2 DB",
     "bluetoothVersion": "Bluetooth 5.0",
-    "vrrMaxRefreshRate": ""
+    "vrrMaxRefreshRate": "60 Hz"
   },
   {
     "modelName": "55PUS7001",
@@ -917,11 +917,11 @@ const ModelsData = [
       "YouTube",
       "Apps"
     ],
-    "audioChannels": "",
-    "audioPower": "",
+    "audioChannels": "2 CH",
+    "audioPower": "12W",
     "wifiStandard": "WIFI 11n 2x2 SB",
     "bluetoothVersion": "",
-    "vrrMaxRefreshRate": ""
+    "vrrMaxRefreshRate": "60 Hz"
   },
   {
     "modelName": "65OLED950",

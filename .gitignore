@@ -17,3 +17,5 @@ scripts/tmp_port_images/
 scripts/*.tmp.js
 backend/node_modules/
 backend/.env
+.cache/
+2026 PHILIPS TV PSS_v5.1_20260528.xlsx

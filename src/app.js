@@ -129,6 +129,8 @@ export async function initCallCenterApp(api, options) {
 				countryCode: "UK",
 				activeModule: "TV",
 				data: null,
+				modelDetailsById: {},
+				modelDetailRequestToken: 0,
 				modelSearchIndex: null,
 				globalSearchIndex: null,
 				filteredModels: [],
@@ -446,6 +448,7 @@ export async function initCallCenterApp(api, options) {
 					if (model) {
 						renderModelDetail(model);
 						setViewMode("detail");
+						void hydrateModelDetail(state.selectedModelId);
 						return;
 					}
 				}
@@ -1858,6 +1861,44 @@ export async function initCallCenterApp(api, options) {
 				return model && typeof model.specs === "object" && model.specs !== null ? model.specs : {};
 			}
 
+			function findTechnicalCategory(model, categoryPatterns) {
+				const technicalByCategory = getModelTechnicalByCategory(model);
+				const patterns = safeList(categoryPatterns);
+
+				for (const [categoryName, entries] of Object.entries(technicalByCategory)) {
+					if (!isPlainObject(entries)) {
+						continue;
+					}
+
+					if (patterns.some((pattern) => pattern.test(categoryName))) {
+						return entries;
+					}
+				}
+
+				return null;
+			}
+
+			function getTechnicalCategoryValue(model, categoryPatterns, keyPatterns) {
+				const category = findTechnicalCategory(model, categoryPatterns);
+				if (!category) {
+					return "";
+				}
+
+				const patterns = safeList(keyPatterns);
+				for (const [key, value] of Object.entries(category)) {
+					if (!patterns.some((pattern) => pattern.test(key))) {
+						continue;
+					}
+
+					const text = stringifyTechnicalValue(value);
+					if (text) {
+						return text;
+					}
+				}
+
+				return "";
+			}
+
 			function getModelChassis(model) {
 				const directValue = safeText(getModelSpecs(model).chassis, "");
 				if (directValue) {
@@ -2045,7 +2086,7 @@ export async function initCallCenterApp(api, options) {
 					return directVesa;
 				}
 
-				return getModelTechnicalValue(model, [/Wall-mount compatible/i, /Zgodny uchwyt ścienny/i, /VESA/i]);
+				return getTechnicalCategoryValue(model, [/^Dimensions$/i, /^Wymiary$/i], [/Wall-mount compatible/i, /Zgodny uchwyt ścienny/i, /VESA/i]);
 			}
 
 			function extractModelPolicyTags(fullModelName) {
@@ -2278,11 +2319,11 @@ export async function initCallCenterApp(api, options) {
 
 			function getModelStandardSpecs(model) {
 				return {
-					audioChannels: safeText(model && model.audioChannels, ""),
-					audioPower: safeText(model && model.audioPower, ""),
-					wifiStandard: safeText(model && model.wifiStandard, ""),
-					bluetoothVersion: safeText(model && model.bluetoothVersion, ""),
-					vrrMaxRefreshRate: safeText(model && model.vrrMaxRefreshRate, "")
+					audioChannels: getTechnicalCategoryValue(model, [/^Sound$/i, /^Dźwięk$/i], [/^Audio$/i, /Channel/i, /Channels/i]) || safeText(model && model.audioChannels, ""),
+					audioPower: getTechnicalCategoryValue(model, [/^Sound$/i, /^Dźwięk$/i], [/Output power \(RMS\)/i, /Output power/i, /Moc wyjściowa/i]) || safeText(model && model.audioPower, ""),
+					wifiStandard: getTechnicalCategoryValue(model, [/^Connectivity$/i, /^Łączność$/i], [/Wi[-\s]?Fi/i, /Wireless connection/i, /WiFi/i]) || safeText(model && model.wifiStandard, ""),
+					bluetoothVersion: getTechnicalCategoryValue(model, [/^Connectivity$/i, /^Łączność$/i], [/Bluetooth/i, /Wireless connection/i]) || safeText(model && model.bluetoothVersion, ""),
+					vrrMaxRefreshRate: getTechnicalCategoryValue(model, [/^Supported HDMI video features$/i, /^Gaming$/i, /^Connectivity$/i], [/VRR/i, /refresh rate/i, /Max refresh/i]) || safeText(model && model.vrrMaxRefreshRate, "")
 				};
 			}
 
@@ -3168,7 +3209,55 @@ export async function initCallCenterApp(api, options) {
 				if (!state.data) {
 					return null;
 				}
+				if (state.modelDetailsById && state.modelDetailsById[id]) {
+					return state.modelDetailsById[id];
+				}
+
 				return state.data.ModelsData.find((model) => getModelKey(model) === id) || null;
+			}
+
+			async function hydrateModelDetail(modelId) {
+				const normalizedModelId = safeText(modelId, "");
+				if (!normalizedModelId) {
+					return null;
+				}
+
+				const baseModel = getModelById(normalizedModelId);
+				if (!baseModel) {
+					return null;
+				}
+
+				if (state.modelDetailsById && state.modelDetailsById[normalizedModelId]) {
+					return state.modelDetailsById[normalizedModelId];
+				}
+
+				const requestToken = state.modelDetailRequestToken + 1;
+				state.modelDetailRequestToken = requestToken;
+
+				try {
+					const response = await api.getModelDetail(getModelName(baseModel));
+					const detailedModel = response && response.bundle && response.bundle.model ? response.bundle.model : null;
+					if (!detailedModel) {
+						return baseModel;
+					}
+
+					const mergedModel = {
+						...baseModel,
+						...detailedModel,
+						__key: normalizedModelId
+					};
+
+					state.modelDetailsById[normalizedModelId] = mergedModel;
+
+					if (state.selectedModelId === normalizedModelId && state.modelDetailRequestToken === requestToken && state.viewMode === "detail") {
+						renderModelDetail(mergedModel);
+					}
+
+					return mergedModel;
+				} catch (error) {
+					console.warn("Failed to hydrate model detail", error);
+					return baseModel;
+				}
 			}
 
 			function getKnowledgeArticleById(id) {
@@ -3390,10 +3479,13 @@ export async function initCallCenterApp(api, options) {
 				const featureValues = flattenFeatureValues(sizeScopedModel && sizeScopedModel.features);
 				const kbFeatureValues = featureValues.filter((item) => !isBasicFeatureValue(item));
 				const standardSpecs = getModelStandardSpecs(sizeScopedModel);
-				const withStandDimensions = getModelTechnicalValue(dimensionsModel, [/Telewizor z podstawą/i, /TV with stand/i]);
-				const withoutStandDimensions = getModelTechnicalValue(dimensionsModel, [/Telewizor bez podstawy/i, /TV without stand/i]);
-				const dimensionsWeight = getModelTechnicalValue(dimensionsModel, [/Waga telewizora/i, /Waga z opakowaniem/i, /Weight/i]);
+				const withStandDimensions = getTechnicalCategoryValue(dimensionsModel, [/^Dimensions$/i, /^Wymiary$/i], [/TV with stand/i, /Telewizor z podstawą/i]);
+				const withoutStandDimensions = getTechnicalCategoryValue(dimensionsModel, [/^Dimensions$/i, /^Wymiary$/i], [/TV without stand/i, /Telewizor bez podstawy/i]);
+				const dimensionsWeight = getTechnicalCategoryValue(dimensionsModel, [/^Dimensions$/i, /^Wymiary$/i], [/Weight of TV without stand/i, /Weight of TV with stand/i, /Weight incl\. packaging/i, /Weight/i, /Waga/i]);
 				const vesaStandard = getModelVesa(sizeScopedModel);
+				const standValue = safeText(specs.stand, "")
+					|| getTechnicalCategoryValue(sizeScopedModel, [/^Dimensions$/i, /^Wymiary$/i], [/^stand$/i])
+					|| safeText(getModelSpecs(sizeScopedModel).rawSource && getModelSpecs(sizeScopedModel).rawSource.stand, "");
 				const sizeLabel = displayedSize !== "-" ? displayedSize : "-";
 				const allSizesLabel = formatModelSizesWithInches(allSizes) || "-";
 
@@ -3422,7 +3514,7 @@ export async function initCallCenterApp(api, options) {
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Physical Details</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm\">"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Stand</dt><dd class=\"font-semibold text-slate-800\">" + safeText(specs.stand, "-") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Stand</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standValue, "-") + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Sizes</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(allSizesLabel) + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">VESA Standard</dt><dd class=\"font-semibold text-slate-800\">" + safeText(vesaStandard, "-") + "</dd></div>"
 					+ "</dl>"
@@ -3912,6 +4004,7 @@ export async function initCallCenterApp(api, options) {
 				renderModelDetail(model);
 				setViewMode("detail");
 				updatePath();
+				void hydrateModelDetail(modelId);
 			}
 
 			function openKnowledgeArticle(articleId, options) {
@@ -4095,6 +4188,7 @@ export async function initCallCenterApp(api, options) {
 					const model = getModelById(state.selectedModelId);
 					if (model) {
 						renderModelDetail(model);
+						void hydrateModelDetail(state.selectedModelId);
 					}
 				}
 

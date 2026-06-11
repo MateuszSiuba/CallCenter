@@ -147,6 +147,12 @@ export class ApiService {
         if (!q) throw new Error('Search query is required');
         return this.fetchJSON('/api/models/search?q=' + encodeURIComponent(q));
     }
+
+    async getModelDetail(modelName) {
+        const name = String(modelName || '').trim();
+        if (!name) throw new Error('Model name is required');
+        return this.fetchJSON('/api/models/' + encodeURIComponent(name));
+    }
 }
 
 export const api = new ApiService();

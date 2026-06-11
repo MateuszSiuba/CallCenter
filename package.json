@@ -14,7 +14,8 @@
     "build": "vite build",
     "regen-models": "node ./scripts/regenerate_public_models.js",
     "import:postgres": "npm --prefix backend run import:postgres",
-    "quick:test": "node ./scripts/quick_test.js"
+    "quick:test": "node ./scripts/quick_test.js",
+    "load:test": "node ./scripts/load_test_search.js"
   },
   "engines": {
     "node": ">=18"

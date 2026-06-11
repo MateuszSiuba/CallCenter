@@ -1,11 +1,8 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { getPool, closePool } = require("./db");
-const { loadBootstrapData } = require("./publicContentRepository");
 
 const projectRoot = path.resolve(__dirname, "..", "..");
-const dataDir = path.join(projectRoot, "data");
-const publicDataDir = path.join(projectRoot, "public", "data");
 
 function toText(value) {
   if (value === null || value === undefined) {
@@ -509,30 +506,32 @@ async function upsertSpecs(client, seriesId, model, seriesMeta) {
   ]);
 }
 
-function loadPublicModelsJsonIfPresent() {
-  const publicModelsPath = path.join(publicDataDir, "models.json");
+function loadPublicModelsJson(projectRootPath) {
+  const resolvedProjectRoot = projectRootPath || projectRoot;
+  const publicModelsPath = path.join(resolvedProjectRoot, "public", "data", "models.json");
+
   if (!fs.existsSync(publicModelsPath)) {
-    return null;
+    throw new Error("Source file not found: public/data/models.json");
   }
 
+  const rawContent = fs.readFileSync(publicModelsPath, "utf8");
+
   try {
-    return JSON.parse(fs.readFileSync(publicModelsPath, "utf8"));
-  } catch (_error) {
-    return null;
+    const parsed = JSON.parse(rawContent);
+    if (!Array.isArray(parsed)) {
+      throw new Error("Expected public/data/models.json to contain an array");
+    }
+
+    return parsed;
+  } catch (error) {
+    const wrapped = new Error("Failed to parse public/data/models.json");
+    wrapped.cause = error;
+    throw wrapped;
   }
 }
 
-async function loadSourceModels(projectRootPath) {
-  const bootstrap = await loadBootstrapData(projectRootPath);
-  const models = Array.isArray(bootstrap.ModelsData) ? bootstrap.ModelsData : [];
-  const publicModels = loadPublicModelsJsonIfPresent();
-
-  if (Array.isArray(publicModels) && publicModels.length > 0 && publicModels.length !== models.length) {
-    console.warn("[etl] public/data/models.json count differs from data/models.js bootstrap count:", {
-      jsCount: models.length,
-      jsonCount: publicModels.length
-    });
-  }
+function loadSourceModels(projectRootPath) {
+  const models = loadPublicModelsJson(projectRootPath);
 
   return models;
 }

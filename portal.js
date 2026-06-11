@@ -1,13 +1,18 @@
-// portal.js - Kompletny skrypt routingu i integracji z API
+// portal.js - routing portalu i integracja wyłącznie z backendem API
 
-// Pobieranie bazy URL bezpośrednio z konfiguracji w HTML lub fallback na sztywno
-const RENDER_BACKEND_URL = window.SupportHubConfig?.apiBaseUrl || 'https://callcenter-yskc.onrender.com';
+function getPortalApiBaseUrl() {
+    const runtimeConfig = (window && window.SupportHubConfig && typeof window.SupportHubConfig === 'object')
+        ? window.SupportHubConfig
+        : {};
 
-const BACKEND_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-    ? 'http://localhost:3000'
-    : RENDER_BACKEND_URL;
+    const rawUrl = String(runtimeConfig.apiBaseUrl || '').trim();
+    return rawUrl ? rawUrl.replace(/\/+$/, '') : '';
+}
 
-console.log("Portal Hub nawiązuje połączenie z backendem pod adresem:", BACKEND_URL);
+function buildPortalApiUrl(path) {
+    const baseUrl = getPortalApiBaseUrl();
+    return baseUrl ? baseUrl + path : path;
+}
 
 // Globalny stan artykułów szkoleniowych
 let trainingArticles = [];
@@ -60,7 +65,7 @@ function initPortalRouting() {
                 trainingShell.classList.remove('hidden');
             }
             
-            // Dynamicznie zaciągamy artykuły szkoleniowe z Twojego API na Renderze
+            // Dynamicznie zaciągamy artykuły szkoleniowe z backendu
             await fetchTrainingArticles();
         });
     }
@@ -95,15 +100,27 @@ async function fetchTrainingArticles() {
     `;
 
     try {
-        const response = await fetch(`${BACKEND_URL}/api/articles`);
-        if (!response.ok) throw new Error('Serwer API zwrócił błąd połączenia.');
-        
-        trainingArticles = await response.json();
+        const response = await fetch(buildPortalApiUrl('/api/knowledge'), {
+            headers: { 'Accept': 'application/json' }
+        });
+
+        if (!response.ok) {
+            throw new Error('Backend zwrócił błąd ' + response.status);
+        }
+
+        const payload = await response.json();
+        trainingArticles = Array.isArray(payload && payload.KnowledgeBaseData)
+            ? payload.KnowledgeBaseData
+            : [];
         renderTrainingArticles(trainingArticles);
     } catch (error) {
         console.error('Problem podczas pobierania artykułów treningowych:', error);
-        // W razie awarii backendu aplikacja załaduje statyczne, bezpieczne moduły zapasowe
-        renderTrainingFallback();
+        trainingGrid.innerHTML = `
+            <div class="col-span-full rounded-2xl border border-rose-200 bg-rose-50 p-6 text-center text-rose-700">
+                <p class="font-semibold text-sm">Nie udało się pobrać materiałów z backendu.</p>
+                <p class="mt-1 text-xs">Sprawdź konfigurację API i status renderowanej usługi.</p>
+            </div>
+        `;
     }
 }
 
@@ -137,29 +154,3 @@ function renderTrainingArticles(articles) {
     `).join('');
 }
 
-// Funkcja ładująca lokalne pliki zapasowe (Fallback) w sytuacji, gdy serwer Render śpi lub zgłasza błąd
-function renderTrainingFallback() {
-    const trainingGrid = document.getElementById('trainingGrid');
-    if (!trainingGrid) return;
-
-    trainingGrid.innerHTML = `
-        <div class="rounded-2xl border border-slate-200 p-5 hover:border-blue-300 hover:shadow-md transition cursor-pointer flex gap-4 items-start bg-white shadow-sm">
-            <div class="rounded-lg bg-red-50 p-3 text-red-500">
-                <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" /></svg>
-            </div>
-            <div>
-                <h3 class="font-semibold text-slate-900">2026 TV Alignments</h3>
-                <p class="text-xs text-slate-500 mt-1">PDF Document &bull; Tryb Offline (Brak połączenia z API)</p>
-            </div>
-        </div>
-        <div class="rounded-2xl border border-slate-200 p-5 hover:border-blue-300 hover:shadow-md transition cursor-pointer flex gap-4 items-start bg-white shadow-sm">
-            <div class="rounded-lg bg-blue-50 p-3 text-blue-500">
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 022 2z" /></svg>
-            </div>
-            <div>
-                <h3 class="font-semibold text-slate-900">Titan OS Overview</h3>
-                <p class="text-xs text-slate-500 mt-1">Video Course &bull; Tryb Offline (Brak połączenia z API)</p>
-            </div>
-        </div>
-    `;
-}

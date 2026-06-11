@@ -194,13 +194,7 @@ export async function initCallCenterApp(api, options) {
 				});
 			}
 
-			const externalChangelogEntries = Array.isArray(window.ChangelogEntriesData)
-				? window.ChangelogEntriesData
-				: ((typeof ChangelogEntriesData !== "undefined" && Array.isArray(ChangelogEntriesData)) ? ChangelogEntriesData : []);
-
-			let changelogEntries = normalizeChangelogEntries(
-				externalChangelogEntries.length > 0 ? externalChangelogEntries : defaultChangelogEntries
-			);
+			let changelogEntries = normalizeChangelogEntries(defaultChangelogEntries);
 
 			const changelogVisibleLimit = 4;
 			let changelogVisibleEntries = changelogEntries.slice(0, changelogVisibleLimit);

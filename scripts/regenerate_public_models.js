@@ -14,15 +14,20 @@ function readDataVariable(filePath, variableName) {
   return context.window[variableName] || context[variableName] || null;
 }
 
-// Use backend loader so the same merge logic applies
-const loader = require(path.join(projectRoot, 'backend', 'src', 'loadJsData.js'));
-const bootstrap = loader.loadBootstrapData(projectRoot);
-const models = bootstrap.ModelsData || [];
-try {
-  fs.mkdirSync(publicDir, { recursive: true });
-  fs.writeFileSync(path.join(publicDir, 'models.json'), JSON.stringify(models, null, 2), 'utf8');
-  console.log('Wrote public/data/models.json from backend bootstrap (merged)');
-} catch (err) {
-  console.error('Failed to write public models.json:', err && err.message);
-  process.exit(2);
-}
+const { loadBootstrapData } = require(path.join(projectRoot, 'backend', 'src', 'publicContentRepository.js'));
+
+(async () => {
+  const bootstrap = await loadBootstrapData(projectRoot);
+  const models = bootstrap.ModelsData || [];
+  try {
+    fs.mkdirSync(publicDir, { recursive: true });
+    fs.writeFileSync(path.join(publicDir, 'models.json'), JSON.stringify(models, null, 2), 'utf8');
+    console.log('Wrote public/data/models.json from backend bootstrap (merged)');
+  } catch (err) {
+    console.error('Failed to write public models.json:', err && err.message);
+    process.exit(2);
+  }
+})().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

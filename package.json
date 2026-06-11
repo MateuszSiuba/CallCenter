@@ -12,7 +12,8 @@
     "dev:backend": "npm --prefix backend run dev",
     "dev": "vite",
     "build": "vite build",
-    "regen-models": "node ./scripts/regenerate_public_models.js"
+    "regen-models": "node ./scripts/regenerate_public_models.js",
+    "import:postgres": "npm --prefix backend run import:postgres"
   },
   "engines": {
     "node": ">=18"

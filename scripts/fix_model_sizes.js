@@ -1,6 +1,5 @@
 const path = require('path');
-const store = require('../backend/src/modelsAdminStore');
-const loader = require('../backend/src/loadJsData');
+const { loadBootstrapData } = require('../backend/src/publicContentRepository');
 
 function splitModelName(name) {
   if (!name) return { size: null, base: '' };
@@ -24,9 +23,9 @@ function normalizeSizes(arr) {
     .sort((a, b) => Number(a) - Number(b));
 }
 
-function fixModels(projectRoot) {
-  const bootstrap = loader.loadBootstrapData(projectRoot);
-  const models = Array.isArray(bootstrap.ModelsData) ? bootstrap.ModelsData : store.loadModelsData(projectRoot);
+async function fixModels(projectRoot) {
+  const bootstrap = await loadBootstrapData(projectRoot);
+  const models = Array.isArray(bootstrap.ModelsData) ? bootstrap.ModelsData : [];
   if (!Array.isArray(models)) {
     console.error('No models loaded');
     return 1;
@@ -87,13 +86,21 @@ function fixModels(projectRoot) {
     updated.push(canonical.modelName);
   }
 
-  // persist
-  store.saveModelsData(projectRoot, models);
+  const dataFile = path.join(projectRoot, 'data', 'models.js');
+  const header = 'const ModelsData = ';
+  const content = header + JSON.stringify(models, null, 2) + ";\n\nif (typeof module !== 'undefined') module.exports = { ModelsData };\n";
+  fs.copyFileSync(dataFile, dataFile + '.bak');
+  fs.writeFileSync(dataFile, content, 'utf8');
   console.log('Fixed models, updated canonical entries count:', updated.length);
   return 0;
 }
 
 if (require.main === module) {
   const projectRoot = path.resolve(__dirname, '..');
-  process.exit(fixModels(projectRoot));
+  fixModels(projectRoot)
+    .then((code) => process.exit(code))
+    .catch((error) => {
+      console.error(error);
+      process.exit(1);
+    });
 }

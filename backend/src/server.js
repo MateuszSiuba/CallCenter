@@ -3,24 +3,18 @@ const fs = require("node:fs");
 const crypto = require("node:crypto");
 const express = require("express");
 const cors = require("cors");
-const { loadBootstrapData } = require("./loadJsData");
 const { applyMirroredMediaUrls } = require("./mediaMirror");
-const { issueAdminToken, requireAdminAuth, validateCredentials } = require("./adminAuth");
+const { searchModelsHandler } = require("./searchModelsController");
 const {
-  applyUnsetPaths,
-  deleteModel,
-  findModelIndex,
+  loadBootstrapData,
+  loadModelByName,
+  loadPoliciesData,
+  loadKnowledgeData,
+  loadChangelogData,
   loadDocumentationLinksData,
   loadModelMediaData,
-  loadModelPlatformChassisData,
-  loadModelsData,
-  saveDocumentationLinksData,
-  saveModelMediaData,
-  saveModelPlatformChassisData,
-  saveModelsData,
-  setModel,
-  toText
-} = require("./modelsAdminStore");
+  loadModelPlatformChassisData
+} = require("./publicContentRepository");
 
 const app = express();
 const port = Number(process.env.PORT || 4000);
@@ -134,10 +128,13 @@ function buildCorsOriginRule(value) {
   return origins;
 }
 
+function toText(value) {
+  return value === null || value === undefined ? "" : String(value).trim();
+}
+
 app.use(cors({ origin: buildCorsOriginRule(allowedOrigin) }));
 app.use(express.json({ limit: "2mb" }));
 app.use("/media", express.static(path.join(__dirname, "..", "public", "media")));
-app.use("/admin", express.static(path.join(__dirname, "..", "public", "admin")));
 
 function asHttpError(error) {
   const message = error && error.message ? String(error.message) : "Unknown error";
@@ -545,7 +542,10 @@ app.get("/", (_req, res) => {
       "/api/bootstrap",
       "/api/image-proxy",
       "/api/models",
+      "/api/models/search",
+      "/api/models/:modelName",
       "/api/knowledge",
+      "/api/troubleshooting",
       "/api/policies",
       "/api/changelog",
       "/api/documentation-links"
@@ -553,9 +553,9 @@ app.get("/", (_req, res) => {
   });
 });
 
-app.get("/api/bootstrap", (req, res) => {
+app.get("/api/bootstrap", async (req, res) => {
   try {
-    const data = loadBootstrapData(projectRoot);
+    const data = await loadBootstrapData();
     res.json({
       ...data,
       ModelMediaData: applyMirroredMediaUrls(data.ModelMediaData, getPublicBaseUrl(req))
@@ -569,9 +569,9 @@ app.get("/api/bootstrap", (req, res) => {
   }
 });
 
-app.get("/api/models", (req, res) => {
+app.get("/api/models", async (req, res) => {
   try {
-    const data = loadBootstrapData(projectRoot);
+    const data = await loadBootstrapData();
     res.json({
       ok: true,
       ModelsData: data.ModelsData || [],
@@ -587,13 +587,53 @@ app.get("/api/models", (req, res) => {
   }
 });
 
-app.get("/api/knowledge", (_req, res) => {
+app.get("/api/models/:modelName", async (req, res) => {
   try {
-    const data = loadBootstrapData(projectRoot);
+    const modelName = toText(req.params.modelName);
+    const [model, mediaData, documentationLinksData, platformChassisRows] = await Promise.all([
+      loadModelByName(modelName),
+      loadModelMediaData(),
+      loadDocumentationLinksData(),
+      loadModelPlatformChassisData()
+    ]);
+
+    if (!model) {
+      res.status(404).json({
+        ok: false,
+        error: "NOT_FOUND",
+        message: "Model not found"
+      });
+      return;
+    }
+
     res.json({
       ok: true,
-      KnowledgeBaseData: data.KnowledgeBaseData || [],
-      TroubleshootingData: data.TroubleshootingData || {}
+      bundle: buildModelBundleResponse(
+        model,
+        applyMirroredMediaUrls(mediaData, getPublicBaseUrl(req)),
+        documentationLinksData || {},
+        platformChassisRows || []
+      )
+    });
+  } catch (error) {
+    const mapped = asHttpError(error);
+    res.status(mapped.status).json({
+      ok: false,
+      error: mapped.code,
+      message: mapped.message
+    });
+  }
+});
+
+app.get("/api/models/search", searchModelsHandler);
+
+app.get("/api/knowledge", async (_req, res) => {
+  try {
+    const [knowledgeData] = await Promise.all([loadKnowledgeData()]);
+    res.json({
+      ok: true,
+      KnowledgeBaseData: knowledgeData || [],
+      TroubleshootingData: {}
     });
   } catch (error) {
     res.status(500).json({
@@ -604,12 +644,27 @@ app.get("/api/knowledge", (_req, res) => {
   }
 });
 
-app.get("/api/policies", (_req, res) => {
+app.get("/api/troubleshooting", async (_req, res) => {
   try {
-    const data = loadBootstrapData(projectRoot);
     res.json({
       ok: true,
-      PoliciesData: data.PoliciesData || {}
+      TroubleshootingData: {}
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      error: "TROUBLESHOOTING_LOAD_FAILED",
+      message: error && error.message ? error.message : "Unknown error"
+    });
+  }
+});
+
+app.get("/api/policies", async (_req, res) => {
+  try {
+    const policiesData = await loadPoliciesData();
+    res.json({
+      ok: true,
+      PoliciesData: policiesData || []
     });
   } catch (error) {
     res.status(500).json({
@@ -620,12 +675,12 @@ app.get("/api/policies", (_req, res) => {
   }
 });
 
-app.get("/api/changelog", (_req, res) => {
+app.get("/api/changelog", async (_req, res) => {
   try {
-    const data = loadBootstrapData(projectRoot);
+    const changelogData = await loadChangelogData();
     res.json({
       ok: true,
-      ChangelogEntriesData: data.ChangelogEntriesData || []
+      ChangelogEntriesData: changelogData || []
     });
   } catch (error) {
     res.status(500).json({
@@ -636,12 +691,12 @@ app.get("/api/changelog", (_req, res) => {
   }
 });
 
-app.get("/api/documentation-links", (_req, res) => {
+app.get("/api/documentation-links", async (_req, res) => {
   try {
-    const data = loadBootstrapData(projectRoot);
+    const documentationLinksData = await loadDocumentationLinksData();
     res.json({
       ok: true,
-      DocumentationLinksData: data.DocumentationLinksData || {}
+      DocumentationLinksData: documentationLinksData || {}
     });
   } catch (error) {
     res.status(500).json({
@@ -649,332 +704,6 @@ app.get("/api/documentation-links", (_req, res) => {
       error: "DOCUMENTATION_LINKS_LOAD_FAILED",
       message: error && error.message ? error.message : "Unknown error"
     });
-  }
-});
-
-app.post("/api/admin/login", (req, res) => {
-  const username = toText(req.body && req.body.username);
-  const password = toText(req.body && req.body.password);
-
-  if (!validateCredentials(username, password)) {
-    res.status(401).json({
-      ok: false,
-      error: "ADMIN_LOGIN_FAILED",
-      message: "Invalid admin credentials"
-    });
-    return;
-  }
-
-  const token = issueAdminToken(username);
-  res.json({
-    ok: true,
-    token,
-    user: {
-      username
-    }
-  });
-});
-
-app.get("/api/admin/session", requireAdminAuth, (req, res) => {
-  res.json({
-    ok: true,
-    user: req.adminUser
-  });
-});
-
-app.get("/api/admin/models", requireAdminAuth, (req, res) => {
-  try {
-    const queryText = toText(req.query && req.query.q).toLowerCase();
-    const models = sortedModels(loadModelsData(projectRoot));
-    const filtered = queryText
-      ? models.filter((model) => String(model && model.modelName || "").toLowerCase().includes(queryText))
-      : models;
-
-    res.json({
-      ok: true,
-      count: filtered.length,
-      items: filtered
-    });
-  } catch (error) {
-    const mapped = asHttpError(error);
-    res.status(mapped.status).json({
-      ok: false,
-      error: mapped.code,
-      message: mapped.message
-    });
-  }
-});
-
-app.get("/api/admin/models/:modelName", requireAdminAuth, (req, res) => {
-  try {
-    const modelName = toText(req.params.modelName);
-    const models = loadModelsData(projectRoot);
-    const index = findModelIndex(models, modelName);
-
-    if (index < 0) {
-      res.status(404).json({
-        ok: false,
-        error: "NOT_FOUND",
-        message: "Model not found"
-      });
-      return;
-    }
-
-    res.json({
-      ok: true,
-      item: models[index]
-    });
-  } catch (error) {
-    const mapped = asHttpError(error);
-    res.status(mapped.status).json({
-      ok: false,
-      error: mapped.code,
-      message: mapped.message
-    });
-  }
-});
-
-app.get("/api/admin/model-bundle/:modelName", requireAdminAuth, (req, res) => {
-  try {
-    const modelName = toText(req.params.modelName);
-    const models = loadModelsData(projectRoot);
-    const index = findModelIndex(models, modelName);
-    if (index < 0) {
-      res.status(404).json({
-        ok: false,
-        error: "NOT_FOUND",
-        message: "Model not found"
-      });
-      return;
-    }
-
-    const mediaData = loadModelMediaData(projectRoot);
-    const documentationLinksData = loadDocumentationLinksData(projectRoot);
-    const platformChassisRows = loadModelPlatformChassisData(projectRoot);
-    const bundle = buildModelBundleResponse(models[index], mediaData, documentationLinksData, platformChassisRows);
-
-    res.json({
-      ok: true,
-      bundle
-    });
-  } catch (error) {
-    const mapped = asHttpError(error);
-    res.status(mapped.status).json({
-      ok: false,
-      error: mapped.code,
-      message: mapped.message
-    });
-  }
-});
-
-app.post("/api/admin/model-bundle", requireAdminAuth, (req, res) => {
-  try {
-    const saved = saveModelBundle(projectRoot, "", req.body);
-    res.status(201).json({
-      ok: true,
-      action: saved.action,
-      bundle: saved.bundle,
-      item: saved.bundle.model
-    });
-  } catch (error) {
-    const mapped = asHttpError(error);
-    res.status(mapped.status).json({
-      ok: false,
-      error: mapped.code,
-      message: mapped.message
-    });
-  }
-});
-
-app.put("/api/admin/model-bundle/:modelName", requireAdminAuth, (req, res) => {
-  try {
-    const modelName = toText(req.params.modelName);
-    const saved = saveModelBundle(projectRoot, modelName, req.body);
-    res.json({
-      ok: true,
-      action: saved.action,
-      bundle: saved.bundle,
-      item: saved.bundle.model
-    });
-  } catch (error) {
-    const mapped = asHttpError(error);
-    res.status(mapped.status).json({
-      ok: false,
-      error: mapped.code,
-      message: mapped.message
-    });
-  }
-});
-
-app.post("/api/admin/models", requireAdminAuth, (req, res) => {
-  try {
-    const incoming = req.body && req.body.model;
-    const models = loadModelsData(projectRoot);
-    const result = setModel(models, "", incoming);
-    saveModelsData(projectRoot, models);
-
-    res.status(201).json({
-      ok: true,
-      action: result.action,
-      item: result.model
-    });
-  } catch (error) {
-    const mapped = asHttpError(error);
-    res.status(mapped.status).json({
-      ok: false,
-      error: mapped.code,
-      message: mapped.message
-    });
-  }
-});
-
-app.put("/api/admin/models/:modelName", requireAdminAuth, (req, res) => {
-  try {
-    const modelName = toText(req.params.modelName);
-    const incoming = req.body && req.body.model;
-    const models = loadModelsData(projectRoot);
-    const result = setModel(models, modelName, incoming);
-    saveModelsData(projectRoot, models);
-
-    res.json({
-      ok: true,
-      action: result.action,
-      item: result.model
-    });
-  } catch (error) {
-    const mapped = asHttpError(error);
-    res.status(mapped.status).json({
-      ok: false,
-      error: mapped.code,
-      message: mapped.message
-    });
-  }
-});
-
-app.patch("/api/admin/models/:modelName/unset", requireAdminAuth, (req, res) => {
-  try {
-    const modelName = toText(req.params.modelName);
-    const unsetPaths = Array.isArray(req.body && req.body.unsetPaths)
-      ? req.body.unsetPaths
-      : [];
-
-    const models = loadModelsData(projectRoot);
-    const index = findModelIndex(models, modelName);
-    if (index < 0) {
-      res.status(404).json({
-        ok: false,
-        error: "NOT_FOUND",
-        message: "Model not found"
-      });
-      return;
-    }
-
-    const item = models[index];
-    const result = applyUnsetPaths(item, unsetPaths);
-    saveModelsData(projectRoot, models);
-
-    res.json({
-      ok: true,
-      removed: result.removed,
-      item
-    });
-  } catch (error) {
-    const mapped = asHttpError(error);
-    res.status(mapped.status).json({
-      ok: false,
-      error: mapped.code,
-      message: mapped.message
-    });
-  }
-});
-
-app.delete("/api/admin/models/:modelName", requireAdminAuth, (req, res) => {
-  try {
-    const modelName = toText(req.params.modelName);
-    const models = loadModelsData(projectRoot);
-    const removed = deleteModel(models, modelName);
-
-    if (!removed) {
-      res.status(404).json({
-        ok: false,
-        error: "NOT_FOUND",
-        message: "Model not found"
-      });
-      return;
-    }
-
-    const mediaData = loadModelMediaData(projectRoot);
-    delete mediaData[toText(removed.modelName)];
-
-    const documentationLinksData = loadDocumentationLinksData(projectRoot);
-    const manualsByModel = isPlainObject(documentationLinksData.manualsByModel)
-      ? documentationLinksData.manualsByModel
-      : {};
-    documentationLinksData.manualsByModel = manualsByModel;
-
-    const removedNames = [
-      toText(removed.modelName),
-      ...(Array.isArray(removed.aliases) ? removed.aliases.map((item) => toText(item)) : [])
-    ].filter(Boolean);
-    Object.keys(manualsByModel).forEach((docsCode) => {
-      const docsKey = normalizeModelKey(docsCode);
-      const shouldDelete = removedNames.some((name) => {
-        const modelKey = normalizeModelKey(name);
-        return docsKey === modelKey || docsKey.startsWith(modelKey + "/");
-      });
-
-      if (shouldDelete) {
-        delete manualsByModel[docsCode];
-      }
-    });
-
-    const platformChassisRows = loadModelPlatformChassisData(projectRoot);
-    const platformIndex = findPlatformChassisIndex(platformChassisRows, removed.modelName);
-    if (platformIndex >= 0) {
-      platformChassisRows.splice(platformIndex, 1);
-    }
-
-    saveModelsData(projectRoot, models);
-    saveModelMediaData(projectRoot, mediaData);
-    saveDocumentationLinksData(projectRoot, documentationLinksData);
-    saveModelPlatformChassisData(projectRoot, platformChassisRows);
-
-    res.json({
-      ok: true,
-      removed
-    });
-  } catch (error) {
-    const mapped = asHttpError(error);
-    res.status(mapped.status).json({
-      ok: false,
-      error: mapped.code,
-      message: mapped.message
-    });
-  }
-});
-
-// Admin: purge image-proxy cache. If `key` is provided (body.key or query.key) it removes that entry,
-// otherwise it clears the whole cache. Protected by admin auth.
-app.post("/api/admin/image-proxy/purge", requireAdminAuth, (req, res) => {
-  try {
-    const key = toText(req.body && req.body.key) || toText(req.query && req.query.key);
-    if (key) {
-      removeCacheKey(key);
-      res.json({ ok: true, action: "removed", key });
-      return;
-    }
-
-    // remove all cache files
-    const entries = listCacheEntries();
-    let removed = 0;
-    for (const e of entries) {
-      try { fs.unlinkSync(e.filePath); removed++; } catch (_e) {}
-      try { fs.unlinkSync(e.metaPath); } catch (_e) {}
-    }
-
-    res.json({ ok: true, action: "cleared", removed });
-  } catch (error) {
-    res.status(500).json({ ok: false, error: "PURGE_FAILED", message: error && error.message ? error.message : "Unknown" });
   }
 });
 

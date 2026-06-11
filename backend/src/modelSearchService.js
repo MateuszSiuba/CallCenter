@@ -12,6 +12,11 @@ function getCacheKey(normalizedQuery) {
   return "model-search:" + String(normalizedQuery || "").trim();
 }
 
+function isCacheDisabled() {
+  const value = String(process.env.DISABLE_CACHE || "").trim().toLowerCase();
+  return value === "1" || value === "true" || value === "yes" || value === "on";
+}
+
 function cacheSearchResult(normalizedQuery, result) {
   searchCache.set(getCacheKey(normalizedQuery), result);
 }
@@ -259,13 +264,15 @@ async function searchModels(q) {
     throw error;
   }
 
-  const cachedResult = getCachedSearchResult(normalizedQuery);
+  const cacheDisabled = isCacheDisabled();
+  const cachedResult = cacheDisabled ? null : getCachedSearchResult(normalizedQuery);
   if (cachedResult) {
     return {
       ...cachedResult,
       cache: {
         hit: true,
-        ttlSeconds: Number(process.env.MODEL_SEARCH_CACHE_TTL_SECONDS || 300)
+        ttlSeconds: Number(process.env.MODEL_SEARCH_CACHE_TTL_SECONDS || 300),
+        disabled: false
       }
     };
   }
@@ -289,9 +296,12 @@ async function searchModels(q) {
     bundle.query = normalizedQuery;
     bundle.cache = {
       hit: false,
-      ttlSeconds: Number(process.env.MODEL_SEARCH_CACHE_TTL_SECONDS || 300)
+      ttlSeconds: Number(process.env.MODEL_SEARCH_CACHE_TTL_SECONDS || 300),
+      disabled: cacheDisabled
     };
-    cacheSearchResult(normalizedQuery, bundle);
+    if (!cacheDisabled) {
+      cacheSearchResult(normalizedQuery, bundle);
+    }
     return bundle;
   } finally {
     client.release();

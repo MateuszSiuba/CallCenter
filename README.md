@@ -75,16 +75,24 @@ npm run load:test
 
 Domyślnie testuje `http://localhost:4000/api/models/search?q=55PUS9000` z 100 połączeniami przez 10 sekund.
 
+### Test bez cache
+
+```powershell
+npm run load:test:nocache
+```
+
+Ten wariant ustawia `DISABLE_CACHE=true` przez `cross-env` i wymusza pełny odczyt z PostgreSQL.
+
 ### Porównanie cache vs brak cache
 
 W [backend/src/modelSearchService.js](backend/src/modelSearchService.js) cache jest sprawdzany na początku `searchModels()`.
 
 Najprostszy test porównawczy:
-- Bez cache: zakomentuj blok zaczynający się od `const cachedResult = getCachedSearchResult(normalizedQuery);` w `searchModels()`.
-- Z cache: przywróć ten blok.
+- Bez cache: uruchom `npm run load:test:nocache`.
+- Z cache: uruchom `npm run load:test`.
 
 Potem uruchom ten sam test dwa razy i porównaj:
 - `Req/Sec`
 - `Latency`
 
-Jeśli wolisz bez zmian w kodzie, możesz też ustawić `MODEL_SEARCH_CACHE_TTL_SECONDS=0` przed startem backendu, ale do czystego porównania najczytelniejsze jest tymczasowe wyłączenie bloku cache w kodzie.
+Jeśli chcesz wymusić wyłączenie cache bez zmiany kodu, ustaw `DISABLE_CACHE=true` przed startem backendu lub użyj `npm run load:test:nocache`.

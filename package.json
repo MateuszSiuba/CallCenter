@@ -15,7 +15,8 @@
     "regen-models": "node ./scripts/regenerate_public_models.js",
     "import:postgres": "npm --prefix backend run import:postgres",
     "quick:test": "node ./scripts/quick_test.js",
-    "load:test": "node ./scripts/load_test_search.js"
+    "load:test": "node ./scripts/load_test_search.js",
+    "load:test:nocache": "cross-env DISABLE_CACHE=true node ./scripts/load_test_search.js"
   },
   "engines": {
     "node": ">=18"
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.0",
     "autoprefixer": "^10.5.0",
+    "cross-env": "^10.1.0",
     "postcss": "^8.5.15",
     "tailwindcss": "^4.3.0",
     "vite": "^8.0.14"

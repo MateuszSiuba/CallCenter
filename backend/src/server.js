@@ -587,6 +587,8 @@ app.get("/api/models", async (req, res) => {
   }
 });
 
+app.get("/api/models/search", searchModelsHandler);
+
 app.get("/api/models/:modelName", async (req, res) => {
   try {
     const modelName = toText(req.params.modelName);
@@ -624,8 +626,6 @@ app.get("/api/models/:modelName", async (req, res) => {
     });
   }
 });
-
-app.get("/api/models/search", searchModelsHandler);
 
 app.get("/api/knowledge", async (_req, res) => {
   try {

@@ -47,6 +47,35 @@ async function queryOne(text, values) {
   return rows[0] || null;
 }
 
+function normalizeKnowledgeEntry(row) {
+  return {
+    id: toText(row.id),
+    articleType: toText(row.article_type) || "article",
+    title: toText(row.title),
+    summary: toNullableText(row.summary),
+    tags: toArray(row.tags),
+    filters: toObject(row.filters),
+    sections: toArray(row.sections),
+    contentPoints: toArray(row.content_points),
+    issue: toNullableText(row.issue),
+    steps: toArray(row.steps),
+    imageUrl: toNullableText(row.image_url),
+    matchOs: toArray(row.match_os),
+    matchChassis: toArray(row.match_chassis),
+    sourceKey: toNullableText(row.source_key),
+    sortOrder: Number(row.sort_order) || 100
+  };
+}
+
+function normalizeManualRow(row) {
+  return {
+    label: toText(row.label),
+    url: toText(row.url),
+    sortOrder: Number(row.sort_order) || 100,
+    metadata: toObject(row.metadata)
+  };
+}
+
 function readJsonFile(filename, fallbackValue) {
   const filePath = path.join(publicDataDir, filename);
   try {
@@ -230,24 +259,53 @@ async function loadKnowledgeData() {
   try {
     const rows = await queryRows(
       [
-        "SELECT id, title, summary, body, category, tags, slug",
-        "FROM knowledge_base",
-        "ORDER BY category ASC NULLS LAST, title ASC"
+        "SELECT id, article_type, title, summary, tags, filters, sections, content_points, issue, steps, image_url, match_os, match_chassis, source_key, sort_order",
+        "FROM knowledge_articles",
+        "ORDER BY sort_order ASC, article_type ASC, title ASC"
       ].join(" ")
     );
 
-    return rows.map((row) => ({
-      id: row.id,
-      title: row.title,
-      summary: toNullableText(row.summary),
-      body: toNullableText(row.body),
-      category: toNullableText(row.category),
-      tags: toArray(row.tags),
-      slug: toNullableText(row.slug)
-    }));
+    if (rows.length === 0) {
+      return readJsonFile("knowledge.json", []);
+    }
+
+    return rows.map(normalizeKnowledgeEntry);
   } catch (_error) {
     return readJsonFile("knowledge.json", []);
   }
+}
+
+async function loadKnowledgeArticlesForModel(model) {
+  const modelOsProfileId = toText(model && model.osProfileId);
+  const modelChassis = toText(model && model.platformChassis && model.platformChassis.chassis);
+
+  try {
+    const rows = await queryRows(
+      [
+        "SELECT id, article_type, title, summary, tags, filters, sections, content_points, issue, steps, image_url, match_os, match_chassis, source_key, sort_order",
+        "FROM knowledge_articles",
+        "WHERE (cardinality(match_os) = 0 OR $1 = '' OR match_os && ARRAY[$1]::text[])",
+        "AND (cardinality(match_chassis) = 0 OR $2 = '' OR match_chassis && ARRAY[$2]::text[])",
+        "ORDER BY sort_order ASC, article_type ASC, title ASC"
+      ].join(" "),
+      [modelOsProfileId, modelChassis]
+    );
+
+    if (rows.length > 0) {
+      return rows.map(normalizeKnowledgeEntry);
+    }
+  } catch (_error) {
+    // Fall back to filtering the full knowledge set if the related-content query fails.
+  }
+
+  const knowledge = await loadKnowledgeData();
+  return knowledge.filter((entry) => {
+    const matchOs = toArray(entry.matchOs);
+    const matchChassis = toArray(entry.matchChassis);
+    const osMatches = matchOs.length === 0 || (modelOsProfileId && matchOs.includes(modelOsProfileId));
+    const chassisMatches = matchChassis.length === 0 || (modelChassis && matchChassis.includes(modelChassis));
+    return osMatches && chassisMatches;
+  });
 }
 
 async function loadChangelogData() {
@@ -276,22 +334,53 @@ async function loadChangelogData() {
 
 async function loadDocumentationLinksData() {
   try {
-    const rows = await queryRows(
-      [
-        "SELECT model_code, links",
-        "FROM documentation_links",
-        "ORDER BY model_code ASC"
-      ].join(" ")
-    );
+    const [sourceRow, manualRows] = await Promise.all([
+      queryOne(
+        [
+          "SELECT source_key, portal_url, search_url_template, source_meta",
+          "FROM documentation_sources",
+          "WHERE source_key = 'woodpecker'",
+          "LIMIT 1"
+        ].join(" ")
+      ),
+      queryRows(
+        [
+          "SELECT model_code, label, url, sort_order, metadata",
+          "FROM model_manuals",
+          "WHERE source_key = 'woodpecker'",
+          "ORDER BY normalized_model_code ASC, sort_order ASC, label ASC"
+        ].join(" ")
+      )
+    ]);
+
+    const woodpecker = sourceRow
+      ? {
+          portalUrl: toNullableText(sourceRow.portal_url),
+          searchUrlTemplate: toNullableText(sourceRow.search_url_template),
+          sourceMeta: toObject(sourceRow.source_meta)
+        }
+      : {
+          portalUrl: "",
+          searchUrlTemplate: "",
+          sourceMeta: {}
+        };
 
     const manualsByModel = {};
-    for (const row of rows) {
-      manualsByModel[toText(row.model_code)] = toArray(row.links);
+    for (const row of manualRows) {
+      const modelCode = toText(row.model_code);
+      if (!manualsByModel[modelCode]) {
+        manualsByModel[modelCode] = [];
+      }
+
+      manualsByModel[modelCode].push(normalizeManualRow(row));
     }
 
-    return { manualsByModel };
+    return { woodpecker, manualsByModel };
   } catch (_error) {
-    return readJsonFile("documentation-links.json", { manualsByModel: {} });
+    return readJsonFile("documentation-links.json", {
+      woodpecker: { portalUrl: "", searchUrlTemplate: "", sourceMeta: {} },
+      manualsByModel: {}
+    });
   }
 }
 
@@ -299,20 +388,21 @@ async function loadModelMediaData() {
   try {
     const rows = await queryRows(
       [
-        "SELECT model_name, page_url, front_image_url, side_image_url, remote_image_url, ports_image_url",
+        "SELECT model_key, page_url, front_image_url, side_image_url, remote_image_url, ports_image_url, source_meta",
         "FROM model_media",
-        "ORDER BY model_name ASC"
+        "ORDER BY model_key ASC"
       ].join(" ")
     );
 
     const media = {};
     for (const row of rows) {
-      media[toText(row.model_name)] = {
+      media[toText(row.model_key)] = {
         pageUrl: toNullableText(row.page_url),
         frontImageUrl: toNullableText(row.front_image_url),
         sideImageUrl: toNullableText(row.side_image_url),
         remoteImageUrl: toNullableText(row.remote_image_url),
-        portsImageUrl: toNullableText(row.ports_image_url)
+        portsImageUrl: toNullableText(row.ports_image_url),
+        sourceMeta: toObject(row.source_meta)
       };
     }
 
@@ -375,6 +465,7 @@ module.exports = {
   loadChangelogData,
   loadDocumentationLinksData,
   loadKnowledgeData,
+  loadKnowledgeArticlesForModel,
   loadModelByName,
   loadModelMediaData,
   loadModelPlatformChassisData,

@@ -10,6 +10,7 @@ const {
   loadModelByName,
   loadPoliciesData,
   loadKnowledgeData,
+  loadKnowledgeArticlesForModel,
   loadChangelogData,
   loadDocumentationLinksData,
   loadModelMediaData,
@@ -266,11 +267,33 @@ function sanitizePlatformChassisEntry(rawValue, fallbackModelName, fallbackYear)
   };
 }
 
-function buildModelBundleResponse(model, mediaData, documentationLinksData, platformChassisRows) {
+function resolveModelMediaEntry(mediaData, model) {
   const modelName = toText(model && model.modelName);
-  const media = isPlainObject(mediaData && mediaData[modelName])
-    ? mediaData[modelName]
-    : {};
+  const seriesKey = toText(model && model.seriesKey);
+  const normalizedModelName = normalizeModelKey(modelName);
+  const normalizedSeriesKey = normalizeModelKey(seriesKey);
+  const mediaByKey = isPlainObject(mediaData) ? mediaData : {};
+
+  return mediaByKey[modelName]
+    || mediaByKey[seriesKey]
+    || mediaByKey[normalizedModelName]
+    || mediaByKey[normalizedSeriesKey]
+    || {};
+}
+
+function matchesKnowledgeArticle(article, model, platformChassis) {
+  const modelOsProfileId = toText(model && model.osProfileId);
+  const chassis = toText(platformChassis && platformChassis.chassis);
+  const matchOs = Array.isArray(article && article.matchOs) ? article.matchOs : [];
+  const matchChassis = Array.isArray(article && article.matchChassis) ? article.matchChassis : [];
+  const osMatches = matchOs.length === 0 || (modelOsProfileId && matchOs.includes(modelOsProfileId));
+  const chassisMatches = matchChassis.length === 0 || (chassis && matchChassis.includes(chassis));
+  return osMatches && chassisMatches;
+}
+
+function buildModelBundleResponse(model, mediaData, documentationLinksData, platformChassisRows, knowledgeArticles) {
+  const modelName = toText(model && model.modelName);
+  const media = resolveModelMediaEntry(mediaData, model);
 
   const docsCode = findDocumentationModelCode(documentationLinksData, model);
   const manualsByModel = isPlainObject(documentationLinksData && documentationLinksData.manualsByModel)
@@ -280,6 +303,9 @@ function buildModelBundleResponse(model, mediaData, documentationLinksData, plat
 
   const platformIndex = findPlatformChassisIndex(platformChassisRows, modelName);
   const platformChassis = platformIndex >= 0 ? platformChassisRows[platformIndex] : null;
+  const relatedKnowledgeArticles = Array.isArray(knowledgeArticles)
+    ? knowledgeArticles.filter((article) => matchesKnowledgeArticle(article, model, platformChassis))
+    : [];
 
   return {
     model,
@@ -288,7 +314,8 @@ function buildModelBundleResponse(model, mediaData, documentationLinksData, plat
       modelCode: docsCode || modelName,
       links: documentationLinks
     },
-    platformChassis
+    platformChassis,
+    knowledgeArticles: relatedKnowledgeArticles
   };
 }
 
@@ -608,13 +635,22 @@ app.get("/api/models/:modelName", async (req, res) => {
       return;
     }
 
+    const modelPlatformChassis = Array.isArray(platformChassisRows)
+      ? platformChassisRows.find((entry) => toText(entry && entry.modelName) === toText(model && model.modelName)) || null
+      : null;
+    const knowledgeArticles = await loadKnowledgeArticlesForModel({
+      osProfileId: model && model.osProfileId,
+      platformChassis: modelPlatformChassis
+    });
+
     res.json({
       ok: true,
       bundle: buildModelBundleResponse(
         model,
         applyMirroredMediaUrls(mediaData, getPublicBaseUrl(req)),
         documentationLinksData || {},
-        platformChassisRows || []
+        platformChassisRows || [],
+        knowledgeArticles || []
       )
     });
   } catch (error) {

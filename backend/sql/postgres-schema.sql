@@ -91,6 +91,78 @@ CREATE TABLE model_specs (
 CREATE INDEX idx_model_specs_raw_source_gin ON model_specs USING GIN (raw_source);
 CREATE INDEX idx_model_specs_features_gin ON model_specs USING GIN (features);
 
+CREATE TABLE documentation_sources (
+  source_key TEXT PRIMARY KEY,
+  portal_url TEXT,
+  search_url_template TEXT,
+  source_meta JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  CONSTRAINT documentation_sources_source_meta_object_ck CHECK (jsonb_typeof(source_meta) = 'object')
+);
+
+CREATE TABLE model_manuals (
+  id BIGSERIAL PRIMARY KEY,
+  source_key TEXT NOT NULL REFERENCES documentation_sources(source_key) ON DELETE CASCADE,
+  model_code TEXT NOT NULL,
+  normalized_model_code TEXT GENERATED ALWAYS AS (normalize_model_key(model_code)) STORED,
+  label TEXT NOT NULL,
+  url TEXT NOT NULL,
+  sort_order SMALLINT NOT NULL DEFAULT 100,
+  metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  CONSTRAINT model_manuals_unique_link_uk UNIQUE (normalized_model_code, label, url)
+);
+
+CREATE INDEX idx_model_manuals_model_code ON model_manuals (normalized_model_code, sort_order ASC, label ASC);
+CREATE INDEX idx_model_manuals_source_key ON model_manuals (source_key);
+
+CREATE TABLE model_media (
+  id BIGSERIAL PRIMARY KEY,
+  model_key TEXT NOT NULL,
+  normalized_model_key TEXT GENERATED ALWAYS AS (normalize_model_key(model_key)) STORED,
+  page_url TEXT,
+  front_image_url TEXT,
+  side_image_url TEXT,
+  remote_image_url TEXT,
+  ports_image_url TEXT,
+  source_meta JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  CONSTRAINT model_media_model_key_uk UNIQUE (normalized_model_key)
+);
+
+CREATE INDEX idx_model_media_model_key ON model_media (normalized_model_key);
+CREATE INDEX idx_model_media_source_meta_gin ON model_media USING GIN (source_meta);
+
+CREATE TABLE knowledge_articles (
+  id TEXT PRIMARY KEY,
+  article_type TEXT NOT NULL DEFAULT 'article' CHECK (article_type IN ('article', 'troubleshooting_os', 'troubleshooting_chassis')),
+  title TEXT NOT NULL,
+  summary TEXT,
+  tags TEXT[] NOT NULL DEFAULT '{}'::text[],
+  filters JSONB NOT NULL DEFAULT '{}'::jsonb,
+  sections JSONB NOT NULL DEFAULT '[]'::jsonb,
+  content_points TEXT[] NOT NULL DEFAULT '{}'::text[],
+  issue TEXT,
+  steps TEXT[] NOT NULL DEFAULT '{}'::text[],
+  image_url TEXT,
+  match_os TEXT[] NOT NULL DEFAULT '{}'::text[],
+  match_chassis TEXT[] NOT NULL DEFAULT '{}'::text[],
+  source_key TEXT,
+  sort_order SMALLINT NOT NULL DEFAULT 100,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  CONSTRAINT knowledge_articles_filters_object_ck CHECK (jsonb_typeof(filters) = 'object'),
+  CONSTRAINT knowledge_articles_sections_array_ck CHECK (jsonb_typeof(sections) = 'array')
+);
+
+CREATE INDEX idx_knowledge_articles_lookup ON knowledge_articles (article_type, sort_order ASC, title ASC);
+CREATE INDEX idx_knowledge_articles_match_os ON knowledge_articles USING GIN (match_os);
+CREATE INDEX idx_knowledge_articles_match_chassis ON knowledge_articles USING GIN (match_chassis);
+CREATE INDEX idx_knowledge_articles_tags ON knowledge_articles USING GIN (tags);
+
 -- Example data load for one canonical series with strict normalization.
 WITH inserted_series AS (
   INSERT INTO models_series (

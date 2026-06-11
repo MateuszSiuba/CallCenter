@@ -1,0 +1,44 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: callcenter-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: callcenter
+      POSTGRES_USER: callcenter
+      POSTGRES_PASSWORD: callcenter
+    ports:
+      - "5432:5432"
+    volumes:
+      - callcenter_postgres_data:/var/lib/postgresql/data
+
+  directus:
+    image: directus/directus:latest
+    container_name: callcenter-directus
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    ports:
+      - "8055:8055"
+    environment:
+      KEY: callcenter-local-key
+      SECRET: callcenter-local-secret
+      PUBLIC_URL: http://localhost:8055
+      ADMIN_EMAIL: admin@callcenter.local
+      ADMIN_PASSWORD: admin12345
+      DB_CLIENT: pg
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: callcenter
+      DB_USER: callcenter
+      DB_PASSWORD: callcenter
+      WEBSOCKETS_ENABLED: "false"
+      CORS_ENABLED: "true"
+      CORS_ORIGIN: "*"
+      FILES_MAX_MEMORY_SIZE: 50mb
+    volumes:
+      - directus_uploads:/directus/uploads
+
+volumes:
+  callcenter_postgres_data:
+  directus_uploads:

@@ -1965,6 +1965,44 @@ export async function initCallCenterApp(api, options) {
 				return model && typeof model.specs === "object" && model.specs !== null ? model.specs : {};
 			}
 
+			function formatWifiStandard(value) {
+				const text = safeText(value, "");
+				if (!text) {
+					return "";
+				}
+
+				return text.split(",")[0].trim();
+			}
+
+			function formatBluetoothVersion(value) {
+				const text = safeText(value, "");
+				if (!text) {
+					return "";
+				}
+
+				const match = text.match(/Bluetooth\s*(?:v(?:ersion)?\s*)?(\d+(?:\.\d+)?)/i);
+				if (match) {
+					return "Bluetooth " + match[1];
+				}
+
+				return text;
+			}
+
+			function formatAudioPower(value) {
+				const text = safeText(value, "");
+				if (!text) {
+					return "";
+				}
+
+				const match = text.match(/(\d+(?:[.,]\d+)?)\s*(?:W|Watts?|Watt)/i);
+				if (match) {
+					return match[1].replace(",", ".") + " W";
+				}
+
+				const digits = text.match(/\d+(?:[.,]\d+)?/);
+				return digits ? digits[0].replace(",", ".") + " W" : text;
+			}
+
 			function findTechnicalCategory(model, categoryPatterns) {
 				const technicalByCategory = getModelTechnicalByCategory(model);
 				const patterns = safeList(categoryPatterns);
@@ -2431,25 +2469,25 @@ export async function initCallCenterApp(api, options) {
 						["specs", "technicalByCategory", "sound", "Audio"],
 						["specs", "technicalByCategory", "sound", "Channels"]
 					]) || getTechnicalCategoryValue(model, [/^Sound$/i, /^Dźwięk$/i], [/^Audio$/i, /Channel/i, /Channels/i]) || safeText(specs.audioChannels || model.audioChannels, ""),
-					audioPower: getFirstResolvedSpecValue(model, [
+					audioPower: formatAudioPower(getFirstResolvedSpecValue(model, [
 						["specs", "audioPower"],
 						["specs", "technicalByCategory", "Sound", "Output power (RMS)"],
 						["specs", "technicalByCategory", "Sound", "Output power"],
 						["specs", "technicalByCategory", "sound", "Output power (RMS)"],
 						["specs", "technicalByCategory", "sound", "Output power"]
-					]) || getTechnicalCategoryValue(model, [/^Sound$/i, /^Dźwięk$/i], [/Output power \(RMS\)/i, /Output power/i, /Moc wyjściowa/i]) || safeText(specs.audioPower || model.audioPower, ""),
-					wifiStandard: getFirstResolvedSpecValue(model, [
+					]) || getTechnicalCategoryValue(model, [/^Sound$/i, /^Dźwięk$/i], [/Output power \(RMS\)/i, /Output power/i, /Moc wyjściowa/i]) || safeText(specs.audioPower || model.audioPower, "")),
+					wifiStandard: formatWifiStandard(getFirstResolvedSpecValue(model, [
 						["specs", "wifiStandard"],
 						["specs", "technicalByCategory", "Connectivity", "wifiStandard"],
 						["specs", "technicalByCategory", "Connectivity", "Wi-Fi standard"],
 						["specs", "technicalByCategory", "connectivity", "wifiStandard"],
 						["specs", "technicalByCategory", "connectivity", "Wi-Fi standard"]
-					]) || getTechnicalCategoryValue(model, [/^Connectivity$/i, /^Łączność$/i], [/Wi[-\s]?Fi/i, /Wireless connection/i, /WiFi/i]) || safeText(specs.wifiStandard || model.wifiStandard, ""),
-					bluetoothVersion: getFirstResolvedSpecValue(model, [
+					]) || getTechnicalCategoryValue(model, [/^Connectivity$/i, /^Łączność$/i], [/Wi[-\s]?Fi/i, /Wireless connection/i, /WiFi/i]) || safeText(specs.wifiStandard || model.wifiStandard, "")),
+					bluetoothVersion: formatBluetoothVersion(getFirstResolvedSpecValue(model, [
 						["specs", "bluetoothVersion"],
 						["specs", "technicalByCategory", "Connectivity", "bluetoothVersion"],
 						["specs", "technicalByCategory", "connectivity", "bluetoothVersion"]
-					]) || getTechnicalCategoryValue(model, [/^Connectivity$/i, /^Łączność$/i], [/Bluetooth/i, /Wireless connection/i]) || safeText(specs.bluetoothVersion || model.bluetoothVersion, ""),
+					]) || getTechnicalCategoryValue(model, [/^Connectivity$/i, /^Łączność$/i], [/Bluetooth/i, /Wireless connection/i]) || safeText(specs.bluetoothVersion || model.bluetoothVersion, "")),
 					vrrMaxRefreshRate: getFirstResolvedSpecValue(model, [
 						["specs", "vrrMaxRefreshRate"],
 						["specs", "technicalByCategory", "Supported HDMI video features", "VRR"],
@@ -3964,8 +4002,9 @@ export async function initCallCenterApp(api, options) {
 
 			function renderModelDetail(model) {
 				const platform = getModelPlatform(model);
-				detailTitle.textContent = getModelDisplayTitle(model);
-				detailSubTitle.textContent = "Model linked to " + countryConfigs[state.countryCode].label + " country context and " + getModelOS(model) + " OS guides.";
+				detailTitle.textContent = getModelName(model);
+				const commercialName = getModelCommercialName(model);
+				detailSubTitle.textContent = (commercialName ? commercialName + " · " : "") + "Model linked to " + countryConfigs[state.countryCode].label + " country context and " + getModelOS(model) + " OS guides.";
 
 				const yearLabel = getModelYear(model);
 				const isYearInteractive = Boolean(getExplicitKnowledgeArticleByTerm(yearLabel, { model }));

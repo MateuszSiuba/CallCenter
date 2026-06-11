@@ -471,7 +471,7 @@ export async function initCallCenterApp(api, options) {
 				setViewMode("browse");
 			}
 
-			function renderKnowledgePill(label, extraClasses, isInteractive) {
+			function renderKnowledgePill(label, extraClasses, isInteractive, tooltipText) {
 				const text = safeText(label, "-");
 				const interactive = Boolean(isInteractive);
 				const classes = [];
@@ -502,10 +502,90 @@ export async function initCallCenterApp(api, options) {
 					+ " class=\""
 					+ classes.join(" ")
 					+ "\""
+					+ (safeText(tooltipText, "") ? " title=\"" + escapeHtml(safeText(tooltipText, "")) + "\"" : "")
 					+ kbDataAttr
 					+ ">"
 					+ escapeHtml(text)
 					+ "</span>";
+			}
+
+			function normalizeLookupKey(value) {
+				return normalizeText(value).replace(/[^a-z0-9]+/g, "");
+			}
+
+			function getLooseObjectValue(object, key) {
+				if (!isPlainObject(object)) {
+					return undefined;
+				}
+
+				const desiredKey = normalizeLookupKey(key);
+				if (!desiredKey) {
+					return undefined;
+				}
+
+				const exactKey = Object.keys(object).find((candidate) => candidate === key);
+				if (exactKey) {
+					return object[exactKey];
+				}
+
+				const looseKey = Object.keys(object).find((candidate) => normalizeLookupKey(candidate) === desiredKey);
+				return looseKey ? object[looseKey] : undefined;
+			}
+
+			function getLooseNestedValue(root, pathParts) {
+				let current = root;
+				for (const part of safeList(pathParts)) {
+					if (!isPlainObject(current)) {
+						return undefined;
+					}
+
+					current = getLooseObjectValue(current, part);
+					if (typeof current === "undefined") {
+						return undefined;
+					}
+				}
+
+				return current;
+			}
+
+			function getFirstResolvedSpecValue(model, pathCandidates) {
+				const specs = getModelSpecs(model);
+				for (const candidatePath of safeList(pathCandidates)) {
+					const normalizedPath = Array.isArray(candidatePath)
+						? candidatePath
+						: String(candidatePath || "").split(".").filter(Boolean);
+
+					if (normalizedPath.length === 0) {
+						continue;
+					}
+
+					const rootKey = normalizeLookupKey(normalizedPath[0]);
+					const root = rootKey === "specs" ? model : specs;
+					const pathToResolve = rootKey === "specs" ? normalizedPath.slice(1) : normalizedPath;
+					const resolved = getLooseNestedValue(root, pathToResolve);
+					const text = stringifyTechnicalValue(resolved);
+					if (text) {
+						return text;
+					}
+				}
+
+				return "";
+			}
+
+			function getModelKnowledgeArticles(model) {
+				if (!model) {
+					return [];
+				}
+
+				if (Array.isArray(model.knowledgeArticles)) {
+					return model.knowledgeArticles;
+				}
+
+				if (isPlainObject(model.__bundle) && Array.isArray(model.__bundle.knowledgeArticles)) {
+					return model.__bundle.knowledgeArticles;
+				}
+
+				return [];
 			}
 
 			function getExplicitKnowledgeArticleByTerm(term, options) {
@@ -519,8 +599,32 @@ export async function initCallCenterApp(api, options) {
 				}
 
 				const contextModel = options && options.model ? options.model : null;
+				const bundleArticles = getModelKnowledgeArticles(contextModel);
 				let bestMatch = null;
 				let bestScore = -1;
+
+				safeList(bundleArticles).forEach((article) => {
+					const profile = getArticleFilterProfile(article);
+					if (contextModel && !isModelMatchingArticleScope(contextModel, profile)) {
+						return;
+					}
+
+					const titleExact = normalizeText(article && article.title) === normalizedTerm;
+					const tagExact = safeList(article && article.tags).some((tag) => normalizeText(tag) === normalizedTerm);
+					if (!titleExact && !tagExact) {
+						return;
+					}
+
+					let score = titleExact ? 340 : 260;
+					if (contextModel && (safeList(profile.os).length > 0 || safeList(profile.panel).length > 0 || safeList(profile.years).length > 0)) {
+						score += 20;
+					}
+
+					if (score > bestScore) {
+						bestScore = score;
+						bestMatch = article;
+					}
+				});
 
 				safeList(state.data.KnowledgeBaseData).forEach((article) => {
 					const profile = getArticleFilterProfile(article);
@@ -2318,12 +2422,40 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			function getModelStandardSpecs(model) {
+				const specs = getModelSpecs(model);
 				return {
-					audioChannels: getTechnicalCategoryValue(model, [/^Sound$/i, /^Dźwięk$/i], [/^Audio$/i, /Channel/i, /Channels/i]) || safeText(model && model.audioChannels, ""),
-					audioPower: getTechnicalCategoryValue(model, [/^Sound$/i, /^Dźwięk$/i], [/Output power \(RMS\)/i, /Output power/i, /Moc wyjściowa/i]) || safeText(model && model.audioPower, ""),
-					wifiStandard: getTechnicalCategoryValue(model, [/^Connectivity$/i, /^Łączność$/i], [/Wi[-\s]?Fi/i, /Wireless connection/i, /WiFi/i]) || safeText(model && model.wifiStandard, ""),
-					bluetoothVersion: getTechnicalCategoryValue(model, [/^Connectivity$/i, /^Łączność$/i], [/Bluetooth/i, /Wireless connection/i]) || safeText(model && model.bluetoothVersion, ""),
-					vrrMaxRefreshRate: getTechnicalCategoryValue(model, [/^Supported HDMI video features$/i, /^Gaming$/i, /^Connectivity$/i], [/VRR/i, /refresh rate/i, /Max refresh/i]) || safeText(model && model.vrrMaxRefreshRate, "")
+					audioChannels: getFirstResolvedSpecValue(model, [
+						["specs", "audioChannels"],
+						["specs", "technicalByCategory", "Sound", "Audio"],
+						["specs", "technicalByCategory", "Sound", "Channels"],
+						["specs", "technicalByCategory", "sound", "Audio"],
+						["specs", "technicalByCategory", "sound", "Channels"]
+					]) || getTechnicalCategoryValue(model, [/^Sound$/i, /^Dźwięk$/i], [/^Audio$/i, /Channel/i, /Channels/i]) || safeText(specs.audioChannels || model.audioChannels, ""),
+					audioPower: getFirstResolvedSpecValue(model, [
+						["specs", "audioPower"],
+						["specs", "technicalByCategory", "Sound", "Output power (RMS)"],
+						["specs", "technicalByCategory", "Sound", "Output power"],
+						["specs", "technicalByCategory", "sound", "Output power (RMS)"],
+						["specs", "technicalByCategory", "sound", "Output power"]
+					]) || getTechnicalCategoryValue(model, [/^Sound$/i, /^Dźwięk$/i], [/Output power \(RMS\)/i, /Output power/i, /Moc wyjściowa/i]) || safeText(specs.audioPower || model.audioPower, ""),
+					wifiStandard: getFirstResolvedSpecValue(model, [
+						["specs", "wifiStandard"],
+						["specs", "technicalByCategory", "Connectivity", "wifiStandard"],
+						["specs", "technicalByCategory", "Connectivity", "Wi-Fi standard"],
+						["specs", "technicalByCategory", "connectivity", "wifiStandard"],
+						["specs", "technicalByCategory", "connectivity", "Wi-Fi standard"]
+					]) || getTechnicalCategoryValue(model, [/^Connectivity$/i, /^Łączność$/i], [/Wi[-\s]?Fi/i, /Wireless connection/i, /WiFi/i]) || safeText(specs.wifiStandard || model.wifiStandard, ""),
+					bluetoothVersion: getFirstResolvedSpecValue(model, [
+						["specs", "bluetoothVersion"],
+						["specs", "technicalByCategory", "Connectivity", "bluetoothVersion"],
+						["specs", "technicalByCategory", "connectivity", "bluetoothVersion"]
+					]) || getTechnicalCategoryValue(model, [/^Connectivity$/i, /^Łączność$/i], [/Bluetooth/i, /Wireless connection/i]) || safeText(specs.bluetoothVersion || model.bluetoothVersion, ""),
+					vrrMaxRefreshRate: getFirstResolvedSpecValue(model, [
+						["specs", "vrrMaxRefreshRate"],
+						["specs", "technicalByCategory", "Supported HDMI video features", "VRR"],
+						["specs", "technicalByCategory", "Gaming", "VRR"],
+						["specs", "technicalByCategory", "Connectivity", "VRR"]
+					]) || getTechnicalCategoryValue(model, [/^Supported HDMI video features$/i, /^Gaming$/i, /^Connectivity$/i], [/VRR/i, /refresh rate/i, /Max refresh/i]) || safeText(specs.vrrMaxRefreshRate || model.vrrMaxRefreshRate, "")
 				};
 			}
 
@@ -3236,7 +3368,8 @@ export async function initCallCenterApp(api, options) {
 
 				try {
 					const response = await api.getModelDetail(getModelName(baseModel));
-					const detailedModel = response && response.bundle && response.bundle.model ? response.bundle.model : null;
+					const bundle = response && response.bundle && typeof response.bundle === "object" ? response.bundle : null;
+					const detailedModel = bundle && bundle.model ? bundle.model : null;
 					if (!detailedModel) {
 						return baseModel;
 					}
@@ -3244,6 +3377,8 @@ export async function initCallCenterApp(api, options) {
 					const mergedModel = {
 						...baseModel,
 						...detailedModel,
+						__bundle: bundle,
+						knowledgeArticles: Array.isArray(bundle && bundle.knowledgeArticles) ? bundle.knowledgeArticles : [],
 						__key: normalizedModelId
 					};
 
@@ -3476,12 +3611,34 @@ export async function initCallCenterApp(api, options) {
 				const dimensionsModel = getModelForSize(model, selectedSize, { fallbackToBase: false });
 				const displayedSize = formatSizeWithInch(selectedSize);
 				const specs = getModelSpecs(sizeScopedModel);
-				const featureValues = flattenFeatureValues(sizeScopedModel && sizeScopedModel.features);
-				const kbFeatureValues = featureValues.filter((item) => !isBasicFeatureValue(item));
 				const standardSpecs = getModelStandardSpecs(sizeScopedModel);
-				const withStandDimensions = getTechnicalCategoryValue(dimensionsModel, [/^Dimensions$/i, /^Wymiary$/i], [/TV with stand/i, /Telewizor z podstawą/i]);
-				const withoutStandDimensions = getTechnicalCategoryValue(dimensionsModel, [/^Dimensions$/i, /^Wymiary$/i], [/TV without stand/i, /Telewizor bez podstawy/i]);
-				const dimensionsWeight = getTechnicalCategoryValue(dimensionsModel, [/^Dimensions$/i, /^Wymiary$/i], [/Weight of TV without stand/i, /Weight of TV with stand/i, /Weight incl\. packaging/i, /Weight/i, /Waga/i]);
+				const featureEntries = Array.from(new Set(flattenFeatureValues(specs.features).filter(Boolean)))
+					.filter((item) => !isBasicFeatureValue(item))
+					.map((term) => {
+						const article = getExplicitKnowledgeArticleByTerm(term, { model });
+						return {
+							term,
+							article,
+							tooltip: article ? safeText(article.summary, article.title || term) : ""
+						};
+					});
+				const withStandDimensions = getFirstResolvedSpecValue(dimensionsModel, [
+					["specs", "technicalByCategory", "Dimensions", "TV with stand"],
+					["specs", "technicalByCategory", "Dimensions", "TV with stand (W x H x D)"],
+					["specs", "technicalByCategory", "dimensions", "TV with stand"]
+				]) || getTechnicalCategoryValue(dimensionsModel, [/^Dimensions$/i, /^Wymiary$/i], [/TV with stand/i, /Telewizor z podstawą/i]);
+				const withoutStandDimensions = getFirstResolvedSpecValue(dimensionsModel, [
+					["specs", "technicalByCategory", "Dimensions", "TV without stand"],
+					["specs", "technicalByCategory", "Dimensions", "TV without stand (W x H x D)"],
+					["specs", "technicalByCategory", "dimensions", "TV without stand"]
+				]) || getTechnicalCategoryValue(dimensionsModel, [/^Dimensions$/i, /^Wymiary$/i], [/TV without stand/i, /Telewizor bez podstawy/i]);
+				const dimensionsWeight = getFirstResolvedSpecValue(dimensionsModel, [
+					["specs", "technicalByCategory", "Dimensions", "Weight of TV without stand"],
+					["specs", "technicalByCategory", "Dimensions", "Weight of TV with stand"],
+					["specs", "technicalByCategory", "Dimensions", "Weight incl. packaging"],
+					["specs", "technicalByCategory", "Dimensions", "Weight"],
+					["specs", "technicalByCategory", "dimensions", "Weight"]
+				]) || getTechnicalCategoryValue(dimensionsModel, [/^Dimensions$/i, /^Wymiary$/i], [/Weight of TV without stand/i, /Weight of TV with stand/i, /Weight incl\. packaging/i, /Weight/i, /Waga/i]);
 				const vesaStandard = getModelVesa(sizeScopedModel);
 				const standValue = safeText(specs.stand, "")
 					|| getTechnicalCategoryValue(sizeScopedModel, [/^Dimensions$/i, /^Wymiary$/i], [/^stand$/i])
@@ -3489,13 +3646,14 @@ export async function initCallCenterApp(api, options) {
 				const sizeLabel = displayedSize !== "-" ? displayedSize : "-";
 				const allSizesLabel = formatModelSizesWithInches(allSizes) || "-";
 
-				const featureBadges = kbFeatureValues
+				const featureBadges = featureEntries
 					.map((item) => {
-						const hasExplicitKb = Boolean(getExplicitKnowledgeArticleByTerm(item, { model }));
+						const hasExplicitKb = Boolean(item.article);
 						return renderKnowledgePill(
-							item,
+							item.term,
 							"rounded-full border border-slate-200 bg-white px-2 py-0.5 text-xs font-semibold text-slate-700",
-							hasExplicitKb
+							hasExplicitKb,
+							item.tooltip
 						);
 					})
 					.join(" ");
@@ -4051,7 +4209,18 @@ export async function initCallCenterApp(api, options) {
 					return;
 				}
 
-				showQuickInfoModal(match);
+				setArticleBackTarget(modelId || state.selectedModelId || null);
+				state.articleViewContext = {
+					kind: "knowledge",
+					id: safeText(match && match.id, "")
+				};
+				renderArticle(
+					match,
+					match && String(match.articleType || match.article_type || "").indexOf("troubleshooting") === 0
+						? "Troubleshooting Guide"
+						: "Knowledge Base Article"
+				);
+				setViewMode("article");
 			}
 
 			function refreshModelResults() {

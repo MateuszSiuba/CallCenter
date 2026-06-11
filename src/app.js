@@ -1827,6 +1827,56 @@ export async function initCallCenterApp(api, options) {
 				return lookup;
 			}
 
+			function findPlatformChassisRecord(model) {
+				if (!state.data || !Array.isArray(state.data.ModelPlatformChassisData)) {
+					return null;
+				}
+
+				const normalizedModelName = normalizeModelLookupName(getModelName(model));
+				if (!normalizedModelName) {
+					return null;
+				}
+
+				const modelYear = getModelYearNumber(model);
+				let bestMatch = null;
+				let bestScore = -1;
+
+				safeList(state.data.ModelPlatformChassisData).forEach((record) => {
+					const recordName = normalizeModelLookupName(record && record.modelName);
+					if (!recordName) {
+						return;
+					}
+
+					const sameYear = !modelYear || Number(record && record.year) === modelYear;
+					const directMatch = recordName === normalizedModelName;
+					const prefixMatch = recordName.startsWith(normalizedModelName) || normalizedModelName.startsWith(recordName);
+					const containsMatch = recordName.includes(normalizedModelName) || normalizedModelName.includes(recordName);
+					if (!directMatch && !prefixMatch && !containsMatch) {
+						return;
+					}
+
+					let score = 0;
+					if (directMatch) {
+						score += 300;
+					} else if (prefixMatch) {
+						score += 200;
+					} else if (containsMatch) {
+						score += 120;
+					}
+
+					if (sameYear) {
+						score += 30;
+					}
+
+					if (score > bestScore) {
+						bestScore = score;
+						bestMatch = record;
+					}
+				});
+
+				return bestMatch;
+			}
+
 			function getModelLookupMeta(model) {
 				if (!model || !(state.modelPlatformChassisLookup instanceof Map)) {
 					return null;
@@ -1838,6 +1888,14 @@ export async function initCallCenterApp(api, options) {
 					if (value) {
 						return value;
 					}
+				}
+
+				const fuzzyRecord = findPlatformChassisRecord(model);
+				if (fuzzyRecord) {
+					return {
+						platform: safeText(fuzzyRecord.platform, ""),
+						chassis: safeText(fuzzyRecord.chassis, "")
+					};
 				}
 
 				return null;
@@ -2545,6 +2603,75 @@ export async function initCallCenterApp(api, options) {
 						});
 					});
 				});
+
+				return rows;
+			}
+
+			function getConnectivityCategory(model) {
+				const technicalByCategory = getModelTechnicalByCategory(model);
+				for (const [categoryName, entries] of Object.entries(technicalByCategory)) {
+					if (/^Connectivity$/i.test(categoryName) || /^Łączność$/i.test(categoryName)) {
+						return isPlainObject(entries) ? entries : {};
+					}
+				}
+
+				return {};
+			}
+
+			function normalizePortQty(value) {
+				const text = safeText(value, "");
+				if (!text) {
+					return "-";
+				}
+
+				const match = text.match(/\d+/);
+				return match ? match[0] : text;
+			}
+
+			function collectPortsFromConnectivity(model) {
+				const connectivity = getConnectivityCategory(model);
+				const rows = [];
+
+				const hdmiQty = normalizePortQty(connectivity["Number of HDMI connections"] || getLooseObjectValue(connectivity, "Number of HDMI connections"));
+				if (hdmiQty !== "-") {
+					const hdmiSpecParts = [];
+					Object.entries(connectivity).forEach(([key, value]) => {
+						if (!/HDMI|EasyLink|HDCP|ARC|CEC|VRR|ALLM/i.test(key)) {
+							return;
+						}
+
+						const text = safeText(value, "");
+						if (text && !/^Number of HDMI connections$/i.test(key)) {
+							hdmiSpecParts.push(text);
+						}
+					});
+
+					rows.push({
+						port: "HDMI",
+						qty: hdmiQty,
+						spec: hdmiSpecParts.length > 0 ? Array.from(new Set(hdmiSpecParts)).join(" | ") : "-"
+					});
+				}
+
+				const usbQty = normalizePortQty(connectivity["Number of USBs"] || getLooseObjectValue(connectivity, "Number of USBs"));
+				if (usbQty !== "-") {
+					rows.push({
+						port: "USB",
+						qty: usbQty,
+						spec: "-"
+					});
+				}
+
+				const otherConnections = safeText(connectivity["Other connections"] || getLooseObjectValue(connectivity, "Other connections"), "");
+				if (otherConnections) {
+					otherConnections.split(",").map((item) => safeText(item, "").trim()).filter(Boolean).forEach((connectionName) => {
+						rows.push({
+							port: connectionName,
+							qty: "1",
+							spec: "-"
+						});
+					});
+				}
 
 				return rows;
 			}
@@ -3776,7 +3903,7 @@ export async function initCallCenterApp(api, options) {
 						+ "</section>"
 					: "";
 
-				const sourceRows = safeList(model.ports);
+				const sourceRows = collectPortsFromConnectivity(model);
 				const rows = sourceRows.map((port) => ""
 					+ "<tr>"
 					+ "<td class=\"px-3 py-2 font-semibold text-slate-800\">" + safeText(port.port, "-") + "</td>"

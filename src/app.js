@@ -198,7 +198,13 @@ export async function initCallCenterApp(api, options) {
 				});
 			}
 
-			let changelogEntries = normalizeChangelogEntries(defaultChangelogEntries);
+			const externalChangelogEntries = Array.isArray(window.ChangelogEntriesData)
+				? window.ChangelogEntriesData
+				: ((typeof ChangelogEntriesData !== "undefined" && Array.isArray(ChangelogEntriesData)) ? ChangelogEntriesData : []);
+
+			let changelogEntries = normalizeChangelogEntries(
+				externalChangelogEntries.length > 0 ? externalChangelogEntries : defaultChangelogEntries
+			);
 
 			const changelogVisibleLimit = 4;
 			let changelogVisibleEntries = changelogEntries.slice(0, changelogVisibleLimit);
@@ -1691,7 +1697,21 @@ export async function initCallCenterApp(api, options) {
 					}
 				}
 
-				const uniqueRows = collectUniqueTechnicalRows(scopedModel, selectedConfig);
+				let uniqueRows = collectUniqueTechnicalRows(scopedModel, selectedConfig);
+				if (context.detailType === "connectivity") {
+					const hiddenConnectivityFieldPatterns = [
+						/^Number of HDMI connections$/i,
+						/^Number of USBs?$/i,
+						/^HDMI ARC$/i,
+						/^HDMI 2\.1 features$/i,
+						/^EasyLink 2\.0$/i
+					];
+
+					uniqueRows = uniqueRows.filter((row) => {
+						const label = safeText(row && row.label, "");
+						return !hiddenConnectivityFieldPatterns.some((pattern) => pattern.test(label));
+					});
+				}
 				if (context.detailType === "dimensions") {
 					const screwRows = collectDimensionsScrewRows(scopedModel || model);
 					screwRows.forEach((row) => {
@@ -1756,6 +1776,32 @@ export async function initCallCenterApp(api, options) {
 
 			function getModelName(model) {
 				return safeText(model && model.modelName, "-");
+			}
+
+			function normalizeModelLookupName(value) {
+				return safeText(value, "")
+					.toUpperCase()
+					.replace(/\s+/g, "")
+					.replace(/_/g, "")
+					.replace(/\/.*$/, "");
+			}
+
+			function getModelLookupKeys(modelName, yearValue) {
+				const normalized = normalizeModelLookupName(modelName);
+				if (!normalized) {
+					return [];
+				}
+
+				const yearNumber = Number(yearValue);
+				const keys = [];
+
+				if (Number.isFinite(yearNumber) && yearNumber > 0) {
+					keys.push(String(yearNumber) + "|" + normalized);
+				}
+
+				keys.push("*|" + normalized);
+
+				return keys;
 			}
 
 			function buildModelPlatformChassisLookup(records) {
@@ -2591,6 +2637,37 @@ export async function initCallCenterApp(api, options) {
 
 					if (commaParts.length >= 2) {
 						return commaParts.join(" | ");
+					}
+
+					const knownListTerms = [
+						"Dolby Media Intelligence", "Personal Vocal Boost", "Bass Enhancement",
+						"Room Calibration", "Hearing Profile", "Night Mode", "Night mode",
+						"Clear Dialogue", "Dialogue", "Equalizer", "All Sound Style",
+						"Entertainment", "Spatial Music", "Original", "Music", "AVL Mode",
+						"AI mode", "DTS Play-Fi", "DTS:X", "Dolby Atmos", "Dolby Digital",
+						"Dolby Vision 2 Max", "Dolby Vision", "HDR10+ Compatible",
+						"HDR10+ Adaptive", "HDR10+", "HDR10", "HLG", "One touch play",
+						"Remote control pass-through", "System audio control", "System standby",
+						"External setting via TV UI", "HDMI-CEC for Philips TV/SB",
+						"4K Audio Return Channel", "Audio Return Channel", "eARC", "VRR", "ALLM"
+					];
+
+					function escapeRegex(value) {
+						return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+					}
+
+					const knownTermsPattern = new RegExp(
+						knownListTerms
+							.map((term) => escapeRegex(term))
+							.sort((a, b) => b.length - a.length)
+							.join("|"),
+						"gi"
+					);
+
+					const matches = normalized.match(knownTermsPattern) || [];
+					const matchedLength = matches.reduce((sum, item) => sum + item.length, 0);
+					if (matches.length >= 2 && matchedLength >= normalized.length * 0.45) {
+						return matches.map((item) => safeText(item, "")).filter(Boolean).join(" | ");
 					}
 
 					return normalized;

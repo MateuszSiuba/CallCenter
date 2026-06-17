@@ -1,6 +1,4 @@
-import ModelPlatformChassisData from '../data/model-platform-chassis.js';
-
-export async function initCallCenterApp(api, options) {
+﻿(() => {
 			const countryConfigs = {
 				UK: {
 					label: "United Kingdom (UK)"
@@ -19,17 +17,18 @@ export async function initCallCenterApp(api, options) {
 				AVA: "AVA is currently a placeholder module. TV data remains active."
 			};
 
-			                const RelationalMockData = {
-        ModelsData: await api.getModels(),
-        PoliciesData: await api.getPolicies(),
-        TroubleshootingData: {},
-        KnowledgeBaseData: await api.getKnowledge(),
-        ModelMediaData: await api.getModelMedia(),
-        ModelPlatformChassisData: ModelPlatformChassisData,
-        DocumentationLinksData: await api.getDocs(),
-        ChangelogEntriesData: await api.getChangelog()
-    };
-
+			            const RelationalMockData = {
+				ModelsData: window.ModelsData || (typeof ModelsData !== "undefined" ? ModelsData : []),
+				PoliciesData: window.PoliciesData || (typeof PoliciesData !== "undefined" ? PoliciesData : {}),
+				TroubleshootingData: window.TroubleshootingData || (typeof TroubleshootingData !== "undefined" ? TroubleshootingData : {}),
+				KnowledgeBaseData: [
+					...((Array.isArray(window.KnowledgeBaseData) ? window.KnowledgeBaseData : [])),
+					...((typeof KnowledgeBaseData !== "undefined" && Array.isArray(KnowledgeBaseData)) ? KnowledgeBaseData : [])
+				],
+								ModelMediaData: window.ModelMediaData || (typeof ModelMediaData !== "undefined" ? ModelMediaData : {}),
+						ModelPlatformChassisData: window.ModelPlatformChassisData || (typeof ModelPlatformChassisData !== "undefined" ? ModelPlatformChassisData : []),
+						DocumentationLinksData: window.DocumentationLinksData || (typeof DocumentationLinksData !== "undefined" ? DocumentationLinksData : {})
+			};
 
 							function getRuntimeApiBaseUrl() {
 								const runtimeConfig = (window && window.SupportHubConfig && typeof window.SupportHubConfig === "object")
@@ -131,8 +130,6 @@ export async function initCallCenterApp(api, options) {
 				countryCode: "UK",
 				activeModule: "TV",
 				data: null,
-				modelDetailsById: {},
-				modelDetailRequestToken: 0,
 				modelSearchIndex: null,
 				globalSearchIndex: null,
 				filteredModels: [],
@@ -456,7 +453,6 @@ export async function initCallCenterApp(api, options) {
 					if (model) {
 						renderModelDetail(model);
 						setViewMode("detail");
-						void hydrateModelDetail(state.selectedModelId);
 						return;
 					}
 				}
@@ -479,7 +475,7 @@ export async function initCallCenterApp(api, options) {
 				setViewMode("browse");
 			}
 
-			function renderKnowledgePill(label, extraClasses, isInteractive, tooltipText) {
+			function renderKnowledgePill(label, extraClasses, isInteractive) {
 				const text = safeText(label, "-");
 				const interactive = Boolean(isInteractive);
 				const classes = [];
@@ -510,90 +506,10 @@ export async function initCallCenterApp(api, options) {
 					+ " class=\""
 					+ classes.join(" ")
 					+ "\""
-					+ (safeText(tooltipText, "") ? " title=\"" + escapeHtml(safeText(tooltipText, "")) + "\"" : "")
 					+ kbDataAttr
 					+ ">"
 					+ escapeHtml(text)
 					+ "</span>";
-			}
-
-			function normalizeLookupKey(value) {
-				return normalizeText(value).replace(/[^a-z0-9]+/g, "");
-			}
-
-			function getLooseObjectValue(object, key) {
-				if (!isPlainObject(object)) {
-					return undefined;
-				}
-
-				const desiredKey = normalizeLookupKey(key);
-				if (!desiredKey) {
-					return undefined;
-				}
-
-				const exactKey = Object.keys(object).find((candidate) => candidate === key);
-				if (exactKey) {
-					return object[exactKey];
-				}
-
-				const looseKey = Object.keys(object).find((candidate) => normalizeLookupKey(candidate) === desiredKey);
-				return looseKey ? object[looseKey] : undefined;
-			}
-
-			function getLooseNestedValue(root, pathParts) {
-				let current = root;
-				for (const part of safeList(pathParts)) {
-					if (!isPlainObject(current)) {
-						return undefined;
-					}
-
-					current = getLooseObjectValue(current, part);
-					if (typeof current === "undefined") {
-						return undefined;
-					}
-				}
-
-				return current;
-			}
-
-			function getFirstResolvedSpecValue(model, pathCandidates) {
-				const specs = getModelSpecs(model);
-				for (const candidatePath of safeList(pathCandidates)) {
-					const normalizedPath = Array.isArray(candidatePath)
-						? candidatePath
-						: String(candidatePath || "").split(".").filter(Boolean);
-
-					if (normalizedPath.length === 0) {
-						continue;
-					}
-
-					const rootKey = normalizeLookupKey(normalizedPath[0]);
-					const root = rootKey === "specs" ? model : specs;
-					const pathToResolve = rootKey === "specs" ? normalizedPath.slice(1) : normalizedPath;
-					const resolved = getLooseNestedValue(root, pathToResolve);
-					const text = stringifyTechnicalValue(resolved);
-					if (text) {
-						return text;
-					}
-				}
-
-				return "";
-			}
-
-			function getModelKnowledgeArticles(model) {
-				if (!model) {
-					return [];
-				}
-
-				if (Array.isArray(model.knowledgeArticles)) {
-					return model.knowledgeArticles;
-				}
-
-				if (isPlainObject(model.__bundle) && Array.isArray(model.__bundle.knowledgeArticles)) {
-					return model.__bundle.knowledgeArticles;
-				}
-
-				return [];
 			}
 
 			function getExplicitKnowledgeArticleByTerm(term, options) {
@@ -607,32 +523,8 @@ export async function initCallCenterApp(api, options) {
 				}
 
 				const contextModel = options && options.model ? options.model : null;
-				const bundleArticles = getModelKnowledgeArticles(contextModel);
 				let bestMatch = null;
 				let bestScore = -1;
-
-				safeList(bundleArticles).forEach((article) => {
-					const profile = getArticleFilterProfile(article);
-					if (contextModel && !isModelMatchingArticleScope(contextModel, profile)) {
-						return;
-					}
-
-					const titleExact = normalizeText(article && article.title) === normalizedTerm;
-					const tagExact = safeList(article && article.tags).some((tag) => normalizeText(tag) === normalizedTerm);
-					if (!titleExact && !tagExact) {
-						return;
-					}
-
-					let score = titleExact ? 340 : 260;
-					if (contextModel && (safeList(profile.os).length > 0 || safeList(profile.panel).length > 0 || safeList(profile.years).length > 0)) {
-						score += 20;
-					}
-
-					if (score > bestScore) {
-						bestScore = score;
-						bestMatch = article;
-					}
-				});
 
 				safeList(state.data.KnowledgeBaseData).forEach((article) => {
 					const profile = getArticleFilterProfile(article);
@@ -1595,11 +1487,7 @@ export async function initCallCenterApp(api, options) {
 				const seenKeys = new Set();
 
 				rowsByCategory.concat(rowsByKeys).forEach((row) => {
-					const uniqueKey = [
-						safeText(row && row.category, "").toLowerCase(),
-						safeText(row && row.label, "").toLowerCase(),
-						safeText(row && row.value, "")
-					].join("||");
+					const uniqueKey = [row.category, row.label, row.value].join("||");
 					if (seenKeys.has(uniqueKey)) {
 						return;
 					}
@@ -1807,8 +1695,17 @@ export async function initCallCenterApp(api, options) {
 			function buildModelPlatformChassisLookup(records) {
 				const lookup = new Map();
 
+				const mergeEntry = (key, nextValue) => {
+					const existing = lookup.get(key) || { platform: "", chassis: "" };
+					lookup.set(key, {
+						platform: existing.platform || nextValue.platform,
+						chassis: existing.chassis || nextValue.chassis
+					});
+				};
+
 				safeList(records).forEach((record) => {
-					const modelName = safeText(record && record.modelName, "").trim();
+					const modelName = safeText(record && record.modelName, "");
+					const year = Number(record && record.year);
 					const platform = safeText(record && record.platform, "");
 					const chassis = safeText(record && record.chassis, "");
 
@@ -1816,12 +1713,15 @@ export async function initCallCenterApp(api, options) {
 						return;
 					}
 
-					const lookupKey = modelName.split("/")[0];
-					if (!lookupKey || lookup.has(lookupKey)) {
+					const keys = getModelLookupKeys(modelName, year);
+					if (keys.length === 0) {
 						return;
 					}
 
-					lookup.set(lookupKey, { platform, chassis });
+					const value = { platform, chassis };
+					keys.forEach((key) => {
+						mergeEntry(key, value);
+					});
 				});
 
 				return lookup;
@@ -1832,8 +1732,15 @@ export async function initCallCenterApp(api, options) {
 					return null;
 				}
 
-				const lookupKey = safeText(getModelName(model), "").trim().split("/")[0];
-				return lookupKey ? state.modelPlatformChassisLookup.get(lookupKey) || null : null;
+				const keys = getModelLookupKeys(getModelName(model), getModelYearNumber(model));
+				for (let index = 0; index < keys.length; index += 1) {
+					const value = state.modelPlatformChassisLookup.get(keys[index]);
+					if (value) {
+						return value;
+					}
+				}
+
+				return null;
 			}
 
 			function getSafeHttpUrl(value) {
@@ -1956,82 +1863,6 @@ export async function initCallCenterApp(api, options) {
 
 			function getModelSpecs(model) {
 				return model && typeof model.specs === "object" && model.specs !== null ? model.specs : {};
-			}
-
-			function formatWifiStandard(value) {
-				const text = safeText(value, "");
-				if (!text) {
-					return "";
-				}
-
-				return text.split(",")[0].trim();
-			}
-
-			function formatBluetoothVersion(value) {
-				const text = safeText(value, "");
-				if (!text) {
-					return "";
-				}
-
-				const match = text.match(/Bluetooth\s*(?:v(?:ersion)?\s*)?(\d+(?:\.\d+)?)/i);
-				if (match) {
-					return "Bluetooth " + match[1];
-				}
-
-				return text;
-			}
-
-			function formatAudioPower(value) {
-				const text = safeText(value, "");
-				if (!text) {
-					return "";
-				}
-
-				const match = text.match(/(\d+(?:[.,]\d+)?)\s*(?:W|Watts?|Watt)/i);
-				if (match) {
-					return match[1].replace(",", ".") + " W";
-				}
-
-				const digits = text.match(/\d+(?:[.,]\d+)?/);
-				return digits ? digits[0].replace(",", ".") + " W" : text;
-			}
-
-			function findTechnicalCategory(model, categoryPatterns) {
-				const technicalByCategory = getModelTechnicalByCategory(model);
-				const patterns = safeList(categoryPatterns);
-
-				for (const [categoryName, entries] of Object.entries(technicalByCategory)) {
-					if (!isPlainObject(entries)) {
-						continue;
-					}
-
-					if (patterns.some((pattern) => pattern.test(categoryName))) {
-						return entries;
-					}
-				}
-
-				return null;
-			}
-
-			function getTechnicalCategoryValue(model, categoryPatterns, keyPatterns) {
-				const category = findTechnicalCategory(model, categoryPatterns);
-				if (!category) {
-					return "";
-				}
-
-				const patterns = safeList(keyPatterns);
-				for (const [key, value] of Object.entries(category)) {
-					if (!patterns.some((pattern) => pattern.test(key))) {
-						continue;
-					}
-
-					const text = stringifyTechnicalValue(value);
-					if (text) {
-						return text;
-					}
-				}
-
-				return "";
 			}
 
 			function getModelChassis(model) {
@@ -2221,7 +2052,7 @@ export async function initCallCenterApp(api, options) {
 					return directVesa;
 				}
 
-				return getTechnicalCategoryValue(model, [/^Dimensions$/i, /^Wymiary$/i], [/Wall-mount compatible/i, /Zgodny uchwyt ścienny/i, /VESA/i]);
+				return getModelTechnicalValue(model, [/Wall-mount compatible/i, /Zgodny uchwyt ścienny/i, /VESA/i]);
 			}
 
 			function extractModelPolicyTags(fullModelName) {
@@ -2453,40 +2284,12 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			function getModelStandardSpecs(model) {
-				const specs = getModelSpecs(model);
 				return {
-					audioChannels: getFirstResolvedSpecValue(model, [
-						["specs", "audioChannels"],
-						["specs", "technicalByCategory", "Sound", "Audio"],
-						["specs", "technicalByCategory", "Sound", "Channels"],
-						["specs", "technicalByCategory", "sound", "Audio"],
-						["specs", "technicalByCategory", "sound", "Channels"]
-					]) || getTechnicalCategoryValue(model, [/^Sound$/i, /^Dźwięk$/i], [/^Audio$/i, /Channel/i, /Channels/i]) || safeText(specs.audioChannels || model.audioChannels, ""),
-					audioPower: formatAudioPower(getFirstResolvedSpecValue(model, [
-						["specs", "audioPower"],
-						["specs", "technicalByCategory", "Sound", "Output power (RMS)"],
-						["specs", "technicalByCategory", "Sound", "Output power"],
-						["specs", "technicalByCategory", "sound", "Output power (RMS)"],
-						["specs", "technicalByCategory", "sound", "Output power"]
-					]) || getTechnicalCategoryValue(model, [/^Sound$/i, /^Dźwięk$/i], [/Output power \(RMS\)/i, /Output power/i, /Moc wyjściowa/i]) || safeText(specs.audioPower || model.audioPower, "")),
-					wifiStandard: formatWifiStandard(getFirstResolvedSpecValue(model, [
-						["specs", "wifiStandard"],
-						["specs", "technicalByCategory", "Connectivity", "wifiStandard"],
-						["specs", "technicalByCategory", "Connectivity", "Wi-Fi standard"],
-						["specs", "technicalByCategory", "connectivity", "wifiStandard"],
-						["specs", "technicalByCategory", "connectivity", "Wi-Fi standard"]
-					]) || getTechnicalCategoryValue(model, [/^Connectivity$/i, /^Łączność$/i], [/Wi[-\s]?Fi/i, /Wireless connection/i, /WiFi/i]) || safeText(specs.wifiStandard || model.wifiStandard, "")),
-					bluetoothVersion: formatBluetoothVersion(getFirstResolvedSpecValue(model, [
-						["specs", "bluetoothVersion"],
-						["specs", "technicalByCategory", "Connectivity", "bluetoothVersion"],
-						["specs", "technicalByCategory", "connectivity", "bluetoothVersion"]
-					]) || getTechnicalCategoryValue(model, [/^Connectivity$/i, /^Łączność$/i], [/Bluetooth/i, /Wireless connection/i]) || safeText(specs.bluetoothVersion || model.bluetoothVersion, "")),
-					vrrMaxRefreshRate: getFirstResolvedSpecValue(model, [
-						["specs", "vrrMaxRefreshRate"],
-						["specs", "technicalByCategory", "Supported HDMI video features", "VRR"],
-						["specs", "technicalByCategory", "Gaming", "VRR"],
-						["specs", "technicalByCategory", "Connectivity", "VRR"]
-					]) || getTechnicalCategoryValue(model, [/^Supported HDMI video features$/i, /^Gaming$/i, /^Connectivity$/i], [/VRR/i, /refresh rate/i, /Max refresh/i]) || safeText(specs.vrrMaxRefreshRate || model.vrrMaxRefreshRate, "")
+					audioChannels: safeText(model && model.audioChannels, ""),
+					audioPower: safeText(model && model.audioPower, ""),
+					wifiStandard: safeText(model && model.wifiStandard, ""),
+					bluetoothVersion: safeText(model && model.bluetoothVersion, ""),
+					vrrMaxRefreshRate: safeText(model && model.vrrMaxRefreshRate, "")
 				};
 			}
 
@@ -2542,8 +2345,6 @@ export async function initCallCenterApp(api, options) {
 				return rows;
 			}
 
-
-
 			function collectTechnicalRowsByFlatKeys(model, keyPatterns) {
 				const rows = [];
 				const technicalFlat = getModelTechnicalFlat(model);
@@ -2583,36 +2384,13 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			function renderTechnicalRowsTable(rows, emptyMessage) {
-				function formatTechnicalFieldLabel(value) {
-					const text = safeText(value, "");
-					if (!text) {
-						return "Value";
-					}
-
-					const titleCased = text
-						.replace(/([a-z0-9])([A-Z])/g, "$1 $2")
-						.replace(/[_-]+/g, " ")
-						.replace(/\s+/g, " ")
-						.trim()
-						.replace(/^./, (char) => char.toUpperCase());
-
-					return titleCased
-						.replace(/\bWifi\b/g, "WiFi")
-						.replace(/\bHdmi\b/g, "HDMI")
-						.replace(/\bUsb\b/g, "USB")
-						.replace(/\bVrr\b/g, "VRR")
-						.replace(/\bEarc\b/g, "eARC")
-						.replace(/\bHdcp\b/g, "HDCP")
-						.replace(/\bDts\b/g, "DTS");
-				}
-
-				function formatTechnicalSectionLabel(value) {
-					return formatTechnicalFieldLabel(value);
-				}
-
 				function normalizeTechnicalValue(value) {
 					const text = safeText(value, "-");
 					return text.replace(/\bmm\s+mm\b/gi, "mm").replace(/\s{2,}/g, " ").trim();
+				}
+
+				function escapeRegex(value) {
+					return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 				}
 
 				function formatTechnicalListValue(category, label, value) {
@@ -2640,21 +2418,46 @@ export async function initCallCenterApp(api, options) {
 					}
 
 					const knownListTerms = [
-						"Dolby Media Intelligence", "Personal Vocal Boost", "Bass Enhancement",
-						"Room Calibration", "Hearing Profile", "Night Mode", "Night mode",
-						"Clear Dialogue", "Dialogue", "Equalizer", "All Sound Style",
-						"Entertainment", "Spatial Music", "Original", "Music", "AVL Mode",
-						"AI mode", "DTS Play-Fi", "DTS:X", "Dolby Atmos", "Dolby Digital",
-						"Dolby Vision 2 Max", "Dolby Vision", "HDR10+ Compatible",
-						"HDR10+ Adaptive", "HDR10+", "HDR10", "HLG", "One touch play",
-						"Remote control pass-through", "System audio control", "System standby",
-						"External setting via TV UI", "HDMI-CEC for Philips TV/SB",
-						"4K Audio Return Channel", "Audio Return Channel", "eARC", "VRR", "ALLM"
+						"Dolby Media Intelligence",
+						"Personal Vocal Boost",
+						"Bass Enhancement",
+						"Room Calibration",
+						"Hearing Profile",
+						"Night Mode",
+						"Night mode",
+						"Clear Dialogue",
+						"Dialogue",
+						"Equalizer",
+						"All Sound Style",
+						"Entertainment",
+						"Spatial Music",
+						"Original",
+						"Music",
+						"AVL Mode",
+						"AI mode",
+						"DTS Play-Fi",
+						"DTS:X",
+						"Dolby Atmos",
+						"Dolby Digital",
+						"Dolby Vision 2 Max",
+						"Dolby Vision",
+						"HDR10+ Compatible",
+						"HDR10+ Adaptive",
+						"HDR10+",
+						"HDR10",
+						"HLG",
+						"One touch play",
+						"Remote control pass-through",
+						"System audio control",
+						"System standby",
+						"External setting via TV UI",
+						"HDMI-CEC for Philips TV/SB",
+						"4K Audio Return Channel",
+						"Audio Return Channel",
+						"eARC",
+						"VRR",
+						"ALLM"
 					];
-
-					function escapeRegex(value) {
-						return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-					}
 
 					const knownTermsPattern = new RegExp(
 						knownListTerms
@@ -2678,40 +2481,26 @@ export async function initCallCenterApp(api, options) {
 
 				safeList(rows).forEach((row) => {
 					const category = safeText(row && row.category, "General");
-					const categoryKey = category.toLowerCase();
-					const rawLabel = safeText(row && row.label, "Value");
-					const label = formatTechnicalFieldLabel(rawLabel);
-					if (!groupedRowsByCategory.has(categoryKey)) {
-						groupedRowsByCategory.set(categoryKey, {
-							category: formatTechnicalSectionLabel(category),
-							rows: [],
-							seenRows: new Set()
-						});
-						orderedCategories.push(categoryKey);
+						const label = safeText(row && row.label, "Value");
+					if (!groupedRowsByCategory.has(category)) {
+						groupedRowsByCategory.set(category, []);
+						orderedCategories.push(category);
 					}
 
-					const group = groupedRowsByCategory.get(categoryKey);
-					const rowKey = [label.toLowerCase(), safeText(row && row.value, "")].join("||");
-					if (group.seenRows.has(rowKey)) {
-						return;
-					}
-
-					group.seenRows.add(rowKey);
-					group.rows.push({
-						label,
-						value: formatTechnicalListValue(category, rawLabel, row && row.value)
+					groupedRowsByCategory.get(category).push({
+							label,
+							value: formatTechnicalListValue(category, label, row && row.value)
 					});
 				});
 
 				const bodyRows = orderedCategories
-					.map((categoryKey) => {
-						const group = groupedRowsByCategory.get(categoryKey) || { category: "General", rows: [] };
-						const rowsInCategory = group.rows || [];
+					.map((category) => {
+						const rowsInCategory = groupedRowsByCategory.get(category) || [];
 						return rowsInCategory
 							.map((row, index) => ""
 								+ "<tr>"
 								+ (index === 0
-									? "<td class=\"px-3 py-2 text-slate-600 align-top\" rowspan=\"" + String(rowsInCategory.length) + "\">" + escapeHtml(group.category) + "</td>"
+									? "<td class=\"px-3 py-2 text-slate-600 align-top\" rowspan=\"" + String(rowsInCategory.length) + "\">" + escapeHtml(category) + "</td>"
 									: "")
 								+ "<td class=\"px-3 py-2 font-semibold text-slate-800\">" + escapeHtml(row.label) + "</td>"
 								+ "<td class=\"px-3 py-2 text-slate-700\">" + escapeHtml(row.value) + "</td>"
@@ -3386,58 +3175,7 @@ export async function initCallCenterApp(api, options) {
 				if (!state.data) {
 					return null;
 				}
-				if (state.modelDetailsById && state.modelDetailsById[id]) {
-					return state.modelDetailsById[id];
-				}
-
 				return state.data.ModelsData.find((model) => getModelKey(model) === id) || null;
-			}
-
-			async function hydrateModelDetail(modelId) {
-				const normalizedModelId = safeText(modelId, "");
-				if (!normalizedModelId) {
-					return null;
-				}
-
-				const baseModel = getModelById(normalizedModelId);
-				if (!baseModel) {
-					return null;
-				}
-
-				if (state.modelDetailsById && state.modelDetailsById[normalizedModelId]) {
-					return state.modelDetailsById[normalizedModelId];
-				}
-
-				const requestToken = state.modelDetailRequestToken + 1;
-				state.modelDetailRequestToken = requestToken;
-
-				try {
-					const response = await api.getModelDetail(getModelName(baseModel));
-					const bundle = response && response.bundle && typeof response.bundle === "object" ? response.bundle : null;
-					const detailedModel = bundle && bundle.model ? bundle.model : null;
-					if (!detailedModel) {
-						return baseModel;
-					}
-
-					const mergedModel = {
-						...baseModel,
-						...detailedModel,
-						__bundle: bundle,
-						knowledgeArticles: Array.isArray(bundle && bundle.knowledgeArticles) ? bundle.knowledgeArticles : [],
-						__key: normalizedModelId
-					};
-
-					state.modelDetailsById[normalizedModelId] = mergedModel;
-
-					if (state.selectedModelId === normalizedModelId && state.modelDetailRequestToken === requestToken && state.viewMode === "detail") {
-						renderModelDetail(mergedModel);
-					}
-
-					return mergedModel;
-				} catch (error) {
-					console.warn("Failed to hydrate model detail", error);
-					return baseModel;
-				}
 			}
 
 			function getKnowledgeArticleById(id) {
@@ -3477,7 +3215,10 @@ export async function initCallCenterApp(api, options) {
 					return [];
 				}
 
-				let models = [...state.data.ModelsData];
+				let models = [...state.data.ModelsData].filter((model) => {
+					const mod = model.module || model.productType || "TV";
+					return mod === state.activeModule;
+				});
 
 				if (state.filters.year !== "all") {
 					models = models.filter((model) => String(getModelYear(model)) === state.filters.year);
@@ -3656,125 +3397,153 @@ export async function initCallCenterApp(api, options) {
 				const dimensionsModel = getModelForSize(model, selectedSize, { fallbackToBase: false });
 				const displayedSize = formatSizeWithInch(selectedSize);
 				const specs = getModelSpecs(sizeScopedModel);
+				const featureValues = flattenFeatureValues(sizeScopedModel && sizeScopedModel.features);
+				const kbFeatureValues = featureValues.filter((item) => !isBasicFeatureValue(item));
 				const standardSpecs = getModelStandardSpecs(sizeScopedModel);
-				const featureEntries = Array.from(new Set(flattenFeatureValues(specs.features).filter(Boolean)))
-					.filter((item) => !isBasicFeatureValue(item))
-					.map((term) => {
-						const article = getExplicitKnowledgeArticleByTerm(term, { model });
-						return {
-							term,
-							article,
-							tooltip: article ? safeText(article.summary, article.title || term) : ""
-						};
-					});
-				const withStandDimensions = getFirstResolvedSpecValue(dimensionsModel, [
-					["specs", "technicalByCategory", "Dimensions", "TV with stand"],
-					["specs", "technicalByCategory", "Dimensions", "TV with stand (W x H x D)"],
-					["specs", "technicalByCategory", "dimensions", "TV with stand"]
-				]) || getTechnicalCategoryValue(dimensionsModel, [/^Dimensions$/i, /^Wymiary$/i], [/TV with stand/i, /Telewizor z podstawą/i]);
-				const withoutStandDimensions = getFirstResolvedSpecValue(dimensionsModel, [
-					["specs", "technicalByCategory", "Dimensions", "TV without stand"],
-					["specs", "technicalByCategory", "Dimensions", "TV without stand (W x H x D)"],
-					["specs", "technicalByCategory", "dimensions", "TV without stand"]
-				]) || getTechnicalCategoryValue(dimensionsModel, [/^Dimensions$/i, /^Wymiary$/i], [/TV without stand/i, /Telewizor bez podstawy/i]);
-				const dimensionsWeight = getFirstResolvedSpecValue(dimensionsModel, [
-					["specs", "technicalByCategory", "Dimensions", "Weight of TV without stand"],
-					["specs", "technicalByCategory", "Dimensions", "Weight of TV with stand"],
-					["specs", "technicalByCategory", "Dimensions", "Weight incl. packaging"],
-					["specs", "technicalByCategory", "Dimensions", "Weight"],
-					["specs", "technicalByCategory", "dimensions", "Weight"]
-				]) || getTechnicalCategoryValue(dimensionsModel, [/^Dimensions$/i, /^Wymiary$/i], [/Weight of TV without stand/i, /Weight of TV with stand/i, /Weight incl\. packaging/i, /Weight/i, /Waga/i]);
+				const withStandDimensions = getModelTechnicalValue(dimensionsModel, [/Telewizor z podstawą/i, /TV with stand/i]);
+				const withoutStandDimensions = getModelTechnicalValue(dimensionsModel, [/Telewizor bez podstawy/i, /TV without stand/i]);
+				const dimensionsWeight = getModelTechnicalValue(dimensionsModel, [/Waga telewizora/i, /Waga z opakowaniem/i, /Weight/i]);
 				const vesaStandard = getModelVesa(sizeScopedModel);
-				const standValue = safeText(specs.stand, "")
-					|| getTechnicalCategoryValue(sizeScopedModel, [/^Dimensions$/i, /^Wymiary$/i], [/^stand$/i])
-					|| safeText(getModelSpecs(sizeScopedModel).rawSource && getModelSpecs(sizeScopedModel).rawSource.stand, "");
 				const sizeLabel = displayedSize !== "-" ? displayedSize : "-";
 				const allSizesLabel = formatModelSizesWithInches(allSizes) || "-";
 
-				const featureBadges = featureEntries
+				const featureBadges = kbFeatureValues
 					.map((item) => {
-						const hasExplicitKb = Boolean(item.article);
+						const hasExplicitKb = Boolean(getExplicitKnowledgeArticleByTerm(item, { model }));
 						return renderKnowledgePill(
-							item.term,
+							item,
 							"rounded-full border border-slate-200 bg-white px-2 py-0.5 text-xs font-semibold text-slate-700",
-							hasExplicitKb,
-							item.tooltip
+							hasExplicitKb
 						);
 					})
 					.join(" ");
+
+				const isMnt = model.module === 'MNT' || model.productType === 'MNT';
 
 				return ""
 					+ "<div class=\"grid gap-4 xl:grid-cols-2\">"
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Core Hardware</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm\">"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Panel</dt><dd class=\"font-semibold text-slate-800\">" + getModelPanel(sizeScopedModel) + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">OS</dt><dd class=\"font-semibold text-slate-800\">" + getModelOS(sizeScopedModel) + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Platform</dt><dd class=\"font-semibold text-slate-800\">" + safeText(getModelPlatform(sizeScopedModel), "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Chassis</dt><dd class=\"font-semibold text-slate-800\">" + safeText(getModelChassis(sizeScopedModel), "-") + "</dd></div>"
+					+ (isMnt ? (
+						"<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Panel Type</dt><dd class=\"font-semibold text-slate-800\">" + safeText(specs.panelType, "-") + "</dd></div>"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Resolution</dt><dd class=\"font-semibold text-slate-800\">" + safeText(specs.resolution, "-") + "</dd></div>"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Max Refresh Rate</dt><dd class=\"font-semibold text-slate-800\">" + safeText(specs.maxRefreshRate, "-") + "</dd></div>"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Sync Technology</dt><dd class=\"font-semibold text-slate-800\">" + safeText(specs.syncTechnology, "-") + "</dd></div>"
+					) : (
+						"<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Panel</dt><dd class=\"font-semibold text-slate-800\">" + getModelPanel(sizeScopedModel) + "</dd></div>"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">OS</dt><dd class=\"font-semibold text-slate-800\">" + getModelOS(sizeScopedModel) + "</dd></div>"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Platform</dt><dd class=\"font-semibold text-slate-800\">" + safeText(getModelPlatform(sizeScopedModel), "-") + "</dd></div>"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Chassis</dt><dd class=\"font-semibold text-slate-800\">" + getModelChassis(sizeScopedModel) + "</dd></div>"
+					))
 					+ "</dl>"
 					+ "</div>"
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Physical Details</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm\">"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Stand</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standValue, "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Sizes</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(allSizesLabel) + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">VESA Standard</dt><dd class=\"font-semibold text-slate-800\">" + safeText(vesaStandard, "-") + "</dd></div>"
+					+ (isMnt ? (
+						"<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Height Adjust</dt><dd class=\"font-semibold text-slate-800\">" + safeText(specs.heightAdjust, "-") + "</dd></div>"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Tilt / Pivot</dt><dd class=\"font-semibold text-slate-800\">" + safeText(specs.tilt, "-") + " / " + safeText(specs.pivot, "-") + "</dd></div>"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">VESA Mount</dt><dd class=\"font-semibold text-slate-800\">" + safeText(specs.vesa, "-") + "</dd></div>"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Bezel Type</dt><dd class=\"font-semibold text-slate-800\">" + safeText(specs.bezelType, "-") + "</dd></div>"
+					) : (
+						"<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Stand</dt><dd class=\"font-semibold text-slate-800\">" + safeText(specs.stand, "-") + "</dd></div>"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Sizes</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(allSizesLabel) + "</dd></div>"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">VESA Standard</dt><dd class=\"font-semibold text-slate-800\">" + safeText(vesaStandard, "-") + "</dd></div>"
+					))
 					+ "</dl>"
 					+ "</div>"
-					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col\">"
-					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Audio Specifications</h5>"
-					+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Channels</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.audioChannels, "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Audio Power</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.audioPower, "-") + "</dd></div>"
-					+ "</dl>"
-					+ "<button type=\"button\" data-spec-detail=\"audio\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">Show full audio details</button>"
-					+ "</div>"
-					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col\">"
+					+ (!isMnt ? (
+						"<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col\">"
+						+ "<h5 class=\"text-sm font-semibold text-slate-900\">Audio Specifications</h5>"
+						+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Channels</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.audioChannels, "-") + "</dd></div>"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Audio Power</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.audioPower, "-") + "</dd></div>"
+						+ "</dl>"
+						+ "<button type=\"button\" data-spec-detail=\"audio\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">Show full audio details</button>"
+						+ "</div>"
+					) : "")
+					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col " + (isMnt ? "xl:col-span-2" : "") + "\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Connectivity</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">WiFi</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.wifiStandard, "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Bluetooth</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.bluetoothVersion, "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Max VRR Refresh Rate</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.vrrMaxRefreshRate, "-") + "</dd></div>"
+					+ (isMnt ? (
+						"<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">HDMI</dt><dd class=\"font-semibold text-slate-800\">" + safeText(specs.hdmiPorts, "-") + "</dd></div>"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">DisplayPort</dt><dd class=\"font-semibold text-slate-800\">" + safeText(specs.dpPorts, "-") + "</dd></div>"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">USB-C / PD</dt><dd class=\"font-semibold text-slate-800\">" + safeText(specs.usbC, "-") + "</dd></div>"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Built-in KVM</dt><dd class=\"font-semibold text-slate-800\">" + safeText(specs.kvmSwitch, "-") + "</dd></div>"
+					) : (
+						"<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">WiFi</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.wifiStandard, "-") + "</dd></div>"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Bluetooth</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.bluetoothVersion, "-") + "</dd></div>"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Max VRR Refresh Rate</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.vrrMaxRefreshRate, "-") + "</dd></div>"
+					))
 					+ "</dl>"
 					+ "<button type=\"button\" data-spec-detail=\"connectivity\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">Show full connectivity details</button>"
 					+ "</div>"
-					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 xl:col-span-2 flex flex-col\">"
-					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Dimensions</h5>"
-					+ "<p class=\"mt-2 text-xs text-slate-500\">Selected size: " + escapeHtml(sizeLabel) + "</p>"
-					+ "<dl class=\"mt-3 grid gap-2 text-sm sm:grid-cols-2 flex-1 pb-2\">"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">TV With Stand</dt><dd class=\"font-semibold text-slate-800\">" + safeText(withStandDimensions, "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">TV Without Stand</dt><dd class=\"font-semibold text-slate-800\">" + safeText(withoutStandDimensions, "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Weight</dt><dd class=\"font-semibold text-slate-800\">" + safeText(dimensionsWeight, "-") + "</dd></div>"
-					+ "</dl>"
-					+ "<button type=\"button\" data-spec-detail=\"dimensions\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">Show full dimensions details</button>"
-					+ "</div>"
-					+ "</div>"
-					+ "<div class=\"mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4\">"
+					+ (!isMnt ? (
+						"<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 xl:col-span-2 flex flex-col\">"
+						+ "<h5 class=\"text-sm font-semibold text-slate-900\">Dimensions</h5>"
+						+ "<p class=\"mt-2 text-xs text-slate-500\">Selected size: " + escapeHtml(sizeLabel) + "</p>"
+						+ "<dl class=\"mt-3 grid gap-2 text-sm sm:grid-cols-2 flex-1 pb-2\">"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">TV With Stand</dt><dd class=\"font-semibold text-slate-800\">" + safeText(withStandDimensions, "-") + "</dd></div>"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">TV Without Stand</dt><dd class=\"font-semibold text-slate-800\">" + safeText(withoutStandDimensions, "-") + "</dd></div>"
+						+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Weight</dt><dd class=\"font-semibold text-slate-800\">" + safeText(dimensionsWeight, "-") + "</dd></div>"
+						+ "</dl>"
+						+ "<button type=\"button\" data-spec-detail=\"dimensions\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">Show full dimensions details</button>"
+						+ "</div>"
+					) : "")
+					+ "<div class=\"mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4 xl:col-span-2\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Knowledge Features</h5>"
 					+ "<div class=\"mt-2 flex flex-wrap gap-2\">" + (featureBadges || "<span class=\"text-xs text-slate-500\">No knowledge-linked features for this model.</span>") + "</div>"
+					+ "</div>"
 					+ "</div>";
 			}
 
 			function renderPortsPane(model) {
 				const media = getModelMedia(model);
 				const portsImageUrl = getSafeHttpUrl(media && media.portsImageUrl);
-
-				if (!portsImageUrl) {
-					return "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4\">"
-						+ "<p class=\"text-sm text-slate-600\">No rear layout available</p>"
-						+ "</div>";
-				}
-
 				const portsImageSet = getRenderableImageVariants(portsImageUrl, {
 					displayWidth: 1800,
 					zoomWidth: 3200,
 					widths: [800, 1200, 1600, 1800, 2400, 3200],
 					sizes: "100vw"
 				});
+				const portsImageDisplayUrl = portsImageSet.src;
+				const portsImageZoomUrl = portsImageSet.zoomSrc;
+				const sourcePageUrl = getSafeHttpUrl((media && media.pageUrl) || (model && model.officialProductUrl));
+				const visualBlock = portsImageUrl
+					? ""
+						+ "<section class=\"mb-4 overflow-hidden rounded-xl border border-slate-200 bg-slate-50\">"
+						+ "<div class=\"border-b border-slate-200 px-3 py-2\">"
+						+ "<p class=\"text-xs font-semibold uppercase tracking-[0.12em] text-slate-500\">Rear Connections Layout</p>"
+						+ (sourcePageUrl
+							? "<a href=\"" + escapeHtml(sourcePageUrl) + "\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-xs font-semibold text-brand-700 hover:underline\">Open official product page</a>"
+							: "")
+						+ "</div>"
+						+ "<div class=\"bg-white p-2\">"
+						+ "<img src=\"" + escapeHtml(portsImageDisplayUrl) + "\" srcset=\"" + escapeHtml(portsImageSet.srcSet) + "\" sizes=\"" + escapeHtml(portsImageSet.sizes || "100vw") + "\" alt=\"" + escapeHtml(getModelName(model) + " rear connectors") + "\" class=\"js-zoomable-image h-auto max-h-[360px] w-full cursor-zoom-in rounded-lg object-contain\" loading=\"lazy\" tabindex=\"0\" role=\"button\" data-zoom-src=\"" + escapeHtml(portsImageZoomUrl) + "\">"
+						+ "</div>"
+						+ "</section>"
+					: "";
+
+				const sourceRows = safeList(model.ports);
+				const rows = sourceRows.map((port) => ""
+					+ "<tr>"
+					+ "<td class=\"px-3 py-2 font-semibold text-slate-800\">" + safeText(port.port, "-") + "</td>"
+					+ "<td class=\"px-3 py-2 text-slate-700\">" + safeText(port.qty, "-") + "</td>"
+					+ "<td class=\"px-3 py-2 text-slate-700\">" + safeText(port.spec, "-") + "</td>"
+					+ "</tr>").join("");
+
+				const rowsWithFallback = rows || "<tr><td class=\"px-3 py-3 text-slate-500\" colspan=\"3\">No ports data available for this model.</td></tr>";
+
 				return ""
-					+ "<div class=\"overflow-hidden rounded-xl border border-slate-200 bg-white p-2\">"
-					+ "<img src=\"" + escapeHtml(portsImageSet.src) + "\" srcset=\"" + escapeHtml(portsImageSet.srcSet) + "\" sizes=\"" + escapeHtml(portsImageSet.sizes || "100vw") + "\" alt=\"" + escapeHtml(getModelName(model) + " rear panel") + "\" class=\"js-zoomable-image h-auto max-h-[360px] w-full cursor-zoom-in rounded-lg object-contain\" loading=\"lazy\" tabindex=\"0\" role=\"button\" data-zoom-src=\"" + escapeHtml(portsImageSet.zoomSrc) + "\">"
+					+ visualBlock
+					+ "<div class=\"overflow-x-auto rounded-xl border border-slate-200\">"
+					+ "<table class=\"min-w-full divide-y divide-slate-200 text-sm\">"
+					+ "<thead class=\"bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500\">"
+					+ "<tr><th class=\"px-3 py-2\">Port</th><th class=\"px-3 py-2\">Qty</th><th class=\"px-3 py-2\">Specification</th></tr>"
+					+ "</thead>"
+					+ "<tbody class=\"divide-y divide-slate-100 bg-white\">" + rowsWithFallback + "</tbody>"
+					+ "</table>"
 					+ "</div>";
 			}
 
@@ -3982,9 +3751,8 @@ export async function initCallCenterApp(api, options) {
 
 			function renderModelDetail(model) {
 				const platform = getModelPlatform(model);
-				detailTitle.textContent = getModelName(model);
-				const commercialName = getModelCommercialName(model);
-				detailSubTitle.textContent = (commercialName ? commercialName + " · " : "") + "Model linked to " + countryConfigs[state.countryCode].label + " country context and " + getModelOS(model) + " OS guides.";
+				detailTitle.textContent = getModelDisplayTitle(model);
+				detailSubTitle.textContent = "Model linked to " + countryConfigs[state.countryCode].label + " country context and " + getModelOS(model) + " OS guides.";
 
 				const yearLabel = getModelYear(model);
 				const isYearInteractive = Boolean(getExplicitKnowledgeArticleByTerm(yearLabel, { model }));
@@ -4181,7 +3949,6 @@ export async function initCallCenterApp(api, options) {
 				renderModelDetail(model);
 				setViewMode("detail");
 				updatePath();
-				void hydrateModelDetail(modelId);
 			}
 
 			function openKnowledgeArticle(articleId, options) {
@@ -4228,18 +3995,7 @@ export async function initCallCenterApp(api, options) {
 					return;
 				}
 
-				setArticleBackTarget(modelId || state.selectedModelId || null);
-				state.articleViewContext = {
-					kind: "knowledge",
-					id: safeText(match && match.id, "")
-				};
-				renderArticle(
-					match,
-					match && String(match.articleType || match.article_type || "").indexOf("troubleshooting") === 0
-						? "Troubleshooting Guide"
-						: "Knowledge Base Article"
-				);
-				setViewMode("article");
+				showQuickInfoModal(match);
 			}
 
 			function refreshModelResults() {
@@ -4351,15 +4107,21 @@ export async function initCallCenterApp(api, options) {
 				moduleTabButtons.forEach((button) => {
 					const isActive = button.dataset.tab === tabKey;
 					button.classList.toggle("is-active", isActive);
-					if (isActive) {
-						button.classList.add("bg-slate-100", "shadow-sm", "text-slate-900");
-						button.classList.remove("text-slate-600");
-					} else {
-						button.classList.remove("bg-slate-100", "shadow-sm", "text-slate-900");
-						button.classList.add("text-slate-600");
-					}
+					button.classList.toggle("text-slate-600", !isActive);
 				});
-				moduleNotice.textContent = moduleDescriptions[tabKey] || moduleDescriptions.TV;
+				
+				if (tabKey === 'MNT') {
+					moduleNotice.textContent = "MNT module active. Browsing monitor lineup.";
+				} else {
+					moduleNotice.textContent = moduleDescriptions[tabKey] || moduleDescriptions.TV;
+				}
+
+				if (state.data) {
+					state.filters = { year: "all", os: "all", panel: "all" };
+					updateFilterOptions();
+					refreshModelResults();
+				}
+
 				persistSessionState();
 			}
 
@@ -4376,7 +4138,6 @@ export async function initCallCenterApp(api, options) {
 					const model = getModelById(state.selectedModelId);
 					if (model) {
 						renderModelDetail(model);
-						void hydrateModelDetail(state.selectedModelId);
 					}
 				}
 
@@ -4396,7 +4157,6 @@ export async function initCallCenterApp(api, options) {
 				if (instant) {
 					splashScreen.classList.remove("is-hiding");
 					splashScreen.classList.add("hidden");
-					appShell.classList.remove("hidden");
 					appShell.classList.remove("is-hidden");
 					globalSearch.focus();
 					return;
@@ -4405,7 +4165,6 @@ export async function initCallCenterApp(api, options) {
 				splashScreen.classList.add("is-hiding");
 				window.setTimeout(() => {
 					splashScreen.classList.add("hidden");
-					appShell.classList.remove("hidden");
 					appShell.classList.remove("is-hidden");
 					globalSearch.focus();
 				}, 320);
@@ -4414,7 +4173,6 @@ export async function initCallCenterApp(api, options) {
 			function returnToSplash() {
 				state.isRestoringSession = true;
 				document.documentElement.classList.remove("resume-ready");
-				appShell.classList.add("hidden");
 				appShell.classList.add("is-hidden");
 				splashScreen.classList.remove("hidden");
 				splashScreen.classList.remove("is-hiding");
@@ -4527,9 +4285,6 @@ export async function initCallCenterApp(api, options) {
 				data.TroubleshootingData = data.TroubleshootingData || {};
 				data.KnowledgeBaseData = normalizeKnowledgeData(data.KnowledgeBaseData);
 				data.ModelPlatformChassisData = safeList(data.ModelPlatformChassisData);
-				if (data.ModelPlatformChassisData.length === 0) {
-					data.ModelPlatformChassisData = safeList(ModelPlatformChassisData);
-				}
 				data.DocumentationLinksData = normalizeDocumentationLinksData(data.DocumentationLinksData);
 				data.ChangelogEntriesData = safeList(data.ChangelogEntriesData);
 
@@ -4948,16 +4703,10 @@ export async function initCallCenterApp(api, options) {
 			const effectiveResumeCountry = (persistedCountry && countryConfigs[persistedCountry])
 				? persistedCountry
 				: ((savedCountry && countryConfigs[savedCountry]) ? savedCountry : "");
-			const forceSplash = Boolean(options && options.forceSplash);
-			const shouldAutoResume = !forceSplash && Boolean(effectiveResumeCountry);
+			const shouldAutoResume = Boolean(effectiveResumeCountry);
 
 			if (shouldAutoResume) {
 				showDashboard({ instant: true });
-			} else {
-				appShell.classList.add("hidden");
-				appShell.classList.add("is-hidden");
-				splashScreen.classList.remove("hidden");
-				splashScreen.classList.remove("is-hiding");
 			}
 
 			setActiveModule("TV");
@@ -4974,5 +4723,5 @@ export async function initCallCenterApp(api, options) {
 				splashHint.textContent = "Could not load backend data. Check API URL and service health, then try again.";
 				returnToSplash();
 			});
-		}
+		})();
 

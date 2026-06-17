@@ -77,7 +77,20 @@ function normalizeManualRow(row) {
 }
 
 function readJsonFile(filename, fallbackValue) {
-  const filePath = path.join(publicDataDir, filename);
+	const filePath = path.join(publicDataDir, filename);
+	try {
+		if (!fs.existsSync(filePath)) {
+			return fallbackValue;
+    }
+
+    return JSON.parse(fs.readFileSync(filePath, "utf8"));
+  } catch (_error) {
+    return fallbackValue;
+	}
+}
+
+function readProjectJsonFile(filename, fallbackValue) {
+  const filePath = path.join(projectRoot, filename);
   try {
     if (!fs.existsSync(filePath)) {
       return fallbackValue;
@@ -89,9 +102,13 @@ function readJsonFile(filename, fallbackValue) {
   }
 }
 
+async function loadMntModelsData() {
+  return readProjectJsonFile("mnt-parsed.json", []);
+}
+
 async function loadModelsData() {
-  try {
-    const rows = await queryRows(
+	try {
+		const rows = await queryRows(
       [
         "SELECT id, brand, year, canonical_model_name AS modelName, series_key, canonical_size, os_profile_id, panel_type, status, notes",
         "FROM models_series",
@@ -100,7 +117,9 @@ async function loadModelsData() {
     );
 
     if (rows.length === 0) {
-      return readJsonFile("models.json", []);
+      const tvModels = readJsonFile("models.json", []);
+      const mntModels = await loadMntModelsData();
+      return [...tvModels, ...mntModels];
     }
 
     const seriesIds = rows.map((row) => row.id);
@@ -153,8 +172,10 @@ async function loadModelsData() {
     });
   }
 
-    return rows.map((row) => ({
+    const tvModels = rows.map((row) => ({
       id: row.id,
+      productType: "TV",
+      module: "TV",
       brand: row.brand,
       year: Number(row.year),
       modelName: row.modelname || row.modelName,
@@ -166,8 +187,12 @@ async function loadModelsData() {
       notes: toNullableText(row.notes),
       specs: specsBySeries.get(String(row.id)) || { technicalByCategory: {}, ports: [], features: {}, rawSource: {} }
     }));
+    const mntModels = await loadMntModelsData();
+    return [...tvModels, ...mntModels];
   } catch (_error) {
-    return readJsonFile("models.json", []);
+    const tvModels = readJsonFile("models.json", []);
+    const mntModels = await loadMntModelsData();
+    return [...tvModels, ...mntModels];
   }
 }
 
@@ -207,6 +232,8 @@ async function loadModelByName(modelName) {
 
     return {
       id: row.id,
+      productType: "TV",
+      module: "TV",
       brand: row.brand,
       year: Number(row.year),
       modelName: row.modelName,
@@ -466,6 +493,7 @@ module.exports = {
   loadDocumentationLinksData,
   loadKnowledgeData,
   loadKnowledgeArticlesForModel,
+  loadMntModelsData,
   loadModelByName,
   loadModelMediaData,
   loadModelPlatformChassisData,

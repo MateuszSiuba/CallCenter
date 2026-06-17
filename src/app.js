@@ -1,3 +1,5 @@
+import ModelPlatformChassisData from '../data/model-platform-chassis.js';
+
 export async function initCallCenterApp(api, options) {
 			const countryConfigs = {
 				UK: {
@@ -23,7 +25,7 @@ export async function initCallCenterApp(api, options) {
         TroubleshootingData: {},
         KnowledgeBaseData: await api.getKnowledge(),
         ModelMediaData: await api.getModelMedia(),
-        ModelPlatformChassisData: await api.getChassis(),
+        ModelPlatformChassisData: ModelPlatformChassisData,
         DocumentationLinksData: await api.getDocs(),
         ChangelogEntriesData: await api.getChangelog()
     };
@@ -1766,46 +1768,11 @@ export async function initCallCenterApp(api, options) {
 				return safeText(model && model.modelName, "-");
 			}
 
-			function normalizeModelLookupName(value) {
-				return safeText(value, "")
-					.toUpperCase()
-					.replace(/\s+/g, "")
-					.replace(/_/g, "")
-					.replace(/\/.*$/, "");
-			}
-
-			function getModelLookupKeys(modelName, yearValue) {
-				const normalized = normalizeModelLookupName(modelName);
-				if (!normalized) {
-					return [];
-				}
-
-				const yearNumber = Number(yearValue);
-				const keys = [];
-
-				if (Number.isFinite(yearNumber) && yearNumber > 0) {
-					keys.push(String(yearNumber) + "|" + normalized);
-				}
-
-				keys.push("*|" + normalized);
-
-				return keys;
-			}
-
 			function buildModelPlatformChassisLookup(records) {
 				const lookup = new Map();
 
-				const mergeEntry = (key, nextValue) => {
-					const existing = lookup.get(key) || { platform: "", chassis: "" };
-					lookup.set(key, {
-						platform: existing.platform || nextValue.platform,
-						chassis: existing.chassis || nextValue.chassis
-					});
-				};
-
 				safeList(records).forEach((record) => {
-					const modelName = safeText(record && record.modelName, "");
-					const year = Number(record && record.year);
+					const modelName = safeText(record && record.modelName, "").trim();
 					const platform = safeText(record && record.platform, "");
 					const chassis = safeText(record && record.chassis, "");
 
@@ -1813,68 +1780,15 @@ export async function initCallCenterApp(api, options) {
 						return;
 					}
 
-					const keys = getModelLookupKeys(modelName, year);
-					if (keys.length === 0) {
+					const lookupKey = modelName.split("/")[0];
+					if (!lookupKey || lookup.has(lookupKey)) {
 						return;
 					}
 
-					const value = { platform, chassis };
-					keys.forEach((key) => {
-						mergeEntry(key, value);
-					});
+					lookup.set(lookupKey, { platform, chassis });
 				});
 
 				return lookup;
-			}
-
-			function findPlatformChassisRecord(model) {
-				if (!state.data || !Array.isArray(state.data.ModelPlatformChassisData)) {
-					return null;
-				}
-
-				const normalizedModelName = normalizeModelLookupName(getModelName(model));
-				if (!normalizedModelName) {
-					return null;
-				}
-
-				const modelYear = getModelYearNumber(model);
-				let bestMatch = null;
-				let bestScore = -1;
-
-				safeList(state.data.ModelPlatformChassisData).forEach((record) => {
-					const recordName = normalizeModelLookupName(record && record.modelName);
-					if (!recordName) {
-						return;
-					}
-
-					const sameYear = !modelYear || Number(record && record.year) === modelYear;
-					const directMatch = recordName === normalizedModelName;
-					const prefixMatch = recordName.startsWith(normalizedModelName) || normalizedModelName.startsWith(recordName);
-					const containsMatch = recordName.includes(normalizedModelName) || normalizedModelName.includes(recordName);
-					if (!directMatch && !prefixMatch && !containsMatch) {
-						return;
-					}
-
-					let score = 0;
-					if (directMatch) {
-						score += 300;
-					} else if (prefixMatch) {
-						score += 200;
-					} else if (containsMatch) {
-						score += 120;
-					}
-
-					if (sameYear) {
-						score += 30;
-					}
-
-					if (score > bestScore) {
-						bestScore = score;
-						bestMatch = record;
-					}
-				});
-
-				return bestMatch;
 			}
 
 			function getModelLookupMeta(model) {
@@ -1882,23 +1796,8 @@ export async function initCallCenterApp(api, options) {
 					return null;
 				}
 
-				const keys = getModelLookupKeys(getModelName(model), getModelYearNumber(model));
-				for (let index = 0; index < keys.length; index += 1) {
-					const value = state.modelPlatformChassisLookup.get(keys[index]);
-					if (value) {
-						return value;
-					}
-				}
-
-				const fuzzyRecord = findPlatformChassisRecord(model);
-				if (fuzzyRecord) {
-					return {
-						platform: safeText(fuzzyRecord.platform, ""),
-						chassis: safeText(fuzzyRecord.chassis, "")
-					};
-				}
-
-				return null;
+				const lookupKey = safeText(getModelName(model), "").trim().split("/")[0];
+				return lookupKey ? state.modelPlatformChassisLookup.get(lookupKey) || null : null;
 			}
 
 			function getSafeHttpUrl(value) {
@@ -2607,74 +2506,7 @@ export async function initCallCenterApp(api, options) {
 				return rows;
 			}
 
-			function getConnectivityCategory(model) {
-				const technicalByCategory = getModelTechnicalByCategory(model);
-				for (const [categoryName, entries] of Object.entries(technicalByCategory)) {
-					if (/^Connectivity$/i.test(categoryName) || /^Łączność$/i.test(categoryName)) {
-						return isPlainObject(entries) ? entries : {};
-					}
-				}
 
-				return {};
-			}
-
-			function normalizePortQty(value) {
-				const text = safeText(value, "");
-				if (!text) {
-					return "-";
-				}
-
-				const match = text.match(/\d+/);
-				return match ? match[0] : text;
-			}
-
-			function collectPortsFromConnectivity(model) {
-				const connectivity = getConnectivityCategory(model);
-				const rows = [];
-
-				const hdmiQty = normalizePortQty(connectivity["Number of HDMI connections"] || getLooseObjectValue(connectivity, "Number of HDMI connections"));
-				if (hdmiQty !== "-") {
-					const hdmiSpecParts = [];
-					Object.entries(connectivity).forEach(([key, value]) => {
-						if (!/HDMI|EasyLink|HDCP|ARC|CEC|VRR|ALLM/i.test(key)) {
-							return;
-						}
-
-						const text = safeText(value, "");
-						if (text && !/^Number of HDMI connections$/i.test(key)) {
-							hdmiSpecParts.push(text);
-						}
-					});
-
-					rows.push({
-						port: "HDMI",
-						qty: hdmiQty,
-						spec: hdmiSpecParts.length > 0 ? Array.from(new Set(hdmiSpecParts)).join(" | ") : "-"
-					});
-				}
-
-				const usbQty = normalizePortQty(connectivity["Number of USBs"] || getLooseObjectValue(connectivity, "Number of USBs"));
-				if (usbQty !== "-") {
-					rows.push({
-						port: "USB",
-						qty: usbQty,
-						spec: "-"
-					});
-				}
-
-				const otherConnections = safeText(connectivity["Other connections"] || getLooseObjectValue(connectivity, "Other connections"), "");
-				if (otherConnections) {
-					otherConnections.split(",").map((item) => safeText(item, "").trim()).filter(Boolean).forEach((connectionName) => {
-						rows.push({
-							port: connectionName,
-							qty: "1",
-							spec: "-"
-						});
-					});
-				}
-
-				return rows;
-			}
 
 			function collectTechnicalRowsByFlatKeys(model, keyPatterns) {
 				const rows = [];
@@ -2715,6 +2547,33 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			function renderTechnicalRowsTable(rows, emptyMessage) {
+				function formatTechnicalFieldLabel(value) {
+					const text = safeText(value, "");
+					if (!text) {
+						return "Value";
+					}
+
+					const titleCased = text
+						.replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+						.replace(/[_-]+/g, " ")
+						.replace(/\s+/g, " ")
+						.trim()
+						.replace(/^./, (char) => char.toUpperCase());
+
+					return titleCased
+						.replace(/\bWifi\b/g, "WiFi")
+						.replace(/\bHdmi\b/g, "HDMI")
+						.replace(/\bUsb\b/g, "USB")
+						.replace(/\bVrr\b/g, "VRR")
+						.replace(/\bEarc\b/g, "eARC")
+						.replace(/\bHdcp\b/g, "HDCP")
+						.replace(/\bDts\b/g, "DTS");
+				}
+
+				function formatTechnicalSectionLabel(value) {
+					return formatTechnicalFieldLabel(value);
+				}
+
 				function normalizeTechnicalValue(value) {
 					const text = safeText(value, "-");
 					return text.replace(/\bmm\s+mm\b/gi, "mm").replace(/\s{2,}/g, " ").trim();
@@ -2812,26 +2671,32 @@ export async function initCallCenterApp(api, options) {
 
 				safeList(rows).forEach((row) => {
 					const category = safeText(row && row.category, "General");
-						const label = safeText(row && row.label, "Value");
-					if (!groupedRowsByCategory.has(category)) {
-						groupedRowsByCategory.set(category, []);
-						orderedCategories.push(category);
+					const categoryKey = category.toLowerCase();
+					const rawLabel = safeText(row && row.label, "Value");
+					const label = formatTechnicalFieldLabel(rawLabel);
+					if (!groupedRowsByCategory.has(categoryKey)) {
+						groupedRowsByCategory.set(categoryKey, {
+							category: formatTechnicalSectionLabel(category),
+							rows: []
+						});
+						orderedCategories.push(categoryKey);
 					}
 
-					groupedRowsByCategory.get(category).push({
-							label,
-							value: formatTechnicalListValue(category, label, row && row.value)
+					groupedRowsByCategory.get(categoryKey).rows.push({
+						label,
+						value: formatTechnicalListValue(category, rawLabel, row && row.value)
 					});
 				});
 
 				const bodyRows = orderedCategories
-					.map((category) => {
-						const rowsInCategory = groupedRowsByCategory.get(category) || [];
+					.map((categoryKey) => {
+						const group = groupedRowsByCategory.get(categoryKey) || { category: "General", rows: [] };
+						const rowsInCategory = group.rows || [];
 						return rowsInCategory
 							.map((row, index) => ""
 								+ "<tr>"
 								+ (index === 0
-									? "<td class=\"px-3 py-2 text-slate-600 align-top\" rowspan=\"" + String(rowsInCategory.length) + "\">" + escapeHtml(category) + "</td>"
+									? "<td class=\"px-3 py-2 text-slate-600 align-top\" rowspan=\"" + String(rowsInCategory.length) + "\">" + escapeHtml(group.category) + "</td>"
 									: "")
 								+ "<td class=\"px-3 py-2 font-semibold text-slate-800\">" + escapeHtml(row.label) + "</td>"
 								+ "<td class=\"px-3 py-2 text-slate-700\">" + escapeHtml(row.value) + "</td>"
@@ -3831,7 +3696,7 @@ export async function initCallCenterApp(api, options) {
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Panel</dt><dd class=\"font-semibold text-slate-800\">" + getModelPanel(sizeScopedModel) + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">OS</dt><dd class=\"font-semibold text-slate-800\">" + getModelOS(sizeScopedModel) + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Platform</dt><dd class=\"font-semibold text-slate-800\">" + safeText(getModelPlatform(sizeScopedModel), "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Chassis</dt><dd class=\"font-semibold text-slate-800\">" + getModelChassis(sizeScopedModel) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Chassis</dt><dd class=\"font-semibold text-slate-800\">" + safeText(getModelChassis(sizeScopedModel), "-") + "</dd></div>"
 					+ "</dl>"
 					+ "</div>"
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4\">"
@@ -3879,49 +3744,22 @@ export async function initCallCenterApp(api, options) {
 			function renderPortsPane(model) {
 				const media = getModelMedia(model);
 				const portsImageUrl = getSafeHttpUrl(media && media.portsImageUrl);
+
+				if (!portsImageUrl) {
+					return "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4\">"
+						+ "<p class=\"text-sm text-slate-600\">No rear layout available</p>"
+						+ "</div>";
+				}
+
 				const portsImageSet = getRenderableImageVariants(portsImageUrl, {
 					displayWidth: 1800,
 					zoomWidth: 3200,
 					widths: [800, 1200, 1600, 1800, 2400, 3200],
 					sizes: "100vw"
 				});
-				const portsImageDisplayUrl = portsImageSet.src;
-				const portsImageZoomUrl = portsImageSet.zoomSrc;
-				const sourcePageUrl = getSafeHttpUrl((media && media.pageUrl) || (model && model.officialProductUrl));
-				const visualBlock = portsImageUrl
-					? ""
-						+ "<section class=\"mb-4 overflow-hidden rounded-xl border border-slate-200 bg-slate-50\">"
-						+ "<div class=\"border-b border-slate-200 px-3 py-2\">"
-						+ "<p class=\"text-xs font-semibold uppercase tracking-[0.12em] text-slate-500\">Rear Connections Layout</p>"
-						+ (sourcePageUrl
-							? "<a href=\"" + escapeHtml(sourcePageUrl) + "\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-xs font-semibold text-brand-700 hover:underline\">Open official product page</a>"
-							: "")
-						+ "</div>"
-						+ "<div class=\"bg-white p-2\">"
-						+ "<img src=\"" + escapeHtml(portsImageDisplayUrl) + "\" srcset=\"" + escapeHtml(portsImageSet.srcSet) + "\" sizes=\"" + escapeHtml(portsImageSet.sizes || "100vw") + "\" alt=\"" + escapeHtml(getModelName(model) + " rear connectors") + "\" class=\"js-zoomable-image h-auto max-h-[360px] w-full cursor-zoom-in rounded-lg object-contain\" loading=\"lazy\" tabindex=\"0\" role=\"button\" data-zoom-src=\"" + escapeHtml(portsImageZoomUrl) + "\">"
-						+ "</div>"
-						+ "</section>"
-					: "";
-
-				const sourceRows = collectPortsFromConnectivity(model);
-				const rows = sourceRows.map((port) => ""
-					+ "<tr>"
-					+ "<td class=\"px-3 py-2 font-semibold text-slate-800\">" + safeText(port.port, "-") + "</td>"
-					+ "<td class=\"px-3 py-2 text-slate-700\">" + safeText(port.qty, "-") + "</td>"
-					+ "<td class=\"px-3 py-2 text-slate-700\">" + safeText(port.spec, "-") + "</td>"
-					+ "</tr>").join("");
-
-				const rowsWithFallback = rows || "<tr><td class=\"px-3 py-3 text-slate-500\" colspan=\"3\">No ports data available for this model.</td></tr>";
-
 				return ""
-					+ visualBlock
-					+ "<div class=\"overflow-x-auto rounded-xl border border-slate-200\">"
-					+ "<table class=\"min-w-full divide-y divide-slate-200 text-sm\">"
-					+ "<thead class=\"bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500\">"
-					+ "<tr><th class=\"px-3 py-2\">Port</th><th class=\"px-3 py-2\">Qty</th><th class=\"px-3 py-2\">Specification</th></tr>"
-					+ "</thead>"
-					+ "<tbody class=\"divide-y divide-slate-100 bg-white\">" + rowsWithFallback + "</tbody>"
-					+ "</table>"
+					+ "<div class=\"overflow-hidden rounded-xl border border-slate-200 bg-white p-2\">"
+					+ "<img src=\"" + escapeHtml(portsImageSet.src) + "\" srcset=\"" + escapeHtml(portsImageSet.srcSet) + "\" sizes=\"" + escapeHtml(portsImageSet.sizes || "100vw") + "\" alt=\"" + escapeHtml(getModelName(model) + " rear panel") + "\" class=\"js-zoomable-image h-auto max-h-[360px] w-full cursor-zoom-in rounded-lg object-contain\" loading=\"lazy\" tabindex=\"0\" role=\"button\" data-zoom-src=\"" + escapeHtml(portsImageSet.zoomSrc) + "\">"
 					+ "</div>";
 			}
 
@@ -4674,6 +4512,9 @@ export async function initCallCenterApp(api, options) {
 				data.TroubleshootingData = data.TroubleshootingData || {};
 				data.KnowledgeBaseData = normalizeKnowledgeData(data.KnowledgeBaseData);
 				data.ModelPlatformChassisData = safeList(data.ModelPlatformChassisData);
+				if (data.ModelPlatformChassisData.length === 0) {
+					data.ModelPlatformChassisData = safeList(ModelPlatformChassisData);
+				}
 				data.DocumentationLinksData = normalizeDocumentationLinksData(data.DocumentationLinksData);
 				data.ChangelogEntriesData = safeList(data.ChangelogEntriesData);
 

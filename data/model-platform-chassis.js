@@ -1039,6 +1039,4 @@ const ModelPlatformChassisData = [
   }
 ];
 
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = ModelPlatformChassisData;
-}
+export default ModelPlatformChassisData;

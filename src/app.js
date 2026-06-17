@@ -1589,7 +1589,11 @@ export async function initCallCenterApp(api, options) {
 				const seenKeys = new Set();
 
 				rowsByCategory.concat(rowsByKeys).forEach((row) => {
-					const uniqueKey = [row.category, row.label, row.value].join("||");
+					const uniqueKey = [
+						safeText(row && row.category, "").toLowerCase(),
+						safeText(row && row.label, "").toLowerCase(),
+						safeText(row && row.value, "")
+					].join("||");
 					if (seenKeys.has(uniqueKey)) {
 						return;
 					}
@@ -1687,21 +1691,7 @@ export async function initCallCenterApp(api, options) {
 					}
 				}
 
-				let uniqueRows = collectUniqueTechnicalRows(scopedModel, selectedConfig);
-				if (context.detailType === "connectivity") {
-					const hiddenConnectivityFieldPatterns = [
-						/^Number of HDMI connections$/i,
-						/^Number of USBs?$/i,
-						/^HDMI ARC$/i,
-						/^HDMI 2\.1 features$/i,
-						/^EasyLink 2\.0$/i
-					];
-
-					uniqueRows = uniqueRows.filter((row) => {
-						const label = safeText(row && row.label, "");
-						return !hiddenConnectivityFieldPatterns.some((pattern) => pattern.test(label));
-					});
-				}
+				const uniqueRows = collectUniqueTechnicalRows(scopedModel, selectedConfig);
 				if (context.detailType === "dimensions") {
 					const screwRows = collectDimensionsScrewRows(scopedModel || model);
 					screwRows.forEach((row) => {
@@ -2579,10 +2569,6 @@ export async function initCallCenterApp(api, options) {
 					return text.replace(/\bmm\s+mm\b/gi, "mm").replace(/\s{2,}/g, " ").trim();
 				}
 
-				function escapeRegex(value) {
-					return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-				}
-
 				function formatTechnicalListValue(category, label, value) {
 					const normalized = normalizeTechnicalValue(value);
 					if (!normalized || normalized === "-" || normalized.includes("|")) {
@@ -2607,62 +2593,6 @@ export async function initCallCenterApp(api, options) {
 						return commaParts.join(" | ");
 					}
 
-					const knownListTerms = [
-						"Dolby Media Intelligence",
-						"Personal Vocal Boost",
-						"Bass Enhancement",
-						"Room Calibration",
-						"Hearing Profile",
-						"Night Mode",
-						"Night mode",
-						"Clear Dialogue",
-						"Dialogue",
-						"Equalizer",
-						"All Sound Style",
-						"Entertainment",
-						"Spatial Music",
-						"Original",
-						"Music",
-						"AVL Mode",
-						"AI mode",
-						"DTS Play-Fi",
-						"DTS:X",
-						"Dolby Atmos",
-						"Dolby Digital",
-						"Dolby Vision 2 Max",
-						"Dolby Vision",
-						"HDR10+ Compatible",
-						"HDR10+ Adaptive",
-						"HDR10+",
-						"HDR10",
-						"HLG",
-						"One touch play",
-						"Remote control pass-through",
-						"System audio control",
-						"System standby",
-						"External setting via TV UI",
-						"HDMI-CEC for Philips TV/SB",
-						"4K Audio Return Channel",
-						"Audio Return Channel",
-						"eARC",
-						"VRR",
-						"ALLM"
-					];
-
-					const knownTermsPattern = new RegExp(
-						knownListTerms
-							.map((term) => escapeRegex(term))
-							.sort((a, b) => b.length - a.length)
-							.join("|"),
-						"gi"
-					);
-
-					const matches = normalized.match(knownTermsPattern) || [];
-					const matchedLength = matches.reduce((sum, item) => sum + item.length, 0);
-					if (matches.length >= 2 && matchedLength >= normalized.length * 0.45) {
-						return matches.map((item) => safeText(item, "")).filter(Boolean).join(" | ");
-					}
-
 					return normalized;
 				}
 
@@ -2677,12 +2607,20 @@ export async function initCallCenterApp(api, options) {
 					if (!groupedRowsByCategory.has(categoryKey)) {
 						groupedRowsByCategory.set(categoryKey, {
 							category: formatTechnicalSectionLabel(category),
-							rows: []
+							rows: [],
+							seenRows: new Set()
 						});
 						orderedCategories.push(categoryKey);
 					}
 
-					groupedRowsByCategory.get(categoryKey).rows.push({
+					const group = groupedRowsByCategory.get(categoryKey);
+					const rowKey = [label.toLowerCase(), safeText(row && row.value, "")].join("||");
+					if (group.seenRows.has(rowKey)) {
+						return;
+					}
+
+					group.seenRows.add(rowKey);
+					group.rows.push({
 						label,
 						value: formatTechnicalListValue(category, rawLabel, row && row.value)
 					});

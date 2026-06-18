@@ -14,9 +14,9 @@ export async function initCallCenterApp(api, options) {
 			};
 
 			const moduleDescriptions = {
-				TV: "TV module active. MNT and AVA are visual placeholders for future domains.",
-				MNT: "MNT is currently a placeholder module. TV data remains active.",
-				AVA: "AVA is currently a placeholder module. TV data remains active."
+				TV: "moduleNoticeTv",
+				MNT: "moduleNoticeMnt",
+				AVA: "moduleNoticeAva"
 			};
 
 			                const RelationalMockData = {
@@ -85,6 +85,7 @@ export async function initCallCenterApp(api, options) {
 
 			const modelDetailSection = document.getElementById("modelDetailSection");
 			const detailTitle = document.getElementById("detailTitle");
+			const detailTypeLabel = document.getElementById("detailTypeLabel");
 			const detailSubTitle = document.getElementById("detailSubTitle");
 			const detailBadges = document.getElementById("detailBadges");
 			const detailTabButtons = Array.from(document.querySelectorAll(".detail-tab"));
@@ -158,6 +159,365 @@ export async function initCallCenterApp(api, options) {
 				modelPlatformChassisLookup: null
 			};
 
+			const localeByCountry = {
+				UK: "en",
+				PL: "pl",
+				DE: "de"
+			};
+
+			const countryLabels = {
+				en: {
+					UK: "United Kingdom (UK)",
+					PL: "Poland (PL)",
+					DE: "Germany (DE)"
+				},
+				pl: {
+					UK: "Wielka Brytania (UK)",
+					PL: "Polska (PL)",
+					DE: "Niemcy (DE)"
+				},
+				de: {
+					UK: "Vereinigtes Königreich (UK)",
+					PL: "Polen (PL)",
+					DE: "Deutschland (DE)"
+				}
+			};
+
+			const uiText = {
+				en: {
+					documentTitle: "Support Hub - Global Call Center KB",
+					supportHub: "Support Hub",
+					knowledgeBaseTitle: "Global Technical Knowledge Base",
+					knowledgeBaseIntro: "Select the operating region to load country context before entering the dashboard.",
+					agentRegion: "Agent region",
+					continueDashboard: "Continue to dashboard",
+					splashDefaultHint: "Country profile sets SWAP procedures, contact channels, and policy routing.",
+					splashResumeHint: "Last used profile found. You can keep it or switch before continuing.",
+					loadError: "Could not load backend data. Check API URL and service health, then try again.",
+					consoleSubtitle: "Omni-Search Knowledge Console",
+					printMode: "Print mode",
+					exitPrintMode: "Exit print mode",
+					openChangelog: "Open changelog",
+					changeCountry: "Change country",
+					globalSearch: "Global Omni-Search",
+					globalSearchPlaceholder: "Search models, chassis, Matter, contact numbers, policy rules, known issues...",
+					moduleNoticeTv: "TV module active. Showing television models only.",
+					moduleNoticeMnt: "MNT module active. Showing monitor models only.",
+					moduleNoticeAva: "AVA is currently a placeholder module. TV data remains active.",
+					cascadingFilters: "Cascading Filters",
+					year: "1) Year",
+					os: "2) OS",
+					panel: "3) Panel",
+					anyYear: "Any Year",
+					anyOs: "Any OS",
+					anyPanel: "Any Panel",
+					path: "Path",
+					modelResults: "Model Results",
+					articleResults: "Article Results",
+					models: "Models",
+					articles: "Articles",
+					model: "model",
+					article: "article",
+					noModels: "No models matched current filters/query.",
+					noArticles: "No articles matched current filters/query.",
+					tvModelDetail: "TV Model Detail",
+					mntModelDetail: "MNT Model Detail",
+                    modelLinkedTo: "Model linked to {country} country context and {os} OS guides.",
+					backToModelList: "Back to model list",
+					backToModel: "Back to {model}",
+					printDetail: "Print this detail",
+					printArticle: "Print article",
+					specs: "Specs",
+					ports: "Ports",
+					troubleshooting: "Troubleshooting",
+					policies: "Policies",
+					galleryImages: "Gallery / Images",
+					changelog: "Changelog",
+					close: "Close",
+					quickFeatureInfo: "Quick Feature Info",
+					readFullArticle: "Read Full Article",
+					expandedTechnicalView: "Expanded Technical View",
+					loadingImage: "Loading image",
+					top: "Top",
+					noSummary: "No summary available.",
+					noDetailedPoints: "No detailed points available yet.",
+					noTechnicalDetails: "No technical details found.",
+					noExtendedFields: "No extended technical fields available for this section.",
+					noRearLayout: "No rear layout available",
+					showFullCore: "Show full Core Hardware details",
+					showFullPhysical: "Show full Physical details",
+					showFullConnectivity: "Show full connectivity details",
+					showFullAudio: "Show full audio details",
+					showFullDimensions: "Show full dimensions details",
+					selectedSize: "Selected size: {size}",
+					noKnowledgeFeatures: "No knowledge-linked features for this model.",
+					coreHardware: "Core Hardware",
+					physicalDetails: "Physical Details",
+					audioSpecifications: "Audio Specifications",
+					connectivity: "Connectivity",
+					whatsInTheBox: "What's in the box",
+					knowledgeFeatures: "Knowledge Features"
+				},
+				pl: {
+					documentTitle: "Support Hub - Globalna baza Call Center",
+					supportHub: "Support Hub",
+					knowledgeBaseTitle: "Globalna Techniczna Baza Wiedzy",
+					knowledgeBaseIntro: "Wybierz region pracy, aby załadować kontekst kraju przed wejściem do panelu.",
+					agentRegion: "Region agenta",
+					continueDashboard: "Przejdź do panelu",
+					splashDefaultHint: "Profil kraju ustawia procedury SWAP, kanały kontaktu i routing polityk.",
+					splashResumeHint: "Znaleziono ostatnio używany profil. Możesz go zachować albo zmienić przed kontynuacją.",
+					loadError: "Nie udało się załadować danych backendu. Sprawdź URL API i stan usługi, a potem spróbuj ponownie.",
+					consoleSubtitle: "Konsola wiedzy Omni-Search",
+					printMode: "Tryb druku",
+					exitPrintMode: "Wyjdź z trybu druku",
+					openChangelog: "Otwórz changelog",
+					changeCountry: "Zmień kraj",
+					globalSearch: "Globalne Omni-Search",
+					globalSearchPlaceholder: "Szukaj modeli, chassis, Matter, numerów kontaktowych, reguł polityk, znanych problemów...",
+					moduleNoticeTv: "Aktywny moduł TV. Wyświetlane są tylko modele telewizorów.",
+					moduleNoticeMnt: "Aktywny moduł MNT. Wyświetlane są tylko modele monitorów.",
+					moduleNoticeAva: "AVA jest obecnie modułem zastępczym. Dane TV pozostają aktywne.",
+					cascadingFilters: "Filtry kaskadowe",
+					year: "1) Rok",
+					os: "2) OS",
+					panel: "3) Panel",
+					anyYear: "Dowolny rok",
+					anyOs: "Dowolny OS",
+					anyPanel: "Dowolny panel",
+					path: "Ścieżka",
+					modelResults: "Wyniki modeli",
+					articleResults: "Wyniki artykułów",
+					models: "Modele",
+					articles: "Artykuły",
+					model: "model",
+					article: "artykuł",
+					noModels: "Brak modeli pasujących do obecnych filtrów/zapytania.",
+					noArticles: "Brak artykułów pasujących do obecnych filtrów/zapytania.",
+					tvModelDetail: "Szczegóły modelu TV",
+					mntModelDetail: "Szczegóły modelu MNT",
+					modelLinkedTo: "Model powiązany z kontekstem kraju: {country} oraz przewodnikami OS: {os}.",
+					backToModelList: "Wróć do listy modeli",
+					backToModel: "Wróć do {model}",
+					printDetail: "Drukuj te szczegóły",
+					printArticle: "Drukuj artykuł",
+					specs: "Specyfikacja",
+					ports: "Porty",
+					troubleshooting: "Troubleshooting",
+					policies: "Polityki",
+					galleryImages: "Galeria / Obrazy",
+					changelog: "Changelog",
+					close: "Zamknij",
+					quickFeatureInfo: "Szybka informacja o funkcji",
+					readFullArticle: "Przeczytaj pełny artykuł",
+					expandedTechnicalView: "Rozszerzony widok techniczny",
+					loadingImage: "Ładowanie obrazu",
+					top: "Do góry",
+					noSummary: "Brak podsumowania.",
+					noDetailedPoints: "Brak szczegółowych punktów.",
+					noTechnicalDetails: "Nie znaleziono szczegółów technicznych.",
+					noExtendedFields: "Brak rozszerzonych pól technicznych dla tej sekcji.",
+					noRearLayout: "Brak widoku tylnego panelu",
+					showFullCore: "Pokaż pełne szczegóły Core Hardware",
+					showFullPhysical: "Pokaż pełne szczegóły fizyczne",
+					showFullConnectivity: "Pokaż pełne szczegóły łączności",
+					showFullAudio: "Pokaż pełne szczegóły audio",
+					showFullDimensions: "Pokaż pełne szczegóły wymiarów",
+					selectedSize: "Wybrany rozmiar: {size}",
+					noKnowledgeFeatures: "Brak funkcji powiązanych z bazą wiedzy dla tego modelu.",
+					coreHardware: "Core Hardware",
+					physicalDetails: "Szczegóły fizyczne",
+					audioSpecifications: "Specyfikacja audio",
+					connectivity: "Łączność",
+					whatsInTheBox: "Co jest w pudełku",
+					knowledgeFeatures: "Funkcje wiedzy"
+				},
+				de: {
+					documentTitle: "Support Hub - Globale Call-Center-Wissensbasis",
+					supportHub: "Support Hub",
+					knowledgeBaseTitle: "Globale technische Wissensbasis",
+					knowledgeBaseIntro: "Wählen Sie die Arbeitsregion, um den Länderkontext vor dem Dashboard zu laden.",
+					agentRegion: "Agentenregion",
+					continueDashboard: "Weiter zum Dashboard",
+					splashDefaultHint: "Das Länderprofil setzt SWAP-Prozesse, Kontaktkanäle und Policy-Routing.",
+					splashResumeHint: "Zuletzt verwendetes Profil gefunden. Sie können es behalten oder vor dem Fortfahren wechseln.",
+					loadError: "Backend-Daten konnten nicht geladen werden. Prüfen Sie API-URL und Dienststatus und versuchen Sie es erneut.",
+					consoleSubtitle: "Omni-Search Wissenskonsole",
+					printMode: "Druckmodus",
+					exitPrintMode: "Druckmodus beenden",
+					openChangelog: "Changelog öffnen",
+					changeCountry: "Land ändern",
+					globalSearch: "Globale Omni-Suche",
+					globalSearchPlaceholder: "Modelle, Chassis, Matter, Kontaktnummern, Policy-Regeln, bekannte Probleme suchen...",
+					moduleNoticeTv: "TV-Modul aktiv. Es werden nur TV-Modelle angezeigt.",
+					moduleNoticeMnt: "MNT-Modul aktiv. Es werden nur Monitor-Modelle angezeigt.",
+					moduleNoticeAva: "AVA ist derzeit ein Platzhaltermodul. TV-Daten bleiben aktiv.",
+					cascadingFilters: "Kaskadierende Filter",
+					year: "1) Jahr",
+					os: "2) OS",
+					panel: "3) Panel",
+					anyYear: "Jedes Jahr",
+					anyOs: "Jedes OS",
+					anyPanel: "Jedes Panel",
+					path: "Pfad",
+					modelResults: "Modellergebnisse",
+					articleResults: "Artikelergebnisse",
+					models: "Modelle",
+					articles: "Artikel",
+					model: "Modell",
+					article: "Artikel",
+					noModels: "Keine Modelle entsprechen den aktuellen Filtern/der Suche.",
+					noArticles: "Keine Artikel entsprechen den aktuellen Filtern/der Suche.",
+					tvModelDetail: "TV-Modelldetails",
+					mntModelDetail: "MNT-Modelldetails",
+					modelLinkedTo: "Modell verknüpft mit Länderkontext {country} und {os}-OS-Leitfäden.",
+					backToModelList: "Zurück zur Modellliste",
+					backToModel: "Zurück zu {model}",
+					printDetail: "Diese Details drucken",
+					printArticle: "Artikel drucken",
+					specs: "Spezifikationen",
+					ports: "Ports",
+					troubleshooting: "Fehlerbehebung",
+					policies: "Policies",
+					galleryImages: "Galerie / Bilder",
+					changelog: "Changelog",
+					close: "Schließen",
+					quickFeatureInfo: "Schnelle Feature-Info",
+					readFullArticle: "Vollständigen Artikel lesen",
+					expandedTechnicalView: "Erweiterte technische Ansicht",
+					loadingImage: "Bild wird geladen",
+					top: "Nach oben",
+					noSummary: "Keine Zusammenfassung verfügbar.",
+					noDetailedPoints: "Noch keine Detailpunkte verfügbar.",
+					noTechnicalDetails: "Keine technischen Details gefunden.",
+					noExtendedFields: "Keine erweiterten technischen Felder für diesen Abschnitt verfügbar.",
+					noRearLayout: "Kein Rückseitenlayout verfügbar",
+					showFullCore: "Vollständige Core-Hardware-Details anzeigen",
+					showFullPhysical: "Vollständige physische Details anzeigen",
+					showFullConnectivity: "Vollständige Konnektivitätsdetails anzeigen",
+					showFullAudio: "Vollständige Audiodetails anzeigen",
+					showFullDimensions: "Vollständige Abmessungsdetails anzeigen",
+					selectedSize: "Ausgewählte Größe: {size}",
+					noKnowledgeFeatures: "Keine wissensverknüpften Features für dieses Modell.",
+					coreHardware: "Core Hardware",
+					physicalDetails: "Physische Details",
+					audioSpecifications: "Audiospezifikationen",
+					connectivity: "Konnektivität",
+					whatsInTheBox: "Lieferumfang",
+					knowledgeFeatures: "Wissensfeatures"
+				}
+			};
+
+			function getLocaleForCountry(countryCode) {
+				return localeByCountry[countryCode] || "en";
+			}
+
+			function t(key, replacements) {
+				const locale = getLocaleForCountry(state.countryCode);
+				const value = (uiText[locale] && uiText[locale][key]) || (uiText.en && uiText.en[key]) || key;
+				return Object.entries(replacements || {}).reduce((text, entry) => {
+					return text.replace(new RegExp("\\{" + entry[0] + "\\}", "g"), entry[1]);
+				}, value);
+			}
+
+			function getCountryLabel(countryCode) {
+				const locale = getLocaleForCountry(state.countryCode);
+				return (countryLabels[locale] && countryLabels[locale][countryCode]) || countryConfigs[countryCode].label;
+			}
+
+			function setText(selector, value) {
+				const element = document.querySelector(selector);
+				if (element) {
+					element.textContent = value;
+				}
+			}
+
+			function setTextById(id, value) {
+				const element = document.getElementById(id);
+				if (element) {
+					element.textContent = value;
+				}
+			}
+
+			function setAttributeById(id, attribute, value) {
+				const element = document.getElementById(id);
+				if (element) {
+					element.setAttribute(attribute, value);
+				}
+			}
+
+			function updateCountryOptionLabels() {
+				if (!countrySelect) {
+					return;
+				}
+				Array.from(countrySelect.options).forEach((option) => {
+					option.textContent = getCountryLabel(option.value);
+				});
+			}
+
+			function applyStaticTranslations() {
+				document.documentElement.lang = getLocaleForCountry(state.countryCode);
+				document.title = t("documentTitle");
+				updateCountryOptionLabels();
+
+				setText("#splashScreen > div > p", t("supportHub"));
+				setText("#splashScreen h1", t("knowledgeBaseTitle"));
+				setText("#splashScreen h1 + p", t("knowledgeBaseIntro"));
+				setText("label[for='countrySelect']", t("agentRegion"));
+				setTextById("continueBtn", t("continueDashboard"));
+				setTextById("splashHint", t("splashDefaultHint"));
+
+				setText("#appShell header .brand-font.text-lg", t("supportHub"));
+				setText("#appShell header .brand-font.text-lg + p", t("consoleSubtitle"));
+				setTextById("printModeBtn", state.printPreview ? t("exitPrintMode") : t("printMode"));
+				setTextById("changeCountryBtn", t("changeCountry"));
+				setAttributeById("changelogBtn", "aria-label", t("openChangelog"));
+				setText("label[for='globalSearch']", t("globalSearch"));
+				setAttributeById("globalSearch", "placeholder", t("globalSearchPlaceholder"));
+				setTextById("moduleNotice", t(moduleDescriptions[state.activeModule] || moduleDescriptions.TV));
+
+				setText("#leftSidebar h2", t("cascadingFilters"));
+				setText("label[for='yearFilter']", t("year"));
+				setText("label[for='osFilter']", t("os"));
+				setText("label[for='panelFilter']", t("panel"));
+				setTextById("resultsModeModelsBtn", t("models"));
+				setTextById("resultsModeArticlesBtn", t("articles"));
+				setTextById("resultsSectionTitle", state.resultsView === "articles" ? t("articleResults") : t("modelResults"));
+				setTextById("emptyState", state.resultsView === "articles" ? t("noArticles") : t("noModels"));
+				setTextById("backToResultsBtn", t("backToModelList"));
+				setTextById("printNowBtn", t("printDetail"));
+				setTextById("articleBackBtn", t("backToModelList"));
+				setTextById("articlePrintBtn", t("printArticle"));
+
+				const detailTabLabels = {
+					specs: "specs",
+					ports: "ports",
+					troubleshooting: "troubleshooting",
+					policies: "policies",
+					gallery: "galleryImages"
+				};
+				detailTabButtons.forEach((button) => {
+					const key = detailTabLabels[button.dataset.detailTab];
+					if (key) {
+						button.textContent = t(key);
+					}
+				});
+
+				setText("#changelogPanel .brand-font", t("changelog"));
+				setTextById("closeChangelogBtn", t("close"));
+				setText("#quickInfoModal p.text-xs", t("quickFeatureInfo"));
+				setTextById("quickInfoDismissBtn", t("close"));
+				setTextById("quickInfoReadBtn", t("readFullArticle"));
+				setText("#specDetailsModal p.text-xs", t("expandedTechnicalView"));
+				setTextById("specDetailsDismissBtn", t("close"));
+				setText("#imageZoomLoading p", t("loadingImage"));
+				setTextById("scrollTopBtn", t("top"));
+
+				if (countryBadge) {
+					countryBadge.textContent = getCountryLabel(state.countryCode);
+				}
+			}
+
 			const defaultChangelogEntries = [
 				{
 					id: "2026-04-15-v094",
@@ -214,8 +574,12 @@ export async function initCallCenterApp(api, options) {
 
 			const savedCountry = localStorage.getItem(storageKeyCountry);
 			if (savedCountry && countryConfigs[savedCountry]) {
+				state.countryCode = savedCountry;
 				countrySelect.value = savedCountry;
-				splashHint.textContent = "Last used profile found. You can keep it or switch before continuing.";
+				applyStaticTranslations();
+				splashHint.textContent = t("splashResumeHint");
+			} else {
+				applyStaticTranslations();
 			}
 
 			function loadSeenChangelogIds() {
@@ -669,15 +1033,15 @@ export async function initCallCenterApp(api, options) {
 				}
 
 				if (!state.articleBackModelId) {
-					articleBackBtn.textContent = "Back to model list";
+					articleBackBtn.textContent = t("backToModelList");
 					persistSessionState();
 					return;
 				}
 
 				const model = getModelById(state.articleBackModelId);
 				articleBackBtn.textContent = model
-					? "Back to " + getModelName(model)
-					: "Back to model list";
+					? t("backToModel", { model: getModelName(model) })
+					: t("backToModelList");
 				persistSessionState();
 			}
 
@@ -1409,13 +1773,13 @@ export async function initCallCenterApp(api, options) {
 
 				state.quickInfoArticleId = safeText(article && article.id, "");
 				quickInfoTitle.textContent = safeText(article && article.title, "Knowledge Base");
-				quickInfoSummary.textContent = safeText(article && article.summary, "No summary available.");
+				quickInfoSummary.textContent = safeText(article && article.summary, t("noSummary"));
 				quickInfoPoints.innerHTML = "";
 
 				const points = getArticleContentPoints(article);
 				if (points.length === 0) {
 					const item = document.createElement("li");
-					item.textContent = "No detailed points available yet.";
+					item.textContent = t("noDetailedPoints");
 					quickInfoPoints.appendChild(item);
 				} else {
 					points.forEach((point) => {
@@ -1565,11 +1929,23 @@ export async function initCallCenterApp(api, options) {
 
 			function getSpecDetailsModalConfig(detailType) {
 				const modalConfig = {
+					core: {
+						title: "Core Hardware - Full View",
+						summary: "Extended display and panel fields from the technical source.",
+						categoryPatterns: [/^General$/i, /^Display\/Panel$/i],
+						keyPatterns: [/General/i, /Display\/Panel/i, /Panel/i, /Resolution/i, /Refresh/i, /Warranty/i, /Aspect/i, /Backlight/i, /Brightness/i, /Contrast/i, /Touch/i]
+					},
 					audio: {
 						title: "Audio Specifications - Full View",
 						summary: "Extended audio fields from Philips technical sheet.",
 						categoryPatterns: [/^Sound$/i, /^Dźwięk$/i],
 						keyPatterns: [/Audio/i, /Dźwięk/i, /Głośnik/i, /Subwoofer/i, /Dolby/i, /DTS/i, /Moc wyjściowa/i, /Output power/i]
+					},
+					physical: {
+						title: "Physical Details - Full View",
+						summary: "Extended physical and cabinet fields from the technical source.",
+						categoryPatterns: [/^Physical$/i],
+						keyPatterns: [/Physical/i, /VESA/i, /Tilt/i, /Height/i, /Pivot/i, /Swivel/i, /Webcam/i, /Bezel/i, /Cabinet/i, /Powersensor/i]
 					},
 					connectivity: {
 						title: "Connectivity - Full View",
@@ -1727,7 +2103,7 @@ export async function initCallCenterApp(api, options) {
 				const modalTitleSuffix = context.detailType === "dimensions" && selectedSizeLabel
 					? modalModelName + " (" + selectedSizeLabel + ")"
 					: modalModelName;
-				let emptyMessage = "No extended technical fields available for this section.";
+				let emptyMessage = t("noExtendedFields");
 				if (context.detailType === "dimensions") {
 					emptyMessage = "No dimensions data for selected size " + (selectedSizeLabel || "-") + ".";
 					if (sizeOptionsCount > 1) {
@@ -1776,6 +2152,15 @@ export async function initCallCenterApp(api, options) {
 
 			function getModelName(model) {
 				return safeText(model && model.modelName, "-");
+			}
+
+			function getModelModule(model) {
+				const explicitModule = safeText(model && (model.module || model.productType), "").toUpperCase();
+				return explicitModule || "TV";
+			}
+
+			function isMntModel(model) {
+				return getModelModule(model) === "MNT";
 			}
 
 			function normalizeModelLookupName(value) {
@@ -2610,13 +2995,13 @@ export async function initCallCenterApp(api, options) {
 					return formatTechnicalFieldLabel(value);
 				}
 
-				function normalizeTechnicalValue(value) {
+				function normalizeTechnicalValue(value, label) {
 					const text = safeText(value, "-");
-					return text.replace(/\bmm\s+mm\b/gi, "mm").replace(/\s{2,}/g, " ").trim();
+					return formatMntDisplayValue(label, text).replace(/\bmm\s+mm\b/gi, "mm").replace(/\s{2,}/g, " ").trim();
 				}
 
 				function formatTechnicalListValue(category, label, value) {
-					const normalized = normalizeTechnicalValue(value);
+					const normalized = normalizeTechnicalValue(value, label);
 					if (!normalized || normalized === "-" || normalized.includes("|")) {
 						return normalized;
 					}
@@ -2677,6 +3062,10 @@ export async function initCallCenterApp(api, options) {
 				const orderedCategories = [];
 
 				safeList(rows).forEach((row) => {
+					if (!isUsefulSpecValue(row && row.value)) {
+						return;
+					}
+
 					const category = safeText(row && row.category, "General");
 					const categoryKey = category.toLowerCase();
 					const rawLabel = safeText(row && row.label, "Value");
@@ -2762,8 +3151,11 @@ export async function initCallCenterApp(api, options) {
 
 			function normalizeModelsData(models) {
 				return safeList(models).map((model, index) => {
+					const moduleName = safeText(model && (model.module || model.productType), "TV").toUpperCase();
 					return {
 						...model,
+						module: moduleName,
+						productType: moduleName,
 						audioChannels: safeText(model && model.audioChannels, ""),
 						audioPower: safeText(model && model.audioPower, ""),
 						wifiStandard: safeText(model && model.wifiStandard, ""),
@@ -3452,23 +3844,23 @@ export async function initCallCenterApp(api, options) {
 					return;
 				}
 
-				const allModels = state.data.ModelsData;
+				const allModels = state.data.ModelsData.filter((model) => getModelModule(model) === state.activeModule);
 				const yearOptions = uniqueSorted(allModels.map((model) => getModelYear(model)).filter((year) => year !== "-"), true);
-				fillSelect(yearFilter, yearOptions, state.filters.year, "Any Year");
+				fillSelect(yearFilter, yearOptions, state.filters.year, t("anyYear"));
 				state.filters.year = yearFilter.value;
 
 				const yearScoped = state.filters.year === "all"
 					? allModels
 					: allModels.filter((model) => String(getModelYear(model)) === state.filters.year);
 				const osOptions = uniqueSorted(yearScoped.map((model) => getModelOS(model)).filter(Boolean), false);
-				fillSelect(osFilter, osOptions, state.filters.os, "Any OS");
+				fillSelect(osFilter, osOptions, state.filters.os, t("anyOs"));
 				state.filters.os = osFilter.value;
 
 				const osScoped = state.filters.os === "all"
 					? yearScoped
 					: yearScoped.filter((model) => getModelOS(model) === state.filters.os);
 				const panelOptions = uniqueSorted(osScoped.map((model) => getModelPanel(model)).filter(Boolean), false);
-				fillSelect(panelFilter, panelOptions, state.filters.panel, "Any Panel");
+				fillSelect(panelFilter, panelOptions, state.filters.panel, t("anyPanel"));
 				state.filters.panel = panelFilter.value;
 			}
 
@@ -3477,7 +3869,7 @@ export async function initCallCenterApp(api, options) {
 					return [];
 				}
 
-				let models = [...state.data.ModelsData];
+				let models = state.data.ModelsData.filter((model) => getModelModule(model) === state.activeModule);
 
 				if (state.filters.year !== "all") {
 					models = models.filter((model) => String(getModelYear(model)) === state.filters.year);
@@ -3536,16 +3928,16 @@ export async function initCallCenterApp(api, options) {
 
 			function updatePath() {
 				const model = getModelById(state.selectedModelId);
-				const yearLabel = state.filters.year === "all" ? "Any Year" : state.filters.year;
-				const osLabel = state.filters.os === "all" ? "Any OS" : state.filters.os;
-				const panelLabel = state.filters.panel === "all" ? "Any Panel" : state.filters.panel;
+				const yearLabel = state.filters.year === "all" ? t("anyYear") : state.filters.year;
+				const osLabel = state.filters.os === "all" ? t("anyOs") : state.filters.os;
+				const panelLabel = state.filters.panel === "all" ? t("anyPanel") : state.filters.panel;
 				const modelLabel = model ? " -> " + getModelName(model) : "";
-				activePath.textContent = "Path: " + yearLabel + " -> " + osLabel + " -> " + panelLabel + modelLabel;
+				activePath.textContent = t("path") + ": " + yearLabel + " -> " + osLabel + " -> " + panelLabel + modelLabel;
 			}
 
 			function renderModelGrid(models) {
 				modelGrid.innerHTML = "";
-				emptyState.textContent = "No models matched current filters/query.";
+				emptyState.textContent = t("noModels");
 
 				if (models.length === 0) {
 					emptyState.classList.remove("hidden");
@@ -3559,6 +3951,8 @@ export async function initCallCenterApp(api, options) {
 					card.type = "button";
 					card.className = "model-card rounded-xl p-4 text-left";
 					const modelKey = getModelKey(model);
+					const isMnt = isMntModel(model);
+					const specs = getModelSpecs(model);
 
 					if (modelKey === state.selectedModelId) {
 						card.classList.add("is-active");
@@ -3570,8 +3964,11 @@ export async function initCallCenterApp(api, options) {
 						+ "<span class=\"rounded-full border border-slate-200 bg-white px-2 py-0.5 text-xs font-semibold text-slate-600\">" + getModelYear(model) + "</span>"
 						+ "</div>"
 						+ "<p class=\"mt-1 text-sm font-semibold text-slate-700\">" + safeText(getModelCommercialName(model), "-") + "</p>"
-						+ "<p class=\"mt-2 text-xs text-slate-500\">Platform: " + safeText(getModelPlatform(model), "-") + "</p>"
-						+ "<p class=\"mt-2 text-xs text-slate-500\">Chassis: " + safeText(getModelChassis(model), "-") + "</p>"
+						+ (isMnt
+							? "<p class=\"mt-2 text-xs text-slate-500\">Resolution: " + safeText(specs.resolution, "-") + "</p>"
+								+ "<p class=\"mt-2 text-xs text-slate-500\">Refresh Rate: " + safeText(specs.maxRefreshRate, "-") + "</p>"
+							: "<p class=\"mt-2 text-xs text-slate-500\">Platform: " + safeText(getModelPlatform(model), "-") + "</p>"
+								+ "<p class=\"mt-2 text-xs text-slate-500\">Chassis: " + safeText(getModelChassis(model), "-") + "</p>")
 						+ "<div class=\"mt-3 flex flex-wrap gap-2\">"
 						+ "<span class=\"rounded-full border border-cyan-200 bg-cyan-50 px-2 py-0.5 text-xs font-semibold text-brand-700\">" + getModelOS(model) + "</span>"
 						+ "</div>";
@@ -3588,7 +3985,7 @@ export async function initCallCenterApp(api, options) {
 				modelGrid.innerHTML = "";
 
 				if (articles.length === 0) {
-					emptyState.textContent = "No articles matched current filters/query.";
+					emptyState.textContent = t("noArticles");
 					emptyState.classList.remove("hidden");
 					return;
 				}
@@ -3611,7 +4008,7 @@ export async function initCallCenterApp(api, options) {
 						+ "<p class=\"brand-font text-lg text-slate-900\">" + escapeHtml(safeText(article && article.title, "Knowledge Article")) + "</p>"
 						+ "<span class=\"rounded-full border border-cyan-200 bg-cyan-50 px-2 py-0.5 text-xs font-semibold text-brand-700\">KB</span>"
 						+ "</div>"
-						+ "<p class=\"mt-2 text-sm text-slate-600\">" + escapeHtml(safeText(article && article.summary, "No summary available.")) + "</p>"
+						+ "<p class=\"mt-2 text-sm text-slate-600\">" + escapeHtml(safeText(article && article.summary, t("noSummary"))) + "</p>"
 						+ "<div class=\"mt-3 flex flex-wrap gap-2\">"
 						+ (tagsHtml || "<span class=\"text-xs text-slate-500\">No tags.</span>")
 						+ "</div>";
@@ -3629,7 +4026,7 @@ export async function initCallCenterApp(api, options) {
 				state.resultsView = nextView;
 
 				if (resultsSectionTitle) {
-					resultsSectionTitle.textContent = nextView === "articles" ? "Article Results" : "Model Results";
+					resultsSectionTitle.textContent = nextView === "articles" ? t("articleResults") : t("modelResults");
 				}
 
 				if (resultsModeModelsBtn) {
@@ -3649,7 +4046,198 @@ export async function initCallCenterApp(api, options) {
 				persistSessionState();
 			}
 
+			function getMntSpecValue(model, categoryName, keyName, fallbackValue) {
+				const specs = getModelSpecs(model);
+				const categories = getModelTechnicalByCategory(model);
+				const category = Object.entries(categories).find(([name]) => name.toLowerCase() === String(categoryName || "").toLowerCase());
+				const entries = category && isPlainObject(category[1]) ? category[1] : {};
+				const directValue = entries[keyName];
+				const value = formatMntDisplayValue(keyName, directValue || fallbackValue || "");
+				return isUsefulSpecValue(value) ? value : "";
+			}
+
+			function formatMntAngleRange(value) {
+				const text = safeText(value, "");
+				const normalizedNumber = Number(text.replace(",", "."));
+
+				if (Number.isFinite(normalizedNumber) && normalizedNumber < 0 && normalizedNumber > -1) {
+					const upperValue = 5 / Math.abs(normalizedNumber);
+					const formattedUpper = Number.isInteger(upperValue)
+						? String(upperValue)
+						: String(Math.round(upperValue * 10) / 10);
+					return "-5/" + formattedUpper + "\u00b0";
+				}
+
+				if (/^-?\d+(?:[.,]\d+)?\/\d+(?:[.,]\d+)?$/.test(text)) {
+					return text.replace(",", ".") + "\u00b0";
+				}
+
+				return text;
+			}
+
+			function formatMntSwivelValue(value) {
+				const text = safeText(value, "");
+				if (text === "-1") {
+					return "-180/180\u00b0";
+				}
+				return formatMntAngleRange(text);
+			}
+
+			function formatMntDisplayValue(label, value) {
+				const text = safeText(value, "");
+				const labelText = safeText(label, "");
+
+				if (/^tilt$/i.test(labelText)) {
+					return formatMntAngleRange(text);
+				}
+
+				if (/^swivel$/i.test(labelText)) {
+					return formatMntSwivelValue(text);
+				}
+
+				if (/^pivot$/i.test(labelText) && /^-?\d+(?:[,.]\d+)?$/.test(text)) {
+					return text.replace(",", ".") + "\u00b0";
+				}
+
+				if (/^tilt$/i.test(labelText) && /^-0[,.]166666667$/.test(text)) {
+					return "-5/30°";
+				}
+
+				if (/^swivel$/i.test(labelText) && text === "-1") {
+					return "-180/180°";
+				}
+
+				if (/^pivot$/i.test(labelText) && /^-?\d+(?:[,.]\d+)?$/.test(text)) {
+					return text.replace(",", ".") + "°";
+				}
+
+				if (/^-0[,.]166666667$/.test(text)) {
+					return "-5/30°";
+				}
+
+				return text;
+			}
+
+			function isUsefulSpecValue(value, options) {
+				const text = safeText(value, "");
+				const lowerText = text.toLowerCase();
+				if (!text || text === "-" || lowerText.includes("tbc") || lowerText.includes("tbd")) {
+					return false;
+				}
+
+				if (options && options.forBox && (/^0(?:\s*=\s*no)?$/i.test(text) || /^no$/i.test(text))) {
+					return false;
+				}
+
+				return true;
+			}
+
+			function renderSpecRow(label, value) {
+				const displayValue = formatMntDisplayValue(label, value);
+				if (!isUsefulSpecValue(displayValue)) {
+					return "";
+				}
+				return "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(label) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(displayValue) + "</dd></div>";
+			}
+
+			function renderBoxRow(label, value) {
+				if (!isUsefulSpecValue(value, { forBox: true })) {
+					return "";
+				}
+				return "<div class=\"rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700\">" + escapeHtml(label) + "</div>";
+			}
+
+			function renderMntSpecsPane(model) {
+				const specs = getModelSpecs(model);
+				const featureEntries = Array.from(new Set(safeList(specs.features && specs.features.knowledge).filter(Boolean)))
+					.filter((item) => !isBasicFeatureValue(item))
+					.map((term) => {
+						const article = getExplicitKnowledgeArticleByTerm(term, { model });
+						return {
+							term,
+							article,
+							tooltip: article ? safeText(article.summary, article.title || term) : ""
+						};
+					});
+
+				const featureBadges = featureEntries
+					.map((item) => renderKnowledgePill(
+						item.term,
+						"rounded-full border border-slate-200 bg-white px-2 py-0.5 text-xs font-semibold text-slate-700",
+						Boolean(item.article),
+						item.tooltip
+					))
+					.join(" ");
+
+				const boxRows = [
+					renderBoxRow("VGA cable", getMntSpecValue(model, "What's in the box", "VGA cable")),
+					renderBoxRow("DVI cable", getMntSpecValue(model, "What's in the box", "DVI cable")),
+					renderBoxRow("HDMI cable", getMntSpecValue(model, "What's in the box", "HDMI cable")),
+					renderBoxRow("Displayport Cable", getMntSpecValue(model, "What's in the box", "Displayport Cable")),
+					renderBoxRow("Mini-DP cable", getMntSpecValue(model, "What's in the box", "Mini-DP cable")),
+					renderBoxRow("Audio Cable", getMntSpecValue(model, "What's in the box", "Audio Cable")),
+					renderBoxRow("USB-A to B Cable", getMntSpecValue(model, "What's in the box", "USB-A to B Cable")),
+					renderBoxRow("USB-C Cable", getMntSpecValue(model, "What's in the box", "USB-C Cable")),
+					renderBoxRow("Remote Control", getMntSpecValue(model, "What's in the box", "Remote Control"))
+				].join("");
+
+				return ""
+					+ "<div class=\"grid gap-4 xl:grid-cols-2\">"
+					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col\">"
+					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("coreHardware") + "</h5>"
+					+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
+					+ renderSpecRow("Brand", safeText(model && model.brand, specs.brand || "-"))
+					+ renderSpecRow("Panel", getModelPanel(model))
+					+ renderSpecRow("Resolution", getMntSpecValue(model, "Display/Panel", "Resolution", specs.resolution))
+					+ renderSpecRow("Warranty", getMntSpecValue(model, "Display/Panel", "Warranty", specs.warranty))
+					+ "</dl>"
+					+ "<button type=\"button\" data-spec-detail=\"core\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">" + t("showFullCore") + "</button>"
+					+ "</div>"
+					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col\">"
+					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("physicalDetails") + "</h5>"
+					+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
+					+ renderSpecRow("Tilt", getMntSpecValue(model, "Physical", "Tilt", specs.tilt))
+					+ renderSpecRow("Height Adjust", getMntSpecValue(model, "Physical", "Height Adjust", specs.heightAdjust))
+					+ renderSpecRow("Pivot", getMntSpecValue(model, "Physical", "Pivot", specs.pivot))
+					+ renderSpecRow("Swivel", getMntSpecValue(model, "Physical", "Swivel", specs.swivel))
+					+ "</dl>"
+					+ "<button type=\"button\" data-spec-detail=\"physical\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">" + t("showFullPhysical") + "</button>"
+					+ "</div>"
+					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col\">"
+					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("audioSpecifications") + "</h5>"
+					+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
+					+ renderSpecRow("Speakers", getMntSpecValue(model, "Sound", "Speakers", model && model.audioChannels))
+					+ renderSpecRow("Speaker power", getMntSpecValue(model, "Sound", "Speaker power", model && model.audioPower))
+					+ "</dl>"
+					+ "</div>"
+					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col\">"
+					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("connectivity") + "</h5>"
+					+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
+					+ renderSpecRow("HDMI", getMntSpecValue(model, "Connectivity", "HDMI Ports", specs.hdmiPorts))
+					+ renderSpecRow("DP", getMntSpecValue(model, "Connectivity", "DisplayPort Ports", specs.dpPorts))
+					+ renderSpecRow("USB C", getMntSpecValue(model, "Connectivity", "USB-C", specs.usbC))
+					+ renderSpecRow("USB Hub", getMntSpecValue(model, "Connectivity", "USB Hub", specs.usbHub))
+					+ "</dl>"
+					+ "<button type=\"button\" data-spec-detail=\"connectivity\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">" + t("showFullConnectivity") + "</button>"
+					+ "</div>"
+					+ (boxRows
+						? "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 xl:col-span-2\">"
+							+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("whatsInTheBox") + "</h5>"
+							+ "<dl class=\"mt-3 grid gap-2 text-sm sm:grid-cols-2\">" + boxRows + "</dl>"
+							+ "</div>"
+						: "")
+					+ "</div>"
+					+ "<div class=\"mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4\">"
+					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("knowledgeFeatures") + "</h5>"
+					+ "<div class=\"mt-2 flex flex-wrap gap-2\">" + (featureBadges || "<span class=\"text-xs text-slate-500\">" + t("noKnowledgeFeatures") + "</span>") + "</div>"
+					+ "</div>";
+			}
+
 			function renderSpecsPane(model) {
+				if (isMntModel(model)) {
+					return renderMntSpecsPane(model);
+				}
+
 				const allSizes = getModelSizes(model);
 				const selectedSize = getModelSelectedSize(model);
 				const sizeScopedModel = getModelForSize(model, selectedSize);
@@ -3706,7 +4294,7 @@ export async function initCallCenterApp(api, options) {
 				return ""
 					+ "<div class=\"grid gap-4 xl:grid-cols-2\">"
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4\">"
-					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Core Hardware</h5>"
+					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("coreHardware") + "</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm\">"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Panel</dt><dd class=\"font-semibold text-slate-800\">" + getModelPanel(sizeScopedModel) + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">OS</dt><dd class=\"font-semibold text-slate-800\">" + getModelOS(sizeScopedModel) + "</dd></div>"
@@ -3715,7 +4303,7 @@ export async function initCallCenterApp(api, options) {
 					+ "</dl>"
 					+ "</div>"
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4\">"
-					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Physical Details</h5>"
+					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("physicalDetails") + "</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm\">"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Stand</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standValue, "-") + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Sizes</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(allSizesLabel) + "</dd></div>"
@@ -3723,36 +4311,36 @@ export async function initCallCenterApp(api, options) {
 					+ "</dl>"
 					+ "</div>"
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col\">"
-					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Audio Specifications</h5>"
+					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("audioSpecifications") + "</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Channels</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.audioChannels, "-") + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Audio Power</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.audioPower, "-") + "</dd></div>"
 					+ "</dl>"
-					+ "<button type=\"button\" data-spec-detail=\"audio\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">Show full audio details</button>"
+					+ "<button type=\"button\" data-spec-detail=\"audio\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">" + t("showFullAudio") + "</button>"
 					+ "</div>"
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col\">"
-					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Connectivity</h5>"
+					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("connectivity") + "</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">WiFi</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.wifiStandard, "-") + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Bluetooth</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.bluetoothVersion, "-") + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Max VRR Refresh Rate</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.vrrMaxRefreshRate, "-") + "</dd></div>"
 					+ "</dl>"
-					+ "<button type=\"button\" data-spec-detail=\"connectivity\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">Show full connectivity details</button>"
+					+ "<button type=\"button\" data-spec-detail=\"connectivity\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">" + t("showFullConnectivity") + "</button>"
 					+ "</div>"
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 xl:col-span-2 flex flex-col\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Dimensions</h5>"
-					+ "<p class=\"mt-2 text-xs text-slate-500\">Selected size: " + escapeHtml(sizeLabel) + "</p>"
+					+ "<p class=\"mt-2 text-xs text-slate-500\">" + escapeHtml(t("selectedSize", { size: sizeLabel })) + "</p>"
 					+ "<dl class=\"mt-3 grid gap-2 text-sm sm:grid-cols-2 flex-1 pb-2\">"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">TV With Stand</dt><dd class=\"font-semibold text-slate-800\">" + safeText(withStandDimensions, "-") + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">TV Without Stand</dt><dd class=\"font-semibold text-slate-800\">" + safeText(withoutStandDimensions, "-") + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Weight</dt><dd class=\"font-semibold text-slate-800\">" + safeText(dimensionsWeight, "-") + "</dd></div>"
 					+ "</dl>"
-					+ "<button type=\"button\" data-spec-detail=\"dimensions\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">Show full dimensions details</button>"
+					+ "<button type=\"button\" data-spec-detail=\"dimensions\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">" + t("showFullDimensions") + "</button>"
 					+ "</div>"
 					+ "</div>"
 					+ "<div class=\"mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4\">"
-					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Knowledge Features</h5>"
-					+ "<div class=\"mt-2 flex flex-wrap gap-2\">" + (featureBadges || "<span class=\"text-xs text-slate-500\">No knowledge-linked features for this model.</span>") + "</div>"
+					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("knowledgeFeatures") + "</h5>"
+					+ "<div class=\"mt-2 flex flex-wrap gap-2\">" + (featureBadges || "<span class=\"text-xs text-slate-500\">" + t("noKnowledgeFeatures") + "</span>") + "</div>"
 					+ "</div>";
 			}
 
@@ -3762,7 +4350,7 @@ export async function initCallCenterApp(api, options) {
 
 				if (!portsImageUrl) {
 					return "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4\">"
-						+ "<p class=\"text-sm text-slate-600\">No rear layout available</p>"
+						+ "<p class=\"text-sm text-slate-600\">" + t("noRearLayout") + "</p>"
 						+ "</div>";
 				}
 
@@ -3982,19 +4570,27 @@ export async function initCallCenterApp(api, options) {
 
 			function renderModelDetail(model) {
 				const platform = getModelPlatform(model);
+				const brand = safeText(model && model.brand, "");
+				const hardwareBadge = isMntModel(model) ? (brand || "Brand: -") : (platform || "Platform: -");
+				if (detailTypeLabel) {
+					detailTypeLabel.textContent = isMntModel(model) ? t("mntModelDetail") : t("tvModelDetail");
+				}
 				detailTitle.textContent = getModelName(model);
 				const commercialName = getModelCommercialName(model);
-				detailSubTitle.textContent = (commercialName ? commercialName + " · " : "") + "Model linked to " + countryConfigs[state.countryCode].label + " country context and " + getModelOS(model) + " OS guides.";
+                detailSubTitle.textContent = (commercialName ? commercialName + " \u00b7 " : "") + t("modelLinkedTo", {
+                    country: getCountryLabel(state.countryCode),
+                    os: getModelOS(model)
+                });
 
 				const yearLabel = getModelYear(model);
 				const isYearInteractive = Boolean(getExplicitKnowledgeArticleByTerm(yearLabel, { model }));
 				const isOsInteractive = Boolean(getExplicitKnowledgeArticleByTerm(getModelOS(model), { model }));
-				const isPlatformInteractive = platform ? Boolean(getExplicitKnowledgeArticleByTerm(platform, { model })) : false;
+				const isHardwareBadgeInteractive = isUsefulSpecValue(hardwareBadge) ? Boolean(getExplicitKnowledgeArticleByTerm(hardwareBadge, { model })) : false;
 
 				const badges = [
 					renderKnowledgePill(yearLabel, "rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700", isYearInteractive),
 					renderKnowledgePill(getModelOS(model), "rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-semibold text-brand-700", isOsInteractive),
-					renderKnowledgePill(platform || "Platform: -", "rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700", isPlatformInteractive)
+					renderKnowledgePill(hardwareBadge, "rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700", isHardwareBadgeInteractive)
 				];
 
 				detailBadges.innerHTML = badges.join("");
@@ -4249,8 +4845,8 @@ export async function initCallCenterApp(api, options) {
 				const activeResultsCount = state.resultsView === "articles"
 					? state.filteredArticles.length
 					: state.filteredModels.length;
-				const activeEntityLabel = state.resultsView === "articles" ? "article" : "model";
-				resultCountBadge.textContent = activeResultsCount + " " + activeEntityLabel + (activeResultsCount === 1 ? "" : "s");
+				const activeEntityLabel = state.resultsView === "articles" ? t("articles") : t("models");
+				resultCountBadge.textContent = activeResultsCount + " " + activeEntityLabel.toLowerCase();
 
 				if (state.resultsView === "articles") {
 					renderArticleGrid(state.filteredArticles);
@@ -4359,7 +4955,14 @@ export async function initCallCenterApp(api, options) {
 						button.classList.add("text-slate-600");
 					}
 				});
-				moduleNotice.textContent = moduleDescriptions[tabKey] || moduleDescriptions.TV;
+				moduleNotice.textContent = t(moduleDescriptions[tabKey] || moduleDescriptions.TV);
+				if (state.data) {
+					state.selectedModelId = null;
+					state.modelDetailsById = {};
+					updateFilterOptions();
+					refreshModelResults();
+					setViewMode("browse");
+				}
 				persistSessionState();
 			}
 
@@ -4369,8 +4972,14 @@ export async function initCallCenterApp(api, options) {
 				}
 
 				state.countryCode = countryCode;
-				countryBadge.textContent = countryConfigs[countryCode].label;
+				applyStaticTranslations();
 				localStorage.setItem(storageKeyCountry, countryCode);
+
+				if (state.data) {
+					updateFilterOptions();
+					refreshModelResults();
+					updatePath();
+				}
 
 				if (state.selectedModelId && state.viewMode === "detail") {
 					const model = getModelById(state.selectedModelId);
@@ -4386,7 +4995,7 @@ export async function initCallCenterApp(api, options) {
 			function setPrintPreview(enabled) {
 				state.printPreview = enabled;
 				document.body.classList.toggle("print-preview", enabled);
-				printModeBtn.textContent = enabled ? "Exit print mode" : "Print mode";
+				printModeBtn.textContent = enabled ? t("exitPrintMode") : t("printMode");
 			}
 
 			function showDashboard(options) {
@@ -4558,6 +5167,14 @@ export async function initCallCenterApp(api, options) {
 			continueBtn.addEventListener("click", () => {
 				applyCountryConfig(countrySelect.value);
 				showDashboard();
+			});
+
+			countrySelect.addEventListener("change", () => {
+				if (!countryConfigs[countrySelect.value]) {
+					return;
+				}
+				state.countryCode = countrySelect.value;
+				applyStaticTranslations();
 			});
 
 			changeCountryBtn.addEventListener("click", () => {
@@ -4971,7 +5588,7 @@ export async function initCallCenterApp(api, options) {
 			setViewMode("browse");
 			initializeData(persistedSession).catch((error) => {
 				console.error("Failed to initialize Support Hub data:", error);
-				splashHint.textContent = "Could not load backend data. Check API URL and service health, then try again.";
+				splashHint.textContent = t("loadError");
 				returnToSplash();
 			});
 		}

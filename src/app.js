@@ -191,6 +191,7 @@ export async function initCallCenterApp(api, options) {
 					knowledgeBaseIntro: "Select the operating region to load country context before entering the dashboard.",
 					agentRegion: "Agent region",
 					continueDashboard: "Continue to dashboard",
+					loadingKnowledgeBase: "Loading knowledge base...",
 					splashDefaultHint: "Country profile sets SWAP procedures, contact channels, and policy routing.",
 					splashResumeHint: "Last used profile found. You can keep it or switch before continuing.",
 					loadError: "Could not load backend data. Check API URL and service health, then try again.",
@@ -265,6 +266,7 @@ export async function initCallCenterApp(api, options) {
 					knowledgeBaseIntro: "Wybierz region pracy, aby załadować kontekst kraju przed wejściem do panelu.",
 					agentRegion: "Region agenta",
 					continueDashboard: "Przejdź do panelu",
+					loadingKnowledgeBase: "Ładowanie bazy wiedzy...",
 					splashDefaultHint: "Profil kraju ustawia procedury SWAP, kanały kontaktu i routing polityk.",
 					splashResumeHint: "Znaleziono ostatnio używany profil. Możesz go zachować albo zmienić przed kontynuacją.",
 					loadError: "Nie udało się załadować danych backendu. Sprawdź URL API i stan usługi, a potem spróbuj ponownie.",
@@ -339,6 +341,7 @@ export async function initCallCenterApp(api, options) {
 					knowledgeBaseIntro: "Wählen Sie die Arbeitsregion, um den Länderkontext vor dem Dashboard zu laden.",
 					agentRegion: "Agentenregion",
 					continueDashboard: "Weiter zum Dashboard",
+					loadingKnowledgeBase: "Wissensbasis wird geladen...",
 					splashDefaultHint: "Das Länderprofil setzt SWAP-Prozesse, Kontaktkanäle und Policy-Routing.",
 					splashResumeHint: "Zuletzt verwendetes Profil gefunden. Sie können es behalten oder vor dem Fortfahren wechseln.",
 					loadError: "Backend-Daten konnten nicht geladen werden. Prüfen Sie API-URL und Dienststatus und versuchen Sie es erneut.",
@@ -478,7 +481,7 @@ export async function initCallCenterApp(api, options) {
 
 				setText("#leftSidebar h2", t("cascadingFilters"));
 				setText("label[for='yearFilter']", t("year"));
-				setText("label[for='osFilter']", t("os"));
+				setText("label[for='osFilter']", state.activeModule === "MNT" ? "2) Brand" : t("os"));
 				setText("label[for='panelFilter']", t("panel"));
 				setTextById("resultsModeModelsBtn", t("models"));
 				setTextById("resultsModeArticlesBtn", t("articles"));
@@ -516,6 +519,21 @@ export async function initCallCenterApp(api, options) {
 				if (countryBadge) {
 					countryBadge.textContent = getCountryLabel(state.countryCode);
 				}
+			}
+
+			function setContinueButtonState(mode) {
+				if (!continueBtn) {
+					return;
+				}
+
+				const isLoading = mode === "loading";
+				const isError = mode === "error";
+				continueBtn.disabled = isLoading;
+				continueBtn.classList.toggle("opacity-70", isLoading);
+				continueBtn.classList.toggle("cursor-not-allowed", isLoading);
+				continueBtn.textContent = isLoading
+					? t("loadingKnowledgeBase")
+					: (isError ? t("loadError") : t("continueDashboard"));
 			}
 
 			const defaultChangelogEntries = [
@@ -2074,6 +2092,21 @@ export async function initCallCenterApp(api, options) {
 				}
 
 				let uniqueRows = collectUniqueTechnicalRows(scopedModel, selectedConfig);
+				if (isMntModel(scopedModel || model)) {
+					const hiddenMntRowPatterns = [
+						/bezel\s*type(?:\s*\(front\))?/i,
+						/what'?s\s+in\s+the\s+box/i,
+						/hdmi\s+cable/i
+					];
+
+					uniqueRows = uniqueRows.filter((row) => {
+						const rowText = [
+							safeText(row && row.category, ""),
+							safeText(row && row.label, "")
+						].join(" ");
+						return !hiddenMntRowPatterns.some((pattern) => pattern.test(rowText));
+					});
+				}
 				if (context.detailType === "connectivity") {
 					const hiddenConnectivityFieldPatterns = [
 						/^Number of HDMI connections$/i,
@@ -2333,6 +2366,28 @@ export async function initCallCenterApp(api, options) {
 
 			function getModelOS(model) {
 				return safeText(normalizeOsLabel(model && (model.osProfileId || model.os)), "-");
+			}
+
+			function getMntBrand(model) {
+				const specs = getModelSpecs(model);
+				return safeText(model && model.brand, "") || safeText(specs.brand, "");
+			}
+
+			function getFilterOsOrBrand(model) {
+				return isMntModel(model) ? getMntBrand(model) : getModelOS(model);
+			}
+
+			function getMntRefreshRate(model) {
+				const specs = getModelSpecs(model);
+				return safeText(model && model.vrrMaxRefreshRate, "")
+					|| safeText(model && model.maxRefreshRate, "")
+					|| safeText(specs.vrrMaxRefreshRate, "")
+					|| safeText(specs.maxRefreshRate, "");
+			}
+
+			function getMntWarranty(model) {
+				const specs = getModelSpecs(model);
+				return safeText(model && model.warranty, "") || safeText(specs.warranty, "");
 			}
 
 			function getModelPanel(model) {
@@ -3852,13 +3907,13 @@ export async function initCallCenterApp(api, options) {
 				const yearScoped = state.filters.year === "all"
 					? allModels
 					: allModels.filter((model) => String(getModelYear(model)) === state.filters.year);
-				const osOptions = uniqueSorted(yearScoped.map((model) => getModelOS(model)).filter(Boolean), false);
-				fillSelect(osFilter, osOptions, state.filters.os, t("anyOs"));
+				const osOptions = uniqueSorted(yearScoped.map((model) => getFilterOsOrBrand(model)).filter(Boolean), false);
+				fillSelect(osFilter, osOptions, state.filters.os, state.activeModule === "MNT" ? "Any Brand" : t("anyOs"));
 				state.filters.os = osFilter.value;
 
 				const osScoped = state.filters.os === "all"
 					? yearScoped
-					: yearScoped.filter((model) => getModelOS(model) === state.filters.os);
+					: yearScoped.filter((model) => getFilterOsOrBrand(model) === state.filters.os);
 				const panelOptions = uniqueSorted(osScoped.map((model) => getModelPanel(model)).filter(Boolean), false);
 				fillSelect(panelFilter, panelOptions, state.filters.panel, t("anyPanel"));
 				state.filters.panel = panelFilter.value;
@@ -3876,7 +3931,7 @@ export async function initCallCenterApp(api, options) {
 				}
 
 				if (state.filters.os !== "all") {
-					models = models.filter((model) => getModelOS(model) === state.filters.os);
+					models = models.filter((model) => getFilterOsOrBrand(model) === state.filters.os);
 				}
 
 				if (state.filters.panel !== "all") {
@@ -3902,7 +3957,7 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			function getSearchScopedArticles() {
-				if (!state.data) {
+				if (!state.data || state.activeModule !== "TV") {
 					return [];
 				}
 
@@ -3929,7 +3984,7 @@ export async function initCallCenterApp(api, options) {
 			function updatePath() {
 				const model = getModelById(state.selectedModelId);
 				const yearLabel = state.filters.year === "all" ? t("anyYear") : state.filters.year;
-				const osLabel = state.filters.os === "all" ? t("anyOs") : state.filters.os;
+				const osLabel = state.filters.os === "all" ? (state.activeModule === "MNT" ? "Any Brand" : t("anyOs")) : state.filters.os;
 				const panelLabel = state.filters.panel === "all" ? t("anyPanel") : state.filters.panel;
 				const modelLabel = model ? " -> " + getModelName(model) : "";
 				activePath.textContent = t("path") + ": " + yearLabel + " -> " + osLabel + " -> " + panelLabel + modelLabel;
@@ -3951,8 +4006,11 @@ export async function initCallCenterApp(api, options) {
 					card.type = "button";
 					card.className = "model-card rounded-xl p-4 text-left";
 					const modelKey = getModelKey(model);
-					const isMnt = isMntModel(model);
+					const isMnt = isMntModel(model) || state.activeModule === "MNT";
 					const specs = getModelSpecs(model);
+					const mntRefreshRate = getMntRefreshRate(model);
+					const mntWarranty = getMntWarranty(model);
+					const mntBrand = getMntBrand(model);
 
 					if (modelKey === state.selectedModelId) {
 						card.classList.add("is-active");
@@ -3963,14 +4021,14 @@ export async function initCallCenterApp(api, options) {
 						+ "<p class=\"brand-font text-lg text-slate-900\">" + getModelName(model) + "</p>"
 						+ "<span class=\"rounded-full border border-slate-200 bg-white px-2 py-0.5 text-xs font-semibold text-slate-600\">" + getModelYear(model) + "</span>"
 						+ "</div>"
-						+ "<p class=\"mt-1 text-sm font-semibold text-slate-700\">" + safeText(getModelCommercialName(model), "-") + "</p>"
 						+ (isMnt
-							? "<p class=\"mt-2 text-xs text-slate-500\">Resolution: " + safeText(specs.resolution, "-") + "</p>"
-								+ "<p class=\"mt-2 text-xs text-slate-500\">Refresh Rate: " + safeText(specs.maxRefreshRate, "-") + "</p>"
-							: "<p class=\"mt-2 text-xs text-slate-500\">Platform: " + safeText(getModelPlatform(model), "-") + "</p>"
+							? "<p class=\"mt-2 text-xs text-slate-500\">Refresh Rate: " + escapeHtml(mntRefreshRate) + "</p>"
+								+ (mntWarranty ? "<p class=\"mt-2 text-xs text-slate-500\">Warranty: " + escapeHtml(mntWarranty) + "</p>" : "")
+							: "<p class=\"mt-1 text-sm font-semibold text-slate-700\">" + safeText(getModelCommercialName(model), "-") + "</p>"
+								+ "<p class=\"mt-2 text-xs text-slate-500\">Platform: " + safeText(getModelPlatform(model), "-") + "</p>"
 								+ "<p class=\"mt-2 text-xs text-slate-500\">Chassis: " + safeText(getModelChassis(model), "-") + "</p>")
 						+ "<div class=\"mt-3 flex flex-wrap gap-2\">"
-						+ "<span class=\"rounded-full border border-cyan-200 bg-cyan-50 px-2 py-0.5 text-xs font-semibold text-brand-700\">" + getModelOS(model) + "</span>"
+						+ "<span class=\"rounded-full border border-cyan-200 bg-cyan-50 px-2 py-0.5 text-xs font-semibold text-brand-700\">" + escapeHtml(isMnt ? mntBrand : getModelOS(model)) + "</span>"
 						+ "</div>";
 
 					card.addEventListener("click", () => {
@@ -4367,6 +4425,25 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			function renderTroubleshootingPane(model) {
+				if (isMntModel(model)) {
+					const mntLinks = [
+						{ label: "1. Manual", href: "#" },
+						{ label: "2. Drivers", href: "#" },
+						{ label: "3. Software", href: "#" }
+					].map((entry) => ""
+						+ "<a href=\"" + escapeHtml(entry.href) + "\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-brand-700 transition hover:bg-cyan-100\">"
+						+ escapeHtml(entry.label)
+						+ "</a>"
+					).join("");
+
+					return ""
+						+ "<section class=\"rounded-xl border border-cyan-200 bg-cyan-50/60 p-4\">"
+						+ "<h5 class=\"text-sm font-semibold text-slate-900\">Monitor Support Links</h5>"
+						+ "<p class=\"mt-1 text-xs text-slate-600\">Placeholder links for AOC/Philips monitor support resources.</p>"
+						+ "<div class=\"mt-3 flex flex-wrap gap-2\">" + mntLinks + "</div>"
+						+ "</section>";
+				}
+
 				const docsContext = getModelDocumentationContext(model);
 
 				const manualLabelPriority = {
@@ -4467,37 +4544,64 @@ export async function initCallCenterApp(api, options) {
 
 			function renderGalleryPane(model) {
 				const media = getModelMedia(model);
-				const mediaItems = media
+				const isMnt = isMntModel(model);
+				const mediaItems = isMnt
 					? [
 						{
-							label: getModelName(model) + " front view",
-							note: "Official product gallery image.",
-							imageUrl: getSafeHttpUrl(media.frontImageUrl)
+							label: "Front view",
+							note: getSafeHttpUrl(media && media.frontImageUrl) ? "Official monitor front image." : "Placeholder for monitor front view.",
+							imageUrl: getSafeHttpUrl(media && media.frontImageUrl)
 						},
 						{
-							label: getModelName(model) + " remote control",
-							note: getSafeHttpUrl(media.remoteImageUrl)
-								? "Official accessory/remote image."
-								: "No dedicated remote image found in source.",
-							imageUrl: getSafeHttpUrl(media.remoteImageUrl)
+							label: "Side view",
+							note: getSafeHttpUrl(media && (media.sideImageUrl || media.sideViewImageUrl)) ? "Official monitor side image." : "Placeholder for monitor side view.",
+							imageUrl: getSafeHttpUrl(media && (media.sideImageUrl || media.sideViewImageUrl))
 						},
 						{
-							label: getModelName(model) + " connectors",
-							note: getSafeHttpUrl(media.portsImageUrl)
-								? "Official rear ports image."
-								: "No dedicated rear ports image found in source.",
-							imageUrl: getSafeHttpUrl(media.portsImageUrl)
+							label: "Ports (bottom view)",
+							note: getSafeHttpUrl(media && media.portsImageUrl) ? "Official monitor ports image." : "Placeholder for monitor bottom ports view.",
+							imageUrl: getSafeHttpUrl(media && media.portsImageUrl)
 						}
 					]
-					: [];
+					: (media
+						? [
+							{
+								label: getModelName(model) + " front view",
+								note: "Official product gallery image.",
+								imageUrl: getSafeHttpUrl(media.frontImageUrl)
+							},
+							{
+								label: getModelName(model) + " remote control",
+								note: getSafeHttpUrl(media.remoteImageUrl)
+									? "Official accessory/remote image."
+									: "No dedicated remote image found in source.",
+								imageUrl: getSafeHttpUrl(media.remoteImageUrl)
+							},
+							{
+								label: getModelName(model) + " connectors",
+								note: getSafeHttpUrl(media.portsImageUrl)
+									? "Official rear ports image."
+									: "No dedicated rear ports image found in source.",
+								imageUrl: getSafeHttpUrl(media.portsImageUrl)
+							}
+						]
+						: []);
 
-				const placeholders = safeList(model.galleryPlaceholders);
-				const fallbackItems = [
-					{ label: getModelName(model) + " front view", note: "Placeholder for product photo." },
-					{ label: getModelName(model) + " remote control", note: "Placeholder for remote image." },
-					{ label: getModelName(model) + " connectors", note: "Placeholder for rear ports image." }
-				];
-				const sourceItems = mediaItems.length ? mediaItems : (placeholders.length ? placeholders : fallbackItems);
+				const placeholders = isMnt ? [] : safeList(model.galleryPlaceholders);
+				const fallbackItems = isMnt
+					? [
+						{ label: "Front view", note: "Placeholder for monitor front view." },
+						{ label: "Side view", note: "Placeholder for monitor side view." },
+						{ label: "Ports (bottom view)", note: "Placeholder for monitor bottom ports view." }
+					]
+					: [
+						{ label: getModelName(model) + " front view", note: "Placeholder for product photo." },
+						{ label: getModelName(model) + " remote control", note: "Placeholder for remote image." },
+						{ label: getModelName(model) + " connectors", note: "Placeholder for rear ports image." }
+					];
+				const sourceItems = mediaItems.some((item) => getSafeHttpUrl(item && item.imageUrl)) || isMnt
+					? mediaItems
+					: (placeholders.length ? placeholders : fallbackItems);
 				const items = sourceItems.map((item) => ""
 					+ (() => {
 						const imageUrl = getSafeHttpUrl(item && item.imageUrl);
@@ -4526,6 +4630,9 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			function renderDetailPane(model, paneName) {
+				if (paneName === "ports" && isMntModel(model)) {
+					return renderSpecsPane(model);
+				}
 				if (paneName === "ports") {
 					return renderPortsPane(model);
 				}
@@ -4542,26 +4649,27 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			function setDetailTab(tabName) {
-				state.activeDetailTab = tabName;
+				const model = getModelById(state.selectedModelId);
+				const nextTabName = model && isMntModel(model) && tabName === "ports" ? "specs" : tabName;
+				state.activeDetailTab = nextTabName;
 				detailTabButtons.forEach((button) => {
-					const isActive = button.dataset.detailTab === tabName;
+					const isActive = button.dataset.detailTab === nextTabName;
 					button.classList.toggle("is-active", isActive);
 					button.classList.toggle("text-slate-600", !isActive);
 					button.classList.toggle("text-brand-700", isActive);
 				});
 
 				detailPanes.forEach((pane) => {
-					pane.classList.toggle("pane-hidden", pane.dataset.pane !== tabName);
+					pane.classList.toggle("pane-hidden", pane.dataset.pane !== nextTabName);
 				});
 
-				const model = getModelById(state.selectedModelId);
 				if (!model) {
 					return;
 				}
 
-				const targetPane = detailPanes.find((pane) => pane.dataset.pane === tabName);
+				const targetPane = detailPanes.find((pane) => pane.dataset.pane === nextTabName);
 				if (targetPane) {
-					targetPane.innerHTML = renderDetailPane(model, tabName);
+					targetPane.innerHTML = renderDetailPane(model, nextTabName);
 					primeZoomImagesInContainer(targetPane);
 				}
 
@@ -4595,11 +4703,17 @@ export async function initCallCenterApp(api, options) {
 
 				detailBadges.innerHTML = badges.join("");
 
+				detailTabButtons.forEach((button) => {
+					if (button.dataset.detailTab === "ports") {
+						button.classList.toggle("hidden", isMntModel(model));
+					}
+				});
+
 				detailPanes.forEach((pane) => {
 					pane.innerHTML = "";
 				});
 
-				setDetailTab(state.activeDetailTab || "specs");
+				setDetailTab(isMntModel(model) && state.activeDetailTab === "ports" ? "specs" : (state.activeDetailTab || "specs"));
 				primeModelMediaZoomImages(model);
 			}
 
@@ -4764,7 +4878,55 @@ export async function initCallCenterApp(api, options) {
 				persistSessionState();
 			}
 
-			function selectModel(modelId) {
+			function replaceBrowseHistoryState() {
+				if (window.history && typeof window.history.replaceState === "function") {
+					window.history.replaceState({ view: "browse" }, "", window.location.pathname);
+				}
+			}
+
+			function replaceCurrentViewHistoryState() {
+				if (state.viewMode === "detail" && state.selectedModelId) {
+					if (window.history && typeof window.history.replaceState === "function") {
+						window.history.replaceState({ view: "detail", modelId: state.selectedModelId }, "", "?model=" + encodeURIComponent(state.selectedModelId));
+					}
+					return;
+				}
+
+				if (state.viewMode === "article" && isPlainObject(state.articleViewContext)) {
+					if (state.articleViewContext.kind === "knowledge") {
+						const articleId = safeText(state.articleViewContext.id, "");
+						if (articleId && window.history && typeof window.history.replaceState === "function") {
+							window.history.replaceState({ view: "article", articleId: articleId }, "", "?article=" + encodeURIComponent(articleId));
+							return;
+						}
+					}
+
+					if (state.articleViewContext.kind === "policy" && window.history && typeof window.history.replaceState === "function") {
+						window.history.replaceState({ view: "article", articleKind: "policy", policyPayload: state.articleViewContext.payload }, "", "?article=policy");
+						return;
+					}
+				}
+
+				replaceBrowseHistoryState();
+			}
+
+			function pushAppHistoryState(historyState, url) {
+				if (window.history && typeof window.history.pushState === "function") {
+					window.history.pushState(historyState, "", url);
+				}
+			}
+
+			function goBackOrBrowse() {
+				if (window.history && window.history.state) {
+					window.history.back();
+					return;
+				}
+
+				setViewMode("browse");
+				replaceBrowseHistoryState();
+			}
+
+			function selectModel(modelId, options) {
 				const model = getModelById(modelId);
 				if (!model) {
 					return;
@@ -4777,6 +4939,9 @@ export async function initCallCenterApp(api, options) {
 				renderModelDetail(model);
 				setViewMode("detail");
 				updatePath();
+				if (!(options && options.skipHistory)) {
+					pushAppHistoryState({ view: "detail", modelId: modelId }, "?model=" + encodeURIComponent(modelId));
+				}
 				void hydrateModelDetail(modelId);
 			}
 
@@ -4798,9 +4963,12 @@ export async function initCallCenterApp(api, options) {
 
 				renderArticle(article, "Knowledge Base Article");
 				setViewMode("article");
+				if (!(options && options.skipHistory)) {
+					pushAppHistoryState({ view: "article", articleId: articleId }, "?article=" + encodeURIComponent(articleId));
+				}
 			}
 
-			function openPolicyArticle(policyPayload) {
+			function openPolicyArticle(policyPayload, options) {
 				setArticleBackTarget(null);
 				state.articleViewContext = {
 					kind: "policy",
@@ -4808,6 +4976,9 @@ export async function initCallCenterApp(api, options) {
 				};
 				renderArticle(policyPayload, "Contacts and Policy Note");
 				setViewMode("article");
+				if (!(options && options.skipHistory)) {
+					pushAppHistoryState({ view: "article", articleKind: "policy", policyPayload: policyPayload }, "?article=policy");
+				}
 			}
 
 			function openQuickInfoForTerm(term, options) {
@@ -4944,6 +5115,9 @@ export async function initCallCenterApp(api, options) {
 
 			function setActiveModule(tabKey) {
 				state.activeModule = tabKey;
+				if (state.activeModule !== "TV" && state.resultsView === "articles") {
+					state.resultsView = "models";
+				}
 				moduleTabButtons.forEach((button) => {
 					const isActive = button.dataset.tab === tabKey;
 					button.classList.toggle("is-active", isActive);
@@ -4955,7 +5129,13 @@ export async function initCallCenterApp(api, options) {
 						button.classList.add("text-slate-600");
 					}
 				});
+				applyStaticTranslations();
 				moduleNotice.textContent = t(moduleDescriptions[tabKey] || moduleDescriptions.TV);
+				if (resultsModeModelsBtn && resultsModeArticlesBtn) {
+					const isModels = state.resultsView === "models";
+					resultsModeModelsBtn.classList.toggle("is-active", isModels);
+					resultsModeArticlesBtn.classList.toggle("is-active", !isModels);
+				}
 				if (state.data) {
 					state.selectedModelId = null;
 					state.modelDetailsById = {};
@@ -5165,8 +5345,12 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			continueBtn.addEventListener("click", () => {
+				if (!state.data) {
+					return;
+				}
 				applyCountryConfig(countrySelect.value);
 				showDashboard();
+				replaceBrowseHistoryState();
 			});
 
 			countrySelect.addEventListener("change", () => {
@@ -5175,6 +5359,9 @@ export async function initCallCenterApp(api, options) {
 				}
 				state.countryCode = countrySelect.value;
 				applyStaticTranslations();
+				if (!state.data) {
+					setContinueButtonState("loading");
+				}
 			});
 
 			changeCountryBtn.addEventListener("click", () => {
@@ -5200,16 +5387,11 @@ export async function initCallCenterApp(api, options) {
 			});
 
 			backToResultsBtn.addEventListener("click", () => {
-				setViewMode("browse");
+				goBackOrBrowse();
 			});
 
 			articleBackBtn.addEventListener("click", () => {
-				if (state.articleBackModelId && getModelById(state.articleBackModelId)) {
-					selectModel(state.articleBackModelId);
-					return;
-				}
-
-				setViewMode("browse");
+				goBackOrBrowse();
 			});
 
 			function handleArticleRecommendationClick(event) {
@@ -5556,6 +5738,30 @@ export async function initCallCenterApp(api, options) {
 				window.scrollTo({ top: 0, behavior: "smooth" });
 			});
 
+			window.addEventListener("popstate", (event) => {
+				const navigationState = event.state || {};
+
+				if (navigationState.view === "detail" && navigationState.modelId) {
+					selectModel(safeText(navigationState.modelId, ""), { skipHistory: true });
+					return;
+				}
+
+				if (navigationState.view === "article") {
+					if (navigationState.articleKind === "policy" && navigationState.policyPayload) {
+						openPolicyArticle(navigationState.policyPayload, { skipHistory: true });
+						return;
+					}
+
+					if (navigationState.articleId) {
+						openKnowledgeArticle(safeText(navigationState.articleId, ""), { skipHistory: true });
+						return;
+					}
+				}
+
+				setViewMode("browse");
+				updatePath();
+			});
+
 			const persistedSession = loadPersistedSessionState();
 			const persistedCountry = isPlainObject(persistedSession) ? safeText(persistedSession.countryCode, "") : "";
 			if (persistedCountry && countryConfigs[persistedCountry]) {
@@ -5568,14 +5774,11 @@ export async function initCallCenterApp(api, options) {
 			const forceSplash = Boolean(options && options.forceSplash);
 			const shouldAutoResume = !forceSplash && Boolean(effectiveResumeCountry);
 
-			if (shouldAutoResume) {
-				showDashboard({ instant: true });
-			} else {
-				appShell.classList.add("hidden");
-				appShell.classList.add("is-hidden");
-				splashScreen.classList.remove("hidden");
-				splashScreen.classList.remove("is-hiding");
-			}
+			appShell.classList.add("hidden");
+			appShell.classList.add("is-hidden");
+			splashScreen.classList.remove("hidden");
+			splashScreen.classList.remove("is-hiding");
+			setContinueButtonState("loading");
 
 			setActiveModule("TV");
 			applyCountryConfig(countrySelect.value);
@@ -5586,10 +5789,20 @@ export async function initCallCenterApp(api, options) {
 			toggleChangelog(false);
 			setResultsView("models");
 			setViewMode("browse");
-			initializeData(persistedSession).catch((error) => {
-				console.error("Failed to initialize Support Hub data:", error);
-				splashHint.textContent = t("loadError");
-				returnToSplash();
-			});
+			setContinueButtonState("loading");
+			initializeData(persistedSession)
+				.then(() => {
+					setContinueButtonState("ready");
+					if (shouldAutoResume) {
+						showDashboard({ instant: true });
+						replaceCurrentViewHistoryState();
+					}
+				})
+				.catch((error) => {
+					console.error("Failed to initialize Support Hub data:", error);
+					setContinueButtonState("error");
+					splashHint.textContent = t("loadError");
+					returnToSplash();
+				});
 		}
 

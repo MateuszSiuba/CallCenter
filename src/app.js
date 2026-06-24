@@ -183,6 +183,24 @@ export async function initCallCenterApp(api, options) {
 				}
 			};
 
+			const plTranslations = {
+				"Tilt": "Nachylenie",
+				"Height Adjust": "Regulacja wysokości",
+				"Pivot": "Pivot (Obrót ekranu)",
+				"Swivel": "Obrót w poziomie",
+				"Speakers": "Głośniki",
+				"Speaker power": "Moc głośników",
+				"Speaker Power": "Moc głośników",
+				"Webcam": "Kamera internetowa",
+				"Bezel colour (Front)": "Kolor ramki (Przód)",
+				"Cabinet colour (backside)": "Kolor obudowy (Tył)",
+				"Powersensor/Lightsensor": "Czujnik zasilania / światła",
+				"Resolution": "Rozdzielczość",
+				"Warranty": "Gwarancja",
+				"Panel": "Typ matrycy",
+				"Brand": "Marka"
+			};
+
 			const uiText = {
 				en: {
 					documentTitle: "Support Hub - Global Call Center KB",
@@ -426,6 +444,15 @@ export async function initCallCenterApp(api, options) {
 			function getCountryLabel(countryCode) {
 				const locale = getLocaleForCountry(state.countryCode);
 				return (countryLabels[locale] && countryLabels[locale][countryCode]) || countryConfigs[countryCode].label;
+			}
+
+			function translateLabel(label) {
+				const text = safeText(label, "");
+				if (getLocaleForCountry(state.countryCode) !== "pl") {
+					return text;
+				}
+
+				return plTranslations[text] || text;
 			}
 
 			function setText(selector, value) {
@@ -3124,7 +3151,7 @@ export async function initCallCenterApp(api, options) {
 					const category = safeText(row && row.category, "General");
 					const categoryKey = category.toLowerCase();
 					const rawLabel = safeText(row && row.label, "Value");
-					const label = formatTechnicalFieldLabel(rawLabel);
+					const label = translateLabel(formatTechnicalFieldLabel(rawLabel));
 					if (!groupedRowsByCategory.has(categoryKey)) {
 						groupedRowsByCategory.set(categoryKey, {
 							category: formatTechnicalSectionLabel(category),
@@ -4195,7 +4222,7 @@ export async function initCallCenterApp(api, options) {
 				if (!isUsefulSpecValue(displayValue)) {
 					return "";
 				}
-				return "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(label) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(displayValue) + "</dd></div>";
+				return "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel(label)) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(displayValue) + "</dd></div>";
 			}
 
 			function renderBoxRow(label, value) {
@@ -4431,13 +4458,13 @@ export async function initCallCenterApp(api, options) {
 						{ label: "2. Drivers", href: "#" },
 						{ label: "3. Software", href: "#" }
 					].map((entry) => ""
-						+ "<a href=\"" + escapeHtml(entry.href) + "\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-brand-700 transition hover:bg-cyan-100\">"
+						+ "<a href=\"" + escapeHtml(entry.href) + "\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-white px-3 py-1 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100\">"
 						+ escapeHtml(entry.label)
 						+ "</a>"
 					).join("");
 
 					return ""
-						+ "<section class=\"rounded-xl border border-cyan-200 bg-cyan-50/60 p-4\">"
+						+ "<section class=\"rounded-xl border border-emerald-200 bg-emerald-50 p-4\">"
 						+ "<h5 class=\"text-sm font-semibold text-slate-900\">Monitor Support Links</h5>"
 						+ "<p class=\"mt-1 text-xs text-slate-600\">Placeholder links for AOC/Philips monitor support resources.</p>"
 						+ "<div class=\"mt-3 flex flex-wrap gap-2\">" + mntLinks + "</div>"

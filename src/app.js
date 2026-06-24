@@ -201,6 +201,47 @@ export async function initCallCenterApp(api, options) {
 				"Brand": "Marka"
 			};
 
+			const plValueTranslations = {
+				"Yes": "Tak",
+				"No": "Nie",
+				"Black": "Czarny",
+				"White": "Biały",
+				"Silver": "Srebrny"
+			};
+
+			const plSectionTranslations = {
+				"General": "Ogólne",
+				"Display/Panel": "Wyświetlacz / Panel",
+				"Physical": "Fizyczne",
+				"Sound": "Dźwięk",
+				"Connectivity": "Łączność",
+				"Dimensions": "Wymiary",
+				"What's in the box": "Co jest w pudełku"
+			};
+
+			const plSpecModalTranslations = {
+				core: {
+					title: "Core Hardware - Pełny widok",
+					summary: "Rozszerzone dane wyświetlacza i panelu ze źródła technicznego."
+				},
+				audio: {
+					title: "Specyfikacja audio - Pełny widok",
+					summary: "Rozszerzone dane audio z arkusza technicznego Philips."
+				},
+				physical: {
+					title: "Szczegóły fizyczne - Pełny widok",
+					summary: "Rozszerzone dane fizyczne i obudowy ze źródła technicznego."
+				},
+				connectivity: {
+					title: "Łączność - Pełny widok",
+					summary: "Szczegóły komunikacji przewodowej i bezprzewodowej do zaawansowanego troubleshooting."
+				},
+				dimensions: {
+					title: "Wymiary - Pełny widok",
+					summary: "Wymiary zapakowanego i rozpakowanego produktu dla logistyki i rozmów supportowych."
+				}
+			};
+
 			const uiText = {
 				en: {
 					documentTitle: "Support Hub - Global Call Center KB",
@@ -453,6 +494,37 @@ export async function initCallCenterApp(api, options) {
 				}
 
 				return plTranslations[text] || text;
+			}
+
+			function translateSectionLabel(label) {
+				const text = safeText(label, "");
+				if (state.countryCode !== "PL") {
+					return text;
+				}
+
+				return plSectionTranslations[text] || translateLabel(text);
+			}
+
+			function translateValue(value) {
+				const text = safeText(value, "");
+				if (state.countryCode !== "PL") {
+					return text;
+				}
+
+				const translated = plValueTranslations[text];
+				if (translated) {
+					return translated;
+				}
+
+				return text.replace(/(\d+)\s*Years?/gi, (match, years) => {
+					if (years === "1") {
+						return "1 rok";
+					}
+					if (["2", "3", "4"].includes(years)) {
+						return years + " lata";
+					}
+					return years + " lat";
+				});
 			}
 
 			function setText(selector, value) {
@@ -2006,7 +2078,12 @@ export async function initCallCenterApp(api, options) {
 					}
 				};
 
-				return modalConfig[detailType] || modalConfig.audio;
+				const selectedConfig = modalConfig[detailType] || modalConfig.audio;
+				const polishConfig = state.countryCode === "PL" ? plSpecModalTranslations[detailType] : null;
+
+				return polishConfig
+					? { ...selectedConfig, title: polishConfig.title, summary: polishConfig.summary }
+					: selectedConfig;
 			}
 
 			function collectUniqueTechnicalRows(model, modalConfig) {
@@ -3142,6 +3219,10 @@ export async function initCallCenterApp(api, options) {
 
 				const groupedRowsByCategory = new Map();
 				const orderedCategories = [];
+				const isPolish = state.countryCode === "PL";
+				const sectionHeader = isPolish ? "SEKCJA" : "Section";
+				const fieldHeader = isPolish ? "POLE" : "Field";
+				const valueHeader = isPolish ? "WARTOŚĆ" : "Value";
 
 				safeList(rows).forEach((row) => {
 					if (!isUsefulSpecValue(row && row.value)) {
@@ -3154,7 +3235,7 @@ export async function initCallCenterApp(api, options) {
 					const label = translateLabel(formatTechnicalFieldLabel(rawLabel));
 					if (!groupedRowsByCategory.has(categoryKey)) {
 						groupedRowsByCategory.set(categoryKey, {
-							category: formatTechnicalSectionLabel(category),
+							category: translateSectionLabel(formatTechnicalSectionLabel(category)),
 							rows: [],
 							seenRows: new Set()
 						});
@@ -3170,7 +3251,7 @@ export async function initCallCenterApp(api, options) {
 					group.seenRows.add(rowKey);
 					group.rows.push({
 						label,
-						value: formatTechnicalListValue(category, rawLabel, row && row.value)
+						value: translateValue(formatTechnicalListValue(category, rawLabel, row && row.value))
 					});
 				});
 
@@ -3197,7 +3278,7 @@ export async function initCallCenterApp(api, options) {
 					+ "<div class=\"overflow-x-auto rounded-xl border border-slate-200\">"
 					+ "<table class=\"min-w-full divide-y divide-slate-200 text-sm\">"
 					+ "<thead class=\"bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500\">"
-					+ "<tr><th class=\"px-3 py-2\">Section</th><th class=\"px-3 py-2\">Field</th><th class=\"px-3 py-2\">Value</th></tr>"
+					+ "<tr><th class=\"px-3 py-2\">" + sectionHeader + "</th><th class=\"px-3 py-2\">" + fieldHeader + "</th><th class=\"px-3 py-2\">" + valueHeader + "</th></tr>"
 					+ "</thead>"
 					+ "<tbody class=\"divide-y divide-slate-100 bg-white\">"
 					+ (bodyRows || fallbackRow)
@@ -4050,7 +4131,7 @@ export async function initCallCenterApp(api, options) {
 						+ "</div>"
 						+ (isMnt
 							? "<p class=\"mt-2 text-xs text-slate-500\">Refresh Rate: " + escapeHtml(mntRefreshRate) + "</p>"
-								+ (mntWarranty ? "<p class=\"mt-2 text-xs text-slate-500\">Warranty: " + escapeHtml(mntWarranty) + "</p>" : "")
+								+ (mntWarranty ? "<p class=\"mt-2 text-xs text-slate-500\">Warranty: " + escapeHtml(translateValue(mntWarranty)) + "</p>" : "")
 							: "<p class=\"mt-1 text-sm font-semibold text-slate-700\">" + safeText(getModelCommercialName(model), "-") + "</p>"
 								+ "<p class=\"mt-2 text-xs text-slate-500\">Platform: " + safeText(getModelPlatform(model), "-") + "</p>"
 								+ "<p class=\"mt-2 text-xs text-slate-500\">Chassis: " + safeText(getModelChassis(model), "-") + "</p>")
@@ -4222,7 +4303,7 @@ export async function initCallCenterApp(api, options) {
 				if (!isUsefulSpecValue(displayValue)) {
 					return "";
 				}
-				return "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel(label)) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(displayValue) + "</dd></div>";
+				return "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel(label)) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(displayValue)) + "</dd></div>";
 			}
 
 			function renderBoxRow(label, value) {

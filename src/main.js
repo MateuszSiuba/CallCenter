@@ -3,14 +3,24 @@ import { api } from './api.js';
 import { initCallCenterApp } from './app.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
+    console.log('[App] DOMContentLoaded triggered');
     // 1. Navigation Init
     const btnGoToCallCenter = document.getElementById('btnGoToCallCenter');
     const btnGoToTraining = document.getElementById('btnGoToTraining');
     const btnBackToPortal = document.getElementById('btnBackToPortal');
     const btnBackToPortalApp = document.getElementById('btnBackToPortalApp');
 
-    // Wait until data is fetched before initializing app
     let callCenterAppInitialized = false;
+
+    try {
+        console.log('[App] Starting Call Center app initialization');
+        await initCallCenterApp(api, { forceSplash: true });
+        callCenterAppInitialized = true;
+        console.log('[App] Call Center app initialized');
+    } catch (error) {
+        console.error('[App] Failed to init app', error);
+        document.getElementById('global-loader')?.classList.add('hidden');
+    }
 
     function showCallCenterSplash() {
         const portalLanding = document.getElementById('portalLanding');
@@ -30,12 +40,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (!callCenterAppInitialized) {
             try {
-                // Initialize the app with our api
-                // Force showing the region splash when entering from the portal.
+                console.log('[App] Lazy retry Call Center app initialization');
                 await initCallCenterApp(api, { forceSplash: true });
                 callCenterAppInitialized = true;
-            } catch(e) {
-                console.error("Failed to init app", e);
+            } catch (error) {
+                console.error('[App] Failed to init app', error);
+                document.getElementById('global-loader')?.classList.add('hidden');
             }
         }
     });

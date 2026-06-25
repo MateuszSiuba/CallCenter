@@ -3640,16 +3640,20 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			async function readCachedJson(url) {
+				console.log("[Cache] Checking cache:", url);
 				const cacheOptions = getJsonCacheOptions();
 				if (!window.caches || cacheOptions.disabled || cacheOptions.refresh || cacheOptions.clear) {
+					console.log("[Cache] Cache bypassed/unavailable:", url);
 					return null;
 				}
 
 				try {
 					const cache = await window.caches.open(supportHubCacheName);
 					const cachedResponse = await cache.match(url, { ignoreVary: true });
+					console.log(cachedResponse ? "[Cache] Cache hit:" : "[Cache] Cache miss:", url);
 					return cachedResponse ? cachedResponse.json() : null;
 				} catch (error) {
+					console.warn("[Cache] Cache read failed, falling back to fetch:", url, error);
 					return null;
 				}
 			}
@@ -3663,7 +3667,9 @@ export async function initCallCenterApp(api, options) {
 				try {
 					const cache = await window.caches.open(supportHubCacheName);
 					await cache.put(url, response.clone());
+					console.log("[Cache] Stored response:", url);
 				} catch (error) {
+					console.warn("[Cache] Cache write failed:", url, error);
 					// Cache API is an optimization only; ignore quota/security failures.
 				}
 			}
@@ -3674,6 +3680,7 @@ export async function initCallCenterApp(api, options) {
 				if (cachedJson) {
 					return cachedJson;
 				}
+				console.log("[Fetch] Fetching JSON:", url);
 
 				const controller = new AbortController();
 				const timer = window.setTimeout(() => controller.abort(), timeoutMs);
@@ -5776,6 +5783,7 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			async function initializeData(restoredSession) {
+				console.log("[Bootstrap] Starting initializeData...");
 				try {
 					const data = await loadRelationalData();
 					data.ModelsData = normalizeModelsData(data.ModelsData);
@@ -5811,9 +5819,11 @@ export async function initCallCenterApp(api, options) {
 						persistSessionState();
 					}
 				} catch (error) {
+					console.error("[Bootstrap] Caught error:", error);
 					console.error("Bootstrap error:", error);
 					throw error;
 				} finally {
+					console.log("[Bootstrap] Reached finally block, hiding loader.");
 					hideGlobalLoader();
 				}
 			}

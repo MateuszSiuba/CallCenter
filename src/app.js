@@ -3628,12 +3628,12 @@ export async function initCallCenterApp(api, options) {
 
 			async function clearSupportHubJsonCacheIfRequested() {
 				const cacheOptions = getJsonCacheOptions();
-				if (!cacheOptions.clear || !("caches" in window)) {
+				if (!cacheOptions.clear || !window.caches) {
 					return;
 				}
 
 				try {
-					await caches.delete(supportHubCacheName);
+					await window.caches.delete(supportHubCacheName);
 				} catch (error) {
 					// Cache clearing is best-effort only.
 				}
@@ -3641,12 +3641,12 @@ export async function initCallCenterApp(api, options) {
 
 			async function readCachedJson(url) {
 				const cacheOptions = getJsonCacheOptions();
-				if (!("caches" in window) || cacheOptions.disabled || cacheOptions.refresh || cacheOptions.clear) {
+				if (!window.caches || cacheOptions.disabled || cacheOptions.refresh || cacheOptions.clear) {
 					return null;
 				}
 
 				try {
-					const cache = await caches.open(supportHubCacheName);
+					const cache = await window.caches.open(supportHubCacheName);
 					const cachedResponse = await cache.match(url, { ignoreVary: true });
 					return cachedResponse ? cachedResponse.json() : null;
 				} catch (error) {
@@ -3656,12 +3656,12 @@ export async function initCallCenterApp(api, options) {
 
 			async function writeJsonResponseToCache(url, response) {
 				const cacheOptions = getJsonCacheOptions();
-				if (!("caches" in window) || cacheOptions.disabled || cacheOptions.clear) {
+				if (!window.caches || cacheOptions.disabled || cacheOptions.clear) {
 					return;
 				}
 
 				try {
-					const cache = await caches.open(supportHubCacheName);
+					const cache = await window.caches.open(supportHubCacheName);
 					await cache.put(url, response.clone());
 				} catch (error) {
 					// Cache API is an optimization only; ignore quota/security failures.
@@ -5776,38 +5776,45 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			async function initializeData(restoredSession) {
-				const data = await loadRelationalData();
-				data.ModelsData = normalizeModelsData(data.ModelsData);
-				data.PoliciesData = data.PoliciesData || {};
-				data.TroubleshootingData = data.TroubleshootingData || {};
-				data.KnowledgeBaseData = normalizeKnowledgeData(data.KnowledgeBaseData);
-				data.ModelMediaData = await fetchStaticModelMediaData();
-				data.ModelPlatformChassisData = safeList(data.ModelPlatformChassisData);
-				if (data.ModelPlatformChassisData.length === 0) {
-					data.ModelPlatformChassisData = safeList(ModelPlatformChassisData);
-				}
-				data.DocumentationLinksData = normalizeDocumentationLinksData(data.DocumentationLinksData);
-				data.ChangelogEntriesData = safeList(data.ChangelogEntriesData);
+				try {
+					const data = await loadRelationalData();
+					data.ModelsData = normalizeModelsData(data.ModelsData);
+					data.PoliciesData = data.PoliciesData || {};
+					data.TroubleshootingData = data.TroubleshootingData || {};
+					data.KnowledgeBaseData = normalizeKnowledgeData(data.KnowledgeBaseData);
+					data.ModelMediaData = await fetchStaticModelMediaData();
+					data.ModelPlatformChassisData = safeList(data.ModelPlatformChassisData);
+					if (data.ModelPlatformChassisData.length === 0) {
+						data.ModelPlatformChassisData = safeList(ModelPlatformChassisData);
+					}
+					data.DocumentationLinksData = normalizeDocumentationLinksData(data.DocumentationLinksData);
+					data.ChangelogEntriesData = safeList(data.ChangelogEntriesData);
 
-				state.data = data;
-				state.modelPlatformChassisLookup = buildModelPlatformChassisLookup(data.ModelPlatformChassisData);
-				state.modelSearchIndex = buildSearchIndexFromEntries(buildModelSearchEntries(data.ModelsData));
-				state.globalSearchIndex = buildSearchIndexFromEntries(buildGlobalEntries(data));
-				setChangelogEntries(data.ChangelogEntriesData);
+					state.data = data;
+					state.modelPlatformChassisLookup = buildModelPlatformChassisLookup(data.ModelPlatformChassisData);
+					state.modelSearchIndex = buildSearchIndexFromEntries(buildModelSearchEntries(data.ModelsData));
+					state.globalSearchIndex = buildSearchIndexFromEntries(buildGlobalEntries(data));
+					setChangelogEntries(data.ChangelogEntriesData);
 
-				if (isPlainObject(restoredSession)) {
-					state.isRestoringSession = true;
-					applyPersistedSessionState(restoredSession);
-					setActiveModule(state.activeModule);
-				}
+					if (isPlainObject(restoredSession)) {
+						state.isRestoringSession = true;
+						applyPersistedSessionState(restoredSession);
+						setActiveModule(state.activeModule);
+					}
 
-				updateFilterOptions();
-				setResultsView(state.resultsView);
+					updateFilterOptions();
+					setResultsView(state.resultsView);
 
-				if (isPlainObject(restoredSession)) {
-					restoreViewFromPersistedSession();
-					state.isRestoringSession = false;
-					persistSessionState();
+					if (isPlainObject(restoredSession)) {
+						restoreViewFromPersistedSession();
+						state.isRestoringSession = false;
+						persistSessionState();
+					}
+				} catch (error) {
+					console.error("Bootstrap error:", error);
+					throw error;
+				} finally {
+					hideGlobalLoader();
 				}
 			}
 
@@ -6260,7 +6267,6 @@ export async function initCallCenterApp(api, options) {
 			initializeData(persistedSession)
 				.then(() => {
 					setContinueButtonState("ready");
-					hideGlobalLoader();
 					if (shouldAutoResume) {
 						showDashboard({ instant: true });
 						replaceCurrentViewHistoryState();
@@ -6270,7 +6276,6 @@ export async function initCallCenterApp(api, options) {
 					console.error("Failed to initialize Support Hub data:", error);
 					setContinueButtonState("error");
 					splashHint.textContent = t("loadError");
-					hideGlobalLoader();
 					returnToSplash();
 				});
 		}

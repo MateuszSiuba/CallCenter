@@ -3521,6 +3521,27 @@ export async function initCallCenterApp(api, options) {
 				}
 			}
 
+			async function fetchStaticModelMediaData() {
+				const candidates = [
+					"./mnt-media-links.json",
+					"mnt-media-links.json",
+					"/mnt-media-links.json"
+				];
+
+				if (runtimeApiBaseUrl) {
+					candidates.unshift(runtimeApiBaseUrl + "/mnt-media-links.json");
+				}
+
+				for (const url of Array.from(new Set(candidates))) {
+					const payload = await fetchJsonWithTimeout(url, 4500);
+					if (isPlainObject(payload)) {
+						return payload;
+					}
+				}
+
+				return {};
+			}
+
 			async function fetchRelationalDataFromApi() {
 				const modelsCandidates = buildApiCandidates("/api/models");
 				for (const baseModelsUrl of modelsCandidates) {
@@ -5531,6 +5552,7 @@ export async function initCallCenterApp(api, options) {
 				data.PoliciesData = data.PoliciesData || {};
 				data.TroubleshootingData = data.TroubleshootingData || {};
 				data.KnowledgeBaseData = normalizeKnowledgeData(data.KnowledgeBaseData);
+				data.ModelMediaData = await fetchStaticModelMediaData();
 				data.ModelPlatformChassisData = safeList(data.ModelPlatformChassisData);
 				if (data.ModelPlatformChassisData.length === 0) {
 					data.ModelPlatformChassisData = safeList(ModelPlatformChassisData);

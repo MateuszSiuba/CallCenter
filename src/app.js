@@ -199,6 +199,8 @@ export async function initCallCenterApp(api, options) {
 				"Warranty": "Gwarancja",
 				"Panel": "Typ matrycy",
 				"Brand": "Marka",
+				"Platform": "Platforma",
+				"Chassis": "Chassis",
 				"Panel Type": "Typ matrycy",
 				"Model Name": "Nazwa modelu",
 				"Aspect Ratio": "Proporcje obrazu",
@@ -213,7 +215,20 @@ export async function initCallCenterApp(api, options) {
 				"Touch": "Ekran dotykowy",
 				"Sync Technology": "Technologia synchronizacji",
 				"Headphone out": "Wyjście słuchawkowe",
-				"Audio In": "Wejście audio"
+				"Audio In": "Wejście audio",
+				"HDMI Ports": "Porty HDMI",
+				"Display Port Ports": "Porty DisplayPort",
+				"DisplayPort Ports": "Porty DisplayPort",
+				"Max VRR Refresh Rate": "Maks. częstotliwość odświeżania VRR",
+				"Stand": "Podstawa",
+				"Sizes": "Rozmiary",
+				"VESA Standard": "Standard VESA",
+				"Channels": "Kanały",
+				"Audio Power": "Moc audio",
+				"Dimensions": "Wymiary",
+				"TV With Stand": "TV z podstawą",
+				"TV Without Stand": "TV bez podstawy",
+				"Weight": "Waga"
 			};
 
 			const plValueTranslations = {
@@ -542,7 +557,7 @@ export async function initCallCenterApp(api, options) {
 						return years + " lata";
 					}
 					return years + " lat";
-				});
+				}).replace(/Native/g, "Natywnie");
 			}
 
 			function translateHardcodedText(text, polishText) {
@@ -2008,11 +2023,12 @@ export async function initCallCenterApp(api, options) {
 				if (!media) {
 					return;
 				}
+				const imageMedia = isPlainObject(media.media) ? media.media : media;
 
 				const zoomCandidates = [
-					getRenderableImageVariants(media.frontImageUrl, { displayWidth: 1600, zoomWidth: 3200 }).zoomSrc,
-					getRenderableImageVariants(media.remoteImageUrl, { displayWidth: 1600, zoomWidth: 3200 }).zoomSrc,
-					getRenderableImageVariants(media.portsImageUrl, { displayWidth: 1800, zoomWidth: 3200 }).zoomSrc
+					getRenderableImageVariants(imageMedia.frontImageUrl, { displayWidth: 1600, zoomWidth: 3200 }).zoomSrc,
+					getRenderableImageVariants(imageMedia.remoteImageUrl, { displayWidth: 1600, zoomWidth: 3200 }).zoomSrc,
+					getRenderableImageVariants(imageMedia.portsImageUrl, { displayWidth: 1800, zoomWidth: 3200 }).zoomSrc
 				].filter(Boolean);
 
 				zoomCandidates.forEach((zoomUrl, index) => {
@@ -2381,7 +2397,7 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			function getSafeHttpUrl(value) {
-				const url = safeText(value, "");
+				const url = safeText(value, "").replace(/\s+/g, "");
 				return /^https?:\/\//i.test(url) ? url : "";
 			}
 
@@ -4141,6 +4157,9 @@ export async function initCallCenterApp(api, options) {
 					const mntRefreshRate = getMntRefreshRate(model);
 					const mntWarranty = getMntWarranty(model);
 					const mntBrand = getMntBrand(model);
+					const refreshRateLabel = translateHardcodedText("Refresh Rate:", "Odświeżanie:");
+					const warrantyLabel = translateHardcodedText("Warranty:", "Gwarancja:");
+					const platformLabel = translateHardcodedText("Platform:", "Platforma:");
 
 					if (modelKey === state.selectedModelId) {
 						card.classList.add("is-active");
@@ -4152,10 +4171,10 @@ export async function initCallCenterApp(api, options) {
 						+ "<span class=\"rounded-full border border-slate-200 bg-white px-2 py-0.5 text-xs font-semibold text-slate-600\">" + getModelYear(model) + "</span>"
 						+ "</div>"
 						+ (isMnt
-							? "<p class=\"mt-2 text-xs text-slate-500\">Refresh Rate: " + escapeHtml(mntRefreshRate) + "</p>"
-								+ (mntWarranty ? "<p class=\"mt-2 text-xs text-slate-500\">Warranty: " + escapeHtml(translateValue(mntWarranty)) + "</p>" : "")
+							? "<p class=\"mt-2 text-xs text-slate-500\">" + refreshRateLabel + " " + escapeHtml(translateValue(mntRefreshRate)) + "</p>"
+								+ (mntWarranty ? "<p class=\"mt-2 text-xs text-slate-500\">" + warrantyLabel + " " + escapeHtml(translateValue(mntWarranty)) + "</p>" : "")
 							: "<p class=\"mt-1 text-sm font-semibold text-slate-700\">" + safeText(getModelCommercialName(model), "-") + "</p>"
-								+ "<p class=\"mt-2 text-xs text-slate-500\">Platform: " + safeText(getModelPlatform(model), "-") + "</p>"
+								+ "<p class=\"mt-2 text-xs text-slate-500\">" + platformLabel + " " + safeText(getModelPlatform(model), "-") + "</p>"
 								+ "<p class=\"mt-2 text-xs text-slate-500\">Chassis: " + safeText(getModelChassis(model), "-") + "</p>")
 						+ "<div class=\"mt-3 flex flex-wrap gap-2\">"
 						+ "<span class=\"rounded-full border border-cyan-200 bg-cyan-50 px-2 py-0.5 text-xs font-semibold text-brand-700\">" + escapeHtml(isMnt ? mntBrand : getModelOS(model)) + "</span>"
@@ -4401,8 +4420,8 @@ export async function initCallCenterApp(api, options) {
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("connectivity") + "</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
-					+ renderSpecRow("HDMI", getMntSpecValue(model, "Connectivity", "HDMI Ports", specs.hdmiPorts))
-					+ renderSpecRow("DP", getMntSpecValue(model, "Connectivity", "DisplayPort Ports", specs.dpPorts))
+					+ renderSpecRow("HDMI Ports", getMntSpecValue(model, "Connectivity", "HDMI Ports", specs.hdmiPorts))
+					+ renderSpecRow("Display Port Ports", getMntSpecValue(model, "Connectivity", "DisplayPort Ports", specs.dpPorts))
 					+ renderSpecRow("USB C", getMntSpecValue(model, "Connectivity", "USB-C", specs.usbC))
 					+ renderSpecRow("USB Hub", getMntSpecValue(model, "Connectivity", "USB Hub", specs.usbHub))
 					+ "</dl>"
@@ -4484,44 +4503,44 @@ export async function initCallCenterApp(api, options) {
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("coreHardware") + "</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm\">"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Panel</dt><dd class=\"font-semibold text-slate-800\">" + getModelPanel(sizeScopedModel) + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">OS</dt><dd class=\"font-semibold text-slate-800\">" + getModelOS(sizeScopedModel) + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Platform</dt><dd class=\"font-semibold text-slate-800\">" + safeText(getModelPlatform(sizeScopedModel), "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Chassis</dt><dd class=\"font-semibold text-slate-800\">" + safeText(getModelChassis(sizeScopedModel), "-") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Panel")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(getModelPanel(sizeScopedModel))) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">OS</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(getModelOS(sizeScopedModel))) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Platform")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(getModelPlatform(sizeScopedModel), "-"))) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Chassis")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(getModelChassis(sizeScopedModel), "-"))) + "</dd></div>"
 					+ "</dl>"
 					+ "</div>"
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("physicalDetails") + "</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm\">"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Stand</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standValue, "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Sizes</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(allSizesLabel) + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">VESA Standard</dt><dd class=\"font-semibold text-slate-800\">" + safeText(vesaStandard, "-") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Stand")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(standValue, "-"))) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Sizes")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(allSizesLabel)) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("VESA Standard")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(vesaStandard, "-"))) + "</dd></div>"
 					+ "</dl>"
 					+ "</div>"
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("audioSpecifications") + "</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Channels</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.audioChannels, "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Audio Power</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.audioPower, "-") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Channels")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(standardSpecs.audioChannels, "-"))) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Audio Power")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(standardSpecs.audioPower, "-"))) + "</dd></div>"
 					+ "</dl>"
 					+ "<button type=\"button\" data-spec-detail=\"audio\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">" + t("showFullAudio") + "</button>"
 					+ "</div>"
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("connectivity") + "</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">WiFi</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.wifiStandard, "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Bluetooth</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.bluetoothVersion, "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Max VRR Refresh Rate</dt><dd class=\"font-semibold text-slate-800\">" + safeText(standardSpecs.vrrMaxRefreshRate, "-") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">WiFi</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(standardSpecs.wifiStandard, "-"))) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Bluetooth</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(standardSpecs.bluetoothVersion, "-"))) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Max VRR Refresh Rate")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(standardSpecs.vrrMaxRefreshRate, "-"))) + "</dd></div>"
 					+ "</dl>"
 					+ "<button type=\"button\" data-spec-detail=\"connectivity\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">" + t("showFullConnectivity") + "</button>"
 					+ "</div>"
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 xl:col-span-2 flex flex-col\">"
-					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Dimensions</h5>"
+					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + escapeHtml(translateLabel("Dimensions")) + "</h5>"
 					+ "<p class=\"mt-2 text-xs text-slate-500\">" + escapeHtml(t("selectedSize", { size: sizeLabel })) + "</p>"
 					+ "<dl class=\"mt-3 grid gap-2 text-sm sm:grid-cols-2 flex-1 pb-2\">"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">TV With Stand</dt><dd class=\"font-semibold text-slate-800\">" + safeText(withStandDimensions, "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">TV Without Stand</dt><dd class=\"font-semibold text-slate-800\">" + safeText(withoutStandDimensions, "-") + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Weight</dt><dd class=\"font-semibold text-slate-800\">" + safeText(dimensionsWeight, "-") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("TV With Stand")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(withStandDimensions, "-"))) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("TV Without Stand")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(withoutStandDimensions, "-"))) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Weight")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(dimensionsWeight, "-"))) + "</dd></div>"
 					+ "</dl>"
 					+ "<button type=\"button\" data-spec-detail=\"dimensions\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">" + t("showFullDimensions") + "</button>"
 					+ "</div>"
@@ -4557,8 +4576,8 @@ export async function initCallCenterApp(api, options) {
 			function renderTroubleshootingPane(model) {
 				if (isMntModel(model)) {
 					const modelName = getModelName(model);
-					const media = state.data && state.data.ModelMediaData ? state.data.ModelMediaData[modelName] : null;
-					const support = isPlainObject(media && media.support) ? media.support : {};
+					const mediaData = state.data && state.data.ModelMediaData ? state.data.ModelMediaData[modelName] : null;
+					const support = isPlainObject(mediaData && mediaData.support) ? mediaData.support : {};
 					const manualLanguageByCountry = {
 						PL: { name: "polish", code: "pl", label: "Instrukcja obsługi" },
 						DE: { name: "german", code: "de", label: "User Manual" },
@@ -4738,22 +4757,24 @@ export async function initCallCenterApp(api, options) {
 			function renderGalleryPane(model) {
 				const media = getModelMedia(model);
 				const isMnt = isMntModel(model);
+				const mntMedia = isPlainObject(media && media.media) ? media.media : {};
+				const imageLabel = (index) => translateHardcodedText("Image " + index, "Zdjęcie " + index);
 				const mediaItems = isMnt
 					? [
 						{
-							label: translateHardcodedText("Front view", "Widok z przodu"),
-							note: getSafeHttpUrl(media && media.frontImageUrl) ? "Official monitor front image." : translateHardcodedText("Placeholder for monitor front view.", "Miejsce na zdjęcie frontu monitora."),
-							imageUrl: getSafeHttpUrl(media && media.frontImageUrl)
+							label: imageLabel(1),
+							note: "",
+							imageUrl: getSafeHttpUrl(mntMedia.frontImageUrl)
 						},
 						{
-							label: translateHardcodedText("Side view", "Widok z boku"),
-							note: getSafeHttpUrl(media && (media.sideImageUrl || media.sideViewImageUrl)) ? "Official monitor side image." : translateHardcodedText("Placeholder for monitor side view.", "Miejsce na zdjęcie boku monitora."),
-							imageUrl: getSafeHttpUrl(media && (media.sideImageUrl || media.sideViewImageUrl))
+							label: imageLabel(2),
+							note: "",
+							imageUrl: getSafeHttpUrl(mntMedia.sideImageUrl || mntMedia.sideViewImageUrl)
 						},
 						{
-							label: translateHardcodedText("Ports (bottom view)", "Porty (widok z dołu)"),
-							note: getSafeHttpUrl(media && media.portsImageUrl) ? "Official monitor ports image." : translateHardcodedText("Placeholder for monitor bottom ports view.", "Miejsce na zdjęcie portów z dołu."),
-							imageUrl: getSafeHttpUrl(media && media.portsImageUrl)
+							label: imageLabel(3),
+							note: "",
+							imageUrl: getSafeHttpUrl(mntMedia.portsImageUrl)
 						}
 					]
 					: (media
@@ -4783,9 +4804,9 @@ export async function initCallCenterApp(api, options) {
 				const placeholders = isMnt ? [] : safeList(model.galleryPlaceholders);
 				const fallbackItems = isMnt
 					? [
-						{ label: translateHardcodedText("Front view", "Widok z przodu"), note: translateHardcodedText("Placeholder for monitor front view.", "Miejsce na zdjęcie frontu monitora.") },
-						{ label: translateHardcodedText("Side view", "Widok z boku"), note: translateHardcodedText("Placeholder for monitor side view.", "Miejsce na zdjęcie boku monitora.") },
-						{ label: translateHardcodedText("Ports (bottom view)", "Porty (widok z dołu)"), note: translateHardcodedText("Placeholder for monitor bottom ports view.", "Miejsce na zdjęcie portów z dołu.") }
+						{ label: imageLabel(1), note: "" },
+						{ label: imageLabel(2), note: "" },
+						{ label: imageLabel(3), note: "" }
 					]
 					: [
 						{ label: getModelName(model) + " front view", note: "Placeholder for product photo." },
@@ -4812,7 +4833,7 @@ export async function initCallCenterApp(api, options) {
 						? "<div class=\"overflow-hidden rounded-lg border border-slate-200 bg-white p-1\"><img src=\"" + escapeHtml(displayUrl) + "\" srcset=\"" + escapeHtml(imageSet.srcSet) + "\" sizes=\"" + escapeHtml(imageSet.sizes || "100vw") + "\" alt=\"" + escapeHtml(safeText(item.label, "Model image")) + "\" class=\"js-zoomable-image h-40 w-full cursor-zoom-in object-contain\" loading=\"lazy\" tabindex=\"0\" role=\"button\" data-zoom-src=\"" + escapeHtml(zoomUrl) + "\"></div>"
 						: "<div class=\"rounded-lg border-2 border-dashed border-slate-300 bg-white p-8 text-center text-xs text-slate-500\">" + translateHardcodedText("Image not available", "Brak zdjęcia") + "</div>")
 					+ "<p class=\"mt-2 text-sm font-semibold text-slate-800\">" + safeText(item.label, "Image placeholder") + "</p>"
-					+ "<p class=\"mt-1 text-xs text-slate-500\">" + safeText(item.note, "") + "</p>"
+					+ (safeText(item.note, "") ? "<p class=\"mt-1 text-xs text-slate-500\">" + safeText(item.note, "") + "</p>" : "")
 					+ "</div>";
 					})()).join("");
 
@@ -4872,7 +4893,9 @@ export async function initCallCenterApp(api, options) {
 			function renderModelDetail(model) {
 				const platform = getModelPlatform(model);
 				const brand = safeText(model && model.brand, "");
-				const hardwareBadge = isMntModel(model) ? (brand || "Brand: -") : (platform || "Platform: -");
+				const hardwareBadge = isMntModel(model)
+					? (brand || translateHardcodedText("Brand: -", "Marka: -"))
+					: (platform || translateHardcodedText("Platform: -", "Platforma: -"));
 				if (detailTypeLabel) {
 					detailTypeLabel.textContent = isMntModel(model) ? t("mntModelDetail") : t("tvModelDetail");
 				}

@@ -3,11 +3,13 @@ dist/
 .vscode/
 .env
 .env.*
+.venv/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 merge_conflicts_models_*.csv
 new_data.json
+public/mnt-media-links.json
 data/models.backup.js
 smart_deep_merge.js
 scripts/enrich-models-from-philips-web.js

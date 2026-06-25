@@ -198,7 +198,22 @@ export async function initCallCenterApp(api, options) {
 				"Resolution": "Rozdzielczość",
 				"Warranty": "Gwarancja",
 				"Panel": "Typ matrycy",
-				"Brand": "Marka"
+				"Brand": "Marka",
+				"Panel Type": "Typ matrycy",
+				"Model Name": "Nazwa modelu",
+				"Aspect Ratio": "Proporcje obrazu",
+				"Curved": "Zakrzywienie",
+				"Backlight": "Podświetlenie",
+				"Max Refresh Rate": "Maks. częstotliwość odświeżania",
+				"Response Time Gt G": "Czas reakcji (GtG)",
+				"Response Time GtG": "Czas reakcji (GtG)",
+				"Response Time MPRT": "Czas reakcji (MPRT)",
+				"Brightness (max)": "Jasność (maks.)",
+				"Contrast (static)": "Kontrast (statyczny)",
+				"Touch": "Ekran dotykowy",
+				"Sync Technology": "Technologia synchronizacji",
+				"Headphone out": "Wyjście słuchawkowe",
+				"Audio In": "Wejście audio"
 			};
 
 			const plValueTranslations = {
@@ -206,7 +221,10 @@ export async function initCallCenterApp(api, options) {
 				"No": "Nie",
 				"Black": "Czarny",
 				"White": "Biały",
-				"Silver": "Srebrny"
+				"Silver": "Srebrny",
+				"HDMI Cable": "Kabel HDMI",
+				"Displayport Cable": "Kabel DisplayPort",
+				"Headphone out": "Wyjście słuchawkowe"
 			};
 
 			const plSectionTranslations = {
@@ -391,7 +409,7 @@ export async function initCallCenterApp(api, options) {
 					audioSpecifications: "Specyfikacja audio",
 					connectivity: "Łączność",
 					whatsInTheBox: "Co jest w pudełku",
-					knowledgeFeatures: "Funkcje wiedzy"
+					knowledgeFeatures: "Dodatkowe Funkcje"
 				},
 				de: {
 					documentTitle: "Support Hub - Globale Call-Center-Wissensbasis",
@@ -525,6 +543,10 @@ export async function initCallCenterApp(api, options) {
 					}
 					return years + " lat";
 				});
+			}
+
+			function translateHardcodedText(text, polishText) {
+				return state.countryCode === "PL" ? polishText : text;
 			}
 
 			function setText(selector, value) {
@@ -4534,21 +4556,84 @@ export async function initCallCenterApp(api, options) {
 
 			function renderTroubleshootingPane(model) {
 				if (isMntModel(model)) {
-					const mntLinks = [
-						{ label: "1. Manual", href: "#" },
-						{ label: "2. Drivers", href: "#" },
-						{ label: "3. Software", href: "#" }
-					].map((entry) => ""
-						+ "<a href=\"" + escapeHtml(entry.href) + "\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-white px-3 py-1 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100\">"
-						+ escapeHtml(entry.label)
-						+ "</a>"
-					).join("");
+					const modelName = getModelName(model);
+					const media = state.data && state.data.ModelMediaData ? state.data.ModelMediaData[modelName] : null;
+					const support = isPlainObject(media && media.support) ? media.support : {};
+					const manualLanguageByCountry = {
+						PL: { name: "polish", code: "pl", label: "Instrukcja obsługi" },
+						DE: { name: "german", code: "de", label: "User Manual" },
+						UK: { name: "english", code: "en", label: "User Manual" }
+					};
+					const targetManualLanguage = manualLanguageByCountry[state.countryCode] || manualLanguageByCountry.UK;
+					const languageKeyPattern = /\([a-z]{2}\)/i;
+					const languageNoisePattern = /(polish|english|german|danish|bulgarian|dutch|croatian|czech|finnish|greek|italian|hungarian|french|romanian|portuguese|slovenian|slovak|russian|spanish|turkish|swedish|\([a-z]{2}\))/gi;
+
+					function isMassiveUserManualKey(label) {
+						if (!/^user manual/i.test(label)) {
+							return false;
+						}
+						const languageHits = label.match(languageNoisePattern) || [];
+						return label.length > 120 || languageHits.length > 4;
+					}
+
+					function cleanGenericSupportLabel(label) {
+						return safeText(label, "")
+							.replace(/\d{1,2}\s+[a-zA-Z]+\s+\d{4}/g, "")
+							.replace(/\s+/g, " ")
+							.trim();
+					}
+
+					const supportLinks = Object.entries(support)
+						.reduce((links, [label, url]) => {
+							const rawLabel = safeText(label, "");
+							const normalizedLabel = rawLabel.toLowerCase();
+							const href = getSafeHttpUrl(url);
+							if (!rawLabel || !href || isMassiveUserManualKey(rawLabel)) {
+								return links;
+							}
+
+							if (languageKeyPattern.test(normalizedLabel)) {
+								const isTargetLanguage = normalizedLabel.includes(targetManualLanguage.name)
+									|| normalizedLabel.includes("(" + targetManualLanguage.code + ")");
+								if (!isTargetLanguage) {
+									return links;
+								}
+								links.push({
+									label: targetManualLanguage.label,
+									url: href
+								});
+								return links;
+							}
+
+							const cleanLabel = cleanGenericSupportLabel(rawLabel);
+							if (cleanLabel) {
+								links.push({
+									label: cleanLabel,
+									url: href
+								});
+							}
+							return links;
+						}, [])
+						.filter((entry) => entry.label && entry.url);
+
+					const mntLinks = supportLinks.map((entry) => {
+						const isDocument = /(guide|manual|document|setup|instrukcja)/i.test(entry.label);
+						const buttonClasses = isDocument
+							? "inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-white px-3 py-1 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100"
+							: "inline-flex items-center gap-2 rounded-full border border-cyan-300 bg-white px-3 py-1 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100";
+						return ""
+							+ "<a href=\"" + escapeHtml(entry.url) + "\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"" + buttonClasses + "\">"
+							+ escapeHtml(entry.label)
+							+ "</a>";
+					}).join("");
 
 					return ""
 						+ "<section class=\"rounded-xl border border-emerald-200 bg-emerald-50 p-4\">"
-						+ "<h5 class=\"text-sm font-semibold text-slate-900\">Monitor Support Links</h5>"
-						+ "<p class=\"mt-1 text-xs text-slate-600\">Placeholder links for AOC/Philips monitor support resources.</p>"
-						+ "<div class=\"mt-3 flex flex-wrap gap-2\">" + mntLinks + "</div>"
+						+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + translateHardcodedText("Monitor Support Links", "Linki wsparcia technicznego") + "</h5>"
+						+ "<p class=\"mt-1 text-xs text-slate-600\">" + translateHardcodedText("Placeholder links for AOC/Philips monitor support resources.", "Zastępcze linki do zasobów wsparcia AOC/Philips.") + "</p>"
+						+ (mntLinks
+							? "<div class=\"mt-3 flex flex-wrap gap-2\">" + mntLinks + "</div>"
+							: "<p class=\"mt-3 text-xs text-slate-600\">" + translateHardcodedText("No support files available.", "Brak dostępnych plików wsparcia dla tego modelu.") + "</p>")
 						+ "</section>";
 				}
 
@@ -4638,7 +4723,7 @@ export async function initCallCenterApp(api, options) {
 
 				return ""
 					+ "<section class=\"rounded-xl border border-slate-200 bg-slate-50 p-4\">"
-					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Pixel policy for " + getModelName(model) + "</h5>"
+					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + translateHardcodedText("Pixel policy for ", "Polityka pikseli dla ") + getModelName(model) + "</h5>"
 					+ "<div class=\"mt-3 overflow-hidden rounded-lg border border-slate-200 bg-white\">"
 					+ "<table class=\"min-w-full divide-y divide-slate-200\">"
 					+ "<tbody class=\"divide-y divide-slate-100\">"
@@ -4656,18 +4741,18 @@ export async function initCallCenterApp(api, options) {
 				const mediaItems = isMnt
 					? [
 						{
-							label: "Front view",
-							note: getSafeHttpUrl(media && media.frontImageUrl) ? "Official monitor front image." : "Placeholder for monitor front view.",
+							label: translateHardcodedText("Front view", "Widok z przodu"),
+							note: getSafeHttpUrl(media && media.frontImageUrl) ? "Official monitor front image." : translateHardcodedText("Placeholder for monitor front view.", "Miejsce na zdjęcie frontu monitora."),
 							imageUrl: getSafeHttpUrl(media && media.frontImageUrl)
 						},
 						{
-							label: "Side view",
-							note: getSafeHttpUrl(media && (media.sideImageUrl || media.sideViewImageUrl)) ? "Official monitor side image." : "Placeholder for monitor side view.",
+							label: translateHardcodedText("Side view", "Widok z boku"),
+							note: getSafeHttpUrl(media && (media.sideImageUrl || media.sideViewImageUrl)) ? "Official monitor side image." : translateHardcodedText("Placeholder for monitor side view.", "Miejsce na zdjęcie boku monitora."),
 							imageUrl: getSafeHttpUrl(media && (media.sideImageUrl || media.sideViewImageUrl))
 						},
 						{
-							label: "Ports (bottom view)",
-							note: getSafeHttpUrl(media && media.portsImageUrl) ? "Official monitor ports image." : "Placeholder for monitor bottom ports view.",
+							label: translateHardcodedText("Ports (bottom view)", "Porty (widok z dołu)"),
+							note: getSafeHttpUrl(media && media.portsImageUrl) ? "Official monitor ports image." : translateHardcodedText("Placeholder for monitor bottom ports view.", "Miejsce na zdjęcie portów z dołu."),
 							imageUrl: getSafeHttpUrl(media && media.portsImageUrl)
 						}
 					]
@@ -4698,9 +4783,9 @@ export async function initCallCenterApp(api, options) {
 				const placeholders = isMnt ? [] : safeList(model.galleryPlaceholders);
 				const fallbackItems = isMnt
 					? [
-						{ label: "Front view", note: "Placeholder for monitor front view." },
-						{ label: "Side view", note: "Placeholder for monitor side view." },
-						{ label: "Ports (bottom view)", note: "Placeholder for monitor bottom ports view." }
+						{ label: translateHardcodedText("Front view", "Widok z przodu"), note: translateHardcodedText("Placeholder for monitor front view.", "Miejsce na zdjęcie frontu monitora.") },
+						{ label: translateHardcodedText("Side view", "Widok z boku"), note: translateHardcodedText("Placeholder for monitor side view.", "Miejsce na zdjęcie boku monitora.") },
+						{ label: translateHardcodedText("Ports (bottom view)", "Porty (widok z dołu)"), note: translateHardcodedText("Placeholder for monitor bottom ports view.", "Miejsce na zdjęcie portów z dołu.") }
 					]
 					: [
 						{ label: getModelName(model) + " front view", note: "Placeholder for product photo." },
@@ -4725,7 +4810,7 @@ export async function initCallCenterApp(api, options) {
 					+ "<div class=\"rounded-xl border border-slate-300 bg-slate-50 p-3\">"
 					+ (imageUrl
 						? "<div class=\"overflow-hidden rounded-lg border border-slate-200 bg-white p-1\"><img src=\"" + escapeHtml(displayUrl) + "\" srcset=\"" + escapeHtml(imageSet.srcSet) + "\" sizes=\"" + escapeHtml(imageSet.sizes || "100vw") + "\" alt=\"" + escapeHtml(safeText(item.label, "Model image")) + "\" class=\"js-zoomable-image h-40 w-full cursor-zoom-in object-contain\" loading=\"lazy\" tabindex=\"0\" role=\"button\" data-zoom-src=\"" + escapeHtml(zoomUrl) + "\"></div>"
-						: "<div class=\"rounded-lg border-2 border-dashed border-slate-300 bg-white p-8 text-center text-xs text-slate-500\">Image not available</div>")
+						: "<div class=\"rounded-lg border-2 border-dashed border-slate-300 bg-white p-8 text-center text-xs text-slate-500\">" + translateHardcodedText("Image not available", "Brak zdjęcia") + "</div>")
 					+ "<p class=\"mt-2 text-sm font-semibold text-slate-800\">" + safeText(item.label, "Image placeholder") + "</p>"
 					+ "<p class=\"mt-1 text-xs text-slate-500\">" + safeText(item.note, "") + "</p>"
 					+ "</div>";

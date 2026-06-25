@@ -3523,12 +3523,15 @@ export async function initCallCenterApp(api, options) {
 
 			async function fetchStaticModelMediaData() {
 				const candidates = [
+					"/public/mnt-media-links.json",
+					"./public/mnt-media-links.json",
 					"./mnt-media-links.json",
 					"mnt-media-links.json",
 					"/mnt-media-links.json"
 				];
 
 				if (runtimeApiBaseUrl) {
+					candidates.unshift(runtimeApiBaseUrl + "/public/mnt-media-links.json");
 					candidates.unshift(runtimeApiBaseUrl + "/mnt-media-links.json");
 				}
 

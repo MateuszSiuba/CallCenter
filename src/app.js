@@ -45,6 +45,7 @@ export async function initCallCenterApp(api, options) {
 							}
 
 							const runtimeApiBaseUrl = getRuntimeApiBaseUrl();
+			const supportHubCacheName = "support-hub-cache-v1";
 
 			const storageKeyCountry = "support-hub-country";
 			const storageKeySession = "support-hub-session-v1";
@@ -3613,7 +3614,67 @@ export async function initCallCenterApp(api, options) {
 				return null;
 			}
 
+			function getJsonCacheOptions() {
+				const runtimeConfig = (window && window.SupportHubConfig && typeof window.SupportHubConfig === "object")
+					? window.SupportHubConfig
+					: {};
+				const params = new URLSearchParams(window.location.search || "");
+				return {
+					disabled: Boolean(runtimeConfig.disableJsonCache),
+					refresh: params.has("refreshCache"),
+					clear: params.has("clearSupportHubCache")
+				};
+			}
+
+			async function clearSupportHubJsonCacheIfRequested() {
+				const cacheOptions = getJsonCacheOptions();
+				if (!cacheOptions.clear || !("caches" in window)) {
+					return;
+				}
+
+				try {
+					await caches.delete(supportHubCacheName);
+				} catch (error) {
+					// Cache clearing is best-effort only.
+				}
+			}
+
+			async function readCachedJson(url) {
+				const cacheOptions = getJsonCacheOptions();
+				if (!("caches" in window) || cacheOptions.disabled || cacheOptions.refresh || cacheOptions.clear) {
+					return null;
+				}
+
+				try {
+					const cache = await caches.open(supportHubCacheName);
+					const cachedResponse = await cache.match(url, { ignoreVary: true });
+					return cachedResponse ? cachedResponse.json() : null;
+				} catch (error) {
+					return null;
+				}
+			}
+
+			async function writeJsonResponseToCache(url, response) {
+				const cacheOptions = getJsonCacheOptions();
+				if (!("caches" in window) || cacheOptions.disabled || cacheOptions.clear) {
+					return;
+				}
+
+				try {
+					const cache = await caches.open(supportHubCacheName);
+					await cache.put(url, response.clone());
+				} catch (error) {
+					// Cache API is an optimization only; ignore quota/security failures.
+				}
+			}
+
 			async function fetchJsonWithTimeout(url, timeoutMs) {
+				await clearSupportHubJsonCacheIfRequested();
+				const cachedJson = await readCachedJson(url);
+				if (cachedJson) {
+					return cachedJson;
+				}
+
 				const controller = new AbortController();
 				const timer = window.setTimeout(() => controller.abort(), timeoutMs);
 
@@ -3629,6 +3690,7 @@ export async function initCallCenterApp(api, options) {
 						return null;
 					}
 
+					await writeJsonResponseToCache(url, response);
 					return response.json();
 				} catch (error) {
 					return null;

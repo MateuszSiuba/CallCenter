@@ -53,6 +53,7 @@ export async function initCallCenterApp(api, options) {
 			const countrySelect = document.getElementById("countrySelect");
 			const continueBtn = document.getElementById("continueBtn");
 			const appShell = document.getElementById("appShell");
+			const globalLoader = document.getElementById("global-loader");
 			const splashHint = document.getElementById("splashHint");
 
 			const countryBadge = document.getElementById("countryBadge");
@@ -228,7 +229,20 @@ export async function initCallCenterApp(api, options) {
 				"Dimensions": "Wymiary",
 				"TV With Stand": "TV z podstawą",
 				"TV Without Stand": "TV bez podstawy",
-				"Weight": "Waga"
+				"Weight": "Waga",
+				"Refresh Rate": "Odświeżanie",
+				"USB C": "USB C",
+				"USB Hub": "Hub USB",
+				"VGA cable": "Kabel VGA",
+				"DVI cable": "Kabel DVI",
+				"HDMI cable": "Kabel HDMI",
+				"Displayport Cable": "Kabel DisplayPort",
+				"Mini-DP cable": "Kabel Mini-DP",
+				"Audio Cable": "Kabel audio",
+				"USB-A to B Cable": "Kabel USB-A do B",
+				"USB-C Cable": "Kabel USB-C",
+				"Remote Control": "Pilot",
+				"Cables": "Kable"
 			};
 
 			const plValueTranslations = {
@@ -242,6 +256,85 @@ export async function initCallCenterApp(api, options) {
 				"Headphone out": "Wyjście słuchawkowe"
 			};
 
+			const deTranslations = {
+				"Tilt": "Neigung",
+				"Height Adjust": "Höhenverstellung",
+				"Pivot": "Pivot",
+				"Swivel": "Schwenken",
+				"Speakers": "Lautsprecher",
+				"Speaker power": "Lautsprecherleistung",
+				"Speaker Power": "Lautsprecherleistung",
+				"Webcam": "Webcam",
+				"Resolution": "Auflösung",
+				"Warranty": "Garantie",
+				"Panel": "Paneltyp",
+				"Brand": "Marke",
+				"Platform": "Plattform",
+				"Chassis": "Chassis",
+				"Panel Type": "Paneltyp",
+				"Model Name": "Modellname",
+				"Aspect Ratio": "Seitenverhältnis",
+				"Curved": "Gebogen",
+				"Backlight": "Hintergrundbeleuchtung",
+				"Max Refresh Rate": "Max. Bildwiederholfrequenz",
+				"Response Time Gt G": "Reaktionszeit (GtG)",
+				"Response Time GtG": "Reaktionszeit (GtG)",
+				"Response Time MPRT": "Reaktionszeit (MPRT)",
+				"Brightness (max)": "Helligkeit (max.)",
+				"Contrast (static)": "Kontrast (statisch)",
+				"Touch": "Touchscreen",
+				"Sync Technology": "Synchronisierungstechnologie",
+				"Headphone out": "Kopfhörerausgang",
+				"Audio In": "Audioeingang",
+				"HDMI Ports": "HDMI-Anschlüsse",
+				"Display Port Ports": "DisplayPort-Anschlüsse",
+				"DisplayPort Ports": "DisplayPort-Anschlüsse",
+				"Max VRR Refresh Rate": "Max. VRR-Bildwiederholfrequenz",
+				"Stand": "Standfuß",
+				"Sizes": "Größen",
+				"VESA Standard": "VESA-Standard",
+				"Channels": "Kanäle",
+				"Audio Power": "Audioleistung",
+				"Dimensions": "Abmessungen",
+				"TV With Stand": "TV mit Standfuß",
+				"TV Without Stand": "TV ohne Standfuß",
+				"Weight": "Gewicht",
+				"Refresh Rate": "Bildwiederholfrequenz",
+				"USB C": "USB-C",
+				"USB Hub": "USB-Hub",
+				"VGA cable": "VGA-Kabel",
+				"DVI cable": "DVI-Kabel",
+				"HDMI cable": "HDMI-Kabel",
+				"Displayport Cable": "DisplayPort-Kabel",
+				"Mini-DP cable": "Mini-DP-Kabel",
+				"Audio Cable": "Audiokabel",
+				"USB-A to B Cable": "USB-A-auf-B-Kabel",
+				"USB-C Cable": "USB-C-Kabel",
+				"Remote Control": "Fernbedienung",
+				"Cables": "Kabel"
+			};
+
+			const deValueTranslations = {
+				"Yes": "Ja",
+				"No": "Nein",
+				"Black": "Schwarz",
+				"White": "Weiß",
+				"Silver": "Silber",
+				"HDMI Cable": "HDMI-Kabel",
+				"Displayport Cable": "DisplayPort-Kabel",
+				"Headphone out": "Kopfhörerausgang"
+			};
+
+			const labelTranslationsByLocale = {
+				pl: plTranslations,
+				de: deTranslations
+			};
+
+			const valueTranslationsByLocale = {
+				pl: plValueTranslations,
+				de: deValueTranslations
+			};
+
 			const plSectionTranslations = {
 				"General": "Ogólne",
 				"Display/Panel": "Wyświetlacz / Panel",
@@ -250,6 +343,21 @@ export async function initCallCenterApp(api, options) {
 				"Connectivity": "Łączność",
 				"Dimensions": "Wymiary",
 				"What's in the box": "Co jest w pudełku"
+			};
+
+			const deSectionTranslations = {
+				"General": "Allgemein",
+				"Display/Panel": "Display / Panel",
+				"Physical": "Physisch",
+				"Sound": "Ton",
+				"Connectivity": "Konnektivität",
+				"Dimensions": "Abmessungen",
+				"What's in the box": "Lieferumfang"
+			};
+
+			const sectionTranslationsByLocale = {
+				pl: plSectionTranslations,
+				de: deSectionTranslations
 			};
 
 			const plSpecModalTranslations = {
@@ -522,31 +630,33 @@ export async function initCallCenterApp(api, options) {
 
 			function translateLabel(label) {
 				const text = safeText(label, "");
-				if (getLocaleForCountry(state.countryCode) !== "pl") {
-					return text;
-				}
-
-				return plTranslations[text] || text;
+				const translations = labelTranslationsByLocale[getLocaleForCountry(state.countryCode)] || {};
+				return translations[text] || text;
 			}
 
 			function translateSectionLabel(label) {
 				const text = safeText(label, "");
-				if (state.countryCode !== "PL") {
-					return text;
-				}
-
-				return plSectionTranslations[text] || translateLabel(text);
+				const translations = sectionTranslationsByLocale[getLocaleForCountry(state.countryCode)] || {};
+				return translations[text] || translateLabel(text);
 			}
 
 			function translateValue(value) {
 				const text = safeText(value, "");
-				if (state.countryCode !== "PL") {
+				const locale = getLocaleForCountry(state.countryCode);
+				const translations = valueTranslationsByLocale[locale] || {};
+				if (locale !== "pl" && locale !== "de") {
 					return text;
 				}
 
-				const translated = plValueTranslations[text];
+				const translated = translations[text];
 				if (translated) {
 					return translated;
+				}
+
+				if (locale === "de") {
+					return text
+						.replace(/(\d+)\s*Years?/gi, "$1 Jahre")
+						.replace(/Native/g, "Nativ");
 				}
 
 				return text.replace(/(\d+)\s*Years?/gi, (match, years) => {
@@ -560,8 +670,14 @@ export async function initCallCenterApp(api, options) {
 				}).replace(/Native/g, "Natywnie");
 			}
 
-			function translateHardcodedText(text, polishText) {
-				return state.countryCode === "PL" ? polishText : text;
+			function translateHardcodedText(text, polishText, germanText) {
+				if (state.countryCode === "PL") {
+					return polishText;
+				}
+				if (state.countryCode === "DE") {
+					return germanText || text;
+				}
+				return text;
 			}
 
 			function setText(selector, value) {
@@ -4181,9 +4297,9 @@ export async function initCallCenterApp(api, options) {
 					const mntRefreshRate = getMntRefreshRate(model);
 					const mntWarranty = getMntWarranty(model);
 					const mntBrand = getMntBrand(model);
-					const refreshRateLabel = translateHardcodedText("Refresh Rate:", "Odświeżanie:");
-					const warrantyLabel = translateHardcodedText("Warranty:", "Gwarancja:");
-					const platformLabel = translateHardcodedText("Platform:", "Platforma:");
+					const refreshRateLabel = translateHardcodedText("Refresh Rate:", "Odświeżanie:", "Bildwiederholfrequenz:");
+					const warrantyLabel = translateHardcodedText("Warranty:", "Gwarancja:", "Garantie:");
+					const platformLabel = translateHardcodedText("Platform:", "Platforma:", "Plattform:");
 
 					if (modelKey === state.selectedModelId) {
 						card.classList.add("is-active");
@@ -4375,7 +4491,7 @@ export async function initCallCenterApp(api, options) {
 				if (!isUsefulSpecValue(value, { forBox: true })) {
 					return "";
 				}
-				return "<div class=\"rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700\">" + escapeHtml(label) + "</div>";
+				return "<div class=\"rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700\">" + escapeHtml(translateLabel(label)) + "</div>";
 			}
 
 			function renderMntSpecsPane(model) {
@@ -4604,12 +4720,17 @@ export async function initCallCenterApp(api, options) {
 					const support = isPlainObject(mediaData && mediaData.support) ? mediaData.support : {};
 					const manualLanguageByCountry = {
 						PL: { name: "polish", code: "pl", label: "Instrukcja obsługi" },
-						DE: { name: "german", code: "de", label: "User Manual" },
+						DE: { name: "german", code: "de", label: "Benutzerhandbuch" },
 						UK: { name: "english", code: "en", label: "User Manual" }
 					};
 					const targetManualLanguage = manualLanguageByCountry[state.countryCode] || manualLanguageByCountry.UK;
 					const languageKeyPattern = /\([a-z]{2}\)/i;
 					const languageNoisePattern = /(polish|english|german|danish|bulgarian|dutch|croatian|czech|finnish|greek|italian|hungarian|french|romanian|portuguese|slovenian|slovak|russian|spanish|turkish|swedish|\([a-z]{2}\))/gi;
+					const supportGroupLabels = {
+						manuals: translateHardcodedText("Manuals", "Instrukcje obsługi", "Benutzerhandbücher"),
+						drivers: translateHardcodedText("Drivers & Firmware", "Sterowniki", "Treiber & Software"),
+						others: translateHardcodedText("Declarations & Others", "Deklaracje", "Zertifikate & Sonstiges")
+					};
 
 					function isMassiveUserManualKey(label) {
 						if (!/^user manual/i.test(label)) {
@@ -4624,6 +4745,16 @@ export async function initCallCenterApp(api, options) {
 							.replace(/\d{1,2}\s+[a-zA-Z]+\s+\d{4}/g, "")
 							.replace(/\s+/g, " ")
 							.trim();
+					}
+
+					function getSupportGroup(label) {
+						if (/(driver|firmware|software|i-?menu|g-?menu|setup)/i.test(label)) {
+							return "drivers";
+						}
+						if (/(manual|document|guide|instrukcja|benutzerhandbuch)/i.test(label)) {
+							return "manuals";
+						}
+						return "others";
 					}
 
 					const supportLinks = Object.entries(support)
@@ -4643,7 +4774,8 @@ export async function initCallCenterApp(api, options) {
 								}
 								links.push({
 									label: targetManualLanguage.label,
-									url: href
+									url: href,
+									group: "manuals"
 								});
 								return links;
 							}
@@ -4652,31 +4784,52 @@ export async function initCallCenterApp(api, options) {
 							if (cleanLabel) {
 								links.push({
 									label: cleanLabel,
-									url: href
+									url: href,
+									group: getSupportGroup(cleanLabel)
 								});
 							}
 							return links;
 						}, [])
 						.filter((entry) => entry.label && entry.url);
 
-					const mntLinks = supportLinks.map((entry) => {
-						const isDocument = /(guide|manual|document|setup|instrukcja)/i.test(entry.label);
-						const buttonClasses = isDocument
-							? "inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-white px-3 py-1 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100"
-							: "inline-flex items-center gap-2 rounded-full border border-cyan-300 bg-white px-3 py-1 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100";
-						return ""
+					const groupedSupportLinks = supportLinks.reduce((groups, entry) => {
+						const groupName = entry.group || "others";
+						groups[groupName].push(entry);
+						return groups;
+					}, { manuals: [], drivers: [], others: [] });
+
+					function renderSupportLinkGroup(groupName, buttonClasses) {
+						const entries = groupedSupportLinks[groupName] || [];
+						if (entries.length === 0) {
+							return "";
+						}
+
+						const buttons = entries.map((entry) => ""
 							+ "<a href=\"" + escapeHtml(entry.url) + "\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"" + buttonClasses + "\">"
 							+ escapeHtml(entry.label)
-							+ "</a>";
-					}).join("");
+							+ "</a>"
+						).join("");
+
+						return ""
+							+ "<div class=\"rounded-lg border border-white/70 bg-white/60 p-3\">"
+							+ "<h6 class=\"text-xs font-bold uppercase tracking-[0.18em] text-slate-600\">" + escapeHtml(supportGroupLabels[groupName]) + "</h6>"
+							+ "<div class=\"mt-2 flex flex-wrap gap-2\">" + buttons + "</div>"
+							+ "</div>";
+					}
+
+					const mntLinks = [
+						renderSupportLinkGroup("manuals", "inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-white px-3 py-1 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100"),
+						renderSupportLinkGroup("drivers", "inline-flex items-center gap-2 rounded-full border border-cyan-300 bg-white px-3 py-1 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100"),
+						renderSupportLinkGroup("others", "inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-semibold text-slate-700 transition hover:bg-slate-100")
+					].filter(Boolean).join("");
 
 					return ""
 						+ "<section class=\"rounded-xl border border-emerald-200 bg-emerald-50 p-4\">"
-						+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + translateHardcodedText("Monitor Support Links", "Linki wsparcia technicznego") + "</h5>"
-						+ "<p class=\"mt-1 text-xs text-slate-600\">" + translateHardcodedText("Placeholder links for AOC/Philips monitor support resources.", "Zastępcze linki do zasobów wsparcia AOC/Philips.") + "</p>"
+						+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + translateHardcodedText("Monitor Support Links", "Linki wsparcia technicznego", "Monitor-Support-Links") + "</h5>"
+						+ "<p class=\"mt-1 text-xs text-slate-600\">" + translateHardcodedText("Placeholder links for AOC/Philips monitor support resources.", "Zastępcze linki do zasobów wsparcia AOC/Philips.", "Support-Ressourcen für AOC/Philips-Monitore.") + "</p>"
 						+ (mntLinks
-							? "<div class=\"mt-3 flex flex-wrap gap-2\">" + mntLinks + "</div>"
-							: "<p class=\"mt-3 text-xs text-slate-600\">" + translateHardcodedText("No support files available.", "Brak dostępnych plików wsparcia dla tego modelu.") + "</p>")
+							? "<div class=\"mt-3 grid gap-3\">" + mntLinks + "</div>"
+							: "<p class=\"mt-3 text-xs text-slate-600\">" + translateHardcodedText("No support files available.", "Brak dostępnych plików wsparcia dla tego modelu.", "Keine Support-Dateien für dieses Modell verfügbar.") + "</p>")
 						+ "</section>";
 				}
 
@@ -4918,8 +5071,8 @@ export async function initCallCenterApp(api, options) {
 				const platform = getModelPlatform(model);
 				const brand = safeText(model && model.brand, "");
 				const hardwareBadge = isMntModel(model)
-					? (brand || translateHardcodedText("Brand: -", "Marka: -"))
-					: (platform || translateHardcodedText("Platform: -", "Platforma: -"));
+					? (brand || translateHardcodedText("Brand: -", "Marka: -", "Marke: -"))
+					: (platform || translateHardcodedText("Platform: -", "Platforma: -", "Plattform: -"));
 				if (detailTypeLabel) {
 					detailTypeLabel.textContent = isMntModel(model) ? t("mntModelDetail") : t("tvModelDetail");
 				}
@@ -5416,6 +5569,17 @@ export async function initCallCenterApp(api, options) {
 				state.printPreview = enabled;
 				document.body.classList.toggle("print-preview", enabled);
 				printModeBtn.textContent = enabled ? t("exitPrintMode") : t("printMode");
+			}
+
+			function hideGlobalLoader() {
+				if (!globalLoader || globalLoader.classList.contains("hidden")) {
+					return;
+				}
+
+				globalLoader.classList.add("opacity-0", "pointer-events-none");
+				window.setTimeout(() => {
+					globalLoader.classList.add("hidden");
+				}, 320);
 			}
 
 			function showDashboard(options) {
@@ -6034,6 +6198,7 @@ export async function initCallCenterApp(api, options) {
 			initializeData(persistedSession)
 				.then(() => {
 					setContinueButtonState("ready");
+					hideGlobalLoader();
 					if (shouldAutoResume) {
 						showDashboard({ instant: true });
 						replaceCurrentViewHistoryState();
@@ -6043,6 +6208,7 @@ export async function initCallCenterApp(api, options) {
 					console.error("Failed to initialize Support Hub data:", error);
 					setContinueButtonState("error");
 					splashHint.textContent = t("loadError");
+					hideGlobalLoader();
 					returnToSplash();
 				});
 		}

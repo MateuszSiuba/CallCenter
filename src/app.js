@@ -1348,6 +1348,61 @@ export async function initCallCenterApp(api, options) {
 					return looseKey || desiredKey;
 				}
 
+				function mirrorCoreAdminValue(model, pathParts, nextValue) {
+					if (!model || path[0] === "__media") {
+						return;
+					}
+					const finalPathKey = safeText(pathParts[pathParts.length - 1], "");
+					const normalizedFinalKey = normalizeLookupKey(finalPathKey);
+					if (!isPlainObject(model.specs)) {
+						model.specs = {};
+					}
+
+					if (normalizedFinalKey === normalizeLookupKey("platform")) {
+						model.platform = nextValue;
+						model.specs.platform = nextValue;
+						if (!isPlainObject(model.platformChassis)) {
+							model.platformChassis = {};
+						}
+						model.platformChassis.platform = nextValue;
+						if (model.__bundle && isPlainObject(model.__bundle.platformChassis)) {
+							model.__bundle.platformChassis.platform = nextValue;
+						}
+						const lookupKey = safeText(getModelName(model), "").trim().split("/")[0];
+						if (lookupKey && state.modelPlatformChassisLookup instanceof Map) {
+							const current = state.modelPlatformChassisLookup.get(lookupKey) || {};
+							state.modelPlatformChassisLookup.set(lookupKey, { ...current, platform: nextValue });
+						}
+					}
+
+					if (normalizedFinalKey === normalizeLookupKey("chassis")) {
+						model.chassis = nextValue;
+						model.specs.chassis = nextValue;
+						if (!isPlainObject(model.platformChassis)) {
+							model.platformChassis = {};
+						}
+						model.platformChassis.chassis = nextValue;
+						if (model.__bundle && isPlainObject(model.__bundle.platformChassis)) {
+							model.__bundle.platformChassis.chassis = nextValue;
+						}
+						const lookupKey = safeText(getModelName(model), "").trim().split("/")[0];
+						if (lookupKey && state.modelPlatformChassisLookup instanceof Map) {
+							const current = state.modelPlatformChassisLookup.get(lookupKey) || {};
+							state.modelPlatformChassisLookup.set(lookupKey, { ...current, chassis: nextValue });
+						}
+					}
+
+					if (normalizedFinalKey === normalizeLookupKey("osProfileId") || normalizedFinalKey === normalizeLookupKey("os")) {
+						model.osProfileId = nextValue;
+						model.os = nextValue;
+					}
+
+					if (normalizedFinalKey === normalizeLookupKey("panelType") || normalizedFinalKey === normalizeLookupKey("Panel")) {
+						model.panelType = nextValue;
+						model.specs.panelType = nextValue;
+					}
+				}
+
 				let cursor = target;
 				usablePath.slice(0, -1).forEach((key) => {
 					const existingKey = resolveExistingObjectKey(cursor, key);
@@ -1358,6 +1413,7 @@ export async function initCallCenterApp(api, options) {
 				});
 				const finalKey = resolveExistingObjectKey(cursor, usablePath[usablePath.length - 1]);
 				cursor[finalKey] = value;
+				mirrorCoreAdminValue(target, usablePath, value);
 				setAdminDirty(true);
 				return true;
 			}
@@ -1444,7 +1500,9 @@ export async function initCallCenterApp(api, options) {
 				}
 
 				function commit() {
-					if (setNestedAdminValue(path, input.value.trim())) {
+					const control = editor.querySelector("input, select");
+					const nextValue = control && "value" in control ? safeText(control.value, "") : safeText(input.value, "");
+					if (setNestedAdminValue(path, nextValue)) {
 						updateAdminModelInCollections(state.currentModel);
 						if (typeof onCommit === "function") {
 							onCommit();
@@ -3134,9 +3192,24 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			function getModelChassis(model) {
+				const rootValue = safeText(model && model.chassis, "");
+				if (rootValue) {
+					return rootValue;
+				}
+
 				const directValue = safeText(getModelSpecs(model).chassis, "");
 				if (directValue) {
 					return directValue;
+				}
+
+				const platformChassisValue = safeText(model && model.platformChassis && model.platformChassis.chassis, "");
+				if (platformChassisValue) {
+					return platformChassisValue;
+				}
+
+				const bundleValue = safeText(model && model.__bundle && model.__bundle.platformChassis && model.__bundle.platformChassis.chassis, "");
+				if (bundleValue) {
+					return bundleValue;
 				}
 
 				const lookupValue = getModelLookupMeta(model);
@@ -3144,9 +3217,24 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			function getModelPlatform(model) {
+				const rootValue = safeText(model && model.platform, "");
+				if (rootValue) {
+					return rootValue;
+				}
+
 				const directValue = safeText(getModelSpecs(model).platform, "");
 				if (directValue) {
 					return directValue;
+				}
+
+				const platformChassisValue = safeText(model && model.platformChassis && model.platformChassis.platform, "");
+				if (platformChassisValue) {
+					return platformChassisValue;
+				}
+
+				const bundleValue = safeText(model && model.__bundle && model.__bundle.platformChassis && model.__bundle.platformChassis.platform, "");
+				if (bundleValue) {
+					return bundleValue;
 				}
 
 				const lookupValue = getModelLookupMeta(model);

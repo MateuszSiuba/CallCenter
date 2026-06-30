@@ -6,6 +6,10 @@ const cors = require("cors");
 const { applyMirroredMediaUrls } = require("./mediaMirror");
 const { searchModelsHandler } = require("./searchModelsController");
 const {
+  issueAdminToken,
+  validateCredentials
+} = require("./adminAuth");
+const {
   loadBootstrapData,
   loadModelByName,
   loadPoliciesData,
@@ -136,6 +140,28 @@ function toText(value) {
 app.use(cors({ origin: buildCorsOriginRule(allowedOrigin) }));
 app.use(express.json({ limit: "2mb" }));
 app.use("/media", express.static(path.join(__dirname, "..", "public", "media")));
+
+function adminLoginHandler(req, res) {
+  const username = toText(req.body && req.body.username);
+  const password = toText(req.body && req.body.password);
+
+  if (!validateCredentials(username, password)) {
+    res.status(401).json({
+      ok: false,
+      error: "ADMIN_LOGIN_FAILED",
+      message: "Invalid admin username or password"
+    });
+    return;
+  }
+
+  res.json({
+    ok: true,
+    token: issueAdminToken(username)
+  });
+}
+
+app.post("/api/admin/login", adminLoginHandler);
+app.post("/api/auth/login", adminLoginHandler);
 
 function asHttpError(error) {
   const message = error && error.message ? String(error.message) : "Unknown error";

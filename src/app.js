@@ -1335,14 +1335,29 @@ export async function initCallCenterApp(api, options) {
 					return false;
 				}
 
+				function resolveExistingObjectKey(object, desiredKey) {
+					if (!isPlainObject(object)) {
+						return desiredKey;
+					}
+					const normalizedDesired = normalizeLookupKey(desiredKey);
+					const exactKey = Object.keys(object).find((candidate) => candidate === desiredKey);
+					if (exactKey) {
+						return exactKey;
+					}
+					const looseKey = Object.keys(object).find((candidate) => normalizeLookupKey(candidate) === normalizedDesired);
+					return looseKey || desiredKey;
+				}
+
 				let cursor = target;
 				usablePath.slice(0, -1).forEach((key) => {
-					if (!isPlainObject(cursor[key])) {
-						cursor[key] = {};
+					const existingKey = resolveExistingObjectKey(cursor, key);
+					if (!isPlainObject(cursor[existingKey])) {
+						cursor[existingKey] = {};
 					}
-					cursor = cursor[key];
+					cursor = cursor[existingKey];
 				});
-				cursor[usablePath[usablePath.length - 1]] = value;
+				const finalKey = resolveExistingObjectKey(cursor, usablePath[usablePath.length - 1]);
+				cursor[finalKey] = value;
 				setAdminDirty(true);
 				return true;
 			}
@@ -1363,7 +1378,106 @@ export async function initCallCenterApp(api, options) {
 
 			function adminEditableValue(path, value, label) {
 				const displayValue = translateValue(safeText(value, "-"));
-				return "<span class=\"js-admin-value\">" + escapeHtml(displayValue) + "</span>" + adminEditButton(path, label);
+				return "<span class=\"js-admin-value\" data-admin-value=\"" + escapeHtml(safeText(value, "-")) + "\">" + escapeHtml(displayValue) + "</span>" + adminEditButton(path, label);
+			}
+
+			function getAdminEditableOptions(label, path) {
+				const pathLabel = Array.isArray(path) && path.length > 0 ? safeText(path[path.length - 1], "") : "";
+				const normalizedLabel = normalizeLookupKey(label || pathLabel);
+				const booleanFields = ["HDR", "Touch", "Curved", "Built-in Speakers", "Pivot"];
+				if (booleanFields.some((field) => normalizeLookupKey(field) === normalizedLabel)) {
+					return ["Yes", "No", "-"];
+				}
+				if (normalizeLookupKey("OS") === normalizedLabel || normalizeLookupKey("osProfileId") === normalizedLabel) {
+					return ["Google TV", "Titan OS", "Android TV"];
+				}
+				if (["Panel Type", "Panel", "panelType"].some((field) => normalizeLookupKey(field) === normalizedLabel)) {
+					return ["OLED", "Mini-LED", "IPS", "VA", "TN", "QD-OLED"];
+				}
+				if (normalizeLookupKey("Brand") === normalizedLabel || normalizeLookupKey("brand") === normalizedLabel) {
+					return ["Philips", "AOC"];
+				}
+				return null;
+			}
+
+			function startAdminInlineEdit(trigger, onCommit) {
+				if (!(trigger instanceof Element) || trigger.dataset.editing === "true") {
+					return;
+				}
+				const path = parseAdminPath(trigger.getAttribute("data-admin-path"));
+				const titleLabel = safeText(trigger.getAttribute("title"), "").replace(/^Edit\s+/i, "");
+				const label = safeText(trigger.getAttribute("data-admin-label"), titleLabel || path[path.length - 1] || "value");
+				const valueElement = trigger.parentElement && trigger.parentElement.querySelector(".js-admin-value");
+				const currentValue = safeText(valueElement && valueElement.getAttribute("data-admin-value"), safeText(valueElement && valueElement.textContent, ""));
+				const options = getAdminEditableOptions(label, path);
+				const editor = document.createElement("span");
+				editor.className = "js-admin-inline-editor ml-2 inline-flex items-center gap-1 align-middle";
+
+				const input = options ? document.createElement("select") : document.createElement("input");
+				input.className = "rounded-md border border-cyan-300 bg-white px-2 py-1 text-xs font-semibold text-slate-800 shadow-sm outline-none focus:ring-2 focus:ring-cyan-200";
+				if (options) {
+					options.forEach((optionValue) => {
+						const option = document.createElement("option");
+						option.value = optionValue;
+						option.textContent = optionValue;
+						input.appendChild(option);
+					});
+				} else {
+					input.type = "text";
+				}
+				input.value = options && !options.includes(currentValue) ? options[0] : currentValue;
+
+				const saveButton = document.createElement("button");
+				saveButton.type = "button";
+				saveButton.className = "rounded-md bg-emerald-600 px-2 py-1 text-xs font-bold text-white hover:bg-emerald-500";
+				saveButton.textContent = "Save";
+
+				const cancelButton = document.createElement("button");
+				cancelButton.type = "button";
+				cancelButton.className = "rounded-md border border-slate-300 bg-white px-2 py-1 text-xs font-bold text-slate-600 hover:bg-slate-50";
+				cancelButton.textContent = "Cancel";
+
+				function cleanup() {
+					trigger.dataset.editing = "false";
+					trigger.classList.remove("hidden");
+					editor.remove();
+				}
+
+				function commit() {
+					if (setNestedAdminValue(path, input.value.trim())) {
+						updateAdminModelInCollections(state.currentModel);
+						if (typeof onCommit === "function") {
+							onCommit();
+						} else {
+							refreshCurrentAdminDetail();
+						}
+					}
+					cleanup();
+				}
+
+				saveButton.addEventListener("click", commit);
+				cancelButton.addEventListener("click", cleanup);
+				input.addEventListener("keydown", (event) => {
+					if (event.key === "Enter") {
+						event.preventDefault();
+						commit();
+					}
+					if (event.key === "Escape") {
+						event.preventDefault();
+						cleanup();
+					}
+				});
+
+				editor.appendChild(input);
+				editor.appendChild(saveButton);
+				editor.appendChild(cancelButton);
+				trigger.dataset.editing = "true";
+				trigger.classList.add("hidden");
+				trigger.insertAdjacentElement("afterend", editor);
+				input.focus();
+				if (input instanceof HTMLInputElement) {
+					input.select();
+				}
 			}
 
 			function refreshCurrentAdminDetail() {
@@ -6249,13 +6363,9 @@ export async function initCallCenterApp(api, options) {
 					if (adminEditTrigger && state.isAdmin) {
 						event.preventDefault();
 						event.stopPropagation();
-						const path = parseAdminPath(adminEditTrigger.getAttribute("data-admin-path"));
-						const currentText = safeText(adminEditTrigger.parentElement && adminEditTrigger.parentElement.querySelector(".js-admin-value") && adminEditTrigger.parentElement.querySelector(".js-admin-value").textContent, "");
-						const nextValue = window.prompt("Update value", currentText === "-" ? "" : currentText);
-						if (nextValue !== null && setNestedAdminValue(path, nextValue.trim())) {
-							updateAdminModelInCollections(state.currentModel);
+						startAdminInlineEdit(adminEditTrigger, () => {
 							refreshCurrentAdminDetail();
-						}
+						});
 						return;
 					}
 
@@ -6553,14 +6663,10 @@ export async function initCallCenterApp(api, options) {
 					if (adminEditTrigger && state.isAdmin) {
 						event.preventDefault();
 						event.stopPropagation();
-						const path = parseAdminPath(adminEditTrigger.getAttribute("data-admin-path"));
-						const currentText = safeText(adminEditTrigger.parentElement && adminEditTrigger.parentElement.querySelector(".js-admin-value") && adminEditTrigger.parentElement.querySelector(".js-admin-value").textContent, "");
-						const nextValue = window.prompt("Update value", currentText === "-" ? "" : currentText);
-						if (nextValue !== null && setNestedAdminValue(path, nextValue.trim())) {
-							updateAdminModelInCollections(state.currentModel);
+						startAdminInlineEdit(adminEditTrigger, () => {
 							renderSpecDetailsModalFromContext();
 							refreshCurrentAdminDetail();
-						}
+						});
 						return;
 					}
 

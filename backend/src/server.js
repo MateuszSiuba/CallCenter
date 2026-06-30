@@ -7,6 +7,7 @@ const { applyMirroredMediaUrls } = require("./mediaMirror");
 const { searchModelsHandler } = require("./searchModelsController");
 const {
   issueAdminToken,
+  requireAdminAuth,
   validateCredentials
 } = require("./adminAuth");
 const {
@@ -162,6 +163,25 @@ function adminLoginHandler(req, res) {
 
 app.post("/api/admin/login", adminLoginHandler);
 app.post("/api/auth/login", adminLoginHandler);
+
+app.get("/api/admin/models", requireAdminAuth, async (req, res) => {
+  try {
+    const data = await loadBootstrapData();
+    res.json({
+      ok: true,
+      items: data.ModelsData || [],
+      ModelsData: data.ModelsData || [],
+      ModelPlatformChassisData: data.ModelPlatformChassisData || [],
+      ModelMediaData: applyMirroredMediaUrls(data.ModelMediaData, getPublicBaseUrl(req)) || {}
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      error: "ADMIN_MODELS_LOAD_FAILED",
+      message: error && error.message ? error.message : "Failed to load admin models"
+    });
+  }
+});
 
 function asHttpError(error) {
   const message = error && error.message ? String(error.message) : "Unknown error";

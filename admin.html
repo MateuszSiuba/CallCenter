@@ -97,18 +97,75 @@
 
         <form id="modelForm" class="mt-6 space-y-7">
           <section>
-            <h3 class="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">Core Specs</h3>
+            <h3 class="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">Core Hardware</h3>
             <div class="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               <label class="block"><span class="text-sm font-semibold text-slate-700">Model Name</span><input id="modelNameInput" type="text" placeholder="27P2Q" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
               <label class="block"><span class="text-sm font-semibold text-slate-700">Brand</span><input id="brandInput" type="text" placeholder="Philips / AOC" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
               <label class="block"><span class="text-sm font-semibold text-slate-700">Year</span><input id="yearInput" type="number" min="2000" max="2100" placeholder="2026" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Refresh Rate</span><input id="refreshRateInput" type="text" placeholder="144Hz" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
               <label class="block"><span class="text-sm font-semibold text-slate-700">Panel Type</span><input id="panelTypeInput" type="text" placeholder="IPS / OLED / MiniLED" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
               <label class="block"><span class="text-sm font-semibold text-slate-700">Resolution</span><input id="resolutionInput" type="text" placeholder="2560x1440" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block"><span class="text-sm font-semibold text-slate-700">Refresh Rate</span><input id="refreshRateInput" type="text" placeholder="144Hz" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
               <label class="block"><span class="text-sm font-semibold text-slate-700">Warranty</span><input id="warrantyInput" type="text" placeholder="5 Years" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Platform</span><input id="platformInput" type="text" placeholder="TV platform / monitor family" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Chassis</span><input id="chassisInput" type="text" placeholder="TPM..." class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block" data-module-field="TV"><span class="text-sm font-semibold text-slate-700">Smart TV OS</span><input id="osInput" type="text" placeholder="Titan OS / Google TV" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block" data-module-field="TV"><span class="text-sm font-semibold text-slate-700">Platform</span><input id="platformInput" type="text" placeholder="MT9972" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block" data-module-field="TV"><span class="text-sm font-semibold text-slate-700">Chassis</span><input id="chassisInput" type="text" placeholder="TPM..." class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block"><span class="text-sm font-semibold text-slate-700">Aspect Ratio</span><input id="aspectRatioInput" type="text" placeholder="16:9" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block"><span class="text-sm font-semibold text-slate-700">Backlight</span><input id="backlightInput" type="text" placeholder="WLED" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block"><span class="text-sm font-semibold text-slate-700">Brightness (max)</span><input id="brightnessInput" type="text" placeholder="350" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block"><span class="text-sm font-semibold text-slate-700">Contrast (static)</span><input id="contrastInput" type="text" placeholder="1500:1" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
             </div>
+          </section>
+
+          <section data-module-field="MNT">
+            <h3 class="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">Physical Details</h3>
+            <div class="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              <label class="block"><span class="text-sm font-semibold text-slate-700">Tilt</span><input id="tiltInput" type="text" placeholder="-5/30°" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block"><span class="text-sm font-semibold text-slate-700">Height Adjust</span><input id="heightAdjustInput" type="text" placeholder="150mm" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block"><span class="text-sm font-semibold text-slate-700">Pivot</span><input id="pivotInput" type="text" placeholder="Yes / 90°" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block"><span class="text-sm font-semibold text-slate-700">Swivel</span><input id="swivelInput" type="text" placeholder="-180/180°" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block"><span class="text-sm font-semibold text-slate-700">VESA Wallmount</span><input id="vesaInput" type="text" placeholder="100 x 100" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block"><span class="text-sm font-semibold text-slate-700">Bezel Type</span><input id="bezelTypeInput" type="text" placeholder="4 side like" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block"><span class="text-sm font-semibold text-slate-700">Webcam</span><input id="webcamInput" type="text" placeholder="No" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+            </div>
+          </section>
+
+          <section>
+            <h3 class="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">Audio Specifications</h3>
+            <div class="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              <label class="block"><span class="text-sm font-semibold text-slate-700">Speakers / Channels</span><input id="speakersInput" type="text" placeholder="Yes / 2.1 CH" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block"><span class="text-sm font-semibold text-slate-700">Speaker Power / Audio Power</span><input id="speakerPowerInput" type="text" placeholder="2W x 2 / 80W" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+            </div>
+          </section>
+
+          <section>
+            <h3 class="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">Connectivity</h3>
+            <div class="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              <label class="block"><span class="text-sm font-semibold text-slate-700">HDMI</span><input id="hdmiInput" type="text" placeholder="2x 2.1 / 1x 2.0" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block"><span class="text-sm font-semibold text-slate-700">DisplayPort</span><input id="dpInput" type="text" placeholder="1x 1.4" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block"><span class="text-sm font-semibold text-slate-700">USB-C</span><input id="usbCInput" type="text" placeholder="Yes / No" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block"><span class="text-sm font-semibold text-slate-700">USB Hub</span><input id="usbHubInput" type="text" placeholder="Yes / No" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block" data-module-field="MNT"><span class="text-sm font-semibold text-slate-700">KVM Switch</span><input id="kvmInput" type="text" placeholder="No" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block" data-module-field="MNT"><span class="text-sm font-semibold text-slate-700">Adaptive Sync</span><input id="adaptiveSyncInput" type="text" placeholder="FreeSync Premium" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block" data-module-field="MNT"><span class="text-sm font-semibold text-slate-700">RJ45</span><input id="rj45Input" type="text" placeholder="No" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block"><span class="text-sm font-semibold text-slate-700">Headphone out / Audio In</span><input id="audioIoInput" type="text" placeholder="Audio-in, Headphone out" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block" data-module-field="TV"><span class="text-sm font-semibold text-slate-700">WiFi</span><input id="wifiInput" type="text" placeholder="Wi-Fi 6" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block" data-module-field="TV"><span class="text-sm font-semibold text-slate-700">Bluetooth</span><input id="bluetoothInput" type="text" placeholder="Bluetooth 5.2" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+            </div>
+          </section>
+
+          <section data-module-field="MNT">
+            <h3 class="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">What's in the box</h3>
+            <div class="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              <label class="block"><span class="text-sm font-semibold text-slate-700">HDMI cable</span><input id="boxHdmiCableInput" type="text" placeholder="1.8m" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block"><span class="text-sm font-semibold text-slate-700">DisplayPort Cable</span><input id="boxDpCableInput" type="text" placeholder="1.8m" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block"><span class="text-sm font-semibold text-slate-700">USB-A to B Cable</span><input id="boxUsbABInput" type="text" placeholder="0 = No" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+              <label class="block"><span class="text-sm font-semibold text-slate-700">USB-C Cable</span><input id="boxUsbCInput" type="text" placeholder="0 = No" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
+            </div>
+          </section>
+
+          <section>
+            <h3 class="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">Knowledge Features</h3>
+            <textarea id="knowledgeFeaturesInput" rows="3" placeholder="One feature per line" class="mt-3 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></textarea>
           </section>
 
           <section>
@@ -135,3 +192,4 @@
   <script type="module" src="./src/admin.js"></script>
 </body>
 </html>
+

@@ -33,8 +33,37 @@ const els = {
   panelTypeInput: document.getElementById("panelTypeInput"),
   resolutionInput: document.getElementById("resolutionInput"),
   warrantyInput: document.getElementById("warrantyInput"),
+  osInput: document.getElementById("osInput"),
   platformInput: document.getElementById("platformInput"),
   chassisInput: document.getElementById("chassisInput"),
+  aspectRatioInput: document.getElementById("aspectRatioInput"),
+  backlightInput: document.getElementById("backlightInput"),
+  brightnessInput: document.getElementById("brightnessInput"),
+  contrastInput: document.getElementById("contrastInput"),
+  tiltInput: document.getElementById("tiltInput"),
+  heightAdjustInput: document.getElementById("heightAdjustInput"),
+  pivotInput: document.getElementById("pivotInput"),
+  swivelInput: document.getElementById("swivelInput"),
+  vesaInput: document.getElementById("vesaInput"),
+  bezelTypeInput: document.getElementById("bezelTypeInput"),
+  webcamInput: document.getElementById("webcamInput"),
+  speakersInput: document.getElementById("speakersInput"),
+  speakerPowerInput: document.getElementById("speakerPowerInput"),
+  hdmiInput: document.getElementById("hdmiInput"),
+  dpInput: document.getElementById("dpInput"),
+  usbCInput: document.getElementById("usbCInput"),
+  usbHubInput: document.getElementById("usbHubInput"),
+  kvmInput: document.getElementById("kvmInput"),
+  adaptiveSyncInput: document.getElementById("adaptiveSyncInput"),
+  rj45Input: document.getElementById("rj45Input"),
+  audioIoInput: document.getElementById("audioIoInput"),
+  wifiInput: document.getElementById("wifiInput"),
+  bluetoothInput: document.getElementById("bluetoothInput"),
+  boxHdmiCableInput: document.getElementById("boxHdmiCableInput"),
+  boxDpCableInput: document.getElementById("boxDpCableInput"),
+  boxUsbABInput: document.getElementById("boxUsbABInput"),
+  boxUsbCInput: document.getElementById("boxUsbCInput"),
+  knowledgeFeaturesInput: document.getElementById("knowledgeFeaturesInput"),
   frontImageInput: document.getElementById("frontImageInput"),
   sideImageInput: document.getElementById("sideImageInput"),
   portsImageInput: document.getElementById("portsImageInput"),
@@ -58,6 +87,26 @@ function toText(value) {
 
 function isPlainObject(value) {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function parseLines(value) {
+  return String(value || "")
+    .split(/\r?\n/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function setInput(input, value) {
+  if (input) {
+    input.value = toText(value);
+  }
+}
+
+function setModuleFieldVisibility() {
+  document.querySelectorAll("[data-module-field]").forEach((element) => {
+    const targetModule = toText(element.getAttribute("data-module-field")).toUpperCase();
+    element.classList.toggle("hidden", targetModule && targetModule !== state.activeModule);
+  });
 }
 
 function showToast(message, type = "success") {
@@ -181,6 +230,7 @@ function setActiveModule(moduleName) {
     tab.classList.toggle("text-brand-700", isActive);
     tab.classList.toggle("text-slate-600", !isActive);
   });
+  setModuleFieldVisibility();
   renderModelOptions();
   clearForm();
 }
@@ -225,13 +275,10 @@ function clearForm() {
   state.selectedModel = null;
   state.selectedModelName = "";
   els.editorTitle.textContent = "Add New " + state.activeModule + " Model";
-  [
-    els.modelNameInput, els.brandInput, els.yearInput, els.refreshRateInput, els.panelTypeInput,
-    els.resolutionInput, els.warrantyInput, els.platformInput, els.chassisInput,
-    els.frontImageInput, els.sideImageInput, els.portsImageInput
-  ].forEach((input) => { input.value = ""; });
+  document.querySelectorAll("#modelForm input, #modelForm textarea").forEach((input) => { input.value = ""; });
   els.supportLinksList.innerHTML = "";
   addSupportRow();
+  setModuleFieldVisibility();
 }
 
 function readModelValue(model, paths) {
@@ -244,6 +291,27 @@ function readModelValue(model, paths) {
   return "";
 }
 
+function readSpecValue(model, categoryName, keys) {
+  const specs = isPlainObject(model && model.specs) ? model.specs : {};
+  const categoryVariants = [
+    specs[categoryName],
+    specs[categoryName && categoryName.toLowerCase()],
+    specs.technicalByCategory && specs.technicalByCategory[categoryName],
+    specs.rawSource && specs.rawSource[categoryName]
+  ].filter(isPlainObject);
+
+  for (const key of keys) {
+    const direct = toText(specs[key]);
+    if (direct) return direct;
+    for (const category of categoryVariants) {
+      const value = toText(category[key]);
+      if (value) return value;
+    }
+  }
+
+  return "";
+}
+
 function fillFormFromBundle(bundle) {
   const model = isPlainObject(bundle && bundle.model) ? bundle.model : bundle;
   const specs = isPlainObject(model && model.specs) ? model.specs : {};
@@ -253,22 +321,52 @@ function fillFormFromBundle(bundle) {
   state.selectedModel = model;
   state.selectedModelName = getModelName(model);
   els.editorTitle.textContent = "Editing " + state.selectedModelName;
-  els.modelNameInput.value = state.selectedModelName;
-  els.brandInput.value = readModelValue(model, [["brand"], ["specs", "brand"]]);
-  els.yearInput.value = readModelValue(model, [["year"]]);
-  els.refreshRateInput.value = readModelValue(model, [["vrrMaxRefreshRate"], ["specs", "maxRefreshRate"], ["specs", "vrrMaxRefreshRate"]]);
-  els.panelTypeInput.value = readModelValue(model, [["panelType"], ["panel"], ["specs", "panelType"], ["specs", "panel"]]);
-  els.resolutionInput.value = readModelValue(model, [["resolution"], ["specs", "resolution"]]);
-  els.warrantyInput.value = readModelValue(model, [["warranty"], ["specs", "warranty"]]);
-  els.platformInput.value = readModelValue(bundle, [["platformChassis", "platform"], ["platform"]]);
-  els.chassisInput.value = readModelValue(bundle, [["platformChassis", "chassis"], ["chassis"]]);
-  els.frontImageInput.value = readModelValue(mediaEntry, [["frontImageUrl"], ["media", "frontImageUrl"]]);
-  els.sideImageInput.value = readModelValue(mediaEntry, [["sideImageUrl"], ["media", "sideImageUrl"]]);
-  els.portsImageInput.value = readModelValue(mediaEntry, [["portsImageUrl"], ["media", "portsImageUrl"]]);
+  setInput(els.modelNameInput, state.selectedModelName);
+  setInput(els.brandInput, readModelValue(model, [["brand"], ["specs", "brand"]]));
+  setInput(els.yearInput, readModelValue(model, [["year"]]));
+  setInput(els.refreshRateInput, readModelValue(model, [["vrrMaxRefreshRate"], ["specs", "maxRefreshRate"], ["specs", "vrrMaxRefreshRate"]]) || readSpecValue(model, "Display/Panel", ["Max Refresh Rate", "Refresh Rate"]));
+  setInput(els.panelTypeInput, readModelValue(model, [["panelType"], ["panel"], ["specs", "panelType"], ["specs", "panel"]]) || readSpecValue(model, "Display/Panel", ["Panel", "Panel Type"]));
+  setInput(els.resolutionInput, readModelValue(model, [["resolution"], ["specs", "resolution"]]) || readSpecValue(model, "Display/Panel", ["Resolution"]));
+  setInput(els.warrantyInput, readModelValue(model, [["warranty"], ["specs", "warranty"]]) || readSpecValue(model, "Display/Panel", ["Warranty"]));
+  setInput(els.osInput, readModelValue(model, [["osProfileId"], ["os"], ["specs", "os"]]));
+  setInput(els.platformInput, readModelValue(bundle, [["platformChassis", "platform"], ["platform"]]));
+  setInput(els.chassisInput, readModelValue(bundle, [["platformChassis", "chassis"], ["chassis"]]));
+  setInput(els.aspectRatioInput, readSpecValue(model, "Display/Panel", ["Aspect Ratio", "aspectRatio"]));
+  setInput(els.backlightInput, readSpecValue(model, "Display/Panel", ["Backlight", "backlight"]));
+  setInput(els.brightnessInput, readSpecValue(model, "Display/Panel", ["Brightness (max)", "brightnessMax", "brightness"]));
+  setInput(els.contrastInput, readSpecValue(model, "Display/Panel", ["Contrast (static)", "contrastStatic", "contrast"]));
+  setInput(els.tiltInput, readSpecValue(model, "Physical", ["Tilt", "tilt"]));
+  setInput(els.heightAdjustInput, readSpecValue(model, "Physical", ["Height Adjust", "heightAdjust"]));
+  setInput(els.pivotInput, readSpecValue(model, "Physical", ["Pivot", "pivot"]));
+  setInput(els.swivelInput, readSpecValue(model, "Physical", ["Swivel", "swivel"]));
+  setInput(els.vesaInput, readSpecValue(model, "Physical", ["VESA Wallmount", "VESA", "vesa"]));
+  setInput(els.bezelTypeInput, readSpecValue(model, "Physical", ["Bezel Type", "bezelType"]));
+  setInput(els.webcamInput, readSpecValue(model, "Physical", ["Webcam", "webcam"]));
+  setInput(els.speakersInput, readSpecValue(model, "Sound", ["Speakers", "speakers"]) || readModelValue(model, [["audioChannels"]]));
+  setInput(els.speakerPowerInput, readSpecValue(model, "Sound", ["Speaker power", "Speaker Power", "speakerPower"]) || readModelValue(model, [["audioPower"]]));
+  setInput(els.hdmiInput, readSpecValue(model, "Connectivity", ["HDMI Ports", "HDMI", "hdmiPorts"]));
+  setInput(els.dpInput, readSpecValue(model, "Connectivity", ["DisplayPort Ports", "Display Port Ports", "DP", "dpPorts"]));
+  setInput(els.usbCInput, readSpecValue(model, "Connectivity", ["USB-C", "USB C", "usbC"]));
+  setInput(els.usbHubInput, readSpecValue(model, "Connectivity", ["USB Hub", "usbHub"]));
+  setInput(els.kvmInput, readSpecValue(model, "Connectivity", ["Built-in KVM", "KVM Switch", "kvmSwitch"]));
+  setInput(els.adaptiveSyncInput, readSpecValue(model, "Connectivity", ["Adaptive Sync", "Sync Technology", "syncTechnology"]));
+  setInput(els.rj45Input, readSpecValue(model, "Connectivity", ["RJ45", "rj45"]));
+  setInput(els.audioIoInput, readSpecValue(model, "Connectivity", ["Headphone out/Audio In", "Audio", "audio"]));
+  setInput(els.wifiInput, readModelValue(model, [["wifiStandard"], ["specs", "wifiStandard"]]));
+  setInput(els.bluetoothInput, readModelValue(model, [["bluetoothVersion"], ["specs", "bluetoothVersion"]]));
+  setInput(els.boxHdmiCableInput, readSpecValue(model, "What's in the box", ["HDMI cable"]));
+  setInput(els.boxDpCableInput, readSpecValue(model, "What's in the box", ["Displayport Cable"]));
+  setInput(els.boxUsbABInput, readSpecValue(model, "What's in the box", ["USB-A to B Cable"]));
+  setInput(els.boxUsbCInput, readSpecValue(model, "What's in the box", ["USB-C Cable"]));
+  setInput(els.knowledgeFeaturesInput, Array.isArray(model && model.specs && model.specs.features && model.specs.features.knowledge) ? model.specs.features.knowledge.join("\n") : "");
+  setInput(els.frontImageInput, readModelValue(mediaEntry, [["frontImageUrl"], ["media", "frontImageUrl"]]));
+  setInput(els.sideImageInput, readModelValue(mediaEntry, [["sideImageUrl"], ["media", "sideImageUrl"]]));
+  setInput(els.portsImageInput, readModelValue(mediaEntry, [["portsImageUrl"], ["media", "portsImageUrl"]]));
 
   els.supportLinksList.innerHTML = "";
   Object.entries(support).forEach(([key, url]) => addSupportRow(parseSupportKey(key, url)));
   if (!els.supportLinksList.children.length) addSupportRow();
+  setModuleFieldVisibility();
 }
 
 function parseSupportKey(key, url) {
@@ -303,12 +401,93 @@ function buildModelPayload() {
   const modelName = toText(els.modelNameInput.value);
   if (!modelName) throw new Error("Model Name is required.");
 
+  const physical = {
+    tilt: toText(els.tiltInput.value),
+    heightAdjust: toText(els.heightAdjustInput.value),
+    pivot: toText(els.pivotInput.value),
+    swivel: toText(els.swivelInput.value),
+    vesa: toText(els.vesaInput.value),
+    bezelType: toText(els.bezelTypeInput.value),
+    webcam: toText(els.webcamInput.value)
+  };
+  const sound = {
+    speakers: toText(els.speakersInput.value),
+    speakerPower: toText(els.speakerPowerInput.value)
+  };
+  const connectivity = {
+    hdmiPorts: toText(els.hdmiInput.value),
+    dpPorts: toText(els.dpInput.value),
+    usbC: toText(els.usbCInput.value),
+    usbHub: toText(els.usbHubInput.value),
+    kvmSwitch: toText(els.kvmInput.value),
+    adaptiveSync: toText(els.adaptiveSyncInput.value),
+    syncTechnology: toText(els.adaptiveSyncInput.value),
+    rj45: toText(els.rj45Input.value),
+    audio: toText(els.audioIoInput.value)
+  };
+  const box = {
+    "HDMI cable": toText(els.boxHdmiCableInput.value),
+    "Displayport Cable": toText(els.boxDpCableInput.value),
+    "USB-A to B Cable": toText(els.boxUsbABInput.value),
+    "USB-C Cable": toText(els.boxUsbCInput.value)
+  };
+  const displayPanel = {
+    "Panel": toText(els.panelTypeInput.value),
+    "Panel Type": toText(els.panelTypeInput.value),
+    "Resolution": toText(els.resolutionInput.value),
+    "Max Refresh Rate": toText(els.refreshRateInput.value),
+    "Warranty": toText(els.warrantyInput.value),
+    "Aspect Ratio": toText(els.aspectRatioInput.value),
+    "Backlight": toText(els.backlightInput.value),
+    "Brightness (max)": toText(els.brightnessInput.value),
+    "Contrast (static)": toText(els.contrastInput.value)
+  };
+
   const specs = {
     brand: toText(els.brandInput.value),
     panelType: toText(els.panelTypeInput.value),
+    panel: toText(els.panelTypeInput.value),
     resolution: toText(els.resolutionInput.value),
     maxRefreshRate: toText(els.refreshRateInput.value),
-    warranty: toText(els.warrantyInput.value)
+    warranty: toText(els.warrantyInput.value),
+    aspectRatio: toText(els.aspectRatioInput.value),
+    backlight: toText(els.backlightInput.value),
+    brightnessMax: toText(els.brightnessInput.value),
+    contrastStatic: toText(els.contrastInput.value),
+    physical,
+    sound,
+    connectivity,
+    box,
+    features: {
+      knowledge: parseLines(els.knowledgeFeaturesInput.value)
+    },
+    technicalByCategory: {
+      "Display/Panel": displayPanel,
+      "Physical": {
+        "Tilt": physical.tilt,
+        "Height Adjust": physical.heightAdjust,
+        "Pivot": physical.pivot,
+        "Swivel": physical.swivel,
+        "VESA Wallmount": physical.vesa,
+        "Bezel Type": physical.bezelType,
+        "Webcam": physical.webcam
+      },
+      "Sound": {
+        "Speakers": sound.speakers,
+        "Speaker power": sound.speakerPower
+      },
+      "Connectivity": {
+        "HDMI Ports": connectivity.hdmiPorts,
+        "DisplayPort Ports": connectivity.dpPorts,
+        "USB-C": connectivity.usbC,
+        "USB Hub": connectivity.usbHub,
+        "Built-in KVM": connectivity.kvmSwitch,
+        "Adaptive Sync": connectivity.adaptiveSync,
+        "RJ45": connectivity.rj45,
+        "Headphone out/Audio In": connectivity.audio
+      },
+      "What's in the box": box
+    }
   };
 
   const model = {
@@ -317,18 +496,27 @@ function buildModelPayload() {
     module: state.activeModule,
     brand: specs.brand,
     year: Number(els.yearInput.value) || undefined,
+    osProfileId: toText(els.osInput.value),
     panelType: specs.panelType,
     resolution: specs.resolution,
     vrrMaxRefreshRate: specs.maxRefreshRate,
     warranty: specs.warranty,
+    audioChannels: sound.speakers,
+    audioPower: sound.speakerPower,
+    wifiStandard: toText(els.wifiInput.value),
+    bluetoothVersion: toText(els.bluetoothInput.value),
     specs
   };
 
+  const mediaImages = {
+    frontImageUrl: toText(els.frontImageInput.value),
+    sideImageUrl: toText(els.sideImageInput.value),
+    portsImageUrl: toText(els.portsImageInput.value)
+  };
   const media = {
+    ...mediaImages,
     media: {
-      frontImageUrl: toText(els.frontImageInput.value),
-      sideImageUrl: toText(els.sideImageInput.value),
-      portsImageUrl: toText(els.portsImageInput.value)
+      ...mediaImages
     },
     support: readSupportRows()
   };

@@ -21,6 +21,7 @@ const {
   loadModelMediaData,
   loadModelPlatformChassisData
 } = require("./publicContentRepository");
+const { getPool } = require("./db");
 
 const app = express();
 const port = Number(process.env.PORT || 4000);
@@ -179,6 +180,341 @@ app.get("/api/admin/models", requireAdminAuth, async (req, res) => {
       ok: false,
       error: "ADMIN_MODELS_LOAD_FAILED",
       message: error && error.message ? error.message : "Failed to load admin models"
+    });
+  }
+});
+
+function normalizeAdminLookupKey(value) {
+  return toText(value).toUpperCase().replace(/[^A-Z0-9]+/g, "");
+}
+
+function getAdminModelPayload(body) {
+  if (isPlainObject(body && body.model)) {
+    return body.model;
+  }
+
+  return isPlainObject(body) ? body : {};
+}
+
+function getAdminMediaPayload(body) {
+  if (isPlainObject(body && body.media)) {
+    return body.media;
+  }
+
+  return {};
+}
+
+function getNestedObject(value, key) {
+  return isPlainObject(value && value[key]) ? value[key] : {};
+}
+
+function getFirstText(...values) {
+  for (const value of values) {
+    const text = toText(value);
+    if (text) {
+      return text;
+    }
+  }
+
+  return "";
+}
+
+function getFirstNumber(...values) {
+  for (const value of values) {
+    const number = Number(value);
+    if (Number.isFinite(number) && number > 0) {
+      return number;
+    }
+  }
+
+  return 0;
+}
+
+function inferSizeFromModelName(modelName) {
+  const match = toText(modelName).match(/^(\d{2,3})/);
+  return match ? Number(match[1]) : 0;
+}
+
+function inferSeriesKeyFromModelName(modelName) {
+  const text = toText(modelName);
+  return text.replace(/^\d{2,3}/, "") || text || "UNKNOWN";
+}
+
+function getAdminModelSpecs(model) {
+  const specs = isPlainObject(model && model.specs) ? model.specs : {};
+  return {
+    technicalByCategory: isPlainObject(specs.technicalByCategory) ? specs.technicalByCategory : {},
+    ports: Array.isArray(specs.ports) ? specs.ports : [],
+    features: isPlainObject(specs.features) ? specs.features : {},
+    rawSource: isPlainObject(specs.rawSource) ? specs.rawSource : {}
+  };
+}
+
+function getAdminMediaImages(mediaPayload) {
+  const nestedMedia = getNestedObject(mediaPayload, "media");
+  return {
+    pageUrl: getFirstText(mediaPayload.pageUrl, nestedMedia.pageUrl),
+    frontImageUrl: getFirstText(mediaPayload.frontImageUrl, nestedMedia.frontImageUrl),
+    sideImageUrl: getFirstText(mediaPayload.sideImageUrl, nestedMedia.sideImageUrl, nestedMedia.sideViewImageUrl),
+    remoteImageUrl: getFirstText(mediaPayload.remoteImageUrl, nestedMedia.remoteImageUrl),
+    portsImageUrl: getFirstText(mediaPayload.portsImageUrl, nestedMedia.portsImageUrl)
+  };
+}
+
+function getAdminMediaSourceMeta(mediaPayload) {
+  const sourceMeta = isPlainObject(mediaPayload && mediaPayload.sourceMeta) ? { ...mediaPayload.sourceMeta } : {};
+  if (isPlainObject(mediaPayload && mediaPayload.support)) {
+    sourceMeta.support = mediaPayload.support;
+  }
+  if (isPlainObject(mediaPayload && mediaPayload.media)) {
+    sourceMeta.media = mediaPayload.media;
+  }
+  return sourceMeta;
+}
+
+async function findAdminSeriesRow(client, id, model) {
+  const rawId = toText(id);
+  if (/^\d+$/.test(rawId)) {
+    const byId = await client.query("SELECT * FROM models_series WHERE id = $1 LIMIT 1", [Number(rawId)]);
+    if (byId.rows[0]) {
+      return byId.rows[0];
+    }
+  }
+
+  const candidates = Array.from(new Set([
+    rawId,
+    toText(model && model.id),
+    toText(model && model.modelName),
+    ...(Array.isArray(model && model.aliases) ? model.aliases.map(toText) : [])
+  ].map(normalizeAdminLookupKey).filter(Boolean)));
+
+  for (const candidate of candidates) {
+    const result = await client.query(
+      [
+        "SELECT s.* FROM models_series s",
+        "WHERE s.normalized_canonical_model_name = $1",
+        "UNION",
+        "SELECT s.* FROM models_series s",
+        "JOIN model_variants v ON v.series_id = s.id",
+        "WHERE v.normalized_model_name = $1",
+        "UNION",
+        "SELECT s.* FROM models_series s",
+        "JOIN model_aliases a ON a.series_id = s.id",
+        "WHERE a.normalized_alias = $1",
+        "LIMIT 1"
+      ].join(" "),
+      [candidate]
+    );
+
+    if (result.rows[0]) {
+      return result.rows[0];
+    }
+  }
+
+  return null;
+}
+
+async function updateAdminModelInPostgres(id, model, mediaPayload) {
+  const pool = getPool();
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+    const existing = await findAdminSeriesRow(client, id, model);
+    if (!existing) {
+      await client.query("ROLLBACK");
+      return null;
+    }
+
+    const modelName = getFirstText(model.modelName, existing.canonical_model_name);
+    const brand = getFirstText(model.brand, existing.brand, "Philips");
+    const year = getFirstNumber(model.year, existing.year, new Date().getFullYear());
+    const canonicalSize = getFirstNumber(model.canonicalSize, existing.canonical_size, Array.isArray(model.availableSizes) ? model.availableSizes[0] : "", inferSizeFromModelName(modelName), 55);
+    const seriesKey = getFirstText(model.seriesKey, existing.series_key, inferSeriesKeyFromModelName(modelName));
+    const osProfileId = getFirstText(model.osProfileId, model.os, existing.os_profile_id) || null;
+    const panelType = getFirstText(model.panelType, model.panel, existing.panel_type) || null;
+    const status = ["active", "draft", "archived"].includes(toText(model.status)) ? toText(model.status) : getFirstText(existing.status, "active");
+    const notes = getFirstText(model.notes, existing.notes) || null;
+
+    const updatedSeries = await client.query(
+      [
+        "UPDATE models_series",
+        "SET brand = $1, year = $2, canonical_model_name = $3, series_key = $4, canonical_size = $5,",
+        "os_profile_id = $6, panel_type = $7, status = $8, notes = $9, updated_at = NOW()",
+        "WHERE id = $10",
+        "RETURNING id"
+      ].join(" "),
+      [brand, year, modelName, seriesKey, canonicalSize, osProfileId, panelType, status, notes, existing.id]
+    );
+
+    const seriesId = updatedSeries.rows[0].id;
+    const specs = getAdminModelSpecs(model);
+    await client.query(
+      [
+        "INSERT INTO model_specs (series_id, technical_by_category, ports, features, raw_source)",
+        "VALUES ($1, $2::jsonb, $3::jsonb, $4::jsonb, $5::jsonb)",
+        "ON CONFLICT (series_id)",
+        "DO UPDATE SET technical_by_category = EXCLUDED.technical_by_category,",
+        "ports = EXCLUDED.ports, features = EXCLUDED.features, raw_source = EXCLUDED.raw_source, updated_at = NOW()"
+      ].join(" "),
+      [
+        seriesId,
+        JSON.stringify(specs.technicalByCategory),
+        JSON.stringify(specs.ports),
+        JSON.stringify(specs.features),
+        JSON.stringify({ ...specs.rawSource, adminUpdatedAt: new Date().toISOString() })
+      ]
+    );
+
+    if (isPlainObject(mediaPayload) && Object.keys(mediaPayload).length > 0) {
+      const media = getAdminMediaImages(mediaPayload);
+      await client.query(
+        [
+          "INSERT INTO model_media (model_key, page_url, front_image_url, side_image_url, remote_image_url, ports_image_url, source_meta)",
+          "VALUES ($1, $2, $3, $4, $5, $6, $7::jsonb)",
+          "ON CONFLICT (normalized_model_key)",
+          "DO UPDATE SET model_key = EXCLUDED.model_key, page_url = EXCLUDED.page_url,",
+          "front_image_url = EXCLUDED.front_image_url, side_image_url = EXCLUDED.side_image_url,",
+          "remote_image_url = EXCLUDED.remote_image_url, ports_image_url = EXCLUDED.ports_image_url,",
+          "source_meta = EXCLUDED.source_meta, updated_at = NOW()"
+        ].join(" "),
+        [
+          modelName,
+          media.pageUrl || null,
+          media.frontImageUrl || null,
+          media.sideImageUrl || null,
+          media.remoteImageUrl || null,
+          media.portsImageUrl || null,
+          JSON.stringify(getAdminMediaSourceMeta(mediaPayload))
+        ]
+      );
+    }
+
+    await client.query("COMMIT");
+    return { source: "postgres", id: seriesId, modelName };
+  } catch (error) {
+    await client.query("ROLLBACK").catch(() => {});
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
+function updateAdminModelInJsonFile(id, model) {
+  const filePath = path.join(projectRoot, "mnt-parsed.json");
+  if (!fs.existsSync(filePath)) {
+    return null;
+  }
+
+  const rows = JSON.parse(fs.readFileSync(filePath, "utf8"));
+  if (!Array.isArray(rows)) {
+    return null;
+  }
+
+  const targetKeys = Array.from(new Set([
+    id,
+    model && model.id,
+    model && model.modelName
+  ].map(normalizeAdminLookupKey).filter(Boolean)));
+
+  const index = rows.findIndex((row) => {
+    const rowKeys = [
+      row && row.id,
+      row && row.modelName
+    ].map(normalizeAdminLookupKey).filter(Boolean);
+    return rowKeys.some((key) => targetKeys.includes(key));
+  });
+
+  if (index < 0) {
+    return null;
+  }
+
+  rows[index] = {
+    ...rows[index],
+    ...model,
+    id: rows[index].id || model.id,
+    modelName: model.modelName || rows[index].modelName
+  };
+  fs.writeFileSync(filePath, JSON.stringify(rows, null, 2) + "\n", "utf8");
+  return { source: "json", modelName: rows[index].modelName };
+}
+
+function updateAdminMediaJsonFallback(modelName, mediaPayload) {
+  if (!isPlainObject(mediaPayload) || Object.keys(mediaPayload).length === 0) {
+    return;
+  }
+
+  const candidates = [
+    path.join(projectRoot, "public", "mnt-media-links.json"),
+    path.join(projectRoot, "public", "data", "model-media.json")
+  ];
+
+  const filePath = candidates.find((candidate) => fs.existsSync(candidate));
+  if (!filePath) {
+    return;
+  }
+
+  const payload = JSON.parse(fs.readFileSync(filePath, "utf8"));
+  const current = isPlainObject(payload[modelName]) ? payload[modelName] : {};
+  payload[modelName] = {
+    ...current,
+    ...mediaPayload
+  };
+  fs.writeFileSync(filePath, JSON.stringify(payload, null, 2) + "\n", "utf8");
+}
+
+app.put("/api/admin/models/:id", requireAdminAuth, async (req, res) => {
+  const id = toText(req.params && req.params.id);
+  const model = getAdminModelPayload(req.body);
+  const mediaPayload = getAdminMediaPayload(req.body);
+
+  if (!id || !isPlainObject(model) || !toText(model.modelName)) {
+    res.status(400).json({
+      ok: false,
+      error: "INVALID_MODEL_PAYLOAD",
+      message: "Model id and model.modelName are required"
+    });
+    return;
+  }
+
+  try {
+    let result = null;
+
+    try {
+      result = await updateAdminModelInPostgres(id, model, mediaPayload);
+    } catch (dbError) {
+      if (process.env.NODE_ENV !== "production") {
+        console.warn("Admin DB update failed, trying JSON fallback:", dbError && dbError.message ? dbError.message : dbError);
+      }
+    }
+
+    if (!result) {
+      result = updateAdminModelInJsonFile(id, model);
+      if (result) {
+        updateAdminMediaJsonFallback(result.modelName || model.modelName, mediaPayload);
+      }
+    }
+
+    if (!result) {
+      res.status(404).json({
+        ok: false,
+        error: "MODEL_NOT_FOUND",
+        message: "Model not found: " + id
+      });
+      return;
+    }
+
+    res.json({
+      ok: true,
+      message: "Model updated successfully",
+      source: result.source,
+      modelName: result.modelName || model.modelName
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      error: "MODEL_UPDATE_FAILED",
+      message: error && error.message ? error.message : "Failed to update model"
     });
   }
 });

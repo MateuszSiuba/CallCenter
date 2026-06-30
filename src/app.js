@@ -20,14 +20,14 @@ export async function initCallCenterApp(api, options) {
 			};
 
 			                const RelationalMockData = {
-        ModelsData: await api.getModels(),
-        PoliciesData: await api.getPolicies(),
+        ModelsData: [],
+        PoliciesData: {},
         TroubleshootingData: {},
-        KnowledgeBaseData: await api.getKnowledge(),
-        ModelMediaData: await api.getModelMedia(),
+        KnowledgeBaseData: [],
+        ModelMediaData: {},
         ModelPlatformChassisData: ModelPlatformChassisData,
-        DocumentationLinksData: await api.getDocs(),
-        ChangelogEntriesData: await api.getChangelog()
+        DocumentationLinksData: {},
+        ChangelogEntriesData: []
     };
 
 
@@ -45,6 +45,8 @@ export async function initCallCenterApp(api, options) {
 							}
 
 							const runtimeApiBaseUrl = getRuntimeApiBaseUrl();
+			const isAdminRoute = Boolean(window && window.IS_ADMIN_ROUTE === true);
+			const adminTokenStorageKey = "support-hub-admin-token";
 			const supportHubCacheName = "support-hub-cache-v1";
 
 			const storageKeyCountry = "support-hub-country";
@@ -158,7 +160,12 @@ export async function initCallCenterApp(api, options) {
 				specDetailsContext: null,
 				articleViewContext: null,
 				isRestoringSession: false,
-				modelPlatformChassisLookup: null
+				modelPlatformChassisLookup: null,
+				isAdminRoute,
+				isAdmin: false,
+				adminToken: "",
+				adminDirty: false,
+				currentModel: null
 			};
 
 			const localeByCountry = {
@@ -1150,6 +1157,278 @@ export async function initCallCenterApp(api, options) {
 					+ ">"
 					+ escapeHtml(text)
 					+ "</span>";
+			}
+
+			function getAdminApiUrl(path) {
+				const cleanPath = String(path || "");
+				return (runtimeApiBaseUrl || "") + (cleanPath.charAt(0) === "/" ? cleanPath : "/" + cleanPath);
+			}
+
+			function getStoredAdminToken() {
+				try {
+					return sessionStorage.getItem(adminTokenStorageKey) || localStorage.getItem(adminTokenStorageKey) || "";
+				} catch (error) {
+					return "";
+				}
+			}
+
+			function persistAdminToken(token) {
+				state.adminToken = safeText(token, "");
+				try {
+					if (state.adminToken) {
+						sessionStorage.setItem(adminTokenStorageKey, state.adminToken);
+					} else {
+						sessionStorage.removeItem(adminTokenStorageKey);
+						localStorage.removeItem(adminTokenStorageKey);
+					}
+				} catch (error) {
+					// Storage may be unavailable in private mode.
+				}
+			}
+
+			function ensureAdminChrome() {
+				if (!state.isAdminRoute || document.getElementById("adminLoginModal")) {
+					return;
+				}
+
+				document.body.insertAdjacentHTML("beforeend", ""
+					+ "<div id=\"adminLoginModal\" class=\"fixed inset-0 z-[10000] flex items-center justify-center bg-slate-950/50 px-4 backdrop-blur-sm\">"
+					+ "<div class=\"w-full max-w-md rounded-3xl border border-white/70 bg-white p-8 shadow-2xl\">"
+					+ "<p class=\"brand-font text-xs uppercase tracking-[0.24em] text-brand-700\">Support Hub</p>"
+					+ "<h2 class=\"mt-3 text-3xl font-bold text-slate-900\">Admin Login</h2>"
+					+ "<p class=\"mt-2 text-sm text-slate-600\">Sign in to enable inline editing.</p>"
+					+ "<form id=\"adminLoginForm\" class=\"mt-6 space-y-4\">"
+					+ "<label class=\"block\"><span class=\"text-sm font-semibold text-slate-700\">Username</span><input id=\"adminUsernameInput\" type=\"text\" autocomplete=\"username\" required class=\"mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-brand-600 focus:ring-4 focus:ring-cyan-100\"></label>"
+					+ "<label class=\"block\"><span class=\"text-sm font-semibold text-slate-700\">Password</span><input id=\"adminPasswordInput\" type=\"password\" autocomplete=\"current-password\" required class=\"mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-brand-600 focus:ring-4 focus:ring-cyan-100\"></label>"
+					+ "<button id=\"adminLoginButton\" type=\"submit\" class=\"inline-flex w-full items-center justify-center rounded-xl bg-brand-700 px-4 py-2.5 text-sm font-bold text-white shadow transition hover:bg-brand-600\">Login</button>"
+					+ "<p id=\"adminLoginError\" class=\"hidden rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-700\"></p>"
+					+ "</form>"
+					+ "</div>"
+					+ "</div>"
+					+ "<div id=\"adminActionBar\" class=\"hidden fixed left-1/2 top-3 z-[9998] -translate-x-1/2 rounded-full border border-emerald-200 bg-white/95 px-4 py-2 shadow-xl backdrop-blur\">"
+					+ "<div class=\"flex items-center gap-3\"><span id=\"adminDirtyLabel\" class=\"text-xs font-semibold text-slate-600\">Admin mode</span><button id=\"adminSaveChangesBtn\" type=\"button\" class=\"rounded-full bg-emerald-600 px-4 py-1.5 text-xs font-bold text-white transition hover:bg-emerald-500\">Save Changes</button></div>"
+					+ "</div>");
+
+				const form = document.getElementById("adminLoginForm");
+				if (form) {
+					form.addEventListener("submit", (event) => {
+						event.preventDefault();
+						void loginAdminUser();
+					});
+				}
+
+				document.getElementById("adminSaveChangesBtn")?.addEventListener("click", () => {
+					void saveAdminChanges();
+				});
+			}
+
+			function setAdminLocked(locked) {
+				const modal = document.getElementById("adminLoginModal");
+				const bar = document.getElementById("adminActionBar");
+				if (modal) {
+					modal.classList.toggle("hidden", !locked);
+				}
+				if (bar) {
+					bar.classList.toggle("hidden", locked || !state.isAdmin);
+				}
+			}
+
+			async function loginAdminUser() {
+				const usernameInput = document.getElementById("adminUsernameInput");
+				const passwordInput = document.getElementById("adminPasswordInput");
+				const button = document.getElementById("adminLoginButton");
+				const errorBox = document.getElementById("adminLoginError");
+				const username = safeText(usernameInput && usernameInput.value, "");
+				const password = safeText(passwordInput && passwordInput.value, "");
+
+				if (button) {
+					button.disabled = true;
+					button.textContent = "Logging in...";
+				}
+				if (errorBox) {
+					errorBox.classList.add("hidden");
+					errorBox.textContent = "";
+				}
+
+				try {
+					const response = await fetch(getAdminApiUrl("/api/auth/login"), {
+						method: "POST",
+						headers: {
+							"Accept": "application/json",
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify({ username, password })
+					});
+					const payload = await response.json().catch(() => ({}));
+					if (!response.ok || !payload || !payload.token) {
+						throw new Error(payload && payload.error ? payload.error : "Invalid admin credentials");
+					}
+					persistAdminToken(payload.token);
+					state.isAdmin = true;
+					setAdminLocked(false);
+					setAdminDirty(false);
+					if (state.data) {
+						applyCountryConfig(countrySelect.value || state.countryCode || "UK");
+						showDashboard({ instant: true });
+						replaceBrowseHistoryState();
+					}
+				} catch (error) {
+					if (errorBox) {
+						errorBox.textContent = error && error.message ? error.message : "Login failed";
+						errorBox.classList.remove("hidden");
+					}
+				} finally {
+					if (button) {
+						button.disabled = false;
+						button.textContent = "Login";
+					}
+				}
+			}
+
+			function setAdminDirty(dirty) {
+				state.adminDirty = Boolean(dirty);
+				const label = document.getElementById("adminDirtyLabel");
+				if (label) {
+					label.textContent = state.adminDirty ? "Unsaved changes" : "Admin mode";
+					label.classList.toggle("text-amber-700", state.adminDirty);
+					label.classList.toggle("text-slate-600", !state.adminDirty);
+				}
+			}
+
+			function parseAdminPath(pathValue) {
+				try {
+					const decoded = decodeURIComponent(safeText(pathValue, "[]"));
+					const parsed = JSON.parse(decoded);
+					return Array.isArray(parsed) ? parsed : [];
+				} catch (error) {
+					return [];
+				}
+			}
+
+			function encodeAdminPath(path) {
+				return encodeURIComponent(JSON.stringify(Array.isArray(path) ? path : []));
+			}
+
+			function getMutableAdminTarget(path) {
+				const firstKey = path && path[0];
+				if (firstKey === "__media") {
+					const model = state.currentModel || getModelById(state.selectedModelId);
+					const modelName = getModelName(model);
+					if (!state.data.ModelMediaData) {
+						state.data.ModelMediaData = {};
+					}
+					if (!isPlainObject(state.data.ModelMediaData[modelName])) {
+						state.data.ModelMediaData[modelName] = {};
+					}
+					return state.data.ModelMediaData[modelName];
+				}
+				return state.currentModel || getModelById(state.selectedModelId);
+			}
+
+			function setNestedAdminValue(path, value) {
+				if (!Array.isArray(path) || path.length === 0) {
+					return false;
+				}
+				const target = getMutableAdminTarget(path);
+				const usablePath = path[0] === "__media" ? path.slice(1) : path;
+				if (!target || usablePath.length === 0) {
+					return false;
+				}
+
+				let cursor = target;
+				usablePath.slice(0, -1).forEach((key) => {
+					if (!isPlainObject(cursor[key])) {
+						cursor[key] = {};
+					}
+					cursor = cursor[key];
+				});
+				cursor[usablePath[usablePath.length - 1]] = value;
+				setAdminDirty(true);
+				return true;
+			}
+
+			function adminEditButton(path, label) {
+				if (!state.isAdmin || !Array.isArray(path) || path.length === 0) {
+					return "";
+				}
+				return "<button type=\"button\" class=\"js-admin-edit ml-2 inline-flex h-6 w-6 items-center justify-center rounded-full border border-cyan-200 bg-cyan-50 text-[11px] font-bold text-brand-700 transition hover:bg-cyan-100\" data-admin-path=\"" + encodeAdminPath(path) + "\" title=\"Edit " + escapeHtml(safeText(label, "value")) + "\">✎</button>";
+			}
+
+			function adminAddButton(path, label) {
+				if (!state.isAdmin || !Array.isArray(path) || path.length === 0) {
+					return "";
+				}
+				return "<button type=\"button\" class=\"js-admin-add ml-2 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-700 transition hover:bg-emerald-100\" data-admin-path=\"" + encodeAdminPath(path) + "\">+ " + escapeHtml(safeText(label, "Add Item")) + "</button>";
+			}
+
+			function adminEditableValue(path, value, label) {
+				const displayValue = translateValue(safeText(value, "-"));
+				return "<span class=\"js-admin-value\">" + escapeHtml(displayValue) + "</span>" + adminEditButton(path, label);
+			}
+
+			function refreshCurrentAdminDetail() {
+				const model = state.currentModel || getModelById(state.selectedModelId);
+				if (model && state.viewMode === "detail") {
+					renderModelDetail(model);
+				}
+			}
+
+			function updateAdminModelInCollections(model) {
+				if (!model || !state.data || !Array.isArray(state.data.ModelsData)) {
+					return;
+				}
+				const key = getModelKey(model);
+				const index = state.data.ModelsData.findIndex((item) => getModelKey(item) === key || getModelName(item) === getModelName(model));
+				if (index >= 0) {
+					state.data.ModelsData[index] = model;
+				}
+				if (state.modelDetailsById && state.selectedModelId) {
+					state.modelDetailsById[state.selectedModelId] = model;
+				}
+			}
+
+			async function saveAdminChanges() {
+				const model = state.currentModel || getModelById(state.selectedModelId);
+				if (!state.isAdmin || !model) {
+					return;
+				}
+				const token = state.adminToken || getStoredAdminToken();
+				const modelId = getModelName(model);
+				const media = getModelMedia(model);
+				const button = document.getElementById("adminSaveChangesBtn");
+				if (button) {
+					button.disabled = true;
+					button.textContent = "Saving...";
+				}
+				try {
+					const response = await fetch(getAdminApiUrl("/api/admin/models/" + encodeURIComponent(modelId)), {
+						method: "PUT",
+						headers: {
+							"Accept": "application/json",
+							"Content-Type": "application/json",
+							"Authorization": "Bearer " + token
+						},
+						body: JSON.stringify({
+							...model,
+							model,
+							media,
+							module: getModelModule(model)
+						})
+					});
+					const payload = await response.json().catch(() => ({}));
+					if (!response.ok) {
+						throw new Error(payload && payload.message ? payload.message : "Save failed");
+					}
+					updateAdminModelInCollections(model);
+					setAdminDirty(false);
+				} catch (error) {
+					window.alert("Save failed: " + (error && error.message ? error.message : "Unknown error"));
+				} finally {
+					if (button) {
+						button.disabled = false;
+						button.textContent = "Save Changes";
+					}
+				}
 			}
 
 			function normalizeLookupKey(value) {
@@ -4548,19 +4827,19 @@ export async function initCallCenterApp(api, options) {
 				return true;
 			}
 
-			function renderSpecRow(label, value) {
+			function renderSpecRow(label, value, adminPath) {
 				const displayValue = formatMntDisplayValue(label, value);
 				if (!isUsefulSpecValue(displayValue)) {
 					return "";
 				}
-				return "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel(label)) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(displayValue)) + "</dd></div>";
+				return "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel(label)) + "</dt><dd class=\"font-semibold text-slate-800\">" + adminEditableValue(adminPath, displayValue, label) + "</dd></div>";
 			}
 
-			function renderBoxRow(label, value) {
+			function renderBoxRow(label, value, adminPath) {
 				if (!isUsefulSpecValue(value, { forBox: true })) {
 					return "";
 				}
-				return "<div class=\"rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700\">" + escapeHtml(translateLabel(label)) + "</div>";
+				return "<div class=\"rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700\">" + escapeHtml(translateLabel(label)) + adminEditButton(adminPath, label) + "</div>";
 			}
 
 			function renderMntSpecsPane(model) {
@@ -4586,15 +4865,15 @@ export async function initCallCenterApp(api, options) {
 					.join(" ");
 
 				const boxRows = [
-					renderBoxRow("VGA cable", getMntSpecValue(model, "What's in the box", "VGA cable")),
-					renderBoxRow("DVI cable", getMntSpecValue(model, "What's in the box", "DVI cable")),
-					renderBoxRow("HDMI cable", getMntSpecValue(model, "What's in the box", "HDMI cable")),
-					renderBoxRow("Displayport Cable", getMntSpecValue(model, "What's in the box", "Displayport Cable")),
-					renderBoxRow("Mini-DP cable", getMntSpecValue(model, "What's in the box", "Mini-DP cable")),
-					renderBoxRow("Audio Cable", getMntSpecValue(model, "What's in the box", "Audio Cable")),
-					renderBoxRow("USB-A to B Cable", getMntSpecValue(model, "What's in the box", "USB-A to B Cable")),
-					renderBoxRow("USB-C Cable", getMntSpecValue(model, "What's in the box", "USB-C Cable")),
-					renderBoxRow("Remote Control", getMntSpecValue(model, "What's in the box", "Remote Control"))
+					renderBoxRow("VGA cable", getMntSpecValue(model, "What's in the box", "VGA cable"), ["specs", "technicalByCategory", "What's in the box", "VGA cable"]),
+					renderBoxRow("DVI cable", getMntSpecValue(model, "What's in the box", "DVI cable"), ["specs", "technicalByCategory", "What's in the box", "DVI cable"]),
+					renderBoxRow("HDMI cable", getMntSpecValue(model, "What's in the box", "HDMI cable"), ["specs", "technicalByCategory", "What's in the box", "HDMI cable"]),
+					renderBoxRow("Displayport Cable", getMntSpecValue(model, "What's in the box", "Displayport Cable"), ["specs", "technicalByCategory", "What's in the box", "Displayport Cable"]),
+					renderBoxRow("Mini-DP cable", getMntSpecValue(model, "What's in the box", "Mini-DP cable"), ["specs", "technicalByCategory", "What's in the box", "Mini-DP cable"]),
+					renderBoxRow("Audio Cable", getMntSpecValue(model, "What's in the box", "Audio Cable"), ["specs", "technicalByCategory", "What's in the box", "Audio Cable"]),
+					renderBoxRow("USB-A to B Cable", getMntSpecValue(model, "What's in the box", "USB-A to B Cable"), ["specs", "technicalByCategory", "What's in the box", "USB-A to B Cable"]),
+					renderBoxRow("USB-C Cable", getMntSpecValue(model, "What's in the box", "USB-C Cable"), ["specs", "technicalByCategory", "What's in the box", "USB-C Cable"]),
+					renderBoxRow("Remote Control", getMntSpecValue(model, "What's in the box", "Remote Control"), ["specs", "technicalByCategory", "What's in the box", "Remote Control"])
 				].join("");
 
 				return ""
@@ -4602,49 +4881,49 @@ export async function initCallCenterApp(api, options) {
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("coreHardware") + "</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
-					+ renderSpecRow("Brand", safeText(model && model.brand, specs.brand || "-"))
-					+ renderSpecRow("Panel", getModelPanel(model))
-					+ renderSpecRow("Resolution", getMntSpecValue(model, "Display/Panel", "Resolution", specs.resolution))
-					+ renderSpecRow("Warranty", getMntSpecValue(model, "Display/Panel", "Warranty", specs.warranty))
+					+ renderSpecRow("Brand", safeText(model && model.brand, specs.brand || "-"), ["brand"])
+					+ renderSpecRow("Panel", getModelPanel(model), ["specs", "technicalByCategory", "Display/Panel", "Panel"])
+					+ renderSpecRow("Resolution", getMntSpecValue(model, "Display/Panel", "Resolution", specs.resolution), ["specs", "technicalByCategory", "Display/Panel", "Resolution"])
+					+ renderSpecRow("Warranty", getMntSpecValue(model, "Display/Panel", "Warranty", specs.warranty), ["specs", "technicalByCategory", "Display/Panel", "Warranty"])
 					+ "</dl>"
 					+ "<button type=\"button\" data-spec-detail=\"core\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">" + t("showFullCore") + "</button>"
 					+ "</div>"
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("physicalDetails") + "</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
-					+ renderSpecRow("Tilt", getMntSpecValue(model, "Physical", "Tilt", specs.tilt))
-					+ renderSpecRow("Height Adjust", getMntSpecValue(model, "Physical", "Height Adjust", specs.heightAdjust))
-					+ renderSpecRow("Pivot", getMntSpecValue(model, "Physical", "Pivot", specs.pivot))
-					+ renderSpecRow("Swivel", getMntSpecValue(model, "Physical", "Swivel", specs.swivel))
+					+ renderSpecRow("Tilt", getMntSpecValue(model, "Physical", "Tilt", specs.tilt), ["specs", "technicalByCategory", "Physical", "Tilt"])
+					+ renderSpecRow("Height Adjust", getMntSpecValue(model, "Physical", "Height Adjust", specs.heightAdjust), ["specs", "technicalByCategory", "Physical", "Height Adjust"])
+					+ renderSpecRow("Pivot", getMntSpecValue(model, "Physical", "Pivot", specs.pivot), ["specs", "technicalByCategory", "Physical", "Pivot"])
+					+ renderSpecRow("Swivel", getMntSpecValue(model, "Physical", "Swivel", specs.swivel), ["specs", "technicalByCategory", "Physical", "Swivel"])
 					+ "</dl>"
 					+ "<button type=\"button\" data-spec-detail=\"physical\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">" + t("showFullPhysical") + "</button>"
 					+ "</div>"
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("audioSpecifications") + "</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
-					+ renderSpecRow("Speakers", getMntSpecValue(model, "Sound", "Speakers", model && model.audioChannels))
-					+ renderSpecRow("Speaker power", getMntSpecValue(model, "Sound", "Speaker power", model && model.audioPower))
+					+ renderSpecRow("Speakers", getMntSpecValue(model, "Sound", "Speakers", model && model.audioChannels), ["specs", "technicalByCategory", "Sound", "Speakers"])
+					+ renderSpecRow("Speaker power", getMntSpecValue(model, "Sound", "Speaker power", model && model.audioPower), ["specs", "technicalByCategory", "Sound", "Speaker power"])
 					+ "</dl>"
 					+ "</div>"
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("connectivity") + "</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
-					+ renderSpecRow("HDMI Ports", getMntSpecValue(model, "Connectivity", "HDMI Ports", specs.hdmiPorts))
-					+ renderSpecRow("Display Port Ports", getMntSpecValue(model, "Connectivity", "DisplayPort Ports", specs.dpPorts))
-					+ renderSpecRow("USB C", getMntSpecValue(model, "Connectivity", "USB-C", specs.usbC))
-					+ renderSpecRow("USB Hub", getMntSpecValue(model, "Connectivity", "USB Hub", specs.usbHub))
+					+ renderSpecRow("HDMI Ports", getMntSpecValue(model, "Connectivity", "HDMI Ports", specs.hdmiPorts), ["specs", "technicalByCategory", "Connectivity", "HDMI Ports"])
+					+ renderSpecRow("Display Port Ports", getMntSpecValue(model, "Connectivity", "DisplayPort Ports", specs.dpPorts), ["specs", "technicalByCategory", "Connectivity", "DisplayPort Ports"])
+					+ renderSpecRow("USB C", getMntSpecValue(model, "Connectivity", "USB-C", specs.usbC), ["specs", "technicalByCategory", "Connectivity", "USB-C"])
+					+ renderSpecRow("USB Hub", getMntSpecValue(model, "Connectivity", "USB Hub", specs.usbHub), ["specs", "technicalByCategory", "Connectivity", "USB Hub"])
 					+ "</dl>"
 					+ "<button type=\"button\" data-spec-detail=\"connectivity\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">" + t("showFullConnectivity") + "</button>"
 					+ "</div>"
 					+ (boxRows
 						? "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 xl:col-span-2\">"
-							+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("whatsInTheBox") + "</h5>"
+							+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("whatsInTheBox") + adminAddButton(["specs", "technicalByCategory", "What's in the box"], "Add Item") + "</h5>"
 							+ "<dl class=\"mt-3 grid gap-2 text-sm sm:grid-cols-2\">" + boxRows + "</dl>"
 							+ "</div>"
 						: "")
 					+ "</div>"
 					+ "<div class=\"mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4\">"
-					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("knowledgeFeatures") + "</h5>"
+					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("knowledgeFeatures") + adminAddButton(["specs", "features", "knowledge"], "Add Item") + "</h5>"
 					+ "<div class=\"mt-2 flex flex-wrap gap-2\">" + (featureBadges || "<span class=\"text-xs text-slate-500\">" + t("noKnowledgeFeatures") + "</span>") + "</div>"
 					+ "</div>";
 			}
@@ -4712,34 +4991,34 @@ export async function initCallCenterApp(api, options) {
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("coreHardware") + "</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm\">"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Panel")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(getModelPanel(sizeScopedModel))) + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">OS</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(getModelOS(sizeScopedModel))) + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Platform")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(getModelPlatform(sizeScopedModel), "-"))) + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Chassis")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(getModelChassis(sizeScopedModel), "-"))) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Panel")) + "</dt><dd class=\"font-semibold text-slate-800\">" + adminEditableValue(["panelType"], getModelPanel(sizeScopedModel), "Panel") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">OS</dt><dd class=\"font-semibold text-slate-800\">" + adminEditableValue(["osProfileId"], getModelOS(sizeScopedModel), "OS") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Platform")) + "</dt><dd class=\"font-semibold text-slate-800\">" + adminEditableValue(["platform"], safeText(getModelPlatform(sizeScopedModel), "-"), "Platform") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Chassis")) + "</dt><dd class=\"font-semibold text-slate-800\">" + adminEditableValue(["chassis"], safeText(getModelChassis(sizeScopedModel), "-"), "Chassis") + "</dd></div>"
 					+ "</dl>"
 					+ "</div>"
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("physicalDetails") + "</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm\">"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Stand")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(standValue, "-"))) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Stand")) + "</dt><dd class=\"font-semibold text-slate-800\">" + adminEditableValue(["specs", "stand"], safeText(standValue, "-"), "Stand") + "</dd></div>"
 					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Sizes")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(allSizesLabel)) + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("VESA Standard")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(vesaStandard, "-"))) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("VESA Standard")) + "</dt><dd class=\"font-semibold text-slate-800\">" + adminEditableValue(["specs", "vesa"], safeText(vesaStandard, "-"), "VESA Standard") + "</dd></div>"
 					+ "</dl>"
 					+ "</div>"
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("audioSpecifications") + "</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Channels")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(standardSpecs.audioChannels, "-"))) + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Audio Power")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(standardSpecs.audioPower, "-"))) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Channels")) + "</dt><dd class=\"font-semibold text-slate-800\">" + adminEditableValue(["audioChannels"], safeText(standardSpecs.audioChannels, "-"), "Channels") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Audio Power")) + "</dt><dd class=\"font-semibold text-slate-800\">" + adminEditableValue(["audioPower"], safeText(standardSpecs.audioPower, "-"), "Audio Power") + "</dd></div>"
 					+ "</dl>"
 					+ "<button type=\"button\" data-spec-detail=\"audio\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">" + t("showFullAudio") + "</button>"
 					+ "</div>"
 					+ "<div class=\"rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col\">"
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("connectivity") + "</h5>"
 					+ "<dl class=\"mt-3 space-y-2 text-sm flex-1 pb-2\">"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">WiFi</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(standardSpecs.wifiStandard, "-"))) + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Bluetooth</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(standardSpecs.bluetoothVersion, "-"))) + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Max VRR Refresh Rate")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(standardSpecs.vrrMaxRefreshRate, "-"))) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">WiFi</dt><dd class=\"font-semibold text-slate-800\">" + adminEditableValue(["wifiStandard"], safeText(standardSpecs.wifiStandard, "-"), "WiFi") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">Bluetooth</dt><dd class=\"font-semibold text-slate-800\">" + adminEditableValue(["bluetoothVersion"], safeText(standardSpecs.bluetoothVersion, "-"), "Bluetooth") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Max VRR Refresh Rate")) + "</dt><dd class=\"font-semibold text-slate-800\">" + adminEditableValue(["vrrMaxRefreshRate"], safeText(standardSpecs.vrrMaxRefreshRate, "-"), "Max VRR Refresh Rate") + "</dd></div>"
 					+ "</dl>"
 					+ "<button type=\"button\" data-spec-detail=\"connectivity\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">" + t("showFullConnectivity") + "</button>"
 					+ "</div>"
@@ -4747,15 +5026,15 @@ export async function initCallCenterApp(api, options) {
 					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + escapeHtml(translateLabel("Dimensions")) + "</h5>"
 					+ "<p class=\"mt-2 text-xs text-slate-500\">" + escapeHtml(t("selectedSize", { size: sizeLabel })) + "</p>"
 					+ "<dl class=\"mt-3 grid gap-2 text-sm sm:grid-cols-2 flex-1 pb-2\">"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("TV With Stand")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(withStandDimensions, "-"))) + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("TV Without Stand")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(withoutStandDimensions, "-"))) + "</dd></div>"
-					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Weight")) + "</dt><dd class=\"font-semibold text-slate-800\">" + escapeHtml(translateValue(safeText(dimensionsWeight, "-"))) + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("TV With Stand")) + "</dt><dd class=\"font-semibold text-slate-800\">" + adminEditableValue(["specs", "technicalByCategory", "Dimensions", "TV with stand"], safeText(withStandDimensions, "-"), "TV With Stand") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("TV Without Stand")) + "</dt><dd class=\"font-semibold text-slate-800\">" + adminEditableValue(["specs", "technicalByCategory", "Dimensions", "TV without stand"], safeText(withoutStandDimensions, "-"), "TV Without Stand") + "</dd></div>"
+					+ "<div class=\"flex justify-between gap-3\"><dt class=\"text-slate-500\">" + escapeHtml(translateLabel("Weight")) + "</dt><dd class=\"font-semibold text-slate-800\">" + adminEditableValue(["specs", "technicalByCategory", "Dimensions", "Weight"], safeText(dimensionsWeight, "-"), "Weight") + "</dd></div>"
 					+ "</dl>"
 					+ "<button type=\"button\" data-spec-detail=\"dimensions\" class=\"js-spec-detail-trigger mt-4 mt-auto w-full rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">" + t("showFullDimensions") + "</button>"
 					+ "</div>"
 					+ "</div>"
 					+ "<div class=\"mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4\">"
-					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("knowledgeFeatures") + "</h5>"
+					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + t("knowledgeFeatures") + adminAddButton(["specs", "features", "knowledge"], "Add Item") + "</h5>"
 					+ "<div class=\"mt-2 flex flex-wrap gap-2\">" + (featureBadges || "<span class=\"text-xs text-slate-500\">" + t("noKnowledgeFeatures") + "</span>") + "</div>"
 					+ "</div>";
 			}
@@ -4881,7 +5160,7 @@ export async function initCallCenterApp(api, options) {
 
 						return ""
 							+ "<div class=\"rounded-lg border border-white/70 bg-white/60 p-3\">"
-							+ "<h6 class=\"text-xs font-bold uppercase tracking-[0.18em] text-slate-600\">" + escapeHtml(supportGroupLabels[groupName]) + "</h6>"
+							+ "<h6 class=\"text-xs font-bold uppercase tracking-[0.18em] text-slate-600\">" + escapeHtml(supportGroupLabels[groupName]) + adminAddButton(["__media", "support"], "Add Link") + "</h6>"
 							+ "<div class=\"mt-2 flex flex-wrap gap-2\">" + buttons + "</div>"
 							+ "</div>";
 					}
@@ -4894,7 +5173,7 @@ export async function initCallCenterApp(api, options) {
 
 					return ""
 						+ "<section class=\"rounded-xl border border-emerald-200 bg-emerald-50 p-4\">"
-						+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + translateHardcodedText("Monitor Support Links", "Linki wsparcia technicznego", "Monitor-Support-Links") + "</h5>"
+						+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + translateHardcodedText("Monitor Support Links", "Linki wsparcia technicznego", "Monitor-Support-Links") + adminAddButton(["__media", "support"], "Add Link") + "</h5>"
 						+ "<p class=\"mt-1 text-xs text-slate-600\">" + translateHardcodedText("Placeholder links for AOC/Philips monitor support resources.", "Zastępcze linki do zasobów wsparcia AOC/Philips.", "Support-Ressourcen für AOC/Philips-Monitore.") + "</p>"
 						+ (mntLinks
 							? "<div class=\"mt-3 grid gap-3\">" + mntLinks + "</div>"
@@ -4959,7 +5238,7 @@ export async function initCallCenterApp(api, options) {
 
 				const docsBlock = ""
 					+ "<section class=\"rounded-xl border border-emerald-200 bg-emerald-50 p-4\">"
-					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Manuals & Documentation</h5>"
+					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Manuals & Documentation" + adminAddButton(["__media", "support"], "Add Link") + "</h5>"
 					+ "<p class=\"mt-1 text-xs text-slate-600\">Open manuals directly during troubleshooting.</p>"
 					+ (directManualLinksBlock
 						? "<div class=\"mt-3 flex flex-wrap gap-2\">" + directManualLinksBlock + "</div>"
@@ -5010,17 +5289,20 @@ export async function initCallCenterApp(api, options) {
 						{
 							label: imageLabel(1),
 							note: "",
-							imageUrl: getSafeHttpUrl(mntMedia.frontImageUrl)
+							imageUrl: getSafeHttpUrl(mntMedia.frontImageUrl),
+							adminPath: ["__media", "media", "frontImageUrl"]
 						},
 						{
 							label: imageLabel(2),
 							note: "",
-							imageUrl: getSafeHttpUrl(mntMedia.sideImageUrl || mntMedia.sideViewImageUrl)
+							imageUrl: getSafeHttpUrl(mntMedia.sideImageUrl || mntMedia.sideViewImageUrl),
+							adminPath: ["__media", "media", "sideImageUrl"]
 						},
 						{
 							label: imageLabel(3),
 							note: "",
-							imageUrl: getSafeHttpUrl(mntMedia.portsImageUrl)
+							imageUrl: getSafeHttpUrl(mntMedia.portsImageUrl),
+							adminPath: ["__media", "media", "portsImageUrl"]
 						}
 					]
 					: (media
@@ -5028,21 +5310,24 @@ export async function initCallCenterApp(api, options) {
 							{
 								label: getModelName(model) + " front view",
 								note: "Official product gallery image.",
-								imageUrl: getSafeHttpUrl(media.frontImageUrl)
+								imageUrl: getSafeHttpUrl(media.frontImageUrl),
+								adminPath: ["__media", "frontImageUrl"]
 							},
 							{
 								label: getModelName(model) + " remote control",
 								note: getSafeHttpUrl(media.remoteImageUrl)
 									? "Official accessory/remote image."
 									: "No dedicated remote image found in source.",
-								imageUrl: getSafeHttpUrl(media.remoteImageUrl)
+								imageUrl: getSafeHttpUrl(media.remoteImageUrl),
+								adminPath: ["__media", "remoteImageUrl"]
 							},
 							{
 								label: getModelName(model) + " connectors",
 								note: getSafeHttpUrl(media.portsImageUrl)
 									? "Official rear ports image."
 									: "No dedicated rear ports image found in source.",
-								imageUrl: getSafeHttpUrl(media.portsImageUrl)
+								imageUrl: getSafeHttpUrl(media.portsImageUrl),
+								adminPath: ["__media", "portsImageUrl"]
 							}
 						]
 						: []);
@@ -5076,9 +5361,9 @@ export async function initCallCenterApp(api, options) {
 						return ""
 					+ "<div class=\"rounded-xl border border-slate-300 bg-slate-50 p-3\">"
 					+ (imageUrl
-						? "<div class=\"overflow-hidden rounded-lg border border-slate-200 bg-white p-1\"><img src=\"" + escapeHtml(displayUrl) + "\" srcset=\"" + escapeHtml(imageSet.srcSet) + "\" sizes=\"" + escapeHtml(imageSet.sizes || "100vw") + "\" alt=\"" + escapeHtml(safeText(item.label, "Model image")) + "\" class=\"js-zoomable-image h-40 w-full cursor-zoom-in object-contain\" loading=\"lazy\" tabindex=\"0\" role=\"button\" data-zoom-src=\"" + escapeHtml(zoomUrl) + "\"></div>"
+						? "<div class=\"overflow-hidden rounded-lg border border-slate-200 bg-white p-1\"><img src=\"" + escapeHtml(displayUrl) + "\" srcset=\"" + escapeHtml(imageSet.srcSet) + "\" sizes=\"" + escapeHtml(imageSet.sizes || "100vw") + "\" alt=\"" + escapeHtml(safeText(item.label, "Model image")) + "\" class=\"js-zoomable-image h-40 w-full cursor-zoom-in object-contain\" loading=\"lazy\" tabindex=\"0\" role=\"button\" data-zoom-src=\"" + escapeHtml(zoomUrl) + "\"" + (state.isAdmin && item.adminPath ? " data-admin-image-path=\"" + encodeAdminPath(item.adminPath) + "\"" : "") + "></div>"
 						: "<div class=\"rounded-lg border-2 border-dashed border-slate-300 bg-white p-8 text-center text-xs text-slate-500\">" + translateHardcodedText("Image not available", "Brak zdjęcia") + "</div>")
-					+ "<p class=\"mt-2 text-sm font-semibold text-slate-800\">" + safeText(item.label, "Image placeholder") + "</p>"
+					+ "<p class=\"mt-2 text-sm font-semibold text-slate-800\">" + safeText(item.label, "Image placeholder") + (state.isAdmin && item.adminPath ? adminEditButton(item.adminPath, item.label) : "") + "</p>"
 					+ (safeText(item.note, "") ? "<p class=\"mt-1 text-xs text-slate-500\">" + safeText(item.note, "") + "</p>" : "")
 					+ "</div>";
 					})()).join("");
@@ -5137,6 +5422,7 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			function renderModelDetail(model) {
+				state.currentModel = model;
 				const platform = getModelPlatform(model);
 				const brand = safeText(model && model.brand, "");
 				const hardwareBadge = isMntModel(model)
@@ -5921,8 +6207,97 @@ export async function initCallCenterApp(api, options) {
 						return;
 					}
 
+					const adminEditTrigger = target.closest(".js-admin-edit");
+					if (adminEditTrigger && state.isAdmin) {
+						event.preventDefault();
+						event.stopPropagation();
+						const path = parseAdminPath(adminEditTrigger.getAttribute("data-admin-path"));
+						const currentText = safeText(adminEditTrigger.parentElement && adminEditTrigger.parentElement.querySelector(".js-admin-value") && adminEditTrigger.parentElement.querySelector(".js-admin-value").textContent, "");
+						const nextValue = window.prompt("Update value", currentText === "-" ? "" : currentText);
+						if (nextValue !== null && setNestedAdminValue(path, nextValue.trim())) {
+							updateAdminModelInCollections(state.currentModel);
+							refreshCurrentAdminDetail();
+						}
+						return;
+					}
+
+					const adminAddTrigger = target.closest(".js-admin-add");
+					if (adminAddTrigger && state.isAdmin) {
+						event.preventDefault();
+						event.stopPropagation();
+						const path = parseAdminPath(adminAddTrigger.getAttribute("data-admin-path"));
+						const isSupportPath = path[0] === "__media" && path[path.length - 1] === "support";
+						if (isSupportPath) {
+							const label = window.prompt("Support link label", "Manual (en)");
+							if (!label) {
+								return;
+							}
+							const url = window.prompt("Support link URL", "https://");
+							if (!url) {
+								return;
+							}
+							const targetObject = getMutableAdminTarget(path);
+							if (targetObject) {
+								if (!isPlainObject(targetObject.support)) {
+									targetObject.support = {};
+								}
+								targetObject.support[label.trim()] = url.trim();
+								setAdminDirty(true);
+								refreshCurrentAdminDetail();
+							}
+							return;
+						}
+
+						const itemLabel = window.prompt("New item label", "");
+						if (!itemLabel) {
+							return;
+						}
+						const targetObject = getMutableAdminTarget(path);
+						const usablePath = path[0] === "__media" ? path.slice(1) : path;
+						let cursor = targetObject;
+						usablePath.forEach((key, index) => {
+							if (index === usablePath.length - 1) {
+								if (Array.isArray(cursor[key])) {
+									cursor[key].push(itemLabel.trim());
+								} else if (isPlainObject(cursor[key])) {
+									const itemValue = window.prompt("Value", "Yes");
+									if (itemValue !== null) {
+										cursor[key][itemLabel.trim()] = itemValue.trim();
+									}
+								} else if (String(key).toLowerCase() === "knowledge") {
+									cursor[key] = [itemLabel.trim()];
+								} else {
+									const itemValue = window.prompt("Value", "Yes");
+									cursor[key] = {};
+									if (itemValue !== null) {
+										cursor[key][itemLabel.trim()] = itemValue.trim();
+									}
+								}
+								return;
+							}
+							if (!isPlainObject(cursor[key])) {
+								cursor[key] = {};
+							}
+							cursor = cursor[key];
+						});
+						setAdminDirty(true);
+						refreshCurrentAdminDetail();
+						return;
+					}
+
 					const zoomableImage = target.closest(".js-zoomable-image");
 					if (zoomableImage) {
+						if (state.isAdmin && zoomableImage.hasAttribute("data-admin-image-path")) {
+							event.preventDefault();
+							event.stopPropagation();
+							const path = parseAdminPath(zoomableImage.getAttribute("data-admin-image-path"));
+							const currentUrl = safeText(zoomableImage.getAttribute("src"), "");
+							const nextUrl = window.prompt("Image URL", currentUrl);
+							if (nextUrl !== null && setNestedAdminValue(path, nextUrl.trim())) {
+								refreshCurrentAdminDetail();
+							}
+							return;
+						}
 						const zoomSrc = safeText(zoomableImage.getAttribute("data-zoom-src"), zoomableImage.getAttribute("src") || "");
 						const zoomAlt = safeText(zoomableImage.getAttribute("alt"), "Zoom preview");
 						showImageZoomModal(zoomSrc, zoomAlt);
@@ -6258,6 +6633,13 @@ export async function initCallCenterApp(api, options) {
 			const forceSplash = Boolean(options && options.forceSplash);
 			const shouldAutoResume = !forceSplash && Boolean(effectiveResumeCountry);
 
+			if (state.isAdminRoute) {
+				ensureAdminChrome();
+				document.getElementById("portalLanding")?.classList.add("hidden");
+				document.getElementById("trainingShell")?.classList.add("hidden");
+				setAdminLocked(true);
+			}
+
 			appShell.classList.add("hidden");
 			appShell.classList.add("is-hidden");
 			splashScreen.classList.remove("hidden");
@@ -6277,6 +6659,19 @@ export async function initCallCenterApp(api, options) {
 			initializeData(persistedSession)
 				.then(() => {
 					setContinueButtonState("ready");
+					if (state.isAdminRoute) {
+						const storedToken = getStoredAdminToken();
+						if (storedToken) {
+							persistAdminToken(storedToken);
+							state.isAdmin = true;
+							setAdminLocked(false);
+							showDashboard({ instant: true });
+							replaceBrowseHistoryState();
+						} else {
+							setAdminLocked(true);
+						}
+						return;
+					}
 					if (shouldAutoResume) {
 						showDashboard({ instant: true });
 						replaceCurrentViewHistoryState();

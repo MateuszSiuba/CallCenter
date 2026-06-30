@@ -1,195 +1,592 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Support Hub Admin</title>
-  <script>
-    window.SupportHubConfig = {
-      apiBaseUrl: "https://callcenter-yskc.onrender.com"
-    };
-  </script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#ecfeff',
-              100: '#cffafe',
-              300: '#67e8f9',
-              600: '#0e7490',
-              700: '#155e75'
-            }
-          }
-        }
-      }
-    };
-  </script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Support Hub Admin - Global Call Center KB</title>
+
+	<script>
+		window.IS_ADMIN_ROUTE = true;
+		window.SupportHubConfig = {
+			apiBaseUrl: "https://callcenter-yskc.onrender.com"
+		};
+	</script>
+
+	<script>
+		(() => {
+			try {
+				const allowedCountries = ["UK", "PL", "DE"];
+				const savedCountry = localStorage.getItem("support-hub-country") || "";
+				const rawSession = localStorage.getItem("support-hub-session-v1");
+				let sessionCountry = "";
+
+				if (rawSession) {
+					const parsed = JSON.parse(rawSession);
+					if (parsed && typeof parsed === "object" && typeof parsed.countryCode === "string") {
+						sessionCountry = parsed.countryCode;
+					}
+				}
+
+				const effectiveCountry = allowedCountries.includes(sessionCountry)
+					? sessionCountry
+					: (allowedCountries.includes(savedCountry) ? savedCountry : "");
+
+				if (effectiveCountry) {
+					document.documentElement.classList.add("resume-ready");
+				}
+			} catch (error) {
+				// Ignore storage access/parsing issues.
+			}
+		})();
+	</script>
+
+	<script src="https://cdn.tailwindcss.com"></script>
+	<script>
+		tailwind.config = {
+			theme: {
+				extend: {
+					colors: {
+						brand: {
+							50: "#ecfeff",
+							100: "#cffafe",
+							300: "#67e8f9",
+							500: "#0891b2",
+							600: "#0e7490",
+							700: "#155e75"
+						}
+					},
+					boxShadow: {
+						soft: "0 12px 30px -16px rgba(14, 116, 144, 0.35)",
+						card: "0 14px 30px -18px rgba(21, 32, 51, 0.35)",
+						subtle: "0 12px 26px -18px rgba(21, 32, 51, 0.25)",
+						hover: "0 18px 40px -24px rgba(37, 99, 235, 0.35)"
+					}
+				}
+			}
+		};
+	</script>
+	<link rel="stylesheet" href="style.css">
+
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
-  <div id="toast" class="pointer-events-none fixed right-4 top-4 z-50 hidden max-w-sm rounded-2xl border px-4 py-3 text-sm font-semibold shadow-xl"></div>
 
-  <section id="loginView" class="fixed inset-0 z-40 flex items-center justify-center bg-slate-950/40 px-4 backdrop-blur-sm">
-    <div class="w-full max-w-md rounded-3xl border border-white/70 bg-white p-8 shadow-2xl">
-      <p class="text-xs font-bold uppercase tracking-[0.24em] text-brand-700">Support Hub</p>
-      <h1 class="mt-3 text-3xl font-bold text-slate-900">Admin Login</h1>
-      <p class="mt-2 text-sm text-slate-600">Sign in with the backend admin credentials configured on Render.</p>
+<body class="antialiased">
+	<div id="global-loader" class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-slate-50 text-slate-900 transition-opacity duration-300">
+		<div class="flex flex-col items-center gap-4 rounded-3xl border border-slate-200 bg-white px-8 py-7 shadow-[0_24px_70px_-30px_rgba(15,23,42,0.45)]">
+			<div class="h-12 w-12 animate-spin rounded-full border-4 border-cyan-100 border-t-brand-700"></div>
+			<div class="text-center">
+				<p class="brand-font text-sm uppercase tracking-[0.22em] text-brand-700">Support Hub</p>
+				<p class="mt-2 text-sm font-semibold text-slate-700">Wczytywanie bazy Support Hub...</p>
+			</div>
+		</div>
+	</div>
 
-      <form id="loginForm" class="mt-6 space-y-4">
-        <label class="block">
-          <span class="text-sm font-semibold text-slate-700">Username</span>
-          <input id="usernameInput" type="text" autocomplete="username" required class="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-brand-600 focus:ring-4 focus:ring-cyan-100">
-        </label>
-        <label class="block">
-          <span class="text-sm font-semibold text-slate-700">Password</span>
-          <input id="passwordInput" type="password" autocomplete="current-password" required class="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-brand-600 focus:ring-4 focus:ring-cyan-100">
-        </label>
-        <button id="loginButton" type="submit" class="inline-flex w-full items-center justify-center rounded-xl bg-brand-700 px-4 py-2.5 text-sm font-bold text-white shadow transition hover:bg-brand-600">Login</button>
-      </form>
-    </div>
-  </section>
+	<div class="decor-glow pointer-events-none fixed -right-20 -top-20 h-72 w-72 rounded-full bg-cyan-200/40 blur-3xl"></div>
+	<div class="decor-glow pointer-events-none fixed -bottom-24 -left-16 h-72 w-72 rounded-full bg-blue-200/35 blur-3xl"></div>
 
-  <main id="adminView" class="hidden min-h-screen">
-    <header class="sticky top-0 z-30 border-b border-slate-200 bg-white/90 backdrop-blur">
-      <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4 lg:px-6">
-        <div>
-          <p class="text-xs font-bold uppercase tracking-[0.22em] text-brand-700">Support Hub</p>
-          <h1 class="text-2xl font-bold text-slate-900">Admin Panel</h1>
+	        <!-- Portal Landing Screen -->
+        <section id="portalLanding" class="fixed inset-0 z-[60] flex items-center justify-center px-4 py-8 bg-slate-50/90 backdrop-blur-xl">
+                <div class="w-full max-w-4xl">
+                        <div class="text-center mb-10">
+                                <p class="brand-font text-xs uppercase tracking-[0.24em] text-brand-700">Support Hub</p>
+                                <h1 class="brand-font mt-3 text-4xl leading-tight text-slate-900 sm:text-5xl">Global Portal</h1>
+                                <p class="mt-3 text-base text-slate-600 max-w-2xl mx-auto">Select your destination based on your needs. Access live operational tools or onboarding materials.</p>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-6">
+                                <!-- Call Center Card -->
+                                <button type="button" id="btnGoToCallCenter" class="group relative flex flex-col items-center justify-center rounded-3xl border border-white/70 bg-white/80 p-10 shadow-[0_20px_60px_-25px_rgba(13,148,136,0.25)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_-25px_rgba(13,148,136,0.45)] focus:outline-none focus:ring-4 focus:ring-brand-300">
+                                        <div class="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 transition-colors group-hover:bg-brand-600 group-hover:text-white">
+                                                <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                                        </div>
+                                        <h2 class="brand-font text-2xl font-bold text-slate-900">Call Center Tool</h2>
+                                        <p class="text-center text-sm text-slate-600 mt-2">Operational database, SWAP procedures, policies, and interactive TV models spec sheets.</p>
+                                </button>
+                                <!-- Training Materials Card -->
+                                <button type="button" id="btnGoToTraining" class="group relative flex flex-col items-center justify-center rounded-3xl border border-white/70 bg-white/80 p-10 shadow-[0_20px_60px_-25px_rgba(59,130,246,0.25)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_-25px_rgba(59,130,246,0.45)] focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                        <div class="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-600 group-hover:text-white">
+                                                <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                                        </div>
+                                        <h2 class="brand-font text-2xl font-bold text-slate-900">Training Materials</h2>
+                                        <p class="text-center text-sm text-slate-600 mt-2">Learn everything about TV, MNT, and AVA product lineups. Access agent onboarding PDFs and tutorials.</p>
+                                </button>
+                        </div>
+                </div>
+        </section>
+
+        <!-- Training Shell -->
+        
+        <div id="trainingShell" class="hidden relative z-10 min-h-screen bg-slate-50">
+                <header class="sticky top-0 z-40 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl">
+                        <div class="mx-auto max-w-[1560px] px-4 py-4 md:px-6 lg:px-8">
+                                <div class="flex flex-wrap items-center gap-3 md:gap-4">
+                                        <div class="flex items-center gap-3">
+                                                <button id="btnBackToPortal" class="mr-2 inline-flex h-10 w-10 items-center justify-center rounded-full hover:bg-slate-100 transition-colors text-slate-600">
+                                                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                                                </button>
+                                                <span class="brand-font inline-flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-sm font-bold text-white">TM</span>
+                                                <div>
+                                                        <p class="brand-font text-lg leading-none text-slate-900">Training Materials</p>
+                                                        <p class="text-xs text-slate-500">Agent Onboarding Base</p>
+                                                </div>
+                                        </div>
+                                        
+                                        <nav class="order-3 w-full md:order-2 md:flex-1">
+                                                <div class="inline-flex w-full items-center rounded-xl border border-slate-300/80 bg-white/90 p-1 md:w-auto">
+                                                        <button data-train-tab="TV" class="training-tab is-active flex-1 rounded-lg px-4 py-2 text-sm font-semibold transition bg-slate-100 shadow-sm text-slate-900 md:flex-none">TV</button>
+                                                        <button data-train-tab="MNT" class="training-tab flex-1 rounded-lg px-4 py-2 text-sm font-semibold text-slate-600 transition hover:text-slate-900 md:flex-none">MNT</button>
+                                                        <button data-train-tab="AVA" class="training-tab flex-1 rounded-lg px-4 py-2 text-sm font-semibold text-slate-600 transition hover:text-slate-900 md:flex-none">AVA</button>
+                                                </div>
+                                        </nav>
+                                </div>
+                        </div>
+                </header>
+
+                <main class="mx-auto max-w-[1560px] px-4 py-8 md:px-6 lg:px-8">
+                        <div class="flex flex-col gap-6 lg:flex-row">
+                                <!-- Sidebar imitating cascading filters style -->
+                                <aside class="w-full lg:w-72 lg:shrink-0 rounded-2xl border border-slate-200 bg-white/85 p-4 shadow-card backdrop-blur lg:sticky lg:top-[120px]">
+                                        <h2 class="brand-font text-sm uppercase tracking-[0.2em] text-slate-500">Document Type</h2>
+                                        
+                                        <div class="mt-3 space-y-2">
+                                                <button class="w-full rounded-lg bg-blue-50 px-3 py-2 text-left text-sm font-semibold text-blue-700 transition hover:bg-blue-100">All Materials</button>
+                                                <button class="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-600 transition hover:bg-slate-50">Video Courses</button>
+                                                <button class="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-600 transition hover:bg-slate-50">PDF Guides</button>
+                                                <button class="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-600 transition hover:bg-slate-50">Flowcharts</button>
+                                        </div>
+
+                                        <p class="mt-4 rounded-xl border border-blue-100 bg-blue-50/70 px-3 py-2 text-xs font-semibold text-blue-700">Filter applied: All</p>
+                                </aside>
+
+                                <!-- Main content area imitating Model Results -->
+                                <div class="flex-1 lg:min-w-0">
+                                        <div class="rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-subtle backdrop-blur md:p-6 lg:p-8">
+                                                <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+                                                        <h2 class="brand-font text-2xl font-bold text-slate-800" id="trainingModuleTitle">TV Training Materials</h2>
+                                                </div>
+                                                
+                                                <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-6" id="trainingGrid">
+                                                        <div class="group relative rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-blue-300 hover:shadow-hover cursor-pointer flex flex-col gap-4">
+                                                                <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-red-50 text-red-500 transition-colors group-hover:bg-red-500 group-hover:text-white"><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" /></svg></div>
+                                                                <div>
+                                                                        <h3 class="font-bold text-slate-800">2026 TV Alignments</h3>
+                                                                        <p class="text-xs text-slate-500 mt-1">PDF Document &bull; 2.4 MB</p>
+                                                                </div>
+                                                        </div>
+                                                        
+                                                        <div class="group relative rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-blue-300 hover:shadow-hover cursor-pointer flex flex-col gap-4">
+                                                                <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-500 transition-colors group-hover:bg-blue-500 group-hover:text-white"><svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg></div>
+                                                                <div>
+                                                                        <h3 class="font-bold text-slate-800">Titan OS Overview</h3>
+                                                                        <p class="text-xs text-slate-500 mt-1">Video Course &bull; 15 mins</p>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+                </main>
         </div>
-        <div class="flex flex-wrap items-center gap-2">
-          <button id="refreshModelsBtn" type="button" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">Refresh</button>
-          <button id="logoutBtn" type="button" class="rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-700 transition hover:bg-rose-100">Logout</button>
-        </div>
-      </div>
-    </header>
+<section id="splashScreen" class="hidden hidden fixed inset-0 z-50 flex items-center justify-center px-4 py-8">
+		<div class="w-full max-w-xl rounded-3xl border border-white/70 bg-white/90 p-8 shadow-[0_20px_60px_-25px_rgba(13,148,136,0.45)] backdrop-blur-xl">
+			<p class="brand-font text-xs uppercase tracking-[0.24em] text-brand-700">Support Hub</p>
+			<h1 class="brand-font mt-3 text-3xl leading-tight text-slate-900 sm:text-4xl">Global Technical Knowledge Base</h1>
+			<p class="mt-3 text-sm text-slate-600 sm:text-base">
+				Select the operating region to load country context before entering the dashboard.
+			</p>
 
-    <div class="mx-auto grid max-w-7xl gap-5 px-4 py-6 lg:grid-cols-[320px_1fr] lg:px-6">
-      <aside class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-        <div class="inline-flex w-full rounded-xl border border-slate-200 bg-slate-50 p-1">
-          <button type="button" data-module-tab="MNT" class="module-tab flex-1 rounded-lg bg-white px-3 py-2 text-sm font-bold text-brand-700 shadow-sm">Manage MNT</button>
-          <button type="button" data-module-tab="TV" class="module-tab flex-1 rounded-lg px-3 py-2 text-sm font-bold text-slate-600">Manage TV</button>
-        </div>
+			<div class="mt-8">
+				<label for="countrySelect" class="mb-2 block text-sm font-semibold text-slate-700">Agent region</label>
+				<div class="rounded-2xl border border-slate-300 bg-white px-3 py-2 shadow-sm">
+					<select id="countrySelect" class="w-full bg-transparent text-base font-medium text-slate-800 outline-none">
+						<option value="UK">United Kingdom (UK)</option>
+						<option value="PL">Poland (PL)</option>
+						<option value="DE">Germany (DE)</option>
+					</select>
+				</div>
+			</div>
 
-        <label class="mt-4 block">
-          <span class="text-sm font-semibold text-slate-700">Find model</span>
-          <input id="modelSearchInput" type="search" list="modelOptions" placeholder="Search or type model name..." class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none focus:border-brand-600 focus:ring-4 focus:ring-cyan-100">
-          <datalist id="modelOptions"></datalist>
-        </label>
+			<button
+				id="continueBtn"
+				type="button"
+				class="mt-6 inline-flex w-full items-center justify-center rounded-2xl bg-brand-700 px-5 py-3 text-base font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-brand-600 focus:outline-none focus-visible:ring-4 focus-visible:ring-cyan-300"
+			>
+				Continue to dashboard
+			</button>
 
-        <div class="mt-3 flex gap-2">
-          <button id="loadModelBtn" type="button" class="flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold hover:bg-slate-50">Load</button>
-          <button id="newModelBtn" type="button" class="flex-1 rounded-xl bg-brand-700 px-3 py-2 text-sm font-semibold text-white hover:bg-brand-600">Add New Model</button>
-        </div>
+			<p id="splashHint" class="mt-4 text-xs text-slate-500 sm:text-sm">
+				Country profile sets SWAP procedures, contact channels, and policy routing.
+			</p>
+		</div>
+	</section>
 
-        <p id="modelCountLabel" class="mt-4 rounded-xl border border-cyan-100 bg-cyan-50 px-3 py-2 text-xs font-semibold text-brand-700">0 models loaded</p>
-      </aside>
+	<div id="appShell" class="is-hidden relative z-10">
+		<header class="sticky top-0 z-40 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl">
+			<div class="mx-auto max-w-[1560px] px-4 py-4 md:px-6 lg:px-8">
+				<div class="flex flex-wrap items-center gap-3 md:gap-4">
+					<div class="flex items-center gap-3">
+						<button id="btnBackToPortalApp" class="mr-2 inline-flex h-10 w-10 items-center justify-center rounded-full hover:bg-slate-100 transition-colors text-slate-600">
+							<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+						</button>
+						<span class="brand-font inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-700 text-sm font-bold text-white">SH</span>
+						<div>
+							<p class="brand-font text-lg leading-none text-slate-900">Support Hub</p>
+							<p class="text-xs text-slate-500">Omni-Search Knowledge Console</p>
+						</div>
+					</div>
 
-      <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div class="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <h2 id="editorTitle" class="text-xl font-bold text-slate-900">Add New Model</h2>
-            <p class="text-sm text-slate-500">Edit specs, image URLs, and support documents, then save to the backend.</p>
-          </div>
-          <button id="saveModelBtn" type="button" class="rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white shadow transition hover:bg-emerald-500">Save Model</button>
-        </div>
+					<nav id="moduleTabs" class="order-3 w-full md:order-2 md:flex-1">
+						<div class="inline-flex w-full items-center rounded-xl border border-slate-300/80 bg-white/90 p-1 md:w-auto">
+							<button data-tab="TV" type="button" class="module-tab is-active flex-1 rounded-lg px-4 py-2 text-sm font-semibold transition md:flex-none">TV</button>
+							<button data-tab="MNT" type="button" class="module-tab flex-1 rounded-lg px-4 py-2 text-sm font-semibold text-slate-600 transition hover:text-slate-900 md:flex-none">MNT</button>
+							<button data-tab="AVA" type="button" class="module-tab flex-1 rounded-lg px-4 py-2 text-sm font-semibold text-slate-600 transition hover:text-slate-900 md:flex-none">AVA</button>
+						</div>
+					</nav>
 
-        <form id="modelForm" class="mt-6 space-y-7">
-          <section>
-            <h3 class="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">Core Hardware</h3>
-            <div class="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Model Name</span><input id="modelNameInput" type="text" placeholder="27P2Q" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Brand</span><input id="brandInput" type="text" placeholder="Philips / AOC" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Year</span><input id="yearInput" type="number" min="2000" max="2100" placeholder="2026" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Panel Type</span><input id="panelTypeInput" type="text" placeholder="IPS / OLED / MiniLED" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Resolution</span><input id="resolutionInput" type="text" placeholder="2560x1440" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Refresh Rate</span><input id="refreshRateInput" type="text" placeholder="144Hz" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Warranty</span><input id="warrantyInput" type="text" placeholder="5 Years" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block" data-module-field="TV"><span class="text-sm font-semibold text-slate-700">Smart TV OS</span><input id="osInput" type="text" placeholder="Titan OS / Google TV" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block" data-module-field="TV"><span class="text-sm font-semibold text-slate-700">Platform</span><input id="platformInput" type="text" placeholder="MT9972" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block" data-module-field="TV"><span class="text-sm font-semibold text-slate-700">Chassis</span><input id="chassisInput" type="text" placeholder="TPM..." class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Aspect Ratio</span><input id="aspectRatioInput" type="text" placeholder="16:9" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Backlight</span><input id="backlightInput" type="text" placeholder="WLED" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Brightness (max)</span><input id="brightnessInput" type="text" placeholder="350" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Contrast (static)</span><input id="contrastInput" type="text" placeholder="1500:1" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-            </div>
-          </section>
+					<div class="ml-auto flex items-center gap-2 md:order-3">
+						<span id="countryBadge" class="rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-semibold text-brand-700"></span>
 
-          <section data-module-field="MNT">
-            <h3 class="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">Physical Details</h3>
-            <div class="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Tilt</span><input id="tiltInput" type="text" placeholder="-5/30°" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Height Adjust</span><input id="heightAdjustInput" type="text" placeholder="150mm" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Pivot</span><input id="pivotInput" type="text" placeholder="Yes / 90°" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Swivel</span><input id="swivelInput" type="text" placeholder="-180/180°" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">VESA Wallmount</span><input id="vesaInput" type="text" placeholder="100 x 100" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Bezel Type</span><input id="bezelTypeInput" type="text" placeholder="4 side like" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Webcam</span><input id="webcamInput" type="text" placeholder="No" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-            </div>
-          </section>
+						<button
+							id="printModeBtn"
+							type="button"
+							class="rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100"
+						>
+							Print mode
+						</button>
 
-          <section>
-            <h3 class="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">Audio Specifications</h3>
-            <div class="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Speakers / Channels</span><input id="speakersInput" type="text" placeholder="Yes / 2.1 CH" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Speaker Power / Audio Power</span><input id="speakerPowerInput" type="text" placeholder="2W x 2 / 80W" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-            </div>
-          </section>
+						<button
+							id="changelogBtn"
+							type="button"
+							class="relative inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-600 transition hover:bg-slate-50"
+							aria-label="Open changelog"
+						>
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+								<path stroke-linecap="round" stroke-linejoin="round" d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+							</svg>
+							<span id="changelogUnreadDot" class="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white"></span>
+						</button>
 
-          <section>
-            <h3 class="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">Connectivity</h3>
-            <div class="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-              <label class="block"><span class="text-sm font-semibold text-slate-700">HDMI</span><input id="hdmiInput" type="text" placeholder="2x 2.1 / 1x 2.0" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">DisplayPort</span><input id="dpInput" type="text" placeholder="1x 1.4" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">USB-C</span><input id="usbCInput" type="text" placeholder="Yes / No" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">USB Hub</span><input id="usbHubInput" type="text" placeholder="Yes / No" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block" data-module-field="MNT"><span class="text-sm font-semibold text-slate-700">KVM Switch</span><input id="kvmInput" type="text" placeholder="No" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block" data-module-field="MNT"><span class="text-sm font-semibold text-slate-700">Adaptive Sync</span><input id="adaptiveSyncInput" type="text" placeholder="FreeSync Premium" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block" data-module-field="MNT"><span class="text-sm font-semibold text-slate-700">RJ45</span><input id="rj45Input" type="text" placeholder="No" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Headphone out / Audio In</span><input id="audioIoInput" type="text" placeholder="Audio-in, Headphone out" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block" data-module-field="TV"><span class="text-sm font-semibold text-slate-700">WiFi</span><input id="wifiInput" type="text" placeholder="Wi-Fi 6" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block" data-module-field="TV"><span class="text-sm font-semibold text-slate-700">Bluetooth</span><input id="bluetoothInput" type="text" placeholder="Bluetooth 5.2" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-            </div>
-          </section>
+						<button
+							id="changeCountryBtn"
+							type="button"
+							class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+						>
+							Change country
+						</button>
+					</div>
+				</div>
 
-          <section data-module-field="MNT">
-            <h3 class="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">What's in the box</h3>
-            <div class="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-              <label class="block"><span class="text-sm font-semibold text-slate-700">HDMI cable</span><input id="boxHdmiCableInput" type="text" placeholder="1.8m" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">DisplayPort Cable</span><input id="boxDpCableInput" type="text" placeholder="1.8m" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">USB-A to B Cable</span><input id="boxUsbABInput" type="text" placeholder="0 = No" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">USB-C Cable</span><input id="boxUsbCInput" type="text" placeholder="0 = No" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-            </div>
-          </section>
+				<div id="globalSearchWrap" class="mt-4">
+					<label for="globalSearch" class="block text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Global Omni-Search</label>
+					<div class="relative mt-2">
+						<span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="h-5 w-5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m1.1-4.65a6.75 6.75 0 1 1-13.5 0 6.75 6.75 0 0 1 13.5 0Z" />
+							</svg>
+						</span>
+						<input
+							id="globalSearch"
+							type="text"
+							autocomplete="off"
+							placeholder="Search models, chassis, Matter, contact numbers, policy rules, known issues..."
+							class="w-full rounded-2xl border border-slate-300 bg-white px-11 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-500 focus:ring-4 focus:ring-cyan-100"
+						>
+						<span class="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg border border-slate-300 bg-slate-50 px-2 py-1 text-[11px] font-semibold text-slate-500">Ctrl+F</span>
 
-          <section>
-            <h3 class="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">Knowledge Features</h3>
-            <textarea id="knowledgeFeaturesInput" rows="3" placeholder="One feature per line" class="mt-3 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></textarea>
-          </section>
+						<div id="omniSearchDropdown" class="search-dropdown-hidden absolute left-0 right-0 top-[calc(100%+8px)] z-50 max-h-[420px] overflow-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl"></div>
+					</div>
 
-          <section>
-            <h3 class="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">Media</h3>
-            <div class="mt-3 grid gap-4 md:grid-cols-3">
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Front Image URL</span><input id="frontImageInput" type="url" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Side Image URL</span><input id="sideImageInput" type="url" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-              <label class="block"><span class="text-sm font-semibold text-slate-700">Ports Image URL</span><input id="portsImageInput" type="url" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"></label>
-            </div>
-          </section>
+					<p id="moduleNotice" class="mt-2 text-xs text-slate-500">TV module active. MNT and AVA are visual placeholders for future domains.</p>
+				</div>
+			</div>
+		</header>
 
-          <section>
-            <div class="flex flex-wrap items-center justify-between gap-3">
-              <h3 class="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">Support Links</h3>
-              <button id="addSupportLinkBtn" type="button" class="rounded-xl border border-cyan-200 bg-cyan-50 px-3 py-2 text-sm font-semibold text-brand-700 hover:bg-cyan-100">Add Link</button>
-            </div>
-            <div id="supportLinksList" class="mt-3 space-y-3"></div>
-          </section>
-        </form>
-      </section>
-    </div>
-  </main>
+		<main class="mx-auto max-w-[1560px] px-4 py-6 md:px-6 lg:px-8">
+			<div id="mainContentGrid" class="grid items-start gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
+				<aside id="leftSidebar" class="rounded-2xl border border-slate-200 bg-white/85 p-4 shadow-card backdrop-blur lg:sticky lg:top-[154px]">
+					<h2 class="brand-font text-sm uppercase tracking-[0.2em] text-slate-500">Cascading Filters</h2>
 
-  <script type="module" src="./src/admin.js"></script>
+					<div class="mt-3 space-y-3">
+						<div>
+							<label for="yearFilter" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">1) Year</label>
+							<select id="yearFilter" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-cyan-100"></select>
+						</div>
+						<div>
+							<label for="osFilter" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">2) OS</label>
+							<select id="osFilter" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-cyan-100"></select>
+						</div>
+						<div>
+							<label for="panelFilter" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">3) Panel</label>
+							<select id="panelFilter" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-cyan-100"></select>
+						</div>
+					</div>
+
+					<p id="activePath" class="mt-4 rounded-xl border border-cyan-100 bg-cyan-50/70 px-3 py-2 text-xs font-semibold text-brand-700">Path: Any Year -> Any OS -> Any Panel</p>
+				</aside>
+
+				<section class="space-y-5">
+					<section id="modelResultsSection" class="rounded-2xl border border-slate-200 bg-white/85 p-4 shadow-card">
+						<div class="mb-3 grid items-center gap-2 md:grid-cols-[1fr_auto_1fr]">
+							<h2 id="resultsSectionTitle" class="brand-font text-xl text-slate-900 md:justify-self-start">Model Results</h2>
+							<div id="resultModeSwitch" class="inline-flex items-center justify-self-center rounded-full border border-slate-300 bg-white p-0.5">
+								<button id="resultsModeModelsBtn" type="button" class="result-view-tab is-active rounded-full px-3 py-1 text-xs font-semibold text-slate-700 transition">Models</button>
+								<button id="resultsModeArticlesBtn" type="button" class="result-view-tab rounded-full px-3 py-1 text-xs font-semibold text-slate-700 transition">Articles</button>
+							</div>
+							<span id="resultCountBadge" class="rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-semibold text-brand-700 md:justify-self-end">0 models</span>
+						</div>
+
+						<div id="modelGrid" class="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3"></div>
+						<p id="emptyState" class="mt-3 hidden rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">No models matched current filters/query.</p>
+					</section>
+
+					<section id="modelDetailSection" class="hidden rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-card">
+						<div class="flex flex-wrap items-start justify-between gap-3">
+							<div>
+								<p id="detailTypeLabel" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">TV Model Detail</p>
+								<h3 id="detailTitle" class="brand-font mt-1 text-2xl text-slate-900"></h3>
+								<p id="detailSubTitle" class="mt-1 text-sm text-slate-600"></p>
+							</div>
+							<div class="flex gap-2">
+								<button id="backToResultsBtn" type="button" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50">Back to model list</button>
+								<button id="printNowBtn" type="button" class="rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100">Print this detail</button>
+							</div>
+						</div>
+
+						<div id="detailBadges" class="mt-3 flex flex-wrap gap-2"></div>
+
+						<div id="detailTabs" class="mt-4 inline-flex w-full items-center rounded-xl border border-slate-300 bg-white p-1 sm:w-auto">
+							<button data-detail-tab="specs" type="button" class="detail-tab is-active flex-1 rounded-lg border border-transparent px-4 py-2 text-sm font-semibold transition sm:flex-none">Specs</button>
+							<button data-detail-tab="ports" type="button" class="detail-tab flex-1 rounded-lg border border-transparent px-4 py-2 text-sm font-semibold text-slate-600 transition hover:text-slate-900 sm:flex-none">Ports</button>
+							<button data-detail-tab="troubleshooting" type="button" class="detail-tab flex-1 rounded-lg border border-transparent px-4 py-2 text-sm font-semibold text-slate-600 transition hover:text-slate-900 sm:flex-none">Troubleshooting</button>
+							<button data-detail-tab="policies" type="button" class="detail-tab flex-1 rounded-lg border border-transparent px-4 py-2 text-sm font-semibold text-slate-600 transition hover:text-slate-900 sm:flex-none">Policies</button>
+							<button data-detail-tab="gallery" type="button" class="detail-tab flex-1 rounded-lg border border-transparent px-4 py-2 text-sm font-semibold text-slate-600 transition hover:text-slate-900 sm:flex-none">Gallery / Images</button>
+						</div>
+
+						<div id="detailPanes" class="mt-4">
+							<div data-pane="specs"></div>
+							<div data-pane="ports" class="pane-hidden"></div>
+							<div data-pane="troubleshooting" class="pane-hidden"></div>
+							<div data-pane="policies" class="pane-hidden"></div>
+							<div data-pane="gallery" class="pane-hidden"></div>
+						</div>
+					</section>
+
+					<section id="articleViewSection" class="hidden rounded-2xl border border-slate-200 bg-white/92 p-6 shadow-card">
+						<div class="flex flex-wrap items-start justify-between gap-3">
+							<div>
+								<p id="articleTypeLabel" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Article</p>
+								<h3 id="articleTitle" class="brand-font mt-1 text-2xl text-slate-900"></h3>
+								<p id="articleSummary" class="mt-1 text-sm text-slate-600"></p>
+							</div>
+							<div class="flex gap-2">
+								<button id="articleBackBtn" type="button" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50">Back to model list</button>
+								<button id="articlePrintBtn" type="button" class="rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100">Print article</button>
+							</div>
+						</div>
+						<div id="articleContent" class="mt-4 space-y-4"></div>
+						<div id="articleRecommendationDock" class="mt-4"></div>
+					</section>
+				</section>
+			</div>
+		</main>
+	</div>
+
+	<div id="changelogPanel" class="changelog-panel-hidden fixed right-4 top-[86px] z-50 w-[min(92vw,380px)] rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-2xl backdrop-blur-xl transition-all duration-300">
+		<div class="flex items-center justify-between">
+			<p class="brand-font text-sm uppercase tracking-[0.18em] text-slate-500">Changelog</p>
+			<button id="closeChangelogBtn" type="button" class="rounded-lg border border-slate-300 px-2 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-50">Close</button>
+		</div>
+		<div id="changelogAccordion" class="mt-3 space-y-2"></div>
+	</div>
+
+	<div id="quickInfoModal" class="hidden fixed inset-0 z-[70] flex items-center justify-center bg-slate-900/35 p-4 backdrop-blur-[1px]" role="dialog" aria-modal="true" aria-labelledby="quickInfoTitle">
+		<div id="quickInfoCard" class="w-[min(96vw,560px)] rounded-2xl border border-slate-200 bg-white p-5 shadow-2xl">
+			<div class="flex items-start justify-between gap-3">
+				<div>
+					<p class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Quick Feature Info</p>
+					<h4 id="quickInfoTitle" class="mt-1 text-xl font-semibold text-slate-900"></h4>
+					<p id="quickInfoSummary" class="mt-1 text-sm text-slate-600"></p>
+				</div>
+				<button id="quickInfoCloseBtn" type="button" class="rounded-lg border border-slate-300 bg-white px-2 py-1 text-xs font-semibold text-slate-600 transition hover:bg-slate-50">X</button>
+			</div>
+
+			<ul id="quickInfoPoints" class="mt-4 list-disc space-y-1 pl-5 text-sm text-slate-700"></ul>
+
+			<div class="mt-5 flex flex-wrap justify-end gap-2">
+				<button id="quickInfoDismissBtn" type="button" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50">Close</button>
+				<button id="quickInfoReadBtn" type="button" class="rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100">Read Full Article</button>
+			</div>
+		</div>
+	</div>
+
+	<div id="quickInfoToast" class="pointer-events-none fixed bottom-5 left-1/2 z-[72] hidden -translate-x-1/2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-xl"></div>
+
+	<div id="specDetailsModal" class="hidden fixed inset-0 z-[71] flex items-center justify-center bg-slate-900/35 p-4 backdrop-blur-[1px]" role="dialog" aria-modal="true" aria-labelledby="specDetailsTitle">
+		<div id="specDetailsCard" class="w-[min(96vw,960px)] max-h-[88vh] overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-2xl">
+			<div class="flex items-start justify-between gap-3">
+				<div>
+					<p class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Expanded Technical View</p>
+					<h4 id="specDetailsTitle" class="mt-1 text-xl font-semibold text-slate-900"></h4>
+					<p id="specDetailsSummary" class="mt-1 text-sm text-slate-600"></p>
+				</div>
+				<button id="specDetailsCloseBtn" type="button" class="rounded-lg border border-slate-300 bg-white px-2 py-1 text-xs font-semibold text-slate-600 transition hover:bg-slate-50">X</button>
+			</div>
+
+			<div id="specDetailsBody" class="mt-4 max-h-[62vh] overflow-auto"></div>
+
+			<div class="mt-5 flex flex-wrap justify-end gap-2">
+				<button id="specDetailsDismissBtn" type="button" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50">Close</button>
+			</div>
+		</div>
+	</div>
+
+	<div id="imageZoomModal" class="hidden fixed inset-0 z-[73] flex items-center justify-center bg-slate-900/75 p-4" role="dialog" aria-modal="true" aria-label="Image zoom preview">
+		<div id="imageZoomCard" class="relative w-[min(96vw,1400px)] max-h-[92vh] rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl">
+			<button id="imageZoomCloseBtn" type="button" class="absolute right-2 top-2 z-10 rounded-lg border border-slate-300 bg-white px-2 py-1 text-xs font-semibold text-slate-600 transition hover:bg-slate-50">X</button>
+			<div id="imageZoomLoading" class="absolute inset-0 hidden items-center justify-center rounded-xl bg-white/80">
+				<div class="flex flex-col items-center gap-2 text-slate-600">
+					<span class="h-8 w-8 animate-spin rounded-full border-2 border-slate-300 border-t-brand-700"></span>
+					<p class="text-xs font-semibold uppercase tracking-[0.14em]">Loading image</p>
+				</div>
+			</div>
+			<img id="imageZoomPreview" src="" alt="Zoom preview" class="block max-h-[86vh] w-full rounded-xl object-contain transition-opacity duration-200">
+		</div>
+	</div>
+
+	<button
+		id="scrollTopBtn"
+		type="button"
+		class="scroll-btn-hidden fixed bottom-5 right-5 z-40 rounded-full border border-brand-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-brand-700 shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:bg-cyan-100"
+	>
+		Top
+	</button>
+
+<script>
+	(() => {
+		const trainingMaterials = {
+			TV: [
+				{ title: "2026 TV Alignments", type: "PDF Guides", meta: "PDF Document - 2.4 MB" },
+				{ title: "Titan OS Overview", type: "Video Courses", meta: "Video Course - 15 mins" }
+			],
+			MNT: [
+				{ title: "MNT Display Alignment Guide", type: "PDF Guides", meta: "PDF Document - 1.8 MB" },
+				{ title: "Smart Monitor OS Overview", type: "Video Courses", meta: "Video Course - 12 mins" }
+			],
+			AVA: [
+				{ title: "AVA Product Alignment Guide", type: "PDF Guides", meta: "PDF Document - 2.1 MB" },
+				{ title: "Audio Setup Overview", type: "Video Courses", meta: "Video Course - 10 mins" }
+			]
+		};
+
+		function view(name) {
+			return document.getElementById(name);
+		}
+
+		function showOnly(name) {
+			["portalLanding", "splashScreen", "trainingShell", "appShell"].forEach((id) => {
+				const el = view(id);
+				if (el) {
+					el.classList.add("hidden");
+				}
+			});
+
+			const target = view(name);
+			if (target) {
+				target.classList.remove("hidden");
+			}
+		}
+
+		function showSplash() {
+			document.documentElement.classList.remove("resume-ready");
+			showOnly("splashScreen");
+			view("splashScreen")?.classList.remove("is-hiding");
+			view("appShell")?.classList.add("is-hidden");
+		}
+
+		function showTraining() {
+			showOnly("trainingShell");
+			updateTrainingMaterials();
+		}
+
+		function showDashboardFallback() {
+			showOnly("appShell");
+			view("appShell")?.classList.remove("is-hidden");
+			view("countryBadge").textContent = view("countrySelect")?.selectedOptions?.[0]?.textContent || "";
+			localStorage.setItem("support-hub-country", view("countrySelect")?.value || "UK");
+		}
+
+		let currentTrainModule = "TV";
+		let currentTrainFilter = "All Materials";
+
+		function updateTrainingMaterials() {
+			const title = view("trainingModuleTitle");
+			const cards = Array.from(document.querySelectorAll("#trainingGrid > div"));
+			const materials = trainingMaterials[currentTrainModule] || trainingMaterials.TV;
+
+			if (title) {
+				title.textContent = currentTrainModule + " Training Materials";
+			}
+
+			cards.forEach((card, index) => {
+				const material = materials[index];
+				const heading = card.querySelector("h3");
+				const meta = card.querySelector("p");
+
+				if (!material) {
+					card.style.display = "none";
+					return;
+				}
+
+				card.dataset.type = material.type;
+				if (heading) {
+					heading.textContent = material.title;
+				}
+				if (meta) {
+					meta.textContent = material.meta;
+				}
+				card.style.display = currentTrainFilter === "All Materials" || currentTrainFilter === material.type ? "" : "none";
+			});
+		}
+
+		function bindFallbackNavigation() {
+			view("btnGoToCallCenter")?.addEventListener("click", showSplash);
+			view("btnGoToTraining")?.addEventListener("click", showTraining);
+			view("btnBackToPortal")?.addEventListener("click", () => showOnly("portalLanding"));
+			view("btnBackToPortalApp")?.addEventListener("click", () => showOnly("portalLanding"));
+			view("continueBtn")?.addEventListener("click", showDashboardFallback);
+
+			document.querySelectorAll(".training-tab").forEach((tab) => {
+				tab.addEventListener("click", () => {
+					document.querySelectorAll(".training-tab").forEach((item) => {
+						item.classList.remove("is-active", "bg-slate-100", "shadow-sm", "text-slate-900");
+						item.classList.add("text-slate-600");
+					});
+					tab.classList.add("is-active", "bg-slate-100", "shadow-sm", "text-slate-900");
+					tab.classList.remove("text-slate-600");
+					currentTrainModule = tab.dataset.trainTab || "TV";
+					updateTrainingMaterials();
+				});
+			});
+
+			document.querySelectorAll(".w-full.lg\\:w-72.lg\\:shrink-0 .space-y-2 button").forEach((button) => {
+				button.addEventListener("click", () => {
+					currentTrainFilter = button.textContent.trim();
+					const label = document.querySelector(".w-full.lg\\:w-72.lg\\:shrink-0 p.text-xs");
+					if (label) {
+						label.textContent = "Filter applied: " + currentTrainFilter.replace(" Materials", "");
+					}
+					updateTrainingMaterials();
+				});
+			});
+		}
+
+		if (document.readyState === "loading") {
+			document.addEventListener("DOMContentLoaded", bindFallbackNavigation);
+		} else {
+			bindFallbackNavigation();
+		}
+	})();
+</script>
+<script type="module" src="src/main.js"></script>
 </body>
 </html>
 

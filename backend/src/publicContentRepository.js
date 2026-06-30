@@ -429,6 +429,8 @@ async function loadModelMediaData() {
         sideImageUrl: toNullableText(row.side_image_url),
         remoteImageUrl: toNullableText(row.remote_image_url),
         portsImageUrl: toNullableText(row.ports_image_url),
+        media: isPlainObject(toObject(row.source_meta).media) ? toObject(row.source_meta).media : undefined,
+        support: isPlainObject(toObject(row.source_meta).support) ? toObject(row.source_meta).support : undefined,
         sourceMeta: toObject(row.source_meta)
       };
     }

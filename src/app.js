@@ -1420,6 +1420,13 @@ export async function initCallCenterApp(api, options) {
 						throw new Error(payload && payload.message ? payload.message : "Save failed");
 					}
 					updateAdminModelInCollections(model);
+					await clearSupportHubJsonCache();
+					if (api && api.cache && typeof api.cache.clear === "function") {
+						api.cache.clear();
+					}
+					if (api && Object.prototype.hasOwnProperty.call(api, "_bootstrapPromise")) {
+						api._bootstrapPromise = null;
+					}
 					setAdminDirty(false);
 				} catch (error) {
 					window.alert("Save failed: " + (error && error.message ? error.message : "Unknown error"));
@@ -3685,7 +3692,8 @@ export async function initCallCenterApp(api, options) {
 					group.seenRows.add(rowKey);
 					group.rows.push({
 						label,
-						value: translateValue(formatTechnicalListValue(category, rawLabel, row && row.value))
+						value: translateValue(formatTechnicalListValue(category, rawLabel, row && row.value)),
+						adminPath: ["specs", "technicalByCategory", category, rawLabel]
 					});
 				});
 
@@ -3700,7 +3708,7 @@ export async function initCallCenterApp(api, options) {
 									? "<td class=\"px-3 py-2 text-slate-600 align-top\" rowspan=\"" + String(rowsInCategory.length) + "\">" + escapeHtml(group.category) + "</td>"
 									: "")
 								+ "<td class=\"px-3 py-2 font-semibold text-slate-800\">" + escapeHtml(row.label) + "</td>"
-								+ "<td class=\"px-3 py-2 text-slate-700\">" + escapeHtml(row.value) + "</td>"
+								+ "<td class=\"px-3 py-2 text-slate-700\">" + adminEditableValue(row.adminPath, row.value, row.label) + "</td>"
 								+ "</tr>")
 							.join("");
 					})
@@ -3718,7 +3726,8 @@ export async function initCallCenterApp(api, options) {
 					+ (bodyRows || fallbackRow)
 					+ "</tbody>"
 					+ "</table>"
-					+ "</div>";
+					+ "</div>"
+					+ (state.isAdmin ? "<div class=\"mt-3 flex justify-end\">" + adminAddButton(["specs", "technicalByCategory"], "Add New Field") + "</div>" : "");
 			}
 
 			function isBasicFeatureValue(value) {
@@ -3899,10 +3908,22 @@ export async function initCallCenterApp(api, options) {
 					: {};
 				const params = new URLSearchParams(window.location.search || "");
 				return {
-					disabled: Boolean(runtimeConfig.disableJsonCache),
+					disabled: Boolean(runtimeConfig.disableJsonCache) || state.isAdminRoute,
 					refresh: params.has("refreshCache"),
 					clear: params.has("clearSupportHubCache")
 				};
+			}
+
+			async function clearSupportHubJsonCache() {
+				if (!window.caches) {
+					return;
+				}
+
+				try {
+					await window.caches.delete(supportHubCacheName);
+				} catch (error) {
+					console.warn("[Cache] Failed to clear Support Hub cache:", error);
+				}
 			}
 
 			async function clearSupportHubJsonCacheIfRequested() {
@@ -3955,28 +3976,32 @@ export async function initCallCenterApp(api, options) {
 
 			async function fetchJsonWithTimeout(url, timeoutMs) {
 				await clearSupportHubJsonCacheIfRequested();
-				const cachedJson = await readCachedJson(url);
+				const effectiveUrl = state.isAdminRoute
+					? url + (url.includes("?") ? "&" : "?") + "t=" + Date.now()
+					: url;
+				const cachedJson = await readCachedJson(effectiveUrl);
 				if (cachedJson) {
 					return cachedJson;
 				}
-				console.log("[Fetch] Fetching JSON:", url);
+				console.log("[Fetch] Fetching JSON:", effectiveUrl);
 
 				const controller = new AbortController();
 				const timer = window.setTimeout(() => controller.abort(), timeoutMs);
 
 				try {
-					const response = await fetch(url, {
+					const response = await fetch(effectiveUrl, {
 						headers: {
 							"Accept": "application/json"
 						},
-						signal: controller.signal
+						signal: controller.signal,
+						cache: state.isAdminRoute ? "no-store" : "default"
 					});
 
 					if (!response.ok) {
 						return null;
 					}
 
-					await writeJsonResponseToCache(url, response);
+					await writeJsonResponseToCache(effectiveUrl, response);
 					return response.json();
 				} catch (error) {
 					return null;
@@ -5335,14 +5360,14 @@ export async function initCallCenterApp(api, options) {
 				const placeholders = isMnt ? [] : safeList(model.galleryPlaceholders);
 				const fallbackItems = isMnt
 					? [
-						{ label: imageLabel(1), note: "" },
-						{ label: imageLabel(2), note: "" },
-						{ label: imageLabel(3), note: "" }
+						{ label: imageLabel(1), note: "", adminPath: ["__media", "media", "frontImageUrl"] },
+						{ label: imageLabel(2), note: "", adminPath: ["__media", "media", "sideImageUrl"] },
+						{ label: imageLabel(3), note: "", adminPath: ["__media", "media", "portsImageUrl"] }
 					]
 					: [
-						{ label: getModelName(model) + " front view", note: "Placeholder for product photo." },
-						{ label: getModelName(model) + " remote control", note: "Placeholder for remote image." },
-						{ label: getModelName(model) + " connectors", note: "Placeholder for rear ports image." }
+						{ label: getModelName(model) + " front view", note: "Placeholder for product photo.", adminPath: ["__media", "frontImageUrl"] },
+						{ label: getModelName(model) + " remote control", note: "Placeholder for remote image.", adminPath: ["__media", "remoteImageUrl"] },
+						{ label: getModelName(model) + " connectors", note: "Placeholder for rear ports image.", adminPath: ["__media", "portsImageUrl"] }
 					];
 				const sourceItems = mediaItems.some((item) => getSafeHttpUrl(item && item.imageUrl)) || isMnt
 					? mediaItems
@@ -5369,6 +5394,7 @@ export async function initCallCenterApp(api, options) {
 					})()).join("");
 
 				return ""
+					+ (state.isAdmin ? "<div class=\"mb-3 flex justify-end\">" + adminAddButton(["__media"], "Add Image") + "</div>" : "")
 					+ "<div class=\"grid gap-3 sm:grid-cols-2 xl:grid-cols-3\">"
 					+ items
 					+ "</div>";
@@ -6207,6 +6233,18 @@ export async function initCallCenterApp(api, options) {
 						return;
 					}
 
+					const adminImagePlaceholder = target.closest(".js-admin-image-placeholder");
+					if (adminImagePlaceholder && state.isAdmin) {
+						event.preventDefault();
+						event.stopPropagation();
+						const path = parseAdminPath(adminImagePlaceholder.getAttribute("data-admin-image-path"));
+						const nextUrl = window.prompt("Image URL", "https://");
+						if (nextUrl !== null && setNestedAdminValue(path, nextUrl.trim())) {
+							refreshCurrentAdminDetail();
+						}
+						return;
+					}
+
 					const adminEditTrigger = target.closest(".js-admin-edit");
 					if (adminEditTrigger && state.isAdmin) {
 						event.preventDefault();
@@ -6226,6 +6264,64 @@ export async function initCallCenterApp(api, options) {
 						event.preventDefault();
 						event.stopPropagation();
 						const path = parseAdminPath(adminAddTrigger.getAttribute("data-admin-path"));
+						if (path.length === 1 && path[0] === "__media") {
+							const slot = safeText(window.prompt("Image slot: front, side, remote, ports", "front"), "").toLowerCase();
+							const keyBySlot = {
+								front: "frontImageUrl",
+								side: isMntModel(state.currentModel) ? "media.sideImageUrl" : "sideImageUrl",
+								remote: "remoteImageUrl",
+								ports: isMntModel(state.currentModel) ? "media.portsImageUrl" : "portsImageUrl"
+							};
+							const key = keyBySlot[slot] || keyBySlot.front;
+							const url = window.prompt("Image URL", "https://");
+							if (!url) {
+								return;
+							}
+							const mediaTarget = getMutableAdminTarget(path);
+							if (mediaTarget) {
+								if (key.includes(".")) {
+									const parts = key.split(".");
+									if (!isPlainObject(mediaTarget[parts[0]])) {
+										mediaTarget[parts[0]] = {};
+									}
+									mediaTarget[parts[0]][parts[1]] = url.trim();
+								} else {
+									mediaTarget[key] = url.trim();
+								}
+								setAdminDirty(true);
+								refreshCurrentAdminDetail();
+							}
+							return;
+						}
+						if (path.length === 3 && path[0] === "specs" && path[1] === "technicalByCategory") {
+							const defaultCategory = state.specDetailsContext && state.specDetailsContext.detailType
+								? ({
+									core: "Display/Panel",
+									audio: "Sound",
+									physical: "Physical",
+									connectivity: "Connectivity",
+									dimensions: "Dimensions"
+								}[state.specDetailsContext.detailType] || "General")
+								: "General";
+							const categoryName = safeText(window.prompt("Section / category", defaultCategory), "");
+							if (!categoryName) {
+								return;
+							}
+							const fieldName = safeText(window.prompt("New Field Name", ""), "");
+							if (!fieldName) {
+								return;
+							}
+							const fieldValue = window.prompt("Value", "");
+							if (fieldValue === null) {
+								return;
+							}
+							if (setNestedAdminValue(["specs", "technicalByCategory", categoryName, fieldName], fieldValue.trim())) {
+								updateAdminModelInCollections(state.currentModel);
+								renderSpecDetailsModalFromContext();
+								refreshCurrentAdminDetail();
+							}
+							return;
+						}
 						const isSupportPath = path[0] === "__media" && path[path.length - 1] === "support";
 						if (isSupportPath) {
 							const label = window.prompt("Support link label", "Manual (en)");
@@ -6450,6 +6546,51 @@ export async function initCallCenterApp(api, options) {
 				specDetailsBody.addEventListener("click", (event) => {
 					const target = event.target;
 					if (!(target instanceof Element)) {
+						return;
+					}
+
+					const adminEditTrigger = target.closest(".js-admin-edit");
+					if (adminEditTrigger && state.isAdmin) {
+						event.preventDefault();
+						event.stopPropagation();
+						const path = parseAdminPath(adminEditTrigger.getAttribute("data-admin-path"));
+						const currentText = safeText(adminEditTrigger.parentElement && adminEditTrigger.parentElement.querySelector(".js-admin-value") && adminEditTrigger.parentElement.querySelector(".js-admin-value").textContent, "");
+						const nextValue = window.prompt("Update value", currentText === "-" ? "" : currentText);
+						if (nextValue !== null && setNestedAdminValue(path, nextValue.trim())) {
+							updateAdminModelInCollections(state.currentModel);
+							renderSpecDetailsModalFromContext();
+							refreshCurrentAdminDetail();
+						}
+						return;
+					}
+
+					const adminAddTrigger = target.closest(".js-admin-add");
+					if (adminAddTrigger && state.isAdmin) {
+						event.preventDefault();
+						event.stopPropagation();
+						const path = parseAdminPath(adminAddTrigger.getAttribute("data-admin-path"));
+						if (path.length === 3 && path[0] === "specs" && path[1] === "technicalByCategory") {
+							const defaultCategory = state.specDetailsContext && state.specDetailsContext.detailType
+								? ({
+									core: "Display/Panel",
+									audio: "Sound",
+									physical: "Physical",
+									connectivity: "Connectivity",
+									dimensions: "Dimensions"
+								}[state.specDetailsContext.detailType] || "General")
+								: "General";
+							const categoryName = safeText(window.prompt("Section / category", defaultCategory), "");
+							const fieldName = safeText(window.prompt("New Field Name", ""), "");
+							if (!categoryName || !fieldName) {
+								return;
+							}
+							const fieldValue = window.prompt("Value", "");
+							if (fieldValue !== null && setNestedAdminValue(["specs", "technicalByCategory", categoryName, fieldName], fieldValue.trim())) {
+								updateAdminModelInCollections(state.currentModel);
+								renderSpecDetailsModalFromContext();
+								refreshCurrentAdminDetail();
+							}
+						}
 						return;
 					}
 

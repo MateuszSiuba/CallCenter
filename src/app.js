@@ -1499,7 +1499,7 @@ export async function initCallCenterApp(api, options) {
 				const firstKey = path && path[0];
 				if (firstKey === "__media") {
 					const model = state.currentModel || getModelById(state.selectedModelId);
-					const modelName = getModelName(model);
+					const modelName = safeText(getModelName(model), "").split("/")[0] || getModelName(model);
 					if (!state.data.ModelMediaData) {
 						state.data.ModelMediaData = {};
 					}
@@ -1604,6 +1604,81 @@ export async function initCallCenterApp(api, options) {
 				return true;
 			}
 
+			function deleteNestedAdminValue(path) {
+				if (!Array.isArray(path) || path.length === 0) {
+					return false;
+				}
+				if (!isAdminDeletablePath(path)) {
+					return false;
+				}
+				const target = getMutableAdminTarget(path);
+				const usablePath = path[0] === "__media" ? path.slice(1) : path;
+				if (!target || usablePath.length === 0) {
+					return false;
+				}
+
+				let cursor = target;
+				for (let index = 0; index < usablePath.length - 1; index += 1) {
+					cursor = cursor && cursor[usablePath[index]];
+					if (!cursor) {
+						return false;
+					}
+				}
+
+				const finalKey = usablePath[usablePath.length - 1];
+				const actualObjectKey = isPlainObject(cursor)
+					? Object.keys(cursor).find((candidate) => candidate === finalKey || normalizeLookupKey(candidate) === normalizeLookupKey(finalKey))
+					: "";
+				const removedSupportUrl = path[0] === "__media" && usablePath[0] === "support" && actualObjectKey
+					? safeText(cursor[actualObjectKey] && (cursor[actualObjectKey].url || cursor[actualObjectKey].href || cursor[actualObjectKey].link), "")
+					: "";
+				if (Array.isArray(cursor)) {
+					const itemIndex = Number(finalKey);
+					if (!Number.isInteger(itemIndex) || itemIndex < 0 || itemIndex >= cursor.length) {
+						return false;
+					}
+					cursor.splice(itemIndex, 1);
+				} else if (isPlainObject(cursor)) {
+					if (!actualObjectKey) {
+						return false;
+					}
+					if (path[0] === "__media" && /imageurl$/i.test(actualObjectKey)) {
+						cursor[actualObjectKey] = "";
+					} else {
+						delete cursor[actualObjectKey];
+					}
+				} else {
+					return false;
+				}
+
+				if (path[0] === "__media" && usablePath[0] === "support") {
+					const removedKey = safeText(finalKey, "");
+					const model = state.currentModel || getModelById(state.selectedModelId);
+					if (model && Array.isArray(model.supportLinks)) {
+						model.supportLinks = model.supportLinks.filter((entry) => {
+							const title = safeText(entry && (entry.title || entry.label || entry.name), "");
+							const url = safeText(entry && (entry.url || entry.href || entry.link), "");
+							return normalizeLookupKey(title) !== normalizeLookupKey(removedKey)
+								&& (!removedSupportUrl || url !== removedSupportUrl);
+						});
+					}
+				}
+
+				setAdminDirty(true);
+				return true;
+			}
+
+			function isAdminDeletablePath(path) {
+				if (!Array.isArray(path) || path[0] !== "__media") {
+					return false;
+				}
+				if (path[1] === "support" && path.length === 3) {
+					return true;
+				}
+				const finalKey = safeText(path[path.length - 1], "");
+				return /imageurl$/i.test(finalKey);
+			}
+
 			function adminEditButton(path, label) {
 				if (!state.isAdmin || !Array.isArray(path) || path.length === 0) {
 					return "";
@@ -1616,6 +1691,13 @@ export async function initCallCenterApp(api, options) {
 					return "";
 				}
 				return "<button type=\"button\" class=\"js-admin-add ml-2 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-700 transition hover:bg-emerald-100\" data-admin-path=\"" + encodeAdminPath(path) + "\">+ " + escapeHtml(safeText(label, "Add Item")) + "</button>";
+			}
+
+			function adminDeleteButton(path, label) {
+				if (!state.isAdmin || !isAdminDeletablePath(path)) {
+					return "";
+				}
+				return "<button type=\"button\" class=\"js-admin-delete ml-1 inline-flex h-5 w-5 items-center justify-center rounded-full border border-rose-200 bg-rose-50 text-[10px] font-bold text-rose-700 transition hover:bg-rose-100\" data-admin-path=\"" + encodeAdminPath(path) + "\" title=\"Delete " + escapeHtml(safeText(label, "item")) + "\">×</button>";
 			}
 
 			function normalizeSupportRegion(value) {
@@ -1684,7 +1766,9 @@ export async function initCallCenterApp(api, options) {
 						label,
 						url,
 						region,
-						category: getSupportCategory(label, entry.category || fallback && fallback.category)
+						category: getSupportCategory(label, entry.category || fallback && fallback.category),
+						sourceKey: safeText(entry.sourceKey || entry.key || fallback && fallback.sourceKey || fallback && fallback.label || label, label),
+						sourceType: safeText(entry.sourceType || fallback && fallback.sourceType, "model")
 					};
 				}
 
@@ -1699,7 +1783,9 @@ export async function initCallCenterApp(api, options) {
 					label,
 					url,
 					region,
-					category: getSupportCategory(label, fallback && fallback.category)
+					category: getSupportCategory(label, fallback && fallback.category),
+					sourceKey: safeText(fallback && fallback.sourceKey || fallback && fallback.label || label, label),
+					sourceType: safeText(fallback && fallback.sourceType, "media")
 				};
 			}
 
@@ -1719,6 +1805,8 @@ export async function initCallCenterApp(api, options) {
 					}
 					const normalized = normalizeSupportLinkEntry(value, {
 						label,
+						sourceKey: label,
+						sourceType: "media",
 						region: inferSupportRegionFromLabel(label)
 					});
 					if (normalized) {
@@ -1729,7 +1817,8 @@ export async function initCallCenterApp(api, options) {
 				safeList(extras && extras.manualLinks).forEach((entry) => {
 					const normalized = normalizeSupportLinkEntry(entry, {
 						category: "Manual",
-						region: entry && entry.region ? entry.region : "Global"
+						region: entry && entry.region ? entry.region : "Global",
+						sourceType: "documentation"
 					});
 					if (normalized) {
 						links.push(normalized);
@@ -2000,6 +2089,18 @@ export async function initCallCenterApp(api, options) {
 
 			function normalizeLookupKey(value) {
 				return normalizeText(value).replace(/[^a-z0-9]+/g, "");
+			}
+
+			function getModelMediaLookupKeys(modelOrName) {
+				const rawName = typeof modelOrName === "string" ? modelOrName : getModelName(modelOrName);
+				const baseName = safeText(rawName, "").split("/")[0];
+				return Array.from(new Set([
+					rawName,
+					baseName,
+					typeof modelOrName === "string" ? "" : getModelKey(modelOrName),
+					normalizeLookupKey(rawName),
+					normalizeLookupKey(baseName)
+				].map((key) => safeText(key, "")).filter(Boolean)));
 			}
 
 			function getLooseObjectValue(object, key) {
@@ -3429,7 +3530,21 @@ export async function initCallCenterApp(api, options) {
 					return null;
 				}
 
-				const media = state.data.ModelMediaData[getModelName(model)];
+				const mediaData = state.data.ModelMediaData;
+				const keys = getModelMediaLookupKeys(model);
+				for (const key of keys) {
+					const media = mediaData[key];
+					if (isPlainObject(media)) {
+						return media;
+					}
+				}
+
+				const normalizedKeys = keys.map((key) => normalizeLookupKey(key)).filter(Boolean);
+				const matchedKey = Object.keys(mediaData).find((candidate) => {
+					const normalizedCandidate = normalizeLookupKey(safeText(candidate, "").split("/")[0]);
+					return normalizedKeys.includes(normalizedCandidate);
+				});
+				const media = matchedKey ? mediaData[matchedKey] : null;
 				return isPlainObject(media) ? media : null;
 			}
 
@@ -4606,28 +4721,85 @@ export async function initCallCenterApp(api, options) {
 				}
 			}
 
-			async function fetchStaticModelMediaData() {
-				const candidates = [
-					"/public/mnt-media-links.json",
-					"./public/mnt-media-links.json",
-					"./mnt-media-links.json",
-					"mnt-media-links.json",
-					"/mnt-media-links.json"
-				];
+			function mergeModelMediaData(...sources) {
+				return sources.reduce((merged, source) => {
+					if (!isPlainObject(source)) {
+						return merged;
+					}
+					Object.entries(source).forEach(([modelName, media]) => {
+						if (!isPlainObject(media)) {
+							return;
+						}
+						const cleanKey = safeText(modelName, "").split("/")[0] || safeText(modelName, "");
+						const current = isPlainObject(merged[cleanKey]) ? merged[cleanKey] : {};
+						const scalarMedia = {};
+						Object.entries(media).forEach(([key, value]) => {
+							if (key === "media" || key === "support") {
+								return;
+							}
+							if (isPlainObject(value)) {
+								scalarMedia[key] = value;
+								return;
+							}
+							const textValue = safeText(value, "");
+							if (textValue) {
+								scalarMedia[key] = value;
+							}
+						});
+						merged[cleanKey] = {
+							...current,
+							...scalarMedia,
+							media: {
+								...(isPlainObject(current.media) ? current.media : {}),
+								...(isPlainObject(media.media) ? media.media : {})
+							},
+							support: {
+								...(isPlainObject(current.support) ? current.support : {}),
+								...(isPlainObject(media.support) ? media.support : {})
+							}
+						};
+					});
+					return merged;
+				}, {});
+			}
 
-				if (runtimeApiBaseUrl) {
-					candidates.unshift(runtimeApiBaseUrl + "/public/mnt-media-links.json");
-					candidates.unshift(runtimeApiBaseUrl + "/mnt-media-links.json");
-				}
-
+			async function fetchFirstStaticMediaPayload(candidates) {
 				for (const url of Array.from(new Set(candidates))) {
 					const payload = await fetchJsonWithTimeout(url, 4500);
 					if (isPlainObject(payload)) {
 						return payload;
 					}
 				}
-
 				return {};
+			}
+
+			async function fetchStaticModelMediaData(existingMedia) {
+				const mntCandidates = [
+					"/public/mnt-media-links.json",
+					"./public/mnt-media-links.json",
+					"./mnt-media-links.json",
+					"mnt-media-links.json",
+					"/mnt-media-links.json"
+				];
+				const tvCandidates = [
+					"/public/data/model-media.json",
+					"./public/data/model-media.json",
+					"./data/model-media.json",
+					"data/model-media.json"
+				];
+
+				if (runtimeApiBaseUrl) {
+					mntCandidates.unshift(runtimeApiBaseUrl + "/public/mnt-media-links.json");
+					mntCandidates.unshift(runtimeApiBaseUrl + "/mnt-media-links.json");
+					tvCandidates.unshift(runtimeApiBaseUrl + "/public/data/model-media.json");
+				}
+
+				const [tvMedia, mntMedia] = await Promise.all([
+					fetchFirstStaticMediaPayload(tvCandidates),
+					fetchFirstStaticMediaPayload(mntCandidates)
+				]);
+
+				return mergeModelMediaData(tvMedia, existingMedia, mntMedia);
 			}
 
 			async function fetchRelationalDataFromApi() {
@@ -5709,7 +5881,7 @@ export async function initCallCenterApp(api, options) {
 			function renderTroubleshootingPane(model) {
 				if (isMntModel(model)) {
 					const modelName = getModelName(model);
-					const mediaData = state.data && state.data.ModelMediaData ? state.data.ModelMediaData[modelName] : null;
+					const mediaData = getModelMedia(model);
 					const support = isPlainObject(mediaData && mediaData.support) ? mediaData.support : {};
 					const manualLanguageByCountry = {
 						PL: { name: "polish", code: "pl", label: "Instrukcja obsługi" },
@@ -5719,6 +5891,10 @@ export async function initCallCenterApp(api, options) {
 					const targetManualLanguage = manualLanguageByCountry[state.countryCode] || manualLanguageByCountry.UK;
 					const languageKeyPattern = /\([a-z]{2}\)/i;
 					const languageNoisePattern = /(polish|english|german|danish|bulgarian|dutch|croatian|czech|finnish|greek|italian|hungarian|french|romanian|portuguese|slovenian|slovak|russian|spanish|turkish|swedish|\([a-z]{2}\))/gi;
+					const allowedManualRegions = new Set([
+						normalizeSupportRegion(state.countryCode || "UK"),
+						getRegionFallback(normalizeSupportRegion(state.countryCode || "UK"))
+					]);
 					const supportGroupLabels = {
 						manuals: translateHardcodedText("Manuals", "Instrukcje obsługi", "Benutzerhandbücher"),
 						drivers: translateHardcodedText("Drivers & Firmware", "Sterowniki", "Treiber & Software"),
@@ -5750,21 +5926,47 @@ export async function initCallCenterApp(api, options) {
 						return "others";
 					}
 
+					function getLanguageManualRegion(label) {
+						const text = safeText(label, "").toLowerCase();
+						const looksLikeLanguageManual = languageKeyPattern.test(text)
+							|| /(polish|english|german|indonesian|japanese|korean|chinese|danish|bulgarian|dutch|croatian|czech|finnish|greek|italian|hungarian|french|romanian|portuguese|slovenian|slovak|russian|spanish|turkish|swedish)/i.test(text);
+						if (!looksLikeLanguageManual) {
+							return "";
+						}
+						if (/\bpolish\b|\(pl\)|\[pl\]/i.test(text)) {
+							return "PL";
+						}
+						if (/\bgerman\b|\(de\)|\[de\]/i.test(text)) {
+							return "DE";
+						}
+						if (/\benglish\b|\buk\b|\(en\)|\(uk\)|\[en\]|\[uk\]/i.test(text)) {
+							return "UK";
+						}
+						return "OTHER";
+					}
+
 					const supportLinks = filterSupportLinksForRegion(
 						getModelSupportLinks(model, { support })
 							.filter((entry) => !isMassiveUserManualKey(entry.title || entry.label))
 							.map((entry) => {
 								const rawTitle = entry.title || entry.label;
-								const title = !state.isAdmin && languageKeyPattern.test(safeText(rawTitle, "").toLowerCase())
+								const languageRegion = getLanguageManualRegion(rawTitle);
+								if (!state.isAdmin && languageRegion && !allowedManualRegions.has(languageRegion)) {
+									return null;
+								}
+								const title = !state.isAdmin && languageRegion
 									? targetManualLanguage.label
 									: cleanGenericSupportLabel(rawTitle);
 								return {
 									...entry,
+									region: languageRegion && languageRegion !== "OTHER" ? languageRegion : entry.region,
+									category: languageRegion ? "manuals" : entry.category,
 									label: title,
 									title,
-									group: getSupportGroup(title, entry.category)
+									group: languageRegion ? "manuals" : getSupportGroup(title, entry.category)
 								};
 							})
+							.filter(Boolean)
 					);
 
 					const groupedSupportLinks = supportLinks.reduce((groups, entry) => {
@@ -5784,6 +5986,7 @@ export async function initCallCenterApp(api, options) {
 							+ escapeHtml(entry.label)
 							+ (state.isAdmin ? "<span class=\"ml-1 rounded-full border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-bold text-slate-500\">[" + escapeHtml(normalizeSupportRegion(entry.region)) + "]</span>" : "")
 							+ "</a>"
+							+ (entry.sourceType === "documentation" ? "" : adminDeleteButton(["__media", "support", entry.sourceKey || entry.title], entry.label))
 						).join("");
 
 						return ""
@@ -5852,7 +6055,8 @@ export async function initCallCenterApp(api, options) {
 						+ "<a href=\"" + escapeHtml(url) + "\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-white px-3 py-1 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100\">"
 						+ "<span>" + escapeHtml(label) + "</span>"
 						+ (state.isAdmin ? "<span class=\"rounded-full border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-bold text-slate-500\">[" + escapeHtml(normalizeSupportRegion(entry.region)) + "]</span>" : "")
-						+ "</a>";
+						+ "</a>"
+						+ (entry.sourceType === "documentation" ? "" : adminDeleteButton(["__media", "support", entry.sourceKey || entry.title], label));
 				}).join("");
 
 				const woodpeckerLinksBlock = docsContext.woodpeckerSearchLinks.map((entry) => {
@@ -5996,7 +6200,7 @@ export async function initCallCenterApp(api, options) {
 					+ (imageUrl
 						? "<div class=\"overflow-hidden rounded-lg border border-slate-200 bg-white p-1\"><img src=\"" + escapeHtml(displayUrl) + "\" srcset=\"" + escapeHtml(imageSet.srcSet) + "\" sizes=\"" + escapeHtml(imageSet.sizes || "100vw") + "\" alt=\"" + escapeHtml(safeText(item.label, "Model image")) + "\" class=\"js-zoomable-image h-40 w-full cursor-zoom-in object-contain\" loading=\"lazy\" tabindex=\"0\" role=\"button\" data-zoom-src=\"" + escapeHtml(zoomUrl) + "\"" + (state.isAdmin && item.adminPath ? " data-admin-image-path=\"" + encodeAdminPath(item.adminPath) + "\"" : "") + "></div>"
 						: "<div class=\"rounded-lg border-2 border-dashed border-slate-300 bg-white p-8 text-center text-xs text-slate-500\">" + translateHardcodedText("Image not available", "Brak zdjęcia") + "</div>")
-					+ "<p class=\"mt-2 text-sm font-semibold text-slate-800\">" + safeText(item.label, "Image placeholder") + (state.isAdmin && item.adminPath ? adminEditButton(item.adminPath, item.label) : "") + "</p>"
+					+ "<p class=\"mt-2 text-sm font-semibold text-slate-800\">" + safeText(item.label, "Image placeholder") + (state.isAdmin && item.adminPath ? adminEditButton(item.adminPath, item.label) + adminDeleteButton(item.adminPath, item.label) : "") + "</p>"
 					+ (safeText(item.note, "") ? "<p class=\"mt-1 text-xs text-slate-500\">" + safeText(item.note, "") + "</p>" : "")
 					+ "</div>";
 					})()).join("");
@@ -6721,7 +6925,7 @@ export async function initCallCenterApp(api, options) {
 					data.PoliciesData = data.PoliciesData || {};
 					data.TroubleshootingData = data.TroubleshootingData || {};
 					data.KnowledgeBaseData = normalizeKnowledgeData(data.KnowledgeBaseData);
-					data.ModelMediaData = await fetchStaticModelMediaData();
+					data.ModelMediaData = await fetchStaticModelMediaData(data.ModelMediaData);
 					data.ModelPlatformChassisData = safeList(data.ModelPlatformChassisData);
 					if (data.ModelPlatformChassisData.length === 0) {
 						data.ModelPlatformChassisData = safeList(ModelPlatformChassisData);
@@ -6871,6 +7075,18 @@ export async function initCallCenterApp(api, options) {
 						startAdminInlineEdit(adminEditTrigger, () => {
 							refreshCurrentAdminDetail();
 						});
+						return;
+					}
+
+					const adminDeleteTrigger = target.closest(".js-admin-delete");
+					if (adminDeleteTrigger && state.isAdmin) {
+						event.preventDefault();
+						event.stopPropagation();
+						const path = parseAdminPath(adminDeleteTrigger.getAttribute("data-admin-path"));
+						if (window.confirm("Delete this item?") && deleteNestedAdminValue(path)) {
+							updateAdminModelInCollections(state.currentModel);
+							refreshCurrentAdminDetail();
+						}
 						return;
 					}
 

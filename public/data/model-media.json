@@ -767,7 +767,4 @@
       "portsSource": "auto-aspect"
     }
   }
-};
-if (typeof window !== "undefined") {
-  window.ModelMediaData = ModelMediaData;
 }

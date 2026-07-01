@@ -48,6 +48,7 @@ export async function initCallCenterApp(api, options) {
 			const isAdminRoute = Boolean(window && window.IS_ADMIN_ROUTE === true);
 			const adminTokenStorageKey = "support-hub-admin-token";
 			const supportHubCacheName = "support-hub-cache-v1";
+			const debugNetworkLogs = Boolean(window && window.SupportHubConfig && window.SupportHubConfig.debugNetworkLogs);
 
 			const storageKeyCountry = "support-hub-country";
 			const storageKeySession = "support-hub-session-v1";
@@ -4460,13 +4461,95 @@ export async function initCallCenterApp(api, options) {
 				return false;
 			}
 
-			function normalizeModelsData(models) {
+			function normalizeTvSupportLinksData(value) {
+				if (!isPlainObject(value)) {
+					return {};
+				}
+
+				return Object.entries(value).reduce((normalized, entry) => {
+					const modelName = safeText(entry[0], "").split("/")[0];
+					const links = safeList(entry[1])
+						.map((link) => ({
+							title: safeText(link && (link.title || link.label || link.name), "Manual"),
+							label: safeText(link && (link.label || link.title || link.name), "Manual"),
+							url: getSafeHttpUrl(link && (link.url || link.href || link.link)),
+							category: safeText(link && link.category, "Manual"),
+							region: normalizeSupportRegion(link && link.region)
+						}))
+						.filter((link) => link.url && ["PL", "DE"].includes(link.region));
+
+					if (modelName && links.length > 0) {
+						normalized[modelName] = links;
+					}
+					return normalized;
+				}, {});
+			}
+
+			function getLocalizedTvLinksForModel(modelName, tvLinksData) {
+				const data = isPlainObject(tvLinksData) ? tvLinksData : {};
+				const lookupNames = [
+					safeText(modelName, ""),
+					safeText(modelName, "").split("/")[0],
+					normalizeLookupKey(modelName),
+					normalizeLookupKey(safeText(modelName, "").split("/")[0])
+				].filter(Boolean);
+				const links = [];
+
+				Object.entries(data).forEach(([key, value]) => {
+					const keyVariants = [
+						safeText(key, ""),
+						safeText(key, "").split("/")[0],
+						normalizeLookupKey(key),
+						normalizeLookupKey(safeText(key, "").split("/")[0])
+					].filter(Boolean);
+					if (keyVariants.some((variant) => lookupNames.includes(variant))) {
+						links.push(...safeList(value));
+					}
+				});
+
+				return links;
+			}
+
+			function mergeModelSupportLinks(model, extraLinks) {
+				const mergedLinks = [...safeList(model && model.supportLinks), ...safeList(extraLinks)];
+				const seen = new Set();
+				return mergedLinks.filter((link) => {
+					const url = getSafeHttpUrl(link && (link.url || link.href || link.link));
+					if (!url) {
+						return false;
+					}
+					const key = [
+						url,
+						normalizeSupportRegion(link && link.region),
+						safeText(link && link.category, "Manual").toLowerCase(),
+						safeText(link && (link.title || link.label || link.name), "").toLowerCase()
+					].join("|");
+					if (seen.has(key)) {
+						return false;
+					}
+					seen.add(key);
+					return true;
+				}).map((link) => ({
+					...link,
+					title: safeText(link && (link.title || link.label || link.name), "Manual"),
+					label: safeText(link && (link.label || link.title || link.name), "Manual"),
+					url: getSafeHttpUrl(link && (link.url || link.href || link.link)),
+					category: safeText(link && link.category, "Manual"),
+					region: normalizeSupportRegion(link && link.region)
+				}));
+			}
+
+			function normalizeModelsData(models, tvLinksData) {
 				return safeList(models).map((model, index) => {
 					const moduleName = safeText(model && (model.module || model.productType), "TV").toUpperCase();
+					const localizedTvLinks = moduleName === "TV"
+						? getLocalizedTvLinksForModel(model && model.modelName, tvLinksData)
+						: [];
 					return {
 						...model,
 						module: moduleName,
 						productType: moduleName,
+						supportLinks: mergeModelSupportLinks(model, localizedTvLinks),
 						audioChannels: safeText(model && model.audioChannels, ""),
 						audioPower: safeText(model && model.audioPower, ""),
 						wifiStandard: safeText(model && model.wifiStandard, ""),
@@ -4651,17 +4734,23 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			async function readCachedJson(url) {
-				console.log("[Cache] Checking cache:", url);
+				if (debugNetworkLogs) {
+					console.log("[Cache] Checking cache:", url);
+				}
 				const cacheOptions = getJsonCacheOptions();
 				if (!window.caches || cacheOptions.disabled || cacheOptions.refresh || cacheOptions.clear) {
-					console.log("[Cache] Cache bypassed/unavailable:", url);
+					if (debugNetworkLogs) {
+						console.log("[Cache] Cache bypassed/unavailable:", url);
+					}
 					return null;
 				}
 
 				try {
 					const cache = await window.caches.open(supportHubCacheName);
 					const cachedResponse = await cache.match(url, { ignoreVary: true });
-					console.log(cachedResponse ? "[Cache] Cache hit:" : "[Cache] Cache miss:", url);
+					if (debugNetworkLogs) {
+						console.log(cachedResponse ? "[Cache] Cache hit:" : "[Cache] Cache miss:", url);
+					}
 					return cachedResponse ? cachedResponse.json() : null;
 				} catch (error) {
 					console.warn("[Cache] Cache read failed, falling back to fetch:", url, error);
@@ -4678,7 +4767,9 @@ export async function initCallCenterApp(api, options) {
 				try {
 					const cache = await window.caches.open(supportHubCacheName);
 					await cache.put(url, response.clone());
-					console.log("[Cache] Stored response:", url);
+					if (debugNetworkLogs) {
+						console.log("[Cache] Stored response:", url);
+					}
 				} catch (error) {
 					console.warn("[Cache] Cache write failed:", url, error);
 					// Cache API is an optimization only; ignore quota/security failures.
@@ -4694,7 +4785,9 @@ export async function initCallCenterApp(api, options) {
 				if (cachedJson) {
 					return cachedJson;
 				}
-				console.log("[Fetch] Fetching JSON:", effectiveUrl);
+				if (debugNetworkLogs) {
+					console.log("[Fetch] Fetching JSON:", effectiveUrl);
+				}
 
 				const controller = new AbortController();
 				const timer = window.setTimeout(() => controller.abort(), timeoutMs);
@@ -4775,24 +4868,15 @@ export async function initCallCenterApp(api, options) {
 
 			async function fetchStaticModelMediaData(existingMedia) {
 				const mntCandidates = [
-					"/public/mnt-media-links.json",
 					"./public/mnt-media-links.json",
 					"./mnt-media-links.json",
-					"mnt-media-links.json",
-					"/mnt-media-links.json"
+					"mnt-media-links.json"
 				];
 				const tvCandidates = [
-					"/public/data/model-media.json",
 					"./public/data/model-media.json",
 					"./data/model-media.json",
 					"data/model-media.json"
 				];
-
-				if (runtimeApiBaseUrl) {
-					mntCandidates.unshift(runtimeApiBaseUrl + "/public/mnt-media-links.json");
-					mntCandidates.unshift(runtimeApiBaseUrl + "/mnt-media-links.json");
-					tvCandidates.unshift(runtimeApiBaseUrl + "/public/data/model-media.json");
-				}
 
 				const [tvMedia, mntMedia] = await Promise.all([
 					fetchFirstStaticMediaPayload(tvCandidates),
@@ -4800,6 +4884,41 @@ export async function initCallCenterApp(api, options) {
 				]);
 
 				return mergeModelMediaData(tvMedia, existingMedia, mntMedia);
+			}
+
+			async function fetchStaticTvSupportLinksData() {
+				const candidateMap = {
+					PL: [
+						"./data/tv-links-pl.json",
+						"data/tv-links-pl.json",
+						"./public/data/tv-links-pl.json",
+						"public/data/tv-links-pl.json"
+					],
+					DE: [
+						"./data/tv-links-de.json",
+						"data/tv-links-de.json",
+						"./public/data/tv-links-de.json",
+						"public/data/tv-links-de.json"
+					]
+				};
+
+				const entries = await Promise.all(Object.entries(candidateMap).map(async ([region, candidates]) => {
+					const payload = await fetchFirstStaticMediaPayload(candidates);
+					return [region, normalizeTvSupportLinksData(payload)];
+				}));
+
+				return entries.reduce((merged, [region, linksByModel]) => {
+					Object.entries(linksByModel).forEach(([modelName, links]) => {
+						if (!Array.isArray(merged[modelName])) {
+							merged[modelName] = [];
+						}
+						merged[modelName].push(...safeList(links).map((link) => ({
+							...link,
+							region
+						})));
+					});
+					return merged;
+				}, {});
 			}
 
 			async function fetchRelationalDataFromApi() {
@@ -5318,6 +5437,7 @@ export async function initCallCenterApp(api, options) {
 						...detailedModel,
 						__bundle: bundle,
 						knowledgeArticles: Array.isArray(bundle && bundle.knowledgeArticles) ? bundle.knowledgeArticles : [],
+						supportLinks: mergeModelSupportLinks(baseModel, detailedModel.supportLinks),
 						__key: normalizedModelId
 					};
 
@@ -5974,6 +6094,41 @@ export async function initCallCenterApp(api, options) {
 						groups[groupName].push(entry);
 						return groups;
 					}, { manuals: [], drivers: [], others: [] });
+
+					function getSupportLinkPriority(entry) {
+						const label = safeText(entry && (entry.label || entry.title), "");
+						const rawLabel = safeText(entry && entry.sourceKey, "") + " " + label;
+						const region = normalizeSupportRegion(entry && entry.region);
+						const currentRegion = normalizeSupportRegion(state.countryCode || "UK");
+						const fallbackRegion = getRegionFallback(currentRegion);
+
+						if (label === targetManualLanguage.label && region === currentRegion) {
+							return 0;
+						}
+						if (label === targetManualLanguage.label && region === fallbackRegion) {
+							return 1;
+						}
+						if (/(quick|setup|guide|qsg)/i.test(rawLabel)) {
+							return 2;
+						}
+						if (/(manual|instrukcja|benutzerhandbuch)/i.test(rawLabel)) {
+							return 3;
+						}
+						if (/(otherdocumentation|reach|regulation|compliance|declaration|certificate)/i.test(rawLabel)) {
+							return 8;
+						}
+						return 5;
+					}
+
+					Object.keys(groupedSupportLinks).forEach((groupName) => {
+						groupedSupportLinks[groupName].sort((left, right) => {
+							const priorityDiff = getSupportLinkPriority(left) - getSupportLinkPriority(right);
+							if (priorityDiff !== 0) {
+								return priorityDiff;
+							}
+							return safeText(left && left.label, "").localeCompare(safeText(right && right.label, ""));
+						});
+					});
 
 					function renderSupportLinkGroup(groupName, buttonClasses) {
 						const entries = groupedSupportLinks[groupName] || [];
@@ -6921,7 +7076,8 @@ export async function initCallCenterApp(api, options) {
 				console.log("[Bootstrap] Starting initializeData...");
 				try {
 					const data = await loadRelationalData();
-					data.ModelsData = normalizeModelsData(data.ModelsData);
+					const localizedTvSupportLinks = await fetchStaticTvSupportLinksData();
+					data.ModelsData = normalizeModelsData(data.ModelsData, localizedTvSupportLinks);
 					data.PoliciesData = data.PoliciesData || {};
 					data.TroubleshootingData = data.TroubleshootingData || {};
 					data.KnowledgeBaseData = normalizeKnowledgeData(data.KnowledgeBaseData);

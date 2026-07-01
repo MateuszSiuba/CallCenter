@@ -16,7 +16,10 @@
     "import:postgres": "npm --prefix backend run import:postgres",
     "quick:test": "node ./scripts/quick_test.js",
     "load:test": "node ./scripts/load_test_search.js",
-    "load:test:nocache": "cross-env DISABLE_CACHE=true node ./scripts/load_test_search.js"
+    "load:test:nocache": "cross-env DISABLE_CACHE=true node ./scripts/load_test_search.js",
+    "fetch:tv-links": "node ./scripts/fetchTvLinks.js",
+    "fetch:tv-links-pl": "node ./scripts/fetchTvLinks.js --locale PL",
+    "discover:tv-urls": "node ./scripts/discoverUrls.js"
   },
   "engines": {
     "node": ">=18"

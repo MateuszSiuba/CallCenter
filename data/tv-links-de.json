@@ -1,0 +1,478 @@
+{
+  "55OLED910": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250317/bf8cf5c458334234b567b2a30056e217.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250316/78b026399b81402aaf2cb2a20084da83.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "65OLED950": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250317/535251ad28ec4de984d6b2a300570911.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250414/ec3fe78c65804874aecfb2bf00ab0b25.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55OLED760": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250317/2bb2f01aa9074ff79a95b2a30022f767.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250221/9830cfc0068a40bc9d19b28b009fa324.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55OLED810": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250317/319c8169d9084d77b905b2a30022e49f.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250316/df41b642701b43d0a72db2a20084ce90.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55MLED950": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250402/31d2572b05f64b188421b2b300195bb4.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250515/76e077cacd4549b89348b2de00b027e7.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55MLED910": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250317/3a5f91e472204b888a26b2a30023a103.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250316/767248f97dd048238276b2a20084a954.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55MLED810": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250402/db1558ca4a264631b0d9b2b300194f59.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250603/147f08f2e08f42258f32b2f1003bf66a.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55PUS9000": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250204/e9bc7ec038a54267aa4cb27a0057410f.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250214/1503af1009294108b40bb284006d1021.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55PUS8200": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250204/d32290bdedba4e2b9693b27a005817d7.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250316/9232bfcb543145a08c9bb2a20084acd9.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55PUS8600": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250204/9320bc8f5332404d8040b27a005701cc.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250222/228f8fbdab40489f833db28c00735424.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55PUS8000": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250222/924235d996a448ca86f9b28c00916751.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250214/1683f0040444462eb96db284006c67e3.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55PUS7800": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250204/981babb40b094db287eeb27a005782d2.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250222/43543135b2fb4464b412b28c0072fb09.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "32PFS6900": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250204/cc4abdb78ef242648be8b27a0056f664.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250222/691b8c51f704468b822eb28c00731f23.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55MLED920": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250317/3a5f91e472204b888a26b2a30023a103.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250316/d9e5684cce894b029c73b2a20084a580.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55OLED820": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250317/319c8169d9084d77b905b2a30022e49f.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250316/0590d78954864a04b2cbb2a20084ccbb.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55OLED850": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250317/420af1dd95644c4ca6abb2a30022e156.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250316/62e54744915343119e29b2a20084c34f.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55MLED820": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250402/db1558ca4a264631b0d9b2b300194f59.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250603/8bd0a32c404544e68378b2f1003bf7c9.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "43PFS5500": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250317/b9fa1aef56fc470a82adb2a300574e06.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250414/59c1e21b1a8d4e65a4c0b2bf00ab0e5a.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "32PFS6000": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250222/c836ba8e3337411a9ab9b28c009165f2.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250414/ce6819c74f454aa590c0b2bf00aafd37.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "32PHS5500": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250317/b9fa1aef56fc470a82adb2a300574e06.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250414/0c920efae68b422ead41b2bf00ab0fce.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "32PFS6950": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250204/cc4abdb78ef242648be8b27a0056f664.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250414/b894a78efcb140d0ae3cb2bf00aaf7a5.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "32PHS6050": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250317/0ff34d588d2e4a40aafdb2a300235fca.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250414/518539f2142045cbb9cab2bf00ab0d00.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "32PHS6000": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250222/c836ba8e3337411a9ab9b28c009165f2.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250214/52a654d204e7456bb7e3b284006c5ec2.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55PUS8100": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250317/d3ea153038ab477194a0b2a300231c7c.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250603/3ce54ded43e74b918b20b2f1003bf921.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55PUS9010": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250204/e9bc7ec038a54267aa4cb27a0057410f.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250214/c8a499307b584539a4b8b284006d1157.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55PUS9050": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250204/e9bc7ec038a54267aa4cb27a0057410f.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250408/44a31ef86f9b4e7e896db2b900782c88.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55PUS9060": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250204/e9bc7ec038a54267aa4cb27a0057410f.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20250214/f1c46b5585504a9bb017b284006d144a.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55OLED759": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20240301/38e70d5e4a264509be78b12600330d56.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20240219/ebd3279aaf2f430ab34eb11b00a15b4a.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55OLED769": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20240301/38e70d5e4a264509be78b12600330d56.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20240219/9c3fbed6474947dbb745b11b00a166c9.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "32PHS6009": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20240429/8cf96861bc1b41faa183b161002a00f4.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20240306/efb71b33f397481c9eb9b12b0087d098.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55PML9019": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20240301/2e327b8a066548e19dc4b126003313e1.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20240124/9eebb381850b48a7b990b10100a320c4.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55PML9049": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20240301/2e327b8a066548e19dc4b126003313e1.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20240124/bb208bd8804a44ba838bb10100a321a4.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "32PHS6808": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20230220/68601b84a3da4b7fb4b8afaf00fb5118.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20230412/a537279c08404fe9ae02afe200ff905e.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ],
+  "55PML9308": [
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20230504/e0902a2d777246efa9cbaff80094ffc9.pdf",
+      "category": "Manual",
+      "region": "DE"
+    },
+    {
+      "title": "Kurzanleitung",
+      "url": "https://www.documents.philips.com/assets/20230516/32a20ddca38f48d79c02b0040085564c.pdf",
+      "category": "Manual",
+      "region": "DE"
+    }
+  ]
+}

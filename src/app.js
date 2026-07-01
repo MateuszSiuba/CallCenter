@@ -368,6 +368,73 @@ export async function initCallCenterApp(api, options) {
 				de: deSectionTranslations
 			};
 
+			const techDictionary = {
+				pl: {
+					"Wall Mount Compatible": "Kompatybilność z uchwytem ściennym",
+					"Wall mount compatible": "Kompatybilność z uchwytem ściennym",
+					"Weight Incl. Packaging": "Waga z opakowaniem",
+					"Weight incl. packaging": "Waga z opakowaniem",
+					"Weight Incl Packaging": "Waga z opakowaniem",
+					"Wireless Connection": "Połączenie bezprzewodowe",
+					"Wireless connection": "Połączenie bezprzewodowe",
+					"TV With Stand": "TV z podstawą",
+					"TV Without Stand": "TV bez podstawy",
+					"Width": "Szerokość",
+					"Height": "Wysokość",
+					"Depth": "Głębokość",
+					"Stand Width": "Szerokość podstawy",
+					"Stand Depth": "Głębokość podstawy",
+					"Product Weight": "Waga produktu",
+					"Package Dimensions": "Wymiary opakowania",
+					"Package Weight": "Waga opakowania",
+					"Power Consumption": "Pobór mocy",
+					"Energy Class": "Klasa energetyczna",
+					"USB Playback": "Odtwarzanie USB",
+					"WiFi Standard": "Standard Wi-Fi",
+					"Bluetooth Version": "Wersja Bluetooth",
+					"Ethernet LAN RJ45": "Ethernet LAN RJ45",
+					"Headphone Out": "Wyjście słuchawkowe",
+					"Audio Return Channel": "Zwrotny kanał audio",
+					"Supported Display Resolution": "Obsługiwana rozdzielczość obrazu",
+					"Refresh Rate": "Odświeżanie",
+					"Color": "Kolor",
+					"Colour": "Kolor",
+					"Remote Control": "Pilot"
+				},
+				de: {
+					"Wall Mount Compatible": "Wandhalterung kompatibel",
+					"Wall mount compatible": "Wandhalterung kompatibel",
+					"Weight Incl. Packaging": "Gewicht inkl. Verpackung",
+					"Weight incl. packaging": "Gewicht inkl. Verpackung",
+					"Weight Incl Packaging": "Gewicht inkl. Verpackung",
+					"Wireless Connection": "Drahtlose Verbindung",
+					"Wireless connection": "Drahtlose Verbindung",
+					"TV With Stand": "TV mit Standfuß",
+					"TV Without Stand": "TV ohne Standfuß",
+					"Width": "Breite",
+					"Height": "Höhe",
+					"Depth": "Tiefe",
+					"Stand Width": "Standfußbreite",
+					"Stand Depth": "Standfußtiefe",
+					"Product Weight": "Produktgewicht",
+					"Package Dimensions": "Verpackungsmaße",
+					"Package Weight": "Verpackungsgewicht",
+					"Power Consumption": "Stromverbrauch",
+					"Energy Class": "Energieklasse",
+					"USB Playback": "USB-Wiedergabe",
+					"WiFi Standard": "WLAN-Standard",
+					"Bluetooth Version": "Bluetooth-Version",
+					"Ethernet LAN RJ45": "Ethernet LAN RJ45",
+					"Headphone Out": "Kopfhörerausgang",
+					"Audio Return Channel": "Audio-Rückkanal",
+					"Supported Display Resolution": "Unterstützte Displayauflösung",
+					"Refresh Rate": "Bildwiederholfrequenz",
+					"Color": "Farbe",
+					"Colour": "Farbe",
+					"Remote Control": "Fernbedienung"
+				}
+			};
+
 			const plSpecModalTranslations = {
 				core: {
 					title: "Core Hardware - Pełny widok",
@@ -403,12 +470,12 @@ export async function initCallCenterApp(api, options) {
 					splashDefaultHint: "Country profile sets SWAP procedures, contact channels, and policy routing.",
 					splashResumeHint: "Last used profile found. You can keep it or switch before continuing.",
 					loadError: "Could not load backend data. Check API URL and service health, then try again.",
-					consoleSubtitle: "Omni-Search Knowledge Console",
+					consoleSubtitle: "Knowledge Console",
 					printMode: "Print mode",
 					exitPrintMode: "Exit print mode",
 					openChangelog: "Open changelog",
 					changeCountry: "Change country",
-					globalSearch: "Global Omni-Search",
+					globalSearch: "Search",
 					globalSearchPlaceholder: "Search models, chassis, Matter, contact numbers, policy rules, known issues...",
 					moduleNoticeTv: "TV module active. Showing television models only.",
 					moduleNoticeMnt: "MNT module active. Showing monitor models only.",
@@ -478,12 +545,12 @@ export async function initCallCenterApp(api, options) {
 					splashDefaultHint: "Profil kraju ustawia procedury SWAP, kanały kontaktu i routing polityk.",
 					splashResumeHint: "Znaleziono ostatnio używany profil. Możesz go zachować albo zmienić przed kontynuacją.",
 					loadError: "Nie udało się załadować danych backendu. Sprawdź URL API i stan usługi, a potem spróbuj ponownie.",
-					consoleSubtitle: "Konsola wiedzy Omni-Search",
+					consoleSubtitle: "Knowledge Console",
 					printMode: "Tryb druku",
 					exitPrintMode: "Wyjdź z trybu druku",
 					openChangelog: "Otwórz changelog",
 					changeCountry: "Zmień kraj",
-					globalSearch: "Globalne Omni-Search",
+					globalSearch: "Wyszukiwarka",
 					globalSearchPlaceholder: "Szukaj modeli, chassis, Matter, numerów kontaktowych, reguł polityk, znanych problemów...",
 					moduleNoticeTv: "Aktywny moduł TV. Wyświetlane są tylko modele telewizorów.",
 					moduleNoticeMnt: "Aktywny moduł MNT. Wyświetlane są tylko modele monitorów.",
@@ -553,12 +620,12 @@ export async function initCallCenterApp(api, options) {
 					splashDefaultHint: "Das Länderprofil setzt SWAP-Prozesse, Kontaktkanäle und Policy-Routing.",
 					splashResumeHint: "Zuletzt verwendetes Profil gefunden. Sie können es behalten oder vor dem Fortfahren wechseln.",
 					loadError: "Backend-Daten konnten nicht geladen werden. Prüfen Sie API-URL und Dienststatus und versuchen Sie es erneut.",
-					consoleSubtitle: "Omni-Search Wissenskonsole",
+					consoleSubtitle: "Knowledge Console",
 					printMode: "Druckmodus",
 					exitPrintMode: "Druckmodus beenden",
 					openChangelog: "Changelog öffnen",
 					changeCountry: "Land ändern",
-					globalSearch: "Globale Omni-Suche",
+					globalSearch: "Suche",
 					globalSearchPlaceholder: "Modelle, Chassis, Matter, Kontaktnummern, Policy-Regeln, bekannte Probleme suchen...",
 					moduleNoticeTv: "TV-Modul aktiv. Es werden nur TV-Modelle angezeigt.",
 					moduleNoticeMnt: "MNT-Modul aktiv. Es werden nur Monitor-Modelle angezeigt.",
@@ -642,10 +709,51 @@ export async function initCallCenterApp(api, options) {
 				return translations[text] || text;
 			}
 
+			function translateTechKey(key) {
+				const text = safeText(key, "");
+				const locale = getLocaleForCountry(state.countryCode);
+				const translations = techDictionary[locale] || {};
+				return translations[text] || translateLabel(text);
+			}
+
 			function translateSectionLabel(label) {
 				const text = safeText(label, "");
 				const translations = sectionTranslationsByLocale[getLocaleForCountry(state.countryCode)] || {};
 				return translations[text] || translateLabel(text);
+			}
+
+			function normalizeLocalizedText(value, fallback) {
+				if (isPlainObject(value)) {
+					return {
+						UK: safeText(value.UK || value.en || value.EN || value.English || value.default || fallback, ""),
+						PL: safeText(value.PL || value.pl || value.Polish || "", ""),
+						DE: safeText(value.DE || value.de || value.German || "", "")
+					};
+				}
+
+				const text = safeText(value, fallback || "");
+				return {
+					UK: text,
+					PL: "",
+					DE: ""
+				};
+			}
+
+			function getLocalizedText(value, fallback) {
+				if (!isPlainObject(value)) {
+					return safeText(value, fallback || "");
+				}
+
+				const country = normalizeSupportRegion(state.countryCode || "UK");
+				return safeText(value[country] || value.UK || value.en || value.EN || value.default || fallback, "");
+			}
+
+			function getArticleTitle(article) {
+				return getLocalizedText(article && article.title, "Knowledge Article");
+			}
+
+			function getArticleSummary(article) {
+				return getLocalizedText(article && (article.description || article.summary), t("noSummary"));
 			}
 
 			function translateValue(value) {
@@ -1912,7 +2020,7 @@ export async function initCallCenterApp(api, options) {
 						return;
 					}
 
-					const titleExact = normalizeText(article && article.title) === normalizedTerm;
+					const titleExact = normalizeText(getArticleTitle(article)) === normalizedTerm;
 					const tagExact = safeList(article && article.tags).some((tag) => normalizeText(tag) === normalizedTerm);
 					if (!titleExact && !tagExact) {
 						return;
@@ -1935,7 +2043,7 @@ export async function initCallCenterApp(api, options) {
 						return;
 					}
 
-					const titleExact = normalizeText(article && article.title) === normalizedTerm;
+					const titleExact = normalizeText(getArticleTitle(article)) === normalizedTerm;
 					const tagExact = safeList(article && article.tags).some((tag) => normalizeText(tag) === normalizedTerm);
 					if (!titleExact && !tagExact) {
 						return;
@@ -1978,7 +2086,7 @@ export async function initCallCenterApp(api, options) {
 
 			function getArticleContentPoints(article) {
 				const directPoints = safeList(article && article.contentPoints)
-					.map((point) => safeText(point, ""))
+					.map((point) => getLocalizedText(point, ""))
 					.filter(Boolean);
 
 				if (directPoints.length > 0) {
@@ -1993,7 +2101,7 @@ export async function initCallCenterApp(api, options) {
 						}
 
 						return safeList(section && section.paragraphs).map((paragraph) => {
-							const sentence = safeText(paragraph, "");
+							const sentence = getLocalizedText(paragraph, "");
 							if (!sentence) {
 								return "";
 							}
@@ -2001,7 +2109,7 @@ export async function initCallCenterApp(api, options) {
 							return cutIndex > 0 ? sentence.slice(0, cutIndex + 1) : sentence;
 						});
 					})
-					.map((point) => safeText(point, ""))
+					.map((point) => getLocalizedText(point, ""))
 					.filter(Boolean);
 
 				if (sectionPoints.length > 0) {
@@ -2099,7 +2207,7 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			function inferArticleFilters(article) {
-				const title = safeText(article && article.title, "");
+				const title = getArticleTitle(article);
 				const tags = safeList(article && article.tags);
 				const joined = normalizeText([title, ...tags].join(" "));
 				const topics = [];
@@ -2340,7 +2448,7 @@ export async function initCallCenterApp(api, options) {
 					});
 				});
 
-				const titleText = normalizeText(article && article.title);
+				const titleText = normalizeText(getArticleTitle(article));
 				addCandidate(titleText, 5);
 				titleText.split(/\s+/).forEach((token) => {
 					if (token.length >= 4 && !stopWords.has(token)) {
@@ -2348,7 +2456,7 @@ export async function initCallCenterApp(api, options) {
 					}
 				});
 
-				const summaryTokens = normalizeText(article && article.summary)
+				const summaryTokens = normalizeText(getArticleSummary(article))
 					.split(/\s+/)
 					.filter((token) => token.length >= 5 && !stopWords.has(token))
 					.slice(0, 8);
@@ -2522,7 +2630,7 @@ export async function initCallCenterApp(api, options) {
 
 			function getArticleStrictTerms(article) {
 				const profile = getArticleFilterProfile(article);
-				const rawTerms = [...safeList(profile && profile.topics), safeText(article && article.title, ""), ...safeList(article && article.tags)]
+				const rawTerms = [...safeList(profile && profile.topics), getArticleTitle(article), ...safeList(article && article.tags)]
 					.map((value) => normalizeText(value))
 					.filter((value) => value.length >= 3);
 
@@ -2703,8 +2811,8 @@ export async function initCallCenterApp(api, options) {
 				}
 
 				state.quickInfoArticleId = safeText(article && article.id, "");
-				quickInfoTitle.textContent = safeText(article && article.title, "Knowledge Base");
-				quickInfoSummary.textContent = safeText(article && article.summary, t("noSummary"));
+				quickInfoTitle.textContent = getArticleTitle(article);
+				quickInfoSummary.textContent = getArticleSummary(article);
 				quickInfoPoints.innerHTML = "";
 
 				const points = getArticleContentPoints(article);
@@ -4077,7 +4185,7 @@ export async function initCallCenterApp(api, options) {
 					const category = safeText(row && row.category, "General");
 					const categoryKey = category.toLowerCase();
 					const rawLabel = safeText(row && row.label, "Value");
-					const label = translateLabel(formatTechnicalFieldLabel(rawLabel));
+					const label = translateTechKey(formatTechnicalFieldLabel(rawLabel));
 					if (!groupedRowsByCategory.has(categoryKey)) {
 						groupedRowsByCategory.set(categoryKey, {
 							category: translateSectionLabel(formatTechnicalSectionLabel(category)),
@@ -4178,8 +4286,8 @@ export async function initCallCenterApp(api, options) {
 
 			function normalizeKnowledgeArticle(article, index) {
 				const articleId = safeText(article && article.id, "kb_auto_" + String(index + 1));
-				const title = safeText(article && article.title, "Knowledge Article");
-				const summary = safeText(article && article.summary, "");
+				const title = normalizeLocalizedText(article && article.title, "Knowledge Article");
+				const summary = normalizeLocalizedText(article && (article.summary || article.description), "");
 				const imageUrl = safeText(article && article.imageUrl, "").replace(/\\/g, "/");
 				const filters = normalizeKnowledgeFilters(article && article.filters);
 				const tags = safeList(article && article.tags)
@@ -4187,14 +4295,14 @@ export async function initCallCenterApp(api, options) {
 					.filter(Boolean);
 
 				const sections = safeList(article && article.sections).map((section) => ({
-					heading: safeText(section && section.heading, "Details"),
-					paragraphs: safeList(section && section.paragraphs).map((text) => safeText(text, "")).filter(Boolean),
-					bullets: safeList(section && section.bullets).map((text) => safeText(text, "")).filter(Boolean)
+					heading: normalizeLocalizedText(section && section.heading, "Details"),
+					paragraphs: safeList(section && section.paragraphs).map((text) => normalizeLocalizedText(text, "")).filter((text) => getLocalizedText(text, "")),
+					bullets: safeList(section && section.bullets).map((text) => normalizeLocalizedText(text, "")).filter((text) => getLocalizedText(text, ""))
 				}));
 
 				const contentPoints = safeList(article && article.contentPoints)
-					.map((point) => safeText(point, ""))
-					.filter(Boolean);
+					.map((point) => normalizeLocalizedText(point, ""))
+					.filter((point) => getLocalizedText(point, ""));
 
 				if (sections.length === 0 && contentPoints.length > 0) {
 					sections.push({
@@ -4208,6 +4316,7 @@ export async function initCallCenterApp(api, options) {
 					id: articleId,
 					title,
 					summary,
+					description: summary,
 					imageUrl,
 					filters,
 					tags,
@@ -4238,6 +4347,7 @@ export async function initCallCenterApp(api, options) {
 						id: normalized.id,
 						title: normalized.title || existing.title,
 						summary: normalized.summary || existing.summary,
+						description: normalized.description || existing.description || normalized.summary || existing.summary,
 						imageUrl: normalized.imageUrl || existing.imageUrl || "",
 						filters: nextFilters,
 						tags: nextTags,
@@ -4697,17 +4807,21 @@ export async function initCallCenterApp(api, options) {
 					entityType: "article",
 					category: "Knowledge Base",
 					refId: article.id,
-					title: safeText(article.title, "Knowledge Article"),
-					subtitle: safeText(article.summary, ""),
+					title: getArticleTitle(article),
+					subtitle: getArticleSummary(article),
 					searchFields: [
 						...(article.tags || []),
 						...safeList(article && article.filters && article.filters.topics),
 						...safeList(article && article.filters && article.filters.os),
 						...safeList(article && article.filters && article.filters.panel),
 						...safeList(article.contentPoints),
-						...safeList(article.sections).flatMap((section) => [section.heading, ...(section.paragraphs || []), ...(section.bullets || [])])
+						...safeList(article.sections).flatMap((section) => [
+							getLocalizedText(section && section.heading, ""),
+							...safeList(section && section.paragraphs).map((text) => getLocalizedText(text, "")),
+							...safeList(section && section.bullets).map((text) => getLocalizedText(text, ""))
+						])
 					],
-					identifiers: [article.title, ...(article.tags || [])],
+					identifiers: [getArticleTitle(article), ...(article.tags || [])],
 					payload: { articleType: "knowledge", articleId: article.id }
 				}));
 			}
@@ -5149,10 +5263,10 @@ export async function initCallCenterApp(api, options) {
 
 					card.innerHTML = ""
 						+ "<div class=\"flex items-center justify-between gap-2\">"
-						+ "<p class=\"brand-font text-lg text-slate-900\">" + escapeHtml(safeText(article && article.title, "Knowledge Article")) + "</p>"
+						+ "<p class=\"brand-font text-lg text-slate-900\">" + escapeHtml(getArticleTitle(article)) + "</p>"
 						+ "<span class=\"rounded-full border border-cyan-200 bg-cyan-50 px-2 py-0.5 text-xs font-semibold text-brand-700\">KB</span>"
 						+ "</div>"
-						+ "<p class=\"mt-2 text-sm text-slate-600\">" + escapeHtml(safeText(article && article.summary, t("noSummary"))) + "</p>"
+						+ "<p class=\"mt-2 text-sm text-slate-600\">" + escapeHtml(getArticleSummary(article)) + "</p>"
 						+ "<div class=\"mt-3 flex flex-wrap gap-2\">"
 						+ (tagsHtml || "<span class=\"text-xs text-slate-500\">No tags.</span>")
 						+ "</div>";
@@ -5300,7 +5414,7 @@ export async function initCallCenterApp(api, options) {
 						return {
 							term,
 							article,
-							tooltip: article ? safeText(article.summary, article.title || term) : ""
+							tooltip: article ? getArticleSummary(article) || getArticleTitle(article) || term : ""
 						};
 					});
 
@@ -5396,7 +5510,7 @@ export async function initCallCenterApp(api, options) {
 						return {
 							term,
 							article,
-							tooltip: article ? safeText(article.summary, article.title || term) : ""
+							tooltip: article ? getArticleSummary(article) || getArticleTitle(article) || term : ""
 						};
 					});
 				const withStandDimensions = getFirstResolvedSpecValue(dimensionsModel, [
@@ -5916,8 +6030,8 @@ export async function initCallCenterApp(api, options) {
 
 			function renderArticle(sectionData, typeLabel) {
 				articleTypeLabel.textContent = typeLabel;
-				articleTitle.textContent = sectionData.title;
-				articleSummary.textContent = sectionData.summary || "";
+				articleTitle.textContent = getArticleTitle(sectionData);
+				articleSummary.textContent = getArticleSummary(sectionData);
 				articleContent.innerHTML = "";
 				if (articleRecommendationDock) {
 					articleRecommendationDock.innerHTML = "";
@@ -5935,13 +6049,13 @@ export async function initCallCenterApp(api, options) {
 
 					const heading = document.createElement("h4");
 					heading.className = "text-base font-semibold text-slate-900";
-					heading.textContent = section.heading;
+					heading.textContent = getLocalizedText(section && section.heading, "Details");
 					container.appendChild(heading);
 
 					safeList(section.paragraphs).forEach((paragraphText) => {
 						const paragraph = document.createElement("p");
 						paragraph.className = "mt-2 text-sm text-slate-700";
-						paragraph.textContent = paragraphText;
+						paragraph.textContent = getLocalizedText(paragraphText, "");
 						container.appendChild(paragraph);
 					});
 
@@ -5950,7 +6064,7 @@ export async function initCallCenterApp(api, options) {
 						list.className = "mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700";
 						safeList(section.bullets).forEach((itemText) => {
 							const item = document.createElement("li");
-							item.textContent = itemText;
+							item.textContent = getLocalizedText(itemText, "");
 							list.appendChild(item);
 						});
 						container.appendChild(list);
@@ -5968,14 +6082,14 @@ export async function initCallCenterApp(api, options) {
 
 					const image = document.createElement("img");
 					image.src = articleImageUrl;
-					image.alt = safeText(sectionData && sectionData.title, "Knowledge article") + " image";
+					image.alt = getArticleTitle(sectionData) + " image";
 					image.className = "block h-auto w-full";
 					image.loading = "lazy";
 					image.decoding = "async";
 					image.addEventListener("error", () => {
 						imageWrap.innerHTML = ""
 							+ "<div class=\"rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 p-5 text-center\">"
-							+ "<p class=\"text-sm font-semibold text-slate-800\">" + escapeHtml(safeText(sectionData && sectionData.title, "Knowledge article image")) + "</p>"
+							+ "<p class=\"text-sm font-semibold text-slate-800\">" + escapeHtml(getArticleTitle(sectionData) || "Knowledge article image") + "</p>"
 							+ "<p class=\"mt-1 text-xs text-slate-500\">Placeholder for article image.</p>"
 							+ "</div>";
 					});
@@ -6051,7 +6165,7 @@ export async function initCallCenterApp(api, options) {
 								button.type = "button";
 								button.className = "rounded-full border border-cyan-300 bg-white px-3 py-1 text-xs font-semibold text-cyan-800 transition hover:bg-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400";
 								button.setAttribute("data-related-article-id", safeText(article && article.id, ""));
-								button.textContent = safeText(article && article.title, "Open related article");
+								button.textContent = getArticleTitle(article) || "Open related article";
 								relatedList.appendChild(button);
 							});
 							recommendationSection.appendChild(relatedList);

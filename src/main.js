@@ -50,8 +50,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    btnGoToTraining?.addEventListener('click', () => {
-        router.navigate('training');
+    btnGoToTraining?.addEventListener('click', (event) => {
+        event.preventDefault();
     });
 
     btnBackToPortal?.addEventListener('click', () => {

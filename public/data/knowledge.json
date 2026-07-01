@@ -239,7 +239,11 @@ window.KnowledgeBaseData.push(...[
     },
     {
         "id": "kb_ambilight_3sided",
-        "title": "3-sided Ambilight",
+        "title": {
+            "UK": "3-sided Ambilight",
+            "PL": "3-stronny Ambilight",
+            "DE": "3-seitiges Ambilight"
+        },
         "tags": [
             "3-sided Ambilight",
             "Ambilight",
@@ -252,7 +256,11 @@ window.KnowledgeBaseData.push(...[
             ]
         },
         "imageUrl": "Images/3sideambi.jpg",
-        "summary": "Ambilight configuration with LEDs on three sides of the TV for immersive bias lighting.",
+        "summary": {
+            "UK": "Ambilight configuration with LEDs on three sides of the TV for immersive bias lighting.",
+            "PL": "Konfiguracja Ambilight z diodami LED po trzech stronach telewizora, zapewniająca immersyjne podświetlenie tła.",
+            "DE": "Ambilight-Konfiguration mit LEDs auf drei Seiten des TVs für eine immersive Hintergrundbeleuchtung."
+        },
         "contentPoints": [
             "Projects matching light from the left, right, and top edges of the rear panel.",
             "Delivers a strong immersion effect while being available on a wider model range than 4-sided variants.",
@@ -541,8 +549,16 @@ window.KnowledgeBaseData.push(...[
     },
     {
         "id": "kb-allm",
-        "title": "ALLM (Auto Low Latency Mode)",
-        "summary": "Automatically switches the TV to Game Mode for the lowest input lag.",
+        "title": {
+            "UK": "ALLM (Auto Low Latency Mode)",
+            "PL": "ALLM (Automatyczny tryb niskiego opóźnienia)",
+            "DE": "ALLM (Auto Low Latency Mode)"
+        },
+        "summary": {
+            "UK": "Automatically switches the TV to Game Mode for the lowest input lag.",
+            "PL": "Automatycznie przełącza telewizor w Tryb Gry, aby uzyskać najniższe opóźnienie wejścia.",
+            "DE": "Schaltet den Fernseher automatisch in den Spielemodus, um die geringste Eingabeverzögerung zu erreichen."
+        },
         "tags": [
             "ALLM",
             "Auto Low Latency Mode",
@@ -551,13 +567,29 @@ window.KnowledgeBaseData.push(...[
         ],
         "sections": [
             {
-                "heading": "Gaming Performance",
+                "heading": {
+                    "UK": "Gaming Performance",
+                    "PL": "Wydajność w grach",
+                    "DE": "Gaming-Leistung"
+                },
                 "paragraphs": [
-                    "When the TV detects a gaming signal from a console or PC, it automatically turns off unnecessary video processing features to reduce input delay."
+                    {
+                        "UK": "When the TV detects a gaming signal from a console or PC, it automatically turns off unnecessary video processing features to reduce input delay.",
+                        "PL": "Gdy telewizor wykryje sygnał gry z konsoli lub komputera, automatycznie wyłącza zbędne funkcje przetwarzania obrazu, aby zmniejszyć opóźnienie.",
+                        "DE": "Wenn der Fernseher ein Spielsignal von einer Konsole oder einem PC erkennt, deaktiviert er automatisch unnötige Bildverarbeitung, um die Eingabeverzögerung zu reduzieren."
+                    }
                 ],
                 "bullets": [
-                    "No need to manually toggle Game Mode.",
-                    "Switches back to standard picture modes for movies."
+                    {
+                        "UK": "No need to manually toggle Game Mode.",
+                        "PL": "Nie trzeba ręcznie włączać Trybu Gry.",
+                        "DE": "Der Spielemodus muss nicht manuell aktiviert werden."
+                    },
+                    {
+                        "UK": "Switches back to standard picture modes for movies.",
+                        "PL": "Przełącza się z powrotem na standardowe tryby obrazu przy filmach.",
+                        "DE": "Wechselt bei Filmen wieder zu den normalen Bildmodi."
+                    }
                 ]
             }
         ]
@@ -658,8 +690,16 @@ window.KnowledgeBaseData.push(...[
     },
     {
         "id": "kb-dolby-atmos",
-        "title": "Dolby Atmos",
-        "summary": "Immersive spatial audio technology.",
+        "title": {
+            "UK": "Dolby Atmos",
+            "PL": "Dolby Atmos",
+            "DE": "Dolby Atmos"
+        },
+        "summary": {
+            "UK": "Immersive spatial audio technology.",
+            "PL": "Immersyjna technologia dźwięku przestrzennego.",
+            "DE": "Immersive räumliche Audiotechnologie."
+        },
         "tags": [
             "Dolby Atmos",
             "Atmos",

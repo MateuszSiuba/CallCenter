@@ -399,6 +399,32 @@ export async function initCallCenterApp(api, options) {
 					"Refresh Rate": "Odświeżanie",
 					"Color": "Kolor",
 					"Colour": "Kolor",
+					"Weight Of TV With Stand": "Waga telewizora z podstawą",
+					"Weight of TV with stand": "Waga telewizora z podstawą",
+					"Distance Between 2 Stands": "Odległość między nóżkami",
+					"Distance between 2 stands": "Odległość między nóżkami",
+					"TV With Stand (W X H X D)": "Wymiary z podstawą (S x W x G)",
+					"TV with stand (W x H x D)": "Wymiary z podstawą (S x W x G)",
+					"Package Carton (W X H X D)": "Wymiary opakowania (S x W x G)",
+					"Package carton (W x H x D)": "Wymiary opakowania (S x W x G)",
+					"Weight Of TV Without Stand": "Waga telewizora bez podstawy",
+					"Weight of TV without stand": "Waga telewizora bez podstawy",
+					"TV Without Stand (W X H X D)": "Wymiary bez podstawy (S x W x G)",
+					"TV without stand (W x H x D)": "Wymiary bez podstawy (S x W x G)",
+					"HDMI Features": "Funkcje HDMI",
+					"HDMI features": "Funkcje HDMI",
+					"Easy Link (HDMI CEC)": "Easy Link (HDMI CEC)",
+					"Ports Count": "Liczba portów",
+					"Audio": "Dźwięk",
+					"Codec": "Kodeki",
+					"Woofer": "Głośnik niskotonowy (Woofer)",
+					"Main Speaker": "Głośnik główny",
+					"Sound Enhancement": "Funkcje poprawy dźwięku",
+					"Headphone Features": "Funkcje słuchawkowe",
+					"Output Power (RMS)": "Moc wyjściowa (RMS)",
+					"Output power (RMS)": "Moc wyjściowa (RMS)",
+					"Speaker Configuration": "Konfiguracja głośników",
+					"Speaker configuration": "Konfiguracja głośników",
 					"Remote Control": "Pilot"
 				},
 				de: {
@@ -431,6 +457,32 @@ export async function initCallCenterApp(api, options) {
 					"Refresh Rate": "Bildwiederholfrequenz",
 					"Color": "Farbe",
 					"Colour": "Farbe",
+					"Weight Of TV With Stand": "Gewicht des Fernsehers mit Standfuß",
+					"Weight of TV with stand": "Gewicht des Fernsehers mit Standfuß",
+					"Distance Between 2 Stands": "Abstand zwischen den Standfüßen",
+					"Distance between 2 stands": "Abstand zwischen den Standfüßen",
+					"TV With Stand (W X H X D)": "Abmessungen mit Standfuß (B x H x T)",
+					"TV with stand (W x H x D)": "Abmessungen mit Standfuß (B x H x T)",
+					"Package Carton (W X H X D)": "Verpackungsabmessungen (B x H x T)",
+					"Package carton (W x H x D)": "Verpackungsabmessungen (B x H x T)",
+					"Weight Of TV Without Stand": "Gewicht des Fernsehers ohne Standfuß",
+					"Weight of TV without stand": "Gewicht des Fernsehers ohne Standfuß",
+					"TV Without Stand (W X H X D)": "Abmessungen ohne Standfuß (B x H x T)",
+					"TV without stand (W x H x D)": "Abmessungen ohne Standfuß (B x H x T)",
+					"HDMI Features": "HDMI-Funktionen",
+					"HDMI features": "HDMI-Funktionen",
+					"Easy Link (HDMI CEC)": "Easy Link (HDMI CEC)",
+					"Ports Count": "Anzahl der Anschlüsse",
+					"Audio": "Audio",
+					"Codec": "Codecs",
+					"Woofer": "Tieftöner (Woofer)",
+					"Main Speaker": "Hauptlautsprecher",
+					"Sound Enhancement": "Klangverbesserung",
+					"Headphone Features": "Kopfhörer-Funktionen",
+					"Output Power (RMS)": "Ausgangsleistung (RMS)",
+					"Output power (RMS)": "Ausgangsleistung (RMS)",
+					"Speaker Configuration": "Lautsprecherkonfiguration",
+					"Speaker configuration": "Lautsprecherkonfiguration",
 					"Remote Control": "Fernbedienung"
 				}
 			};
@@ -754,6 +806,32 @@ export async function initCallCenterApp(api, options) {
 
 			function getArticleSummary(article) {
 				return getLocalizedText(article && (article.description || article.summary), t("noSummary"));
+			}
+
+			function getArticleUiLabel(key) {
+				const labels = {
+					keyPoints: {
+						UK: "Key Points",
+						PL: "Kluczowe informacje",
+						DE: "Wichtige Punkte"
+					},
+					compatibleTvs: {
+						UK: "Compatible TVs",
+						PL: "Kompatybilne telewizory",
+						DE: "Kompatible Fernseher"
+					},
+					relatedArticles: {
+						UK: "Related Articles",
+						PL: "Powiązane artykuły",
+						DE: "Verwandte Artikel"
+					},
+					modelsMatchingTopic: {
+						UK: "Models matching this article topic (for example Matter, HDR, Ambilight).",
+						PL: "Modele pasujące do tematu artykułu (np. Matter, HDR, Ambilight).",
+						DE: "Modelle, die zu diesem Thema passen (z. B. Matter, HDR, Ambilight)."
+					}
+				};
+				return getLocalizedText(labels[key], key);
 			}
 
 			function translateValue(value) {
@@ -4300,13 +4378,17 @@ export async function initCallCenterApp(api, options) {
 					bullets: safeList(section && section.bullets).map((text) => normalizeLocalizedText(text, "")).filter((text) => getLocalizedText(text, ""))
 				}));
 
-				const contentPoints = safeList(article && article.contentPoints)
+				const contentPoints = safeList(article && (article.contentPoints || article.keyPoints || article.content || article.points))
 					.map((point) => normalizeLocalizedText(point, ""))
 					.filter((point) => getLocalizedText(point, ""));
 
 				if (sections.length === 0 && contentPoints.length > 0) {
 					sections.push({
-						heading: "Key Points",
+						heading: {
+							UK: "Key Points",
+							PL: "Kluczowe informacje",
+							DE: "Wichtige Punkte"
+						},
 						paragraphs: [],
 						bullets: contentPoints
 					});
@@ -6131,12 +6213,12 @@ export async function initCallCenterApp(api, options) {
 						if (compatibleModels.length > 0) {
 							const modelsHeading = document.createElement("h4");
 							modelsHeading.className = "text-base font-semibold text-slate-900";
-							modelsHeading.textContent = "Compatible TVs";
+							modelsHeading.textContent = getArticleUiLabel("compatibleTvs");
 							recommendationSection.appendChild(modelsHeading);
 
 							const modelsHint = document.createElement("p");
 							modelsHint.className = "mt-1 text-xs text-slate-600";
-							modelsHint.textContent = "Models matching this article topic (for example Matter, HDR, Ambilight).";
+							modelsHint.textContent = getArticleUiLabel("modelsMatchingTopic");
 							recommendationSection.appendChild(modelsHint);
 
 							const modelsList = document.createElement("div");
@@ -6155,7 +6237,7 @@ export async function initCallCenterApp(api, options) {
 						if (relatedArticles.length > 0) {
 							const relatedHeading = document.createElement("h4");
 							relatedHeading.className = "mt-4 text-base font-semibold text-slate-900";
-							relatedHeading.textContent = "Related Articles";
+							relatedHeading.textContent = getArticleUiLabel("relatedArticles");
 							recommendationSection.appendChild(relatedHeading);
 
 							const relatedList = document.createElement("div");

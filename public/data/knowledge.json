@@ -1,4 +1,4 @@
-{
+﻿window.TroubleshootingData = {
 					byOS: {
 						"Titan OS": [
 							{
@@ -186,6 +186,98 @@ window.KnowledgeBaseData = [
                 ]
             }
         ]
+    },
+    {
+        "id": "kb-matter-pairing-fails",
+        "title": {
+            "UK": "Matter pairing fails",
+            "PL": "Parowanie Matter nie działa",
+            "DE": "Matter-Kopplung schlägt fehl"
+        },
+        "summary": {
+            "UK": "Quick checks for Matter onboarding failures on Google TV models.",
+            "PL": "Szybkie kroki diagnostyczne przy problemach z parowaniem Matter na modelach Google TV.",
+            "DE": "Schnelle Prüfungen bei Matter-Einrichtungsproblemen auf Google-TV-Modellen."
+        },
+        "tags": [
+            "Matter",
+            "pairing",
+            "Google TV",
+            "smart home"
+        ],
+        "filters": {
+            "topics": [
+                "Matter",
+                "pairing"
+            ],
+            "os": [
+                "Google TV",
+                "Google OS",
+                "Android TV"
+            ]
+        },
+        "keyPoints": [
+            {
+                "UK": "Confirm the TV and smart-home hub are on the same VLAN or local network.",
+                "PL": "Sprawdź, czy telewizor i hub smart home są w tej samej sieci lokalnej lub VLAN.",
+                "DE": "Prüfen Sie, ob Fernseher und Smart-Home-Hub im selben lokalen Netzwerk oder VLAN sind."
+            },
+            {
+                "UK": "Enable mDNS/Bonjour forwarding on the router if the devices are separated by network rules.",
+                "PL": "Włącz przekazywanie mDNS/Bonjour na routerze, jeśli urządzenia są rozdzielone regułami sieciowymi.",
+                "DE": "Aktivieren Sie mDNS/Bonjour-Weiterleitung am Router, wenn Netzwerkregeln die Geräte trennen."
+            },
+            {
+                "UK": "Reset Matter credentials and retry pairing within 10 minutes.",
+                "PL": "Zresetuj poświadczenia Matter i ponów parowanie w ciągu 10 minut.",
+                "DE": "Setzen Sie die Matter-Zugangsdaten zurück und versuchen Sie die Kopplung innerhalb von 10 Minuten erneut."
+            }
+        ]
+    },
+    {
+        "id": "kb-high-input-lag-game-mode",
+        "title": {
+            "UK": "High input lag in game mode",
+            "PL": "Wysokie opóźnienie wejścia w trybie gry",
+            "DE": "Hohe Eingabeverzögerung im Spielemodus"
+        },
+        "summary": {
+            "UK": "Agent checklist for reducing game input delay on HDMI sources.",
+            "PL": "Lista kontrolna dla agenta, która pomaga zmniejszyć opóźnienie wejścia na źródłach HDMI.",
+            "DE": "Agenten-Checkliste zur Reduzierung der Eingabeverzögerung bei HDMI-Quellen."
+        },
+        "tags": [
+            "input lag",
+            "game mode",
+            "HDMI",
+            "VRR",
+            "gaming"
+        ],
+        "filters": {
+            "topics": [
+                "input lag",
+                "game mode",
+                "gaming",
+                "VRR"
+            ]
+        },
+        "keyPoints": [
+            {
+                "UK": "Set the HDMI input to Ultra Mode or Enhanced mode where available.",
+                "PL": "Ustaw wejście HDMI na tryb Ultra lub Enhanced, jeśli jest dostępny.",
+                "DE": "Stellen Sie den HDMI-Eingang auf Ultra Mode oder Enhanced Mode, sofern verfügbar."
+            },
+            {
+                "UK": "Disable motion smoothing and extra picture processing in the active picture preset.",
+                "PL": "Wyłącz upłynnianie ruchu i dodatkowe przetwarzanie obrazu w aktywnym profilu obrazu.",
+                "DE": "Deaktivieren Sie Bewegungsglättung und zusätzliche Bildverarbeitung im aktiven Bildprofil."
+            },
+            {
+                "UK": "Validate that the console outputs 120 Hz VRR when the TV and HDMI port support it.",
+                "PL": "Sprawdź, czy konsola wysyła sygnał 120 Hz VRR, jeśli telewizor i port HDMI to obsługują.",
+                "DE": "Prüfen Sie, ob die Konsole 120 Hz VRR ausgibt, wenn TV und HDMI-Anschluss dies unterstützen."
+            }
+        ]
     }
 ];
 
@@ -262,10 +354,26 @@ window.KnowledgeBaseData.push(...[
             "DE": "Ambilight-Konfiguration mit LEDs auf drei Seiten des TVs für eine immersive Hintergrundbeleuchtung."
         },
         "contentPoints": [
-            "Projects matching light from the left, right, and top edges of the rear panel.",
-            "Delivers a strong immersion effect while being available on a wider model range than 4-sided variants.",
-            "Works best when the TV is placed close to a neutral-color wall for cleaner color reflection.",
-            "Supports Ambilight styles such as video-follow, audio-reactive, and static lounge modes."
+            {
+                "UK": "Projects matching light from the left, right, and top edges of the rear panel.",
+                "PL": "Rzuca dopasowane światło z lewej, prawej i górnej krawędzi tylnego panelu.",
+                "DE": "Projiziert passendes Licht von der linken, rechten und oberen Kante der Rückseite."
+            },
+            {
+                "UK": "Delivers a strong immersion effect while being available on a wider model range than 4-sided variants.",
+                "PL": "Daje mocny efekt immersji i jest dostępny w szerszej gamie modeli niż warianty 4-stronne.",
+                "DE": "Bietet einen starken Immersionseffekt und ist in mehr Modellen verfügbar als 4-seitige Varianten."
+            },
+            {
+                "UK": "Works best when the TV is placed close to a neutral-color wall for cleaner color reflection.",
+                "PL": "Działa najlepiej, gdy telewizor stoi blisko ściany w neutralnym kolorze, co poprawia odbicie barw.",
+                "DE": "Funktioniert am besten nahe an einer neutralfarbigen Wand für sauberere Farbreaktionen."
+            },
+            {
+                "UK": "Supports Ambilight styles such as video-follow, audio-reactive, and static lounge modes.",
+                "PL": "Obsługuje style Ambilight, takie jak podążanie za obrazem, reakcja na dźwięk i statyczne tryby lounge.",
+                "DE": "Unterstützt Ambilight-Stile wie Video-Follow, audioreaktive Effekte und statische Lounge-Modi."
+            }
         ]
     },
     {
@@ -315,23 +423,47 @@ window.KnowledgeBaseData.push(...[
     },
     {
         "id": "kb_auracast",
-        "title": "Bluetooth Auracast",
+        "title": {
+            "UK": "Bluetooth Auracast",
+            "PL": "Bluetooth Auracast",
+            "DE": "Bluetooth Auracast"
+        },
         "tags": [
             "Auracast",
             "Bluetooth",
             "Audio",
             "Smart"
         ],
-        "summary": "A next-generation Bluetooth audio broadcasting technology available in 2025/2026 models.",
+        "summary": {
+            "UK": "A next-generation Bluetooth audio broadcasting technology available in 2025/2026 models.",
+            "PL": "Nowa generacja transmisji dźwięku Bluetooth dostępna w modelach 2025/2026.",
+            "DE": "Bluetooth-Audioübertragung der nächsten Generation, verfügbar in Modellen 2025/2026."
+        },
         "contentPoints": [
-            "Allows the TV to broadcast audio to an unlimited number of nearby Auracast-compatible headphones or speakers simultaneously.",
-            "Perfect for couples watching TV late at night with two separate pairs of headphones.",
-            "Eliminates the traditional pairing process – users just 'tune in' to the TV's audio stream like a radio station."
+            {
+                "UK": "Allows the TV to broadcast audio to an unlimited number of nearby Auracast-compatible headphones or speakers simultaneously.",
+                "PL": "Pozwala telewizorowi nadawać dźwięk jednocześnie do wielu pobliskich słuchawek lub głośników zgodnych z Auracast.",
+                "DE": "Ermöglicht dem TV, Audio gleichzeitig an viele nahe Auracast-kompatible Kopfhörer oder Lautsprecher zu senden."
+            },
+            {
+                "UK": "Perfect for couples watching TV late at night with two separate pairs of headphones.",
+                "PL": "Idealne dla osób oglądających telewizję późno w nocy na dwóch oddzielnych parach słuchawek.",
+                "DE": "Ideal für Paare, die spätabends mit zwei separaten Kopfhörern fernsehen."
+            },
+            {
+                "UK": "Eliminates the traditional pairing process – users just 'tune in' to the TV's audio stream like a radio station.",
+                "PL": "Ogranicza klasyczne parowanie — użytkownik po prostu „dostraja się” do strumienia audio telewizora jak do stacji radiowej.",
+                "DE": "Reduziert den klassischen Kopplungsprozess – Nutzer „schalten sich” wie bei einem Radiosender in den TV-Audiostream ein."
+            }
         ]
     },
     {
         "id": "kb_matter_dash",
-        "title": "MATTER Dash (Ambiscape)",
+        "title": {
+            "UK": "MATTER Dash (Ambiscape)",
+            "PL": "MATTER Dash (Ambiscape)",
+            "DE": "MATTER Dash (Ambiscape)"
+        },
         "tags": [
             "MATTER Dash",
             "Ambiscape",
@@ -348,11 +480,27 @@ window.KnowledgeBaseData.push(...[
                 "Titan OS"
             ]
         },
-        "summary": "The central smart home dashboard integrated into the TV, using the universal Matter protocol.",
+        "summary": {
+            "UK": "The central smart home dashboard integrated into the TV, using the universal Matter protocol.",
+            "PL": "Centralny panel smart home wbudowany w telewizor, wykorzystujący uniwersalny protokół Matter.",
+            "DE": "Das zentrale Smart-Home-Dashboard im TV, basierend auf dem universellen Matter-Protokoll."
+        },
         "contentPoints": [
-            "Allows the TV to act as a control hub for smart home devices (lights, thermostats, locks) from any brand that supports Matter (Apple, Google, Amazon, Philips Hue).",
-            "'Ambiscape' feature specifically integrates Ambilight with other smart lighting in the room to create a unified lighting environment.",
-            "Accessible directly from the TV remote without interrupting the viewing experience."
+            {
+                "UK": "Allows the TV to act as a control hub for smart home devices (lights, thermostats, locks) from any brand that supports Matter (Apple, Google, Amazon, Philips Hue).",
+                "PL": "Pozwala telewizorowi działać jako centrum sterowania urządzeniami smart home (światła, termostaty, zamki) dowolnej marki obsługującej Matter.",
+                "DE": "Ermöglicht dem TV, als Steuerzentrale für Smart-Home-Geräte wie Lampen, Thermostate und Schlösser von Matter-kompatiblen Marken zu dienen."
+            },
+            {
+                "UK": "'Ambiscape' feature specifically integrates Ambilight with other smart lighting in the room to create a unified lighting environment.",
+                "PL": "Funkcja „Ambiscape” łączy Ambilight z innym inteligentnym oświetleniem w pokoju, tworząc spójne środowisko świetlne.",
+                "DE": "„Ambiscape” verbindet Ambilight mit weiterer smarter Beleuchtung im Raum zu einer einheitlichen Lichtumgebung."
+            },
+            {
+                "UK": "Accessible directly from the TV remote without interrupting the viewing experience.",
+                "PL": "Dostępne bezpośrednio z pilota telewizora, bez przerywania oglądania.",
+                "DE": "Direkt über die TV-Fernbedienung erreichbar, ohne das Fernseherlebnis zu unterbrechen."
+            }
         ]
     },
     {
@@ -767,4 +915,4 @@ window.KnowledgeBaseData.push(...[
             }
         ]
     }
-])
+]);

@@ -585,7 +585,12 @@ export async function initCallCenterApp(api, options) {
 					audioSpecifications: "Audio Specifications",
 					connectivity: "Connectivity",
 					whatsInTheBox: "What's in the box",
-					knowledgeFeatures: "Knowledge Features"
+					knowledgeFeatures: "Knowledge Features",
+					manualsDocumentation: "Manuals & Documentation",
+					openManualsDuringTroubleshooting: "Open manuals directly during troubleshooting.",
+					noDirectManualLinks: "No direct manual links configured for this model yet.",
+					openWoodpeckerSearch: "Open Woodpecker Search",
+					openWoodpeckerPortal: "Open Woodpecker portal"
 				},
 				pl: {
 					documentTitle: "Support Hub - Globalna baza Call Center",
@@ -660,7 +665,12 @@ export async function initCallCenterApp(api, options) {
 					audioSpecifications: "Specyfikacja audio",
 					connectivity: "Łączność",
 					whatsInTheBox: "Co jest w pudełku",
-					knowledgeFeatures: "Dodatkowe Funkcje"
+					knowledgeFeatures: "Dodatkowe Funkcje",
+					manualsDocumentation: "Instrukcje i dokumentacja",
+					openManualsDuringTroubleshooting: "Otwieraj instrukcje bezpośrednio podczas rozwiązywania problemów.",
+					noDirectManualLinks: "Brak bezpośrednich linków do instrukcji dla tego modelu.",
+					openWoodpeckerSearch: "Otwórz wyszukiwanie Woodpecker",
+					openWoodpeckerPortal: "Otwórz portal Woodpecker"
 				},
 				de: {
 					documentTitle: "Support Hub - Globale Call-Center-Wissensbasis",
@@ -735,7 +745,12 @@ export async function initCallCenterApp(api, options) {
 					audioSpecifications: "Audiospezifikationen",
 					connectivity: "Konnektivität",
 					whatsInTheBox: "Lieferumfang",
-					knowledgeFeatures: "Wissensfeatures"
+					knowledgeFeatures: "Wissensfeatures",
+					manualsDocumentation: "Handbücher und Dokumentation",
+					openManualsDuringTroubleshooting: "Handbücher während der Fehlerbehebung direkt öffnen.",
+					noDirectManualLinks: "Für dieses Modell sind noch keine direkten Handbuch-Links konfiguriert.",
+					openWoodpeckerSearch: "Woodpecker-Suche öffnen",
+					openWoodpeckerPortal: "Woodpecker-Portal öffnen"
 				}
 			};
 
@@ -873,6 +888,35 @@ export async function initCallCenterApp(api, options) {
 					return germanText || text;
 				}
 				return text;
+			}
+
+			function translateSupportDocumentLabel(label) {
+				const text = safeText(label, "");
+				const normalized = text.toLowerCase().replace(/\s+/g, " ").trim();
+				const locale = getLocaleForCountry(state.countryCode);
+				const translations = {
+					pl: {
+						"manual": "Instrukcja",
+						"user manual": "Instrukcja obsługi",
+						"quick start guide": "Skrócona instrukcja",
+						"quick setup guide": "Skrócona instrukcja",
+						"leaflet": "Ulotka",
+						"product leaflet": "Ulotka produktu",
+						"open woodpecker search": "Otwórz wyszukiwanie Woodpecker",
+						"open woodpecker portal": "Otwórz portal Woodpecker"
+					},
+					de: {
+						"manual": "Handbuch",
+						"user manual": "Benutzerhandbuch",
+						"quick start guide": "Kurzanleitung",
+						"quick setup guide": "Kurzanleitung",
+						"leaflet": "Broschüre",
+						"product leaflet": "Produktbroschüre",
+						"open woodpecker search": "Woodpecker-Suche öffnen",
+						"open woodpecker portal": "Woodpecker-Portal öffnen"
+					}
+				};
+				return (translations[locale] && translations[locale][normalized]) || translateValue(text);
 			}
 
 			function setText(selector, value) {
@@ -6200,7 +6244,8 @@ export async function initCallCenterApp(api, options) {
 					});
 
 				const directManualLinksBlock = orderedManualLinks.map((entry) => {
-					const label = safeText(entry && entry.label, "Manual");
+					const rawLabel = safeText(entry && entry.label, "Manual");
+					const label = translateSupportDocumentLabel(rawLabel);
 					const url = getSafeHttpUrl(entry && entry.url);
 					if (!url) {
 						return "";
@@ -6211,7 +6256,7 @@ export async function initCallCenterApp(api, options) {
 						+ "<span>" + escapeHtml(label) + "</span>"
 						+ (state.isAdmin ? "<span class=\"rounded-full border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-bold text-slate-500\">[" + escapeHtml(normalizeSupportRegion(entry.region)) + "]</span>" : "")
 						+ "</a>"
-						+ (entry.sourceType === "documentation" ? "" : adminDeleteButton(["__media", "support", entry.sourceKey || entry.title], label));
+						+ (entry.sourceType === "documentation" ? "" : adminDeleteButton(["__media", "support", entry.sourceKey || entry.title], rawLabel));
 				}).join("");
 
 				const woodpeckerLinksBlock = docsContext.woodpeckerSearchLinks.map((entry) => {
@@ -6223,23 +6268,23 @@ export async function initCallCenterApp(api, options) {
 
 					return ""
 						+ "<a href=\"" + escapeHtml(url) + "\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"inline-flex items-center gap-2 rounded-full border border-cyan-300 bg-white px-3 py-1 text-xs font-semibold text-brand-700 transition hover:bg-cyan-100\">"
-						+ "<span>Open Woodpecker Search</span>"
+						+ "<span>" + escapeHtml(t("openWoodpeckerSearch")) + "</span>"
 						+ (modelCode ? "<span class=\"text-brand-700/80\">" + escapeHtml(modelCode) + "</span>" : "")
 						+ "</a>";
 				}).join("");
 
 				const docsBlock = ""
 					+ "<section class=\"rounded-xl border border-emerald-200 bg-emerald-50 p-4\">"
-					+ "<h5 class=\"text-sm font-semibold text-slate-900\">Manuals & Documentation" + adminAddButton(["__media", "support"], "Add Link") + "</h5>"
-					+ "<p class=\"mt-1 text-xs text-slate-600\">Open manuals directly during troubleshooting.</p>"
+					+ "<h5 class=\"text-sm font-semibold text-slate-900\">" + escapeHtml(t("manualsDocumentation")) + adminAddButton(["__media", "support"], "Add Link") + "</h5>"
+					+ "<p class=\"mt-1 text-xs text-slate-600\">" + escapeHtml(t("openManualsDuringTroubleshooting")) + "</p>"
 					+ (directManualLinksBlock
 						? "<div class=\"mt-3 flex flex-wrap gap-2\">" + directManualLinksBlock + "</div>"
-						: "<p class=\"mt-3 text-xs text-slate-600\">No direct manual links configured for this model yet.</p>")
+						: "<p class=\"mt-3 text-xs text-slate-600\">" + escapeHtml(t("noDirectManualLinks")) + "</p>")
 					+ (woodpeckerLinksBlock
 						? "<div class=\"mt-2 flex flex-wrap gap-2\">" + woodpeckerLinksBlock + "</div>"
 						: "")
 					+ (docsContext.woodpeckerPortalUrl
-						? "<a href=\"" + escapeHtml(docsContext.woodpeckerPortalUrl) + "\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"mt-2 inline-flex text-xs font-semibold text-brand-700 hover:underline\">Open Woodpecker portal</a>"
+						? "<a href=\"" + escapeHtml(docsContext.woodpeckerPortalUrl) + "\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"mt-2 inline-flex text-xs font-semibold text-brand-700 hover:underline\">" + escapeHtml(t("openWoodpeckerPortal")) + "</a>"
 						: "")
 					+ "</section>";
 

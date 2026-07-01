@@ -1432,6 +1432,205 @@ export async function initCallCenterApp(api, options) {
 				return "<button type=\"button\" class=\"js-admin-add ml-2 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-700 transition hover:bg-emerald-100\" data-admin-path=\"" + encodeAdminPath(path) + "\">+ " + escapeHtml(safeText(label, "Add Item")) + "</button>";
 			}
 
+			function normalizeSupportRegion(value) {
+				const text = safeText(value, "").toUpperCase();
+				return ["GLOBAL", "PL", "UK", "DE"].includes(text) ? (text === "GLOBAL" ? "Global" : text) : "Global";
+			}
+
+			function inferSupportRegionFromLabel(label) {
+				const text = safeText(label, "").toLowerCase();
+				if (/\bpolish\b|\(pl\)|\[pl\]/i.test(text)) {
+					return "PL";
+				}
+				if (/\bgerman\b|\(de\)|\[de\]/i.test(text)) {
+					return "DE";
+				}
+				if (/\benglish\b|\buk\b|\(en\)|\(uk\)|\[en\]|\[uk\]/i.test(text)) {
+					return "UK";
+				}
+				return "Global";
+			}
+
+			function getSupportCategory(label, category) {
+				const explicit = safeText(category, "");
+				if (/manual|guide|document|instrukcja|benutzerhandbuch/i.test(explicit)) {
+					return "manuals";
+				}
+				if (/driver|firmware|software|i-?menu|g-?menu|setup/i.test(explicit)) {
+					return "drivers";
+				}
+				if (/driver|firmware|software|i-?menu|g-?menu|setup/i.test(label)) {
+					return "drivers";
+				}
+				if (/manual|document|guide|instrukcja|benutzerhandbuch/i.test(label)) {
+					return "manuals";
+				}
+				return "others";
+			}
+
+			function cleanSupportLabel(label) {
+				return safeText(label, "")
+					.replace(/\d{1,2}\s+[a-zA-Z]+\s+\d{4}/g, "")
+					.replace(/^\[(PL|UK|DE|Global)\]\s*/i, "")
+					.replace(/\s+/g, " ")
+					.trim();
+			}
+
+			function getRegionFallback(countryCode) {
+				const map = {
+					PL: "UK",
+					UK: "PL",
+					DE: "PL"
+				};
+				return map[countryCode] || "UK";
+			}
+
+			function normalizeSupportLinkEntry(entry, fallback) {
+				if (isPlainObject(entry)) {
+					const label = cleanSupportLabel(entry.title || entry.label || entry.name || fallback && fallback.label);
+					const url = getSafeHttpUrl(entry.url || entry.href || entry.link || fallback && fallback.url);
+					if (!label || !url) {
+						return null;
+					}
+					const region = normalizeSupportRegion(entry.region || fallback && fallback.region || inferSupportRegionFromLabel(label));
+					return {
+						title: label,
+						label,
+						url,
+						region,
+						category: getSupportCategory(label, entry.category || fallback && fallback.category)
+					};
+				}
+
+				const label = cleanSupportLabel(fallback && fallback.label);
+				const url = getSafeHttpUrl(entry || fallback && fallback.url);
+				if (!label || !url) {
+					return null;
+				}
+				const region = normalizeSupportRegion(fallback && fallback.region || inferSupportRegionFromLabel(label));
+				return {
+					title: label,
+					label,
+					url,
+					region,
+					category: getSupportCategory(label, fallback && fallback.category)
+				};
+			}
+
+			function getModelSupportLinks(model, extras) {
+				const links = [];
+				safeList(model && model.supportLinks).forEach((entry) => {
+					const normalized = normalizeSupportLinkEntry(entry, {});
+					if (normalized) {
+						links.push(normalized);
+					}
+				});
+
+				const supportObject = isPlainObject(extras && extras.support) ? extras.support : {};
+				Object.entries(supportObject).forEach(([label, value]) => {
+					if (/^user manual/i.test(label) && label.length > 120) {
+						return;
+					}
+					const normalized = normalizeSupportLinkEntry(value, {
+						label,
+						region: inferSupportRegionFromLabel(label)
+					});
+					if (normalized) {
+						links.push(normalized);
+					}
+				});
+
+				safeList(extras && extras.manualLinks).forEach((entry) => {
+					const normalized = normalizeSupportLinkEntry(entry, {
+						category: "Manual",
+						region: entry && entry.region ? entry.region : "Global"
+					});
+					if (normalized) {
+						links.push(normalized);
+					}
+				});
+
+				const seen = new Set();
+				return links.filter((entry) => {
+					const key = [entry.category, entry.region, entry.title, entry.url].map((item) => safeText(item, "").toLowerCase()).join("|");
+					if (seen.has(key)) {
+						return false;
+					}
+					seen.add(key);
+					return true;
+				});
+			}
+
+			function filterSupportLinksForRegion(links) {
+				if (state.isAdmin) {
+					return safeList(links);
+				}
+
+				const currentRegion = normalizeSupportRegion(state.countryCode || "UK");
+				const fallbackRegion = getRegionFallback(currentRegion);
+				const byCategory = safeList(links).reduce((groups, entry) => {
+					const category = entry.category || "others";
+					if (!groups[category]) {
+						groups[category] = [];
+					}
+					groups[category].push(entry);
+					return groups;
+				}, {});
+
+				return Object.values(byCategory).flatMap((entries) => {
+					const globals = entries.filter((entry) => normalizeSupportRegion(entry.region) === "Global");
+					const native = entries.filter((entry) => normalizeSupportRegion(entry.region) === currentRegion);
+					const fallback = native.length > 0
+						? []
+						: entries.filter((entry) => normalizeSupportRegion(entry.region) === fallbackRegion);
+					return [...globals, ...native, ...fallback];
+				});
+			}
+
+			function showAdminSupportLinkDialog(onSubmit) {
+				const existing = document.getElementById("adminSupportLinkDialog");
+				if (existing) {
+					existing.remove();
+				}
+
+				document.body.insertAdjacentHTML("beforeend", ""
+					+ "<div id=\"adminSupportLinkDialog\" class=\"fixed inset-0 z-[10001] flex items-center justify-center bg-slate-950/50 px-4 backdrop-blur-sm\">"
+					+ "<form id=\"adminSupportLinkForm\" class=\"w-full max-w-md rounded-3xl border border-white/70 bg-white p-6 shadow-2xl\">"
+					+ "<h3 class=\"text-lg font-bold text-slate-900\">Add Support Link</h3>"
+					+ "<label class=\"mt-4 block\"><span class=\"text-sm font-semibold text-slate-700\">Title</span><input id=\"adminSupportTitle\" class=\"mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm\" required></label>"
+					+ "<label class=\"mt-3 block\"><span class=\"text-sm font-semibold text-slate-700\">URL</span><input id=\"adminSupportUrl\" type=\"url\" class=\"mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm\" required value=\"https://\"></label>"
+					+ "<label class=\"mt-3 block\"><span class=\"text-sm font-semibold text-slate-700\">Category</span><select id=\"adminSupportCategory\" class=\"mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm\"><option value=\"Manual\">Manual</option><option value=\"Driver\">Driver</option><option value=\"Declaration\">Declaration</option><option value=\"Software\">Software</option><option value=\"Other\">Other</option></select></label>"
+					+ "<label class=\"mt-3 block\"><span class=\"text-sm font-semibold text-slate-700\">Language / Region</span><select id=\"adminSupportRegion\" class=\"mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm\"><option value=\"Global\">Global</option><option value=\"PL\">PL</option><option value=\"UK\">UK</option><option value=\"DE\">DE</option></select></label>"
+					+ "<div class=\"mt-5 flex justify-end gap-2\"><button type=\"button\" id=\"adminSupportCancel\" class=\"rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-bold text-slate-600\">Cancel</button><button type=\"submit\" class=\"rounded-xl bg-emerald-600 px-4 py-2 text-sm font-bold text-white\">Add Link</button></div>"
+					+ "</form>"
+					+ "</div>");
+
+				const dialog = document.getElementById("adminSupportLinkDialog");
+				const form = document.getElementById("adminSupportLinkForm");
+				const cancel = document.getElementById("adminSupportCancel");
+				const close = () => dialog && dialog.remove();
+				cancel?.addEventListener("click", close);
+				dialog?.addEventListener("click", (event) => {
+					if (event.target === dialog) {
+						close();
+					}
+				});
+				form?.addEventListener("submit", (event) => {
+					event.preventDefault();
+					const link = {
+						title: safeText(document.getElementById("adminSupportTitle")?.value, ""),
+						url: safeText(document.getElementById("adminSupportUrl")?.value, ""),
+						category: safeText(document.getElementById("adminSupportCategory")?.value, "Manual"),
+						region: normalizeSupportRegion(document.getElementById("adminSupportRegion")?.value)
+					};
+					if (link.title && getSafeHttpUrl(link.url) && typeof onSubmit === "function") {
+						onSubmit(link);
+						close();
+					}
+				});
+				document.getElementById("adminSupportTitle")?.focus();
+			}
+
 			function adminEditableValue(path, value, label) {
 				const displayValue = translateValue(safeText(value, "-"));
 				return "<span class=\"js-admin-value\" data-admin-value=\"" + escapeHtml(safeText(value, "-")) + "\">" + escapeHtml(displayValue) + "</span>" + adminEditButton(path, label);
@@ -2763,7 +2962,7 @@ export async function initCallCenterApp(api, options) {
 					return;
 				}
 
-				const model = getModelById(context.modelId);
+				const model = getLiveAdminModelById(context.modelId);
 				if (!model) {
 					return;
 				}
@@ -4701,6 +4900,22 @@ export async function initCallCenterApp(api, options) {
 				return state.data.ModelsData.find((model) => getModelKey(model) === id) || null;
 			}
 
+			function getLiveAdminModelById(id) {
+				if (
+					state.isAdmin
+					&& state.currentModel
+					&& (
+						getModelKey(state.currentModel) === id
+						|| state.selectedModelId === id
+						|| getModelName(state.currentModel) === id
+					)
+				) {
+					return state.currentModel;
+				}
+
+				return getModelById(id);
+			}
+
 			async function hydrateModelDetail(modelId) {
 				const normalizedModelId = safeText(modelId, "");
 				if (!normalizedModelId) {
@@ -4734,6 +4949,10 @@ export async function initCallCenterApp(api, options) {
 						knowledgeArticles: Array.isArray(bundle && bundle.knowledgeArticles) ? bundle.knowledgeArticles : [],
 						__key: normalizedModelId
 					};
+
+					if (state.isAdmin && state.adminDirty && state.selectedModelId === normalizedModelId && state.currentModel) {
+						return state.currentModel;
+					}
 
 					state.modelDetailsById[normalizedModelId] = mergedModel;
 
@@ -4843,7 +5062,7 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			function updatePath() {
-				const model = getModelById(state.selectedModelId);
+				const model = getLiveAdminModelById(state.selectedModelId);
 				const yearLabel = state.filters.year === "all" ? t("anyYear") : state.filters.year;
 				const osLabel = state.filters.os === "all" ? (state.activeModule === "MNT" ? "Any Brand" : t("anyOs")) : state.filters.os;
 				const panelLabel = state.filters.panel === "all" ? t("anyPanel") : state.filters.panel;
@@ -5332,40 +5551,22 @@ export async function initCallCenterApp(api, options) {
 						return "others";
 					}
 
-					const supportLinks = Object.entries(support)
-						.reduce((links, [label, url]) => {
-							const rawLabel = safeText(label, "");
-							const normalizedLabel = rawLabel.toLowerCase();
-							const href = getSafeHttpUrl(url);
-							if (!rawLabel || !href || isMassiveUserManualKey(rawLabel)) {
-								return links;
-							}
-
-							if (languageKeyPattern.test(normalizedLabel)) {
-								const isTargetLanguage = normalizedLabel.includes(targetManualLanguage.name)
-									|| normalizedLabel.includes("(" + targetManualLanguage.code + ")");
-								if (!isTargetLanguage) {
-									return links;
-								}
-								links.push({
-									label: targetManualLanguage.label,
-									url: href,
-									group: "manuals"
-								});
-								return links;
-							}
-
-							const cleanLabel = cleanGenericSupportLabel(rawLabel);
-							if (cleanLabel) {
-								links.push({
-									label: cleanLabel,
-									url: href,
-									group: getSupportGroup(cleanLabel)
-								});
-							}
-							return links;
-						}, [])
-						.filter((entry) => entry.label && entry.url);
+					const supportLinks = filterSupportLinksForRegion(
+						getModelSupportLinks(model, { support })
+							.filter((entry) => !isMassiveUserManualKey(entry.title || entry.label))
+							.map((entry) => {
+								const rawTitle = entry.title || entry.label;
+								const title = !state.isAdmin && languageKeyPattern.test(safeText(rawTitle, "").toLowerCase())
+									? targetManualLanguage.label
+									: cleanGenericSupportLabel(rawTitle);
+								return {
+									...entry,
+									label: title,
+									title,
+									group: getSupportGroup(title, entry.category)
+								};
+							})
+					);
 
 					const groupedSupportLinks = supportLinks.reduce((groups, entry) => {
 						const groupName = entry.group || "others";
@@ -5382,6 +5583,7 @@ export async function initCallCenterApp(api, options) {
 						const buttons = entries.map((entry) => ""
 							+ "<a href=\"" + escapeHtml(entry.url) + "\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"" + buttonClasses + "\">"
 							+ escapeHtml(entry.label)
+							+ (state.isAdmin ? "<span class=\"ml-1 rounded-full border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-bold text-slate-500\">[" + escapeHtml(normalizeSupportRegion(entry.region)) + "]</span>" : "")
 							+ "</a>"
 						).join("");
 
@@ -5416,8 +5618,12 @@ export async function initCallCenterApp(api, options) {
 					"leaflet": 2
 				};
 
-				const orderedManualLinks = safeList(docsContext.manualLinks)
-					.slice()
+				const orderedManualLinks = filterSupportLinksForRegion(
+					getModelSupportLinks(model, {
+						manualLinks: docsContext.manualLinks,
+						support: isPlainObject(getModelMedia(model) && getModelMedia(model).support) ? getModelMedia(model).support : {}
+					})
+				)
 					.sort((left, right) => {
 						const leftLabel = safeText(left && left.label, "").toLowerCase();
 						const rightLabel = safeText(right && right.label, "").toLowerCase();
@@ -5446,6 +5652,7 @@ export async function initCallCenterApp(api, options) {
 					return ""
 						+ "<a href=\"" + escapeHtml(url) + "\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-white px-3 py-1 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100\">"
 						+ "<span>" + escapeHtml(label) + "</span>"
+						+ (state.isAdmin ? "<span class=\"rounded-full border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-bold text-slate-500\">[" + escapeHtml(normalizeSupportRegion(entry.region)) + "]</span>" : "")
 						+ "</a>";
 				}).join("");
 
@@ -5650,6 +5857,17 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			function renderModelDetail(model) {
+				if (
+					state.isAdmin
+					&& state.adminDirty
+					&& state.currentModel
+					&& (
+						getModelKey(state.currentModel) === getModelKey(model)
+						|| getModelName(state.currentModel) === getModelName(model)
+					)
+				) {
+					model = state.currentModel;
+				}
 				state.currentModel = model;
 				const platform = getModelPlatform(model);
 				const brand = safeText(model && model.brand, "");
@@ -6491,7 +6709,7 @@ export async function initCallCenterApp(api, options) {
 							}
 							return;
 						}
-						if (path.length === 3 && path[0] === "specs" && path[1] === "technicalByCategory") {
+						if (path.length >= 2 && path[0] === "specs" && path[1] === "technicalByCategory") {
 							const defaultCategory = state.specDetailsContext && state.specDetailsContext.detailType
 								? ({
 									core: "Display/Panel",
@@ -6522,23 +6740,35 @@ export async function initCallCenterApp(api, options) {
 						}
 						const isSupportPath = path[0] === "__media" && path[path.length - 1] === "support";
 						if (isSupportPath) {
-							const label = window.prompt("Support link label", "Manual (en)");
-							if (!label) {
-								return;
-							}
-							const url = window.prompt("Support link URL", "https://");
-							if (!url) {
-								return;
-							}
-							const targetObject = getMutableAdminTarget(path);
-							if (targetObject) {
-								if (!isPlainObject(targetObject.support)) {
-									targetObject.support = {};
+							showAdminSupportLinkDialog((link) => {
+								const model = state.currentModel || getModelById(state.selectedModelId);
+								if (model) {
+									if (!Array.isArray(model.supportLinks)) {
+										model.supportLinks = [];
+									}
+									model.supportLinks.push({
+										title: link.title,
+										url: link.url,
+										category: link.category,
+										region: link.region
+									});
 								}
-								targetObject.support[label.trim()] = url.trim();
+
+								const targetObject = getMutableAdminTarget(path);
+								if (targetObject) {
+									if (!isPlainObject(targetObject.support)) {
+										targetObject.support = {};
+									}
+									targetObject.support[link.title] = {
+										url: link.url,
+										category: link.category,
+										region: link.region
+									};
+								}
 								setAdminDirty(true);
+								updateAdminModelInCollections(state.currentModel);
 								refreshCurrentAdminDetail();
-							}
+							});
 							return;
 						}
 
@@ -6763,7 +6993,7 @@ export async function initCallCenterApp(api, options) {
 						event.preventDefault();
 						event.stopPropagation();
 						const path = parseAdminPath(adminAddTrigger.getAttribute("data-admin-path"));
-						if (path.length === 3 && path[0] === "specs" && path[1] === "technicalByCategory") {
+						if (path.length >= 2 && path[0] === "specs" && path[1] === "technicalByCategory") {
 							const defaultCategory = state.specDetailsContext && state.specDetailsContext.detailType
 								? ({
 									core: "Display/Panel",

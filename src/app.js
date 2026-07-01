@@ -1647,7 +1647,10 @@ export async function initCallCenterApp(api, options) {
 					return ["Google TV", "Titan OS", "Android TV"];
 				}
 				if (["Panel Type", "Panel", "panelType"].some((field) => normalizeLookupKey(field) === normalizedLabel)) {
-					return ["OLED", "Mini-LED", "IPS", "VA", "TN", "QD-OLED"];
+					const model = state.currentModel || getModelById(state.selectedModelId);
+					return isMntModel(model)
+						? ["-", "IPS", "VA", "TN", "OLED", "Mini-LED"]
+						: ["-", "DLED", "DLED QD", "LED", "MiniLED", "OLED", "QD MiniLED", "QLED", "RGB MiniLED"];
 				}
 				if (normalizeLookupKey("Brand") === normalizedLabel || normalizeLookupKey("brand") === normalizedLabel) {
 					return ["Philips", "AOC"];

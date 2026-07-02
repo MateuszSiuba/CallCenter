@@ -1836,9 +1836,11 @@ export async function initCallCenterApp(api, options) {
 
 			function getModelSupportLinks(model, extras) {
 				const links = [];
-				safeList(model && model.supportLinks).forEach((entry) => {
+				safeList(model && model.supportLinks).forEach((entry, sourceIndex) => {
 					const normalized = normalizeSupportLinkEntry(entry, {});
 					if (normalized) {
+						normalized.sourceIndex = sourceIndex;
+						normalized.sourceType = safeText(normalized.sourceType, "model");
 						links.push(normalized);
 					}
 				});
@@ -1900,34 +1902,225 @@ export async function initCallCenterApp(api, options) {
 				return Object.values(byCategory).flatMap((entries) => {
 					const globals = entries.filter((entry) => normalizeSupportRegion(entry.region) === "Global");
 					const native = entries.filter((entry) => normalizeSupportRegion(entry.region) === currentRegion);
-					const fallback = native.length > 0
-						? []
-						: entries.filter((entry) => normalizeSupportRegion(entry.region) === fallbackRegion);
-					return [...globals, ...native, ...fallback];
+					if (native.length > 0) {
+						return native;
+					}
+					const fallback = entries.filter((entry) => normalizeSupportRegion(entry.region) === fallbackRegion);
+					if (fallback.length > 0) {
+						return fallback;
+					}
+					return globals;
 				});
 			}
 
-			function showAdminSupportLinkDialog(onSubmit) {
+			function getSupportLinkAdminIdentity(entry) {
+				const sourceType = safeText(entry && entry.sourceType, "model");
+				if (sourceType === "model" && Number.isInteger(entry && entry.sourceIndex)) {
+					return {
+						sourceType,
+						sourceIndex: entry.sourceIndex,
+						sourceKey: ""
+					};
+				}
+				return {
+					sourceType,
+					sourceIndex: -1,
+					sourceKey: safeText(entry && (entry.sourceKey || entry.title || entry.label), "")
+				};
+			}
+
+			function encodeSupportLinkIdentity(entry) {
+				return encodeURIComponent(JSON.stringify(getSupportLinkAdminIdentity(entry)));
+			}
+
+			function parseSupportLinkIdentity(value) {
+				try {
+					const parsed = JSON.parse(decodeURIComponent(safeText(value, "{}")));
+					return isPlainObject(parsed) ? parsed : {};
+				} catch (_error) {
+					return {};
+				}
+			}
+
+			function adminSupportLinkActions(entry) {
+				if (!state.isAdmin || !entry) {
+					return "";
+				}
+				const identity = encodeSupportLinkIdentity(entry);
+				const label = safeText(entry.title || entry.label, "support link");
+				return ""
+					+ "<button type=\"button\" class=\"js-admin-support-edit ml-1 inline-flex h-5 w-5 items-center justify-center rounded-full border border-cyan-200 bg-cyan-50 text-[10px] font-bold text-brand-700 transition hover:bg-cyan-100\" data-support-link=\"" + identity + "\" title=\"Edit " + escapeHtml(label) + "\">✎</button>"
+					+ "<button type=\"button\" class=\"js-admin-support-delete ml-1 inline-flex h-5 w-5 items-center justify-center rounded-full border border-rose-200 bg-rose-50 text-[10px] font-bold text-rose-700 transition hover:bg-rose-100\" data-support-link=\"" + identity + "\" title=\"Delete " + escapeHtml(label) + "\">×</button>";
+			}
+
+			function getSupportLinksArrayTarget() {
+				const model = state.currentModel || getModelById(state.selectedModelId);
+				if (!model) {
+					return null;
+				}
+				if (!Array.isArray(model.supportLinks)) {
+					model.supportLinks = [];
+				}
+				return model.supportLinks;
+			}
+
+			function findSupportLinkIndex(identity) {
+				const links = getSupportLinksArrayTarget();
+				if (!links) {
+					return -1;
+				}
+				const sourceIndex = Number(identity && identity.sourceIndex);
+				if (Number.isInteger(sourceIndex) && sourceIndex >= 0 && sourceIndex < links.length) {
+					return sourceIndex;
+				}
+
+				const sourceKey = safeText(identity && identity.sourceKey, "");
+				if (!sourceKey) {
+					return -1;
+				}
+				return links.findIndex((entry) => {
+					const title = safeText(entry && (entry.title || entry.label || entry.name), "");
+					const source = safeText(entry && (entry.sourceKey || entry.key), "");
+					return normalizeLookupKey(title) === normalizeLookupKey(sourceKey)
+						|| normalizeLookupKey(source) === normalizeLookupKey(sourceKey);
+				});
+			}
+
+			function getSupportLinkForEdit(identity) {
+				const links = getSupportLinksArrayTarget();
+				const index = findSupportLinkIndex(identity);
+				if (links && index >= 0) {
+					const normalized = normalizeSupportLinkEntry(links[index], {});
+					return normalized || links[index];
+				}
+
+				const mediaTarget = getMutableAdminTarget(["__media"]);
+				const sourceKey = safeText(identity && identity.sourceKey, "");
+				if (mediaTarget && isPlainObject(mediaTarget.support) && sourceKey) {
+					const actualKey = Object.keys(mediaTarget.support).find((candidate) => {
+						return candidate === sourceKey || normalizeLookupKey(candidate) === normalizeLookupKey(sourceKey);
+					});
+					if (actualKey) {
+						return normalizeSupportLinkEntry(mediaTarget.support[actualKey], {
+							label: actualKey,
+							sourceKey: actualKey,
+							sourceType: "media",
+							region: inferSupportRegionFromLabel(actualKey)
+						});
+					}
+				}
+				return null;
+			}
+
+			function deleteSupportLink(identity) {
+				const links = getSupportLinksArrayTarget();
+				if (!links) {
+					return false;
+				}
+				const index = findSupportLinkIndex(identity);
+				if (index >= 0) {
+					links.splice(index, 1);
+					setAdminDirty(true);
+					return true;
+				}
+
+				const mediaTarget = getMutableAdminTarget(["__media"]);
+				const sourceKey = safeText(identity && identity.sourceKey, "");
+				if (mediaTarget && isPlainObject(mediaTarget.support) && sourceKey) {
+					const actualKey = Object.keys(mediaTarget.support).find((candidate) => {
+						return candidate === sourceKey || normalizeLookupKey(candidate) === normalizeLookupKey(sourceKey);
+					});
+					if (actualKey) {
+						delete mediaTarget.support[actualKey];
+						setAdminDirty(true);
+						return true;
+					}
+				}
+
+				return false;
+			}
+
+			function updateSupportLink(identity, nextLink) {
+				const links = getSupportLinksArrayTarget();
+				if (!links) {
+					return false;
+				}
+				const normalizedLink = {
+					title: safeText(nextLink && nextLink.title, ""),
+					url: getSafeHttpUrl(nextLink && nextLink.url),
+					category: safeText(nextLink && nextLink.category, "Manual"),
+					region: normalizeSupportRegion(nextLink && nextLink.region)
+				};
+				if (!normalizedLink.title || !normalizedLink.url) {
+					return false;
+				}
+
+				const index = findSupportLinkIndex(identity);
+				if (index >= 0) {
+					links[index] = {
+						...links[index],
+						...normalizedLink
+					};
+				} else {
+					const mediaTarget = getMutableAdminTarget(["__media"]);
+					const sourceKey = safeText(identity && identity.sourceKey, "");
+					const actualKey = mediaTarget && isPlainObject(mediaTarget.support) && sourceKey
+						? Object.keys(mediaTarget.support).find((candidate) => {
+							return candidate === sourceKey || normalizeLookupKey(candidate) === normalizeLookupKey(sourceKey);
+						})
+						: "";
+					if (actualKey && isPlainObject(mediaTarget.support)) {
+						if (actualKey !== normalizedLink.title) {
+							delete mediaTarget.support[actualKey];
+						}
+						mediaTarget.support[normalizedLink.title] = {
+							url: normalizedLink.url,
+							category: normalizedLink.category,
+							region: normalizedLink.region
+						};
+					} else {
+						links.push(normalizedLink);
+					}
+				}
+				setAdminDirty(true);
+				return true;
+			}
+
+			function showAdminSupportLinkDialog(onSubmit, initialLink) {
 				const existing = document.getElementById("adminSupportLinkDialog");
 				if (existing) {
 					existing.remove();
 				}
+				const initial = isPlainObject(initialLink) ? initialLink : {};
+				const title = safeText(initial.title || initial.label, "");
+				const url = safeText(initial.url, "https://");
+				const category = safeText(initial.category, "Manual");
+				const region = normalizeSupportRegion(initial.region || "Global");
+				const modeLabel = title ? "Edit Support Link" : "Add Support Link";
 
 				document.body.insertAdjacentHTML("beforeend", ""
 					+ "<div id=\"adminSupportLinkDialog\" class=\"fixed inset-0 z-[10001] flex items-center justify-center bg-slate-950/50 px-4 backdrop-blur-sm\">"
 					+ "<form id=\"adminSupportLinkForm\" class=\"w-full max-w-md rounded-3xl border border-white/70 bg-white p-6 shadow-2xl\">"
-					+ "<h3 class=\"text-lg font-bold text-slate-900\">Add Support Link</h3>"
-					+ "<label class=\"mt-4 block\"><span class=\"text-sm font-semibold text-slate-700\">Title</span><input id=\"adminSupportTitle\" class=\"mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm\" required></label>"
-					+ "<label class=\"mt-3 block\"><span class=\"text-sm font-semibold text-slate-700\">URL</span><input id=\"adminSupportUrl\" type=\"url\" class=\"mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm\" required value=\"https://\"></label>"
+					+ "<h3 class=\"text-lg font-bold text-slate-900\">" + escapeHtml(modeLabel) + "</h3>"
+					+ "<label class=\"mt-4 block\"><span class=\"text-sm font-semibold text-slate-700\">Title</span><input id=\"adminSupportTitle\" class=\"mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm\" required value=\"" + escapeHtml(title) + "\"></label>"
+					+ "<label class=\"mt-3 block\"><span class=\"text-sm font-semibold text-slate-700\">URL</span><input id=\"adminSupportUrl\" type=\"url\" class=\"mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm\" required value=\"" + escapeHtml(url) + "\"></label>"
 					+ "<label class=\"mt-3 block\"><span class=\"text-sm font-semibold text-slate-700\">Category</span><select id=\"adminSupportCategory\" class=\"mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm\"><option value=\"Manual\">Manual</option><option value=\"Driver\">Driver</option><option value=\"Declaration\">Declaration</option><option value=\"Software\">Software</option><option value=\"Other\">Other</option></select></label>"
 					+ "<label class=\"mt-3 block\"><span class=\"text-sm font-semibold text-slate-700\">Language / Region</span><select id=\"adminSupportRegion\" class=\"mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm\"><option value=\"Global\">Global</option><option value=\"PL\">PL</option><option value=\"UK\">UK</option><option value=\"DE\">DE</option></select></label>"
-					+ "<div class=\"mt-5 flex justify-end gap-2\"><button type=\"button\" id=\"adminSupportCancel\" class=\"rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-bold text-slate-600\">Cancel</button><button type=\"submit\" class=\"rounded-xl bg-emerald-600 px-4 py-2 text-sm font-bold text-white\">Add Link</button></div>"
+					+ "<div class=\"mt-5 flex justify-end gap-2\"><button type=\"button\" id=\"adminSupportCancel\" class=\"rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-bold text-slate-600\">Cancel</button><button type=\"submit\" class=\"rounded-xl bg-emerald-600 px-4 py-2 text-sm font-bold text-white\">Save Link</button></div>"
 					+ "</form>"
 					+ "</div>");
 
 				const dialog = document.getElementById("adminSupportLinkDialog");
 				const form = document.getElementById("adminSupportLinkForm");
 				const cancel = document.getElementById("adminSupportCancel");
+				const categorySelect = document.getElementById("adminSupportCategory");
+				const regionSelect = document.getElementById("adminSupportRegion");
+				if (categorySelect) {
+					categorySelect.value = category;
+				}
+				if (regionSelect) {
+					regionSelect.value = region;
+				}
 				const close = () => dialog && dialog.remove();
 				cancel?.addEventListener("click", close);
 				dialog?.addEventListener("click", (event) => {
@@ -6185,7 +6378,7 @@ export async function initCallCenterApp(api, options) {
 							+ escapeHtml(entry.label)
 							+ (state.isAdmin ? "<span class=\"ml-1 rounded-full border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-bold text-slate-500\">[" + escapeHtml(normalizeSupportRegion(entry.region)) + "]</span>" : "")
 							+ "</a>"
-							+ (entry.sourceType === "documentation" ? "" : adminDeleteButton(["__media", "support", entry.sourceKey || entry.title], entry.label))
+							+ adminSupportLinkActions(entry)
 						).join("");
 
 						return ""
@@ -6256,7 +6449,7 @@ export async function initCallCenterApp(api, options) {
 						+ "<span>" + escapeHtml(label) + "</span>"
 						+ (state.isAdmin ? "<span class=\"rounded-full border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-bold text-slate-500\">[" + escapeHtml(normalizeSupportRegion(entry.region)) + "]</span>" : "")
 						+ "</a>"
-						+ (entry.sourceType === "documentation" ? "" : adminDeleteButton(["__media", "support", entry.sourceKey || entry.title], rawLabel));
+						+ adminSupportLinkActions(entry);
 				}).join("");
 
 				const woodpeckerLinksBlock = docsContext.woodpeckerSearchLinks.map((entry) => {
@@ -7254,6 +7447,33 @@ export async function initCallCenterApp(api, options) {
 				modelDetailSection.addEventListener("click", (event) => {
 					const target = event.target;
 					if (!(target instanceof Element)) {
+						return;
+					}
+
+					const adminSupportEditTrigger = target.closest(".js-admin-support-edit");
+					if (adminSupportEditTrigger && state.isAdmin) {
+						event.preventDefault();
+						event.stopPropagation();
+						const identity = parseSupportLinkIdentity(adminSupportEditTrigger.getAttribute("data-support-link"));
+						const currentLink = getSupportLinkForEdit(identity);
+						showAdminSupportLinkDialog((link) => {
+							if (updateSupportLink(identity, link)) {
+								updateAdminModelInCollections(state.currentModel);
+								refreshCurrentAdminDetail();
+							}
+						}, currentLink || {});
+						return;
+					}
+
+					const adminSupportDeleteTrigger = target.closest(".js-admin-support-delete");
+					if (adminSupportDeleteTrigger && state.isAdmin) {
+						event.preventDefault();
+						event.stopPropagation();
+						const identity = parseSupportLinkIdentity(adminSupportDeleteTrigger.getAttribute("data-support-link"));
+						if (window.confirm("Delete this support link?") && deleteSupportLink(identity)) {
+							updateAdminModelInCollections(state.currentModel);
+							refreshCurrentAdminDetail();
+						}
 						return;
 					}
 

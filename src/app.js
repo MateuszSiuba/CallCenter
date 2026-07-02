@@ -2282,6 +2282,21 @@ export async function initCallCenterApp(api, options) {
 				const token = state.adminToken || getStoredAdminToken();
 				const modelId = getModelName(model);
 				const media = getModelMedia(model);
+				const canonicalModel = {
+					...model,
+					platform: getModelPlatform(model),
+					chassis: getModelChassis(model),
+					specs: {
+						...(isPlainObject(model.specs) ? model.specs : {}),
+						platform: getModelPlatform(model),
+						chassis: getModelChassis(model)
+					},
+					platformChassis: {
+						...(isPlainObject(model.platformChassis) ? model.platformChassis : {}),
+						platform: getModelPlatform(model),
+						chassis: getModelChassis(model)
+					}
+				};
 				const button = document.getElementById("adminSaveChangesBtn");
 				if (button) {
 					button.disabled = true;
@@ -2296,17 +2311,18 @@ export async function initCallCenterApp(api, options) {
 							"Authorization": "Bearer " + token
 						},
 						body: JSON.stringify({
-							...model,
-							model,
+							...canonicalModel,
+							model: canonicalModel,
 							media,
-							module: getModelModule(model)
+							module: getModelModule(canonicalModel)
 						})
 					});
 					const payload = await response.json().catch(() => ({}));
 					if (!response.ok) {
 						throw new Error(payload && payload.message ? payload.message : "Save failed");
 					}
-					updateAdminModelInCollections(model);
+					state.currentModel = canonicalModel;
+					updateAdminModelInCollections(canonicalModel);
 					await clearSupportHubJsonCache();
 					if (api && api.cache && typeof api.cache.clear === "function") {
 						api.cache.clear();
@@ -2315,6 +2331,7 @@ export async function initCallCenterApp(api, options) {
 						api._bootstrapPromise = null;
 					}
 					setAdminDirty(false);
+					refreshCurrentAdminDetail();
 				} catch (error) {
 					window.alert("Save failed: " + (error && error.message ? error.message : "Unknown error"));
 				} finally {
@@ -3932,54 +3949,59 @@ export async function initCallCenterApp(api, options) {
 				return "";
 			}
 
+			function normalizeHardwareMetaValue(value) {
+				const text = safeText(value, "").trim();
+				return text === "-" ? "" : text;
+			}
+
 			function getModelChassis(model) {
-				const rootValue = safeText(model && model.chassis, "");
+				const rootValue = normalizeHardwareMetaValue(model && model.chassis);
 				if (rootValue) {
 					return rootValue;
 				}
 
-				const directValue = safeText(getModelSpecs(model).chassis, "");
+				const directValue = normalizeHardwareMetaValue(getModelSpecs(model).chassis);
 				if (directValue) {
 					return directValue;
 				}
 
-				const platformChassisValue = safeText(model && model.platformChassis && model.platformChassis.chassis, "");
+				const platformChassisValue = normalizeHardwareMetaValue(model && model.platformChassis && model.platformChassis.chassis);
 				if (platformChassisValue) {
 					return platformChassisValue;
 				}
 
-				const bundleValue = safeText(model && model.__bundle && model.__bundle.platformChassis && model.__bundle.platformChassis.chassis, "");
+				const bundleValue = normalizeHardwareMetaValue(model && model.__bundle && model.__bundle.platformChassis && model.__bundle.platformChassis.chassis);
 				if (bundleValue) {
 					return bundleValue;
 				}
 
 				const lookupValue = getModelLookupMeta(model);
-				return safeText(lookupValue && lookupValue.chassis, "");
+				return normalizeHardwareMetaValue(lookupValue && lookupValue.chassis);
 			}
 
 			function getModelPlatform(model) {
-				const rootValue = safeText(model && model.platform, "");
+				const rootValue = normalizeHardwareMetaValue(model && model.platform);
 				if (rootValue) {
 					return rootValue;
 				}
 
-				const directValue = safeText(getModelSpecs(model).platform, "");
+				const directValue = normalizeHardwareMetaValue(getModelSpecs(model).platform);
 				if (directValue) {
 					return directValue;
 				}
 
-				const platformChassisValue = safeText(model && model.platformChassis && model.platformChassis.platform, "");
+				const platformChassisValue = normalizeHardwareMetaValue(model && model.platformChassis && model.platformChassis.platform);
 				if (platformChassisValue) {
 					return platformChassisValue;
 				}
 
-				const bundleValue = safeText(model && model.__bundle && model.__bundle.platformChassis && model.__bundle.platformChassis.platform, "");
+				const bundleValue = normalizeHardwareMetaValue(model && model.__bundle && model.__bundle.platformChassis && model.__bundle.platformChassis.platform);
 				if (bundleValue) {
 					return bundleValue;
 				}
 
 				const lookupValue = getModelLookupMeta(model);
-				return safeText(lookupValue && lookupValue.platform, "");
+				return normalizeHardwareMetaValue(lookupValue && lookupValue.platform);
 			}
 
 			function normalizeModelCodeWithRegion(value) {
@@ -5678,7 +5700,7 @@ export async function initCallCenterApp(api, options) {
 						__key: normalizedModelId
 					};
 
-					if (state.isAdmin && state.adminDirty && state.selectedModelId === normalizedModelId && state.currentModel) {
+					if (state.isAdmin && state.selectedModelId === normalizedModelId && state.currentModel) {
 						return state.currentModel;
 					}
 
@@ -6625,7 +6647,18 @@ export async function initCallCenterApp(api, options) {
 			}
 
 			function setDetailTab(tabName) {
-				const model = getModelById(state.selectedModelId);
+				let model = getModelById(state.selectedModelId);
+				if (
+					state.isAdmin
+					&& state.currentModel
+					&& model
+					&& (
+						getModelKey(state.currentModel) === getModelKey(model)
+						|| getModelName(state.currentModel) === getModelName(model)
+					)
+				) {
+					model = state.currentModel;
+				}
 				const nextTabName = model && isMntModel(model) && tabName === "ports" ? "specs" : tabName;
 				state.activeDetailTab = nextTabName;
 				detailTabButtons.forEach((button) => {
@@ -6655,7 +6688,6 @@ export async function initCallCenterApp(api, options) {
 			function renderModelDetail(model) {
 				if (
 					state.isAdmin
-					&& state.adminDirty
 					&& state.currentModel
 					&& (
 						getModelKey(state.currentModel) === getModelKey(model)
